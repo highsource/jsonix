@@ -1479,6 +1479,10 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 			output.writeCharacters(this.print(value));
 		}
 	},
+	build: function(context, module)
+	{
+		// Nothing to do
+	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnySimpleType'
 });
 
@@ -4593,7 +4597,7 @@ Jsonix.Context = Jsonix
 
 				var scopeKey;
 				if (Jsonix.Util.Type.exists(elementInfo.scope)) {
-					scopeKey = elementInfo.scope.name;
+					scopeKey = this.resolveTypeInfo(elementInfo.scope).name;
 				} else {
 					scopeKey = '##global';
 				}
