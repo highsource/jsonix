@@ -1,0 +1,120 @@
+<html>
+	<head>
+		<script type="text/javascript" src="js/Jsonix-all.js"></script> 
+		<script type="text/javascript" src="js/PO.js"></script> 
+	</head>
+	<body>
+		<div id="result">
+		</div>
+
+		<div id="">
+		</div>
+
+		<h1>Purchase order from <span id="orderDate"></span></h1>
+
+		<p>Please see <a href="po.xml">po.xml</a>.</p>
+
+		<h2>Shipping address</h2>
+
+		<dl>
+			<dt>Name</dt>
+			<dd id="shipTo.name"></dd>
+			<dt>Street</dt>
+			<dd id="shipTo.street"></dd>
+			<dt>City</dt>
+			<dd id="shipTo.city"></dd>
+			<dt>State</dt>
+			<dd id="shipTo.state"></dd>
+			<dt>Country</dt>
+			<dd id="shipTo.country"></dd>
+		</dl>
+
+		<h2>Billing address</h2>
+
+		<dl>
+			<dt>Name</dt>
+			<dd id="billTo.name"></dd>
+			<dt>Street</dt>
+			<dd id="billTo.street"></dd>
+			<dt>City</dt>
+			<dd id="billTo.city"></dd>
+			<dt>State</dt>
+			<dd id="billTo.state"></dd>
+			<dt>Country</dt>
+			<dd id="billTo.country"></dd>
+		</dl>
+
+		<h2>Purchase details</h2>
+
+		<dl>
+			<dt>Number of items</dt>
+			<dd id="items.quantity"></dd>
+			<dt>Total price</dt>
+			<dd id="items.usPrice"></dd>
+		</dl>
+
+
+		<script type="text/javascript">
+
+			// Utility function
+			var setValue = function(id, value) {
+				var element = document.getElementById(id);
+				element.innerHTML = value;
+			};
+
+
+			//// Jsonix usage
+
+			// Create Jsonix context
+			var context = new Jsonix.Context([ PO ]);
+
+			// Create unmarshaller
+			var unmarshaller = context.createUnmarshaller();
+
+			// Unmarshal the XML file from URL
+			unmarshaller.unmarshalURL( 'po.xml',
+				function(poElement) {
+
+					// That's it, unmarshalling is complete
+
+					// Now we can worked with the unmarshalled object
+					var po = poElement.value;
+
+					
+					// Output shipping and billing address
+
+					setValue('shipTo.name', po.shipTo.name);
+					setValue('shipTo.street', po.shipTo.street);
+					setValue('shipTo.city', po.shipTo.city);
+					setValue('shipTo.state', po.shipTo.state);
+					setValue('shipTo.country', po.shipTo.country);
+
+					setValue('billTo.name', po.billTo.name);
+					setValue('billTo.street', po.billTo.street);
+					setValue('billTo.city', po.billTo.city);
+					setValue('billTo.state', po.billTo.state);
+					setValue('billTo.country', po.billTo.country);
+
+					// Calculate and output the total quantity and price
+					var quantity = 0;
+					var usPrice = 0;
+
+					for (var index = 0; index < po.items.item.length; index++) {
+						var item = po.items.item[index];
+						quantity += item.quantity;
+						usPrice += item.usPrice;
+					}
+
+					setValue('items.quantity', quantity.toFixed(0));
+					setValue('items.usPrice', usPrice.toFixed(2));
+
+
+					// Format and output the order date
+					setValue('orderDate',
+					        // We can use the method of the calendar type here
+						Jsonix.Schema.XSD.Calendar.INSTANCE.printDate(po.orderDate));
+					
+				});
+		</script>
+	</body>
+</html>

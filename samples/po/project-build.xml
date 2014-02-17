@@ -1,0 +1,57 @@
+<?xml version="1.0"?>
+<project name="jsonix-samples-po-ant" default="install">
+	<property name="artifactId" value="jsonix-samples-po-ant"/>
+	<target name="clean">
+		<delete dir="${basedir}/target/"/>
+		<delete dir="${basedir}/src/main/webapp/js/PO"/>
+	</target>
+	<target name="generate-sources">
+		<taskdef name="xjc" classname="org.jvnet.jaxb2_commons.xjc.XJC2Task">
+			<!-- XJC2 Task classpath -->
+			<classpath>
+				<fileset dir="${basedir}/lib">
+					<include name="activation-*.jar"/>
+					<include name="jaxb-api-*.jar"/>
+					<include name="jaxb-impl-*.jar"/>
+					<include name="jsr173_api-*.jar"/>
+					<include name="stax-api-*.jar"/>
+
+					<include name="jaxb2-basics-jaxb-xjc-*.jar"/>
+					<include name="jaxb-xjc-*.jar"/>
+					<include name="jaxb2-basics-ant-*.jar"/>
+				</fileset>
+			</classpath>
+		</taskdef>
+		<mkdir dir="${basedir}/target/generated-sources/xjc"/>
+		<xjc destdir="${basedir}/target/generated-sources/xjc" extension="true">
+			<arg line="-Xjsonix"/>
+			<binding dir="${basedir}/src/main/resources">
+			 	<include name="**/*.xjb"/>
+			</binding>
+			<schema dir="${basedir}/src/main/resources">
+			 	<include name="**/*.xsd"/>
+			</schema>
+			<!-- Plugins -->
+			<classpath>
+				<fileset dir="${basedir}/lib">
+					<include name="jsonix-*.jar"/>
+				</fileset>
+			</classpath>
+		</xjc>
+
+		<mkdir dir="${basedir}/src/main/webapp/js/PO" />
+
+		<copy
+			file="${basedir}/target/generated-sources/xjc/PO.js"
+			tofile="${basedir}/src/main/webapp/js/PO.js"/>
+
+		<delete
+			dir="${basedir}/target/generated-sources"/>
+	</target>
+	<target name="package" depends="generate-sources">
+		<mkdir dir="${basedir}/target"/>
+		<war destfile="${basedir}/target/${artifactId}.war"
+			basedir="${basedir}/src/main/webapp"/> 
+	</target>
+	<target name="install" depends="package"/>
+</project>

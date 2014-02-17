@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema targetNamespace="http://www.opengis.net/ows/1.1" 
+xmlns:ows="http://www.opengis.net/ows/1.1" 
+xmlns="http://www.w3.org/2001/XMLSchema" 
+elementFormDefault="qualified" xml:lang="en">
+	<annotation>
+		<appinfo>exampleCapabilities.xsd 2006-08-09</appinfo>
+		<documentation>Copyright (c) 2006 Open Geospatial Consortium, Inc. All Rights Reserved. </documentation>
+	</annotation>
+	<!-- ==============================================================
+		includes and imports
+	============================================================== -->
+	<include schemaLocation="../owsGetCapabilities.xsd"/>
+	<include schemaLocation="../owscontents.xsd"/>
+	<!-- ==============================================================
+		elements and types
+	============================================================== -->
+	<element name="Capabilities" type="ows:CapabilitiesType"/>
+	<!-- =========================================================== -->
+	<complexType name="CapabilitiesType">
+		<annotation>
+			<documentation>XML encoded GetCapabilities operation response. This document provides clients with service metadata about a specific service instance, usually including metadata about the tightly-coupled data served. If the server does not implement the updateSequence parameter, the server shall always return the complete Capabilities document, without the updateSequence parameter. When the server implements the updateSequence parameter and the GetCapabilities operation request included the updateSequence parameter with the current value, the server shall return this element with only the "version" and "updateSequence" attributes. Otherwise, all optional elements shall be included or not depending on the actual value of the Contents parameter in the GetCapabilities operation request. This base type shall be extended by each specific OWS to include the additional contents needed. </documentation>
+		</annotation>
+		<complexContent>
+			<extension base="ows:CapabilitiesBaseType">
+				<sequence>
+					<element ref="ows:Contents" minOccurs="0">
+						<annotation>
+							<documentation>This element shall be included whenever this OWS operates on any tightly-coupled data, by any specified operation (even when that data is also available to clients from another service). </documentation>
+						</annotation>
+					</element>
+				</sequence>
+			</extension>
+		</complexContent>
+	</complexType>
+	<!-- =========================================================== -->
+	<element name="Contents" type="ows:ContentsBaseType">
+		<annotation>
+			<documentation>Metadata about the data served by this server. The XML Schema of this section is specific to each OWS type. </documentation>
+		</annotation>
+	</element>
+</schema>

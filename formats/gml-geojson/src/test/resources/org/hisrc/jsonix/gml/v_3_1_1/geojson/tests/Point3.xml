@@ -1,0 +1,7 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Point
+  xmlns:gml="http://www.opengis.net/gml"
+  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://www.opengis.net/gml http://schemas.opengis.net/gml/3.1.1/base/gml.xsd">
+  <gml:pos>0 1</gml:pos>
+</gml:Point>

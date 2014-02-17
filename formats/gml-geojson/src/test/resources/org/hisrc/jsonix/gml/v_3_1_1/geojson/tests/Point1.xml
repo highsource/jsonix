@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Point
+  xmlns:gml="http://www.opengis.net/gml">
+	<gml:coordinates decimal="." cs="," ts=" ">0,1</gml:coordinates>
+</gml:Point>

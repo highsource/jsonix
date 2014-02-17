@@ -1,0 +1,51 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../js/Jsonix/Jsonix-all.js"></script> 
+		<script type="text/javascript" src="../js/Zero/Mappings.js"></script> 
+		<script type="text/javascript" src="../js/Zero/Data.js"></script> 
+	</head>
+	<body>
+		<div id="result">
+		</div>
+		<script type="text/javascript">
+		function roundtrip(resource, zero) {
+			var context = new Jsonix.Context([ org.hisrc.jsonix.tests.zero ]);
+			var unmarshallerOne = context.createUnmarshaller();
+			var unmarshallerTwo = context.createUnmarshaller();
+			var marshallerOne = context.createMarshaller();
+			var marshallerTwo = context.createMarshaller();
+			unmarshallerOne.unmarshalURL(
+  				resource,
+				function(one) {
+					if (!Jsonix.Util.Type.equals(zero, one, function(text) {console.log(text);}))
+					{
+						throw ('Roundtrip [' + resource + '] failed in phase one. Objects must be equal.');
+					}
+					var documentOne = marshallerOne.marshalDocument(one);
+					var two = unmarshallerTwo.unmarshalDocument(documentOne);
+					var stringTwo = marshallerTwo.marshalString(two);
+					// console.log(stringTwo);
+					if (!Jsonix.Util.Type.equals(one, two, function(text) {console.log(text);}))
+					{
+						throw ('Roundtrip [' + resource + '] failed in phase two. Objects must be equal.');
+					}
+				});
+		}
+
+		var resources = org.hisrc.jsonix.tests.zero.Data;
+		
+		var count = 0;
+
+		for ( var name in resources) {
+			if (resources.hasOwnProperty(name)) {
+				roundtrip(name, resources[name]);
+				count ++;
+			}
+		}
+		
+		var resultDiv = document.getElementById("result");
+		resultDiv.innerHTML = '[' + count + '] roundtrip tests passed.'; 
+		</script>
+
+	</body>
+</html>

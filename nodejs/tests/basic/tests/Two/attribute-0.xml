@@ -1,0 +1,1 @@
+<test:attribute xmlns:test="urn:test" test:string="zero" test:integers="1 2">test</test:attribute>

@@ -1,0 +1,62 @@
+<!DOCTYPE html>
+<html>
+	<head>
+		<script type="text/javascript" src="Jsonix-all.js"></script>
+		<script type="text/javascript" src="Mappings-gml.js"></script>
+		<script type="text/javascript" src="Mappings-ows.js"></script>
+		<script type="text/javascript" src="Mappings-dc.js"></script>
+		<script type="text/javascript" src="Mappings-ogc.js"></script>
+		<script type="text/javascript" src="Mappings-csw.js"></script>		
+	</head>
+	<body>
+		<script type="text/javascript">
+		
+			var constraint = {
+				name: {
+					namespaceURI: 'http://www.opengis.net/cat/csw/2.0.2',
+					localPart: 'Constraint',
+					prefix: 'csw'
+				},
+				value: {
+					version: '1.1',
+					filter: {
+						comparisonOps: {
+							name: {
+								namespaceURI: 'http://www.opengis.net/ogc',
+								localPart: 'PropertyIsEqualTo',
+								prefix: 'ogc'
+							},
+							value: {
+								expression: [ {
+									name: {
+										namespaceURI: 'http://www.opengis.net/ogc',
+										localPart: 'PropertyName',
+										prefix: 'ogc'
+									},
+									value: {content: 'my:Property.Name'}
+								}, {
+									name: {
+										namespaceURI: 'http://www.opengis.net/ogc',
+										localPart: 'Literal',
+										prefix: 'ogc'
+									}, 
+									value: {
+										content: ['some_kinda_value']
+									}
+								} ]
+							}
+						}
+					}
+				}
+			};
+			
+			var mappings = [net.opengis.ogc, net.opengis.cat.csw._2_0];
+
+			var context = new Jsonix.Context(mappings);
+			var marshaller = context.createMarshaller();
+
+			alert(marshaller.marshalString(constraint));
+		
+		</script>
+	</body>
+</html>

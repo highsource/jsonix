@@ -1,0 +1,8 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:LinearRing xmlns:gml="http://www.opengis.net/gml">
+  <gml:pos>0 0 </gml:pos>
+  <gml:pos>1 0</gml:pos>
+  <gml:pos>1 1</gml:pos>
+  <gml:pos>0 1</gml:pos>
+  <gml:pos>0 0</gml:pos>
+</gml:LinearRing>

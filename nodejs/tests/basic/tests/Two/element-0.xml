@@ -1,0 +1,8 @@
+<test:element xmlns:test="urn:test">
+	<test:element>one</test:element>
+	<test:elements>two</test:elements>
+	<test:elements>three</test:elements>
+	<test:item>four five</test:item>
+	<test:items>six seven</test:items>
+	<test:items>eight nine</test:items>
+</test:element>

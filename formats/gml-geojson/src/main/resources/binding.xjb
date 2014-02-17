@@ -1,0 +1,40 @@
+<jaxb:bindings version="1.0" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:jsonix="http://jsonix.highsource.org/customizations"
+	xmlns:inheritance="http://jaxb2-commons.dev.java.net/basic/inheritance"
+	jaxb:extensionBindingPrefixes="xjc inheritance jsonix">
+
+	<jaxb:bindings schemaLocation="gml/3.1.1/profiles/gmlsfprofile/1.0.0/gmlsf2.xsd" 
+		node="/xs:schema">
+
+		<jsonix:packageMapping
+			packageName="net.opengis.gml.v_3_1_1.profiles.gmlsfprofile.v_1_0_0"
+			spaceName="GML_V_3_1_1"
+			directory="GML_V_3_1_1"
+			namespaceURI="http://www.opengis.net/gml"
+			defaultPrefix="gml"/>
+
+		<jaxb:globalBindings
+			fixedAttributeAsConstantProperty="false"
+			typesafeEnumBase="xs:string"
+			typesafeEnumMemberName="generateName" 
+			generateIsSetMethod="true">
+			<xjc:noValidator />
+			<xjc:noValidatingUnmarshaller />
+		</jaxb:globalBindings>
+
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.gml.v_3_1_1.profiles.gmlsfprofile.v_1_0_0"/>
+		</jaxb:schemaBindings>
+
+		<jaxb:bindings node="xs:element[@name='_Curve']">
+			<jaxb:class name="ACurveElement"/>
+		</jaxb:bindings>
+		<jaxb:bindings node="xs:element[@name='_Surface']">
+			<jaxb:class name="ASurfaceElement"/>
+		</jaxb:bindings>
+
+	</jaxb:bindings>
+
+</jaxb:bindings>

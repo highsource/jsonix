@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<web-app
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns="http://java.sun.com/xml/ns/javaee"
+	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
+	
+	id="jsonix-demos-wms"
+
+	version="2.5">
+	
+	<display-name>Jsonix Demos [wms]</display-name>
+
+	<servlet>
+		<servlet-name>net.disy.legato.tools.servlet.ProxyServlet</servlet-name>
+		<servlet-class>net.disy.legato.tools.servlet.ProxyServlet</servlet-class>
+		<init-param>
+			<param-name>allowedUrls</param-name>
+			<!-- Comma-separated list of URLs -->
+			<param-value>
+				http://www2.demis.nl
+			</param-value>
+		</init-param>
+	</servlet>
+
+	<servlet-mapping>
+		<servlet-name>net.disy.legato.tools.servlet.ProxyServlet</servlet-name>
+		<url-pattern>/servlet/proxy</url-pattern>
+	</servlet-mapping>
+
+</web-app>

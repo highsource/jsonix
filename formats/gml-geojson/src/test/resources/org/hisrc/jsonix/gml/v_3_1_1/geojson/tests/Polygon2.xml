@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:Polygon xmlns:gml="http://www.opengis.net/gml">
+  <gml:exterior>
+    <gml:LinearRing>
+      <gml:pos>0 0</gml:pos>
+      <gml:pos>100 0</gml:pos>
+      <gml:pos>100 100</gml:pos>
+      <gml:pos>0 100</gml:pos>
+      <gml:pos>0 0</gml:pos>
+    </gml:LinearRing>
+  </gml:exterior>
+  <gml:interior>
+    <gml:LinearRing>
+      <gml:pos>10 10</gml:pos>
+      <gml:pos>90 10</gml:pos>
+      <gml:pos>90 90</gml:pos>
+      <gml:pos>10 90</gml:pos>
+      <gml:pos>10 10</gml:pos>
+    </gml:LinearRing>
+  </gml:interior>
+</gml:Polygon>

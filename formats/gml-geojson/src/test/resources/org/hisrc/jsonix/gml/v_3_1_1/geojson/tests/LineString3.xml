@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:LineString
+  xmlns:gml="http://www.opengis.net/gml"
+  srsName="http://www.opengis.net/gml/srs/epsg.xml#63266405">
+	<gml:pos>0 0</gml:pos>
+    <gml:pointProperty>
+      <gml:Point>
+        <gml:pos>1 0</gml:pos>
+      </gml:Point>
+    </gml:pointProperty>
+    <gml:pointRep>
+      <gml:Point>
+        <gml:pos>1 1</gml:pos>
+      </gml:Point>
+    </gml:pointRep>
+    <gml:coord>
+      <gml:X>0</gml:X>
+      <gml:Y>1</gml:Y>
+    </gml:coord>
+</gml:LineString>
+
+           

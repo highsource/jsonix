@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<gml:MultiGeometry xmlns:gml="http://www.opengis.net/gml">
+	<gml:geometryMember>
+		<gml:Point>
+			<gml:pos>0 0 </gml:pos>
+		</gml:Point>
+	</gml:geometryMember>
+	<gml:geometryMember>
+		<gml:Point>
+			<gml:pos>1 0</gml:pos>
+		</gml:Point>
+	</gml:geometryMember>
+	<gml:geometryMembers>
+		<gml:Point>
+			<gml:pos>1 1</gml:pos>
+		</gml:Point>
+		<gml:Point>
+			<gml:pos>0 1</gml:pos>
+		</gml:Point>
+	</gml:geometryMembers>
+</gml:MultiGeometry>

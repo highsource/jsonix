@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<jaxb:bindings version="1.0" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc" 
+	xmlns:jsonix="http://jsonix.highsource.org/customizations"
+	jaxb:extensionBindingPrefixes="xjc jsonix">
+
+	<jaxb:bindings schemaLocation="../../context/1.1.0/context.xsd" 
+		node="/xs:schema">
+		<jaxb:globalBindings
+			fixedAttributeAsConstantProperty="true"
+			typesafeEnumBase="xs:string"
+			typesafeEnumMemberName="generateName" 
+			generateIsSetMethod="true">
+		</jaxb:globalBindings>
+
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.context.v_1_1_0"/>
+			<jaxb:nameXmlTransform>
+				<jaxb:elementName suffix="Element"/>
+			</jaxb:nameXmlTransform>
+		</jaxb:schemaBindings>
+
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="../../gml/2.1.2/geometry.xsd" 
+		node="/xs:schema">
+
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.gml.v_2_1_2"/>
+			<jaxb:nameXmlTransform>
+				<jaxb:elementName suffix="Element"/>
+			</jaxb:nameXmlTransform>
+		</jaxb:schemaBindings>
+
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="../../filter/1.0.0/filter.xsd" 
+		node="/xs:schema">
+
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.filter.v_1_0_0"/>
+		</jaxb:schemaBindings>
+
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="../../sld/1.0.0/StyledLayerDescriptor.xsd" 
+		node="/xs:schema">
+
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.sld.v_1_0_0"/>
+			<jaxb:nameXmlTransform>
+				<jaxb:elementName suffix="Element"/>
+			</jaxb:nameXmlTransform>
+		</jaxb:schemaBindings>
+
+	</jaxb:bindings>
+
+
+</jaxb:bindings>

@@ -1,0 +1,36 @@
+<jaxb:bindings version="1.0" xmlns:jaxb="http://java.sun.com/xml/ns/jaxb" 
+	xmlns:xs="http://www.w3.org/2001/XMLSchema" 
+	xmlns:xjc="http://java.sun.com/xml/ns/jaxb/xjc"
+	xmlns:jsonix="http://jsonix.highsource.org/customizations"
+	jaxb:extensionBindingPrefixes="jsonix xjc">
+	<jaxb:bindings schemaLocation="wms/1.3.0/capabilities_1_3_0.xsd" 
+		node="/xs:schema">
+		<jaxb:globalBindings
+			fixedAttributeAsConstantProperty="true"
+			typesafeEnumBase="xs:string"
+			typesafeEnumMemberName="generateName" 
+			generateIsSetMethod="true">
+			<xjc:noValidator />
+			<xjc:noValidatingUnmarshaller />
+		</jaxb:globalBindings>
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.wms.v_1_3_0"/>
+		</jaxb:schemaBindings>
+		<jsonix:packageMapping
+			packageName="net.opengis.wms.v_1_3_0"
+			spaceName="WMS_V_1_3_0"
+			directory="WMS_V_1_3_0"/>
+
+		<jaxb:bindings node="xs:element[@name='_ExtendedCapabilities']">
+			<xjc:dom/>
+		</jaxb:bindings>
+
+	</jaxb:bindings>
+
+	<jaxb:bindings schemaLocation="wms/1.3.0/exceptions_1_3_0.xsd" 
+		node="/xs:schema">
+		<jaxb:schemaBindings>
+			<jaxb:package name="net.opengis.wms.v_1_3_0"/>
+		</jaxb:schemaBindings>
+	</jaxb:bindings>
+</jaxb:bindings>
