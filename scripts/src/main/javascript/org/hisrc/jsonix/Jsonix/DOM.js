@@ -40,7 +40,7 @@ Jsonix.DOM = {
 		} else if (typeof ActiveXObject !== 'undefined') {
 			return new ActiveXObject('MSXML2.DOMDocument');
 		} else {
-			throw 'Error created the DOM document.';
+			throw new Error('Error created the DOM document.');
 		}
 	},
 	serialize : function(node) {
@@ -55,7 +55,7 @@ Jsonix.DOM = {
 		} else if (Jsonix.Util.Type.exists(node.xml)) {
 			return node.xml;
 		} else {
-			throw 'Could not serialize the node, neither XMLSerializer nor the [xml] property were found.';
+			throw new Error('Could not serialize the node, neither XMLSerializer nor the [xml] property were found.');
 		}
 	},
 	parse : function(text) {
@@ -93,12 +93,12 @@ Jsonix.DOM = {
 							} else if (Jsonix.Util.Type.isString(transport.responseText)) {
 								result = Jsonix.DOM.parse(transport.responseText);
 							} else {
-								throw 'Response does not have valid [responseXML] or [responseText].';
+								throw new Error('Response does not have valid [responseXML] or [responseText].');
 							}
 							callback(result);
 
 						}, function(transport) {
-							throw 'Could not retrieve XML from URL [' + url	+ '].';
+							throw new Error('Could not retrieve XML from URL [' + url	+ '].');
 
 						}, options);
 	}

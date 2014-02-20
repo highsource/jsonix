@@ -42,7 +42,7 @@ Jsonix.Schema.XSD.Boolean = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		} else if (text === 'false' || text === '0') {
 			return false;
 		} else {
-			throw "Either [true], [1], [0] or [false] expected as boolean value.";
+			throw new Error("Either [true], [1], [0] or [false] expected as boolean value.");
 		}
 	},
 	isInstance : function(value) {

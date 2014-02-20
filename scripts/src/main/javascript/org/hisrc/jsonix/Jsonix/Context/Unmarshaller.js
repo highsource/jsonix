@@ -82,7 +82,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 	},
 	unmarshalElementNode : function(input) {
 		if (input.eventType != 1) {
-			throw "Parser must be on START_ELEMENT to read next text.";
+			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 
 		var result = null;
@@ -90,7 +90,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 
 		var elementDeclaration = this.context.getElementInfo(name);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw 'Could not find element declaration for the element [' + name.key + '].';
+			throw new Error("Could not find element declaration for the element [" + name.key + "].");
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;

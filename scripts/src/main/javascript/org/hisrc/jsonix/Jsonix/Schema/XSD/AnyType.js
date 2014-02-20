@@ -35,7 +35,7 @@ Jsonix.Schema.XSD.AnyType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 	},
 	isInstance : function(value) {
-		throw 'Abstract method [isInstance].';
+		throw new Error('Abstract method [isInstance].');
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnyType'
 });

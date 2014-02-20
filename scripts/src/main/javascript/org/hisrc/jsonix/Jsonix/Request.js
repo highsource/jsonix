@@ -159,7 +159,7 @@ Jsonix.Request = Jsonix
 						// TODO log
 					}
 				}
-				throw 'Could not create XML HTTP transport.';
+				throw new Error('Could not create XML HTTP transport.');
 			},
 			CLASS_NAME : 'Jsonix.Request'
 		});

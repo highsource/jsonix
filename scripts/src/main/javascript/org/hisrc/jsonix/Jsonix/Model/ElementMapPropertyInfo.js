@@ -81,7 +81,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 								result[attributeName] = attributeValue;
 							} else {
 								// TODO Report validation error
-								throw "Value already set.";
+								throw new Error("Value was already set.");
 							}
 						}
 					}

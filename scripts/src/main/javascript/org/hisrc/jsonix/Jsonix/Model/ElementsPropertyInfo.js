@@ -51,7 +51,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 							return callback(typeInfo.unmarshal(context, input));
 						}
 						// TODO better exception
-						throw "Element [" + elementNameKey + "] is not known in this context";
+						throw new Error("Element [" + elementNameKey + "] is not known in this context");
 					},
 					marshalElement : function(context, value, output) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
@@ -64,7 +64,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 								return;
 							}
 						}
-						throw "Could not find an element with type info supporting the value ["	+ value + "].";
+						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
 					},
 					doBuild : function(context, module) {
 						this.elementTypeInfosMap = {};

@@ -103,7 +103,7 @@ Jsonix.Model.ClassInfo = Jsonix
 				};
 
 				if (input.eventType !== 1) {
-					throw "Parser must be on START_ELEMENT to read a class info.";
+					throw new Error("Parser must be on START_ELEMENT to read a class info.");
 				}
 
 				// Read attributes
@@ -157,7 +157,7 @@ Jsonix.Model.ClassInfo = Jsonix
 							} else {
 								// TODO report a validation error that element
 								// is not expected
-								throw 'Unexpected element [' + elementNameKey + '].';
+								throw new Error('Unexpected element [' + elementNameKey + '].');
 							}
 						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
 							// Characters and structure has a mixed property
@@ -167,7 +167,7 @@ Jsonix.Model.ClassInfo = Jsonix
 						} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT	|| et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 							// Ignore
 						} else {
-							throw "Illegal state: unexpected event type [" + et	+ "].";
+							throw new Error("Illegal state: unexpected event type [" + et	+ "].");
 						}
 						et = input.next();
 					}
@@ -180,7 +180,7 @@ Jsonix.Model.ClassInfo = Jsonix
 					input.nextTag();
 				}
 				if (input.eventType !== 2) {
-					throw "Illegal state: must be END_ELEMENT.";
+					throw new Error("Illegal state: must be END_ELEMENT.");
 				}
 				return result;
 			},
@@ -241,7 +241,7 @@ Jsonix.Model.ClassInfo = Jsonix
 						// Call the creator function
 						propertyInfoCreator.call(this, property);
 					} else {
-						throw "Unknown property info type [" + type + "].";
+						throw new Error("Unknown property info type [" + type + "].");
 					}
 				}
 			},

@@ -50,7 +50,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						} else if (data.length >= 8 && data.charAt(2) === ':' && data.charAt(5) === ':') {
 							return this.parseTime(text);
 						} else {
-							throw 'Value [' + text + '] does not match dateTime, date or time patterns.';
+							throw new Error('Value [' + text + '] does not match dateTime, date or time patterns.');
 						}
 					},
 					parseDateTime : function(text) {
@@ -61,7 +61,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						var dateTimeWithTimeZone = negative ? text.substring(1) : text;
 
 						if (dateTimeWithTimeZone.length < 19 || dateTimeWithTimeZone.charAt(4) !== '-' || dateTimeWithTimeZone.charAt(7) !== '-' || dateTimeWithTimeZone.charAt(10) !== 'T' || dateTimeWithTimeZone.charAt(13) !== ':' || dateTimeWithTimeZone.charAt(16) !== ':') {
-							throw 'Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].';
+							throw new Error('Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].');
 						}
 
 						var timeZoneIndex;
@@ -182,11 +182,11 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseDateString : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 10) {
-							throw 'Date string [' + text + '] must be 10 characters long.';
+							throw new Error('Date string [' + text + '] must be 10 characters long.');
 						}
 
 						if (text.charAt(4) !== '-' || text.charAt(7) !== '-') {
-							throw 'Date string [' + text + '] must be a string in format [yyyy \'-\' mm \'-\' ss ].';
+							throw new Error('Date string [' + text + '] must be a string in format [yyyy \'-\' mm \'-\' ss ].');
 						}
 
 						var year = this.parseYear(text.substring(0, 4));
@@ -202,7 +202,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseTimeString : function(timeString) {
 						Jsonix.Util.Ensure.ensureString(timeString);
 						if (timeString.length < 8 || timeString.charAt(2) !== ':' || timeString.charAt(5) !== ':') {
-							throw 'Time string [' + timeString + '] must be a string in format [hh \':\' mm \':\' ss (\'.\' s+)?].';
+							throw new Error('Time string [' + timeString + '] must be a string in format [hh \':\' mm \':\' ss (\'.\' s+)?].');
 						}
 						var hourString = timeString.substring(0, 2);
 						var minuteString = timeString.substring(3, 5);
@@ -229,7 +229,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							return 0;
 						} else {
 							if (text.length !== 6) {
-								throw 'Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].';
+								throw new Error('Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].');
 							}
 							var signString = text.charAt(0);
 							var sign;
@@ -238,7 +238,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							} else if (signString === '-') {
 								sign = -1;
 							} else {
-								throw 'First character of the time zone [' + text + '] must be \'+\' or \'-\'.';
+								throw new Error('First character of the time zone [' + text + '] must be \'+\' or \'-\'.');
 							}
 							var hour = this.parseHour(text.substring(1, 3));
 							var minute = this.parseMinute(text.substring(4, 6));
@@ -249,7 +249,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseYear : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 4) {
-							throw 'Year [' + text + '] must be a four-digit number.';
+							throw new Error('Year [' + text + '] must be a four-digit number.');
 						}
 						var year = Number(text);
 						// TODO message
@@ -259,7 +259,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseMonth : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Month [' + text + '] must be a two-digit number.';
+							throw new Error('Month [' + text + '] must be a two-digit number.');
 						}
 						var month = Number(text);
 						// TODO message
@@ -269,7 +269,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseDay : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Day [' + text + '] must be a two-digit number.';
+							throw new Error('Day [' + text + '] must be a two-digit number.');
 						}
 						var day = Number(text);
 						// TODO message
@@ -279,7 +279,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseHour : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Hour [' + text + '] must be a two-digit number.';
+							throw new Error('Hour [' + text + '] must be a two-digit number.');
 						}
 						var hour = Number(text);
 						// TODO message
@@ -289,7 +289,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseMinute : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Minute [' + text + '] must be a two-digit number.';
+							throw new Error('Minute [' + text + '] must be a two-digit number.');
 						}
 						var minute = Number(text);
 						// TODO message
@@ -299,7 +299,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseSecond : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Second [' + text + '] must be a two-digit number.';
+							throw new Error('Second [' + text + '] must be a two-digit number.');
 						}
 						var second = Number(text);
 						// TODO message
@@ -327,7 +327,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						} else if (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)) {
 							return this.printTime(value);
 						} else {
-							throw 'Value [' + value + '] is not recognized as dateTime, date or time.';
+							throw new Error('Value [' + value + '] is not recognized as dateTime, date or time.');
 						}
 					},
 					printDateTime : function(value) {
@@ -457,7 +457,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					printFractionalSecond : function(value) {
 						Jsonix.Util.Ensure.ensureNumber(value);
 						if (value < 0 || value >= 1) {
-							throw 'Fractional second [' + value + '] must be between 0 and 1.';
+							throw new Error('Fractional second [' + value + '] must be between 0 and 1.');
 						} else if (value === 0) {
 							return '';
 						} else {
@@ -474,13 +474,13 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						Jsonix.Util.Ensure.ensureInteger(value);
 						Jsonix.Util.Ensure.ensureInteger(length);
 						if (length <= 0) {
-							throw 'Length [' + value + '] must be positive.';
+							throw new Error('Length [' + value + '] must be positive.');
 						}
 						if (value < 0) {
-							throw 'Value [' + value + '] must not be negative.';
+							throw new Error('Value [' + value + '] must not be negative.');
 						}
 						if (value >= Math.pow(10, length)) {
-							throw 'Value [' + value + '] must be less than [' + Math.pow(10, length) + '].';
+							throw new Error('Value [' + value + '] must be less than [' + Math.pow(10, length) + '].');
 						}
 						var result = String(value);
 						for ( var i = result.length; i < length; i++) {

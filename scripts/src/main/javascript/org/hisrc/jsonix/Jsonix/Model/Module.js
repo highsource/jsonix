@@ -107,7 +107,7 @@ Jsonix.Model.Module = Jsonix
 						// Call the creator function
 						typeInfo = typeInfoCreator.call(this, mapping);
 					} else {
-						throw "Unknown type info type [" + type + "].";
+						throw new Error("Unknown type info type [" + type + "].");
 					}
 				}
 				return typeInfo;
@@ -158,7 +158,7 @@ Jsonix.Model.Module = Jsonix
 						options.name = options.localName;
 					}
 				} else {
-					throw "Neither [name] nor [localName] was provided for the class info.";
+					throw new Error("Neither [name] nor [localName] was provided for the class info.");
 				}
 				// Now both name an local name are initialized
 				var classInfo = new Jsonix.Model.ClassInfo(options);
@@ -184,7 +184,7 @@ Jsonix.Model.Module = Jsonix
 							this.defaultElementNamespaceURI,
 							options.elementName);
 				} else {
-					throw 'Element info [' + options + '] must provide an element name.';
+					throw new Error('Element info [' + options + '] must provide an element name.');
 				}
 				if (Jsonix.Util.Type.exists(options.substitutionHead)) {
 					if (Jsonix.Util.Type.isObject(options.substitutionHead)) {

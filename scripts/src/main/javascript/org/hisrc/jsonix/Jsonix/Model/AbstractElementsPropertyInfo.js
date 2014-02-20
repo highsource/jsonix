@@ -58,7 +58,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 					result = value;
 				} else {
 					// TODO Report validation error
-					throw "Value already set.";
+					throw new Error("Value already set.");
 				}
 			}
 		};
@@ -81,13 +81,13 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			} else {
 				// TODO ignore comments, processing
 				// instructions
-				throw "Illegal state: unexpected event type [" + et + "].";
+				throw new Error("Illegal state: unexpected event type [" + et + "].");
 			}
 			et = input.next();
 		}
 	},
 	unmarshalElement : function(context, input, callback) {
-		throw "Abstract method [unmarshalElement].";
+		throw new Error("Abstract method [unmarshalElement].");
 	},
 	marshal : function(context, scope, value, output) {
 
@@ -117,7 +117,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 	},
 	marshalElement : function(context, value, output) {
-		throw "Abstract method [marshalElement].";
+		throw new Error("Abstract method [marshalElement].");
 	},
 	marshalElementTypeInfo : function(context, value, elementName, typeInfo, output) {
 		output.writeStartElement(elementName);
@@ -128,7 +128,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		Jsonix.Util.Ensure.ensureObject(structure);
 		if (Jsonix.Util.Type.exists(structure.value)) {
 			// TODO better exception
-			throw "The structure already defines a value property.";
+			throw new Error("The structure already defines a value property.");
 		} else if (!Jsonix.Util.Type.exists(structure.elements)) {
 			structure.elements = {};
 		}
@@ -140,7 +140,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 	},
 	buildStructureElements : function(context, structure) {
-		throw "Abstract method [buildStructureElements].";
+		throw new Error("Abstract method [buildStructureElements].");
 	},
 	CLASS_NAME : 'Jsonix.Model.AbstractElementsPropertyInfo'
 });

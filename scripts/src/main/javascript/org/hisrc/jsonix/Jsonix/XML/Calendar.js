@@ -45,7 +45,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.year >= -9999 && data.year <= 9999) {
 				this.year = data.year;
 			} else {
-				throw 'Invalid year [' + data.year + '].';
+				throw new Error('Invalid year [' + data.year + '].');
 			}
 
 		} else {
@@ -57,7 +57,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.month >= 1 && data.month <= 12) {
 				this.month = data.month;
 			} else {
-				throw 'Invalid month [' + data.month + '].';
+				throw new Error('Invalid month [' + data.month + '].');
 			}
 
 		} else {
@@ -69,7 +69,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.day >= 1 && data.day <= 31) {
 				this.day = data.day;
 			} else {
-				throw 'Invalid day [' + data.day + '].';
+				throw new Error('Invalid day [' + data.day + '].');
 			}
 
 		} else {
@@ -81,7 +81,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.hour >= 0 && data.hour <= 23) {
 				this.hour = data.hour;
 			} else {
-				throw 'Invalid hour [' + data.hour + '].';
+				throw new Error('Invalid hour [' + data.hour + '].');
 			}
 
 		} else {
@@ -93,7 +93,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.minute >= 0 && data.minute <= 59) {
 				this.minute = data.minute;
 			} else {
-				throw 'Invalid minute [' + data.minute + '].';
+				throw new Error('Invalid minute [' + data.minute + '].');
 			}
 
 		} else {
@@ -105,7 +105,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.second >= 0 && data.second <= 59) {
 				this.second = data.second;
 			} else {
-				throw 'Invalid second [' + data.second + '].';
+				throw new Error('Invalid second [' + data.second + '].');
 			}
 
 		} else {
@@ -117,7 +117,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.fractionalSecond >= 0 && data.fractionalSecond < 1) {
 				this.fractionalSecond = data.fractionalSecond;
 			} else {
-				throw 'Invalid fractional second [' + data.fractionalSecond + '].';
+				throw new Error('Invalid fractional second [' + data.fractionalSecond + '].');
 			}
 
 		} else {
@@ -132,7 +132,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 				if (data.timezone >= -1440 && data.timezone < 1440) {
 					this.timezone = data.timezone;
 				} else {
-					throw 'Invalid timezone [' + data.timezone + '].';
+					throw new Error('Invalid timezone [' + data.timezone + '].');
 				}
 			}
 		} else {

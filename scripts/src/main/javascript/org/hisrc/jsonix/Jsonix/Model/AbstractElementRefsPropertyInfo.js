@@ -70,7 +70,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			// Skip whitespace
 		} else {
 			// TODO better exception
-			throw "Illegal state: unexpected event type [" + et + "].";
+			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
 	},
 	unmarshalWrapperElement : function(context, scope, input) {
@@ -92,7 +92,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 						result = value;
 					} else {
 						// TODO Report validation error
-						throw "Value already set.";
+						throw new Error("Value already set.");
 					}
 				}
 			} else
@@ -109,13 +109,13 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 						result = text;
 					} else {
 						// TODO Report validation error
-						throw "Value already set.";
+						throw new Error("Value already set.");
 					}
 				}
 			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 				// Skip whitespace
 			} else {
-				throw "Illegal state: unexpected event type [" + et + "].";
+				throw new Error("Illegal state: unexpected event type [" + et + "].");
 			}
 			et = input.next();
 		}
@@ -162,7 +162,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		if (Jsonix.Util.Type.isString(value)) {
 			if (!this.mixed) {
 				// TODO
-				throw "Property is not mixed, can't handle string values.";
+				throw new Error("Property is not mixed, can't handle string values.");
 			} else {
 				output.writeCharacters(value);
 			}
@@ -171,9 +171,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 		} else {
 			if (this.mixed) {
-				throw "Unsupported content type, either objects or strings are supported.";
+				throw new Error("Unsupported content type, either objects or strings are supported.");
 			} else {
-				throw "Unsupported content type, only objects are supported.";
+				throw new Error("Unsupported content type, only objects are supported.");
 			}
 		}
 
@@ -200,19 +200,19 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			if (Jsonix.Util.Type.exists(contextElementTypeInfo)) {
 				return contextElementTypeInfo.typeInfo;
 			} else {
-				throw "Element [" + elementName.key + "] is not known in this context.";
+				throw new Error("Element [" + elementName.key + "] is not known in this context.");
 			}
 		}
 
 	},
 	getPropertyElementTypeInfo : function(elementName) {
-		throw "Abstract method [getPropertyElementTypeInfo].";
+		throw new Error("Abstract method [getPropertyElementTypeInfo].");
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);
 		if (Jsonix.Util.Type.exists(structure.value)) {
 			// TODO better exception
-			throw "The structure already defines a value property.";
+			throw new Error("The structure already defines a value property.");
 		} else if (!Jsonix.Util.Type.exists(structure.elements)) {
 			structure.elements = {};
 		}
@@ -226,9 +226,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		// if (Jsonix.Util.Type.exists(structure.elements[key]))
 		// {
 		// // TODO better exception
-		// throw "The structure already defines an element for
+		// throw new Error("The structure already defines an element for
 		// the key ["
-		// + key + "].";
+		// + key + "].");
 		// } else
 		// {
 		// structure.elements[key] = this;
@@ -237,8 +237,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		if (this.mixed && !Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			// if (Jsonix.Util.Type.exists(structure.mixed)) {
 			// // TODO better exception
-			// throw "The structure already defines the mixed
-			// property.";
+			// throw new Error("The structure already defines the mixed
+			// property.");
 			// } else
 			// {
 			structure.mixed = this;
@@ -246,7 +246,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 	},
 	buildStructureElements : function(context, structure) {
-		throw "Abstract method [buildStructureElements].";
+		throw new Error("Abstract method [buildStructureElements].");
 	},
 	buildStructureElementTypeInfos : function(context, structure, elementTypeInfo) {
 		structure.elements[elementTypeInfo.elementName.key] = this;

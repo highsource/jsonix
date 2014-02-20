@@ -88,7 +88,7 @@ Jsonix.XML.Output = Jsonix.Class({
 			element = this.xmldom.createNode(1, qualifiedName, namespaceURI);
 
 		} else {
-			throw "Could not create an element node.";
+			throw new Error("Could not create an element node.");
 		}
 		this.peek().appendChild(element);
 		return this.push(element);
@@ -104,7 +104,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		else if (this.xmldom) {
 			node = this.xmldom.createTextNode(text);
 		} else {
-			throw "Could not create an text node.";
+			throw new Error("Could not create a text node.");
 		}
 		this.peek().appendChild(node);
 		return node;
@@ -134,7 +134,7 @@ Jsonix.XML.Output = Jsonix.Class({
 					attribute.nodeValue = value;
 					node.setAttributeNode(attribute);
 				} else {
-					throw "setAttributeNS not implemented";
+					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
 		}

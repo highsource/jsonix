@@ -72,7 +72,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 
 		} else {
 			// TODO better exception
-			throw "Illegal state: unexpected event type [" + et + "].";
+			throw new Error("Illegal state: unexpected event type [" + et + "].");
 
 		}
 	},
@@ -94,7 +94,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			value = input.getElement();
 		} else {
 			// TODO better exception
-			throw "Element [" + name.toString() + "] is not known in this context and property does not allow DOM.";
+			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
 		}
 		if (this.collection) {
 			return [ value ];
@@ -135,7 +135,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 				output.writeEndElement();
 			} else {
 				// TODO better exception
-				throw "Element [" + name.toString() + "] is not known in this context";
+				throw new Error("Element [" + name.toString() + "] is not known in this context");
 			}
 		}
 	},
@@ -146,7 +146,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		Jsonix.Util.Ensure.ensureObject(structure);
 		if (Jsonix.Util.Type.exists(structure.value)) {
 			// TODO better exception
-			throw "The structure already defines a value property.";
+			throw new Error("The structure already defines a value property.");
 		} else if (!Jsonix.Util.Type.exists(structure.elements)) {
 			structure.elements = {};
 		}
@@ -154,8 +154,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		if ((this.allowDom || this.allowTypedObject)) {
 			// if (Jsonix.Util.Type.exists(structure.any)) {
 			// // TODO better exception
-			// throw "The structure already defines the any
-			// property.";
+			// throw new Error("The structure already defines the any
+			// property.");
 			// } else
 			// {
 			structure.any = this;
@@ -164,8 +164,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		if (this.mixed) {
 			// if (Jsonix.Util.Type.exists(structure.mixed)) {
 			// // TODO better exception
-			// throw "The structure already defines the mixed
-			// property.";
+			// throw new Error("The structure already defines the mixed
+			// property.");
 			// } else
 			// {
 			structure.mixed = this;

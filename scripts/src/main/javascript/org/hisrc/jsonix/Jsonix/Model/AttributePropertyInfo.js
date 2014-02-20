@@ -69,9 +69,9 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 		var key = this.attributeName.key;
 		// if (Jsonix.Util.Type.exists(structure.attributes[key])) {
 		// // TODO better exception
-		// throw "The structure already defines an attribute for the key
+		// throw new Error("The structure already defines an attribute for the key
 		// ["
-		// + key + "].";
+		// + key + "].");
 		// } else
 		// {
 		structure.attributes[key] = this;

@@ -181,8 +181,8 @@ Jsonix.Context = Jsonix
 				}
 				return null;
 				//
-				// throw "Element [" + name.key
-				// + "] could not be found in the given context.";
+				// throw new Error("Element [" + name.key
+				// + "] could not be found in the given context.");
 			},
 			getSubstitutionMembers : function(name) {
 				return this.substitutionMembersMap[Jsonix.XML.QName

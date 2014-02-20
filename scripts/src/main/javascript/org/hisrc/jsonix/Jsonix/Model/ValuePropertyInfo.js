@@ -51,12 +51,12 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		Jsonix.Util.Ensure.ensureObject(structure);
 		// if (Jsonix.Util.Type.exists(structure.value)) {
 		// // TODO better exception
-		// throw "The structure already defines a value
-		// property.";
+		// throw new Error("The structure already defines a value
+		// property.");
 		// } else
 		if (Jsonix.Util.Type.exists(structure.elements)) {
 			// TODO better exception
-			throw "The structure already defines element mappings, it cannot define a value property.";
+			throw new Error("The structure already defines element mappings, it cannot define a value property.");
 		} else {
 			structure.value = this;
 		}

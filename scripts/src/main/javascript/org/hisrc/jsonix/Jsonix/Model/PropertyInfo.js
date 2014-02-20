@@ -60,10 +60,10 @@ Jsonix.Model.PropertyInfo = Jsonix
 				}
 			},
 			doBuild : function(context, module) {
-				throw "Abstract method [doBuild].";
+				throw new Error("Abstract method [doBuild].");
 			},
 			buildStructure : function(context, structure) {
-				throw "Abstract method [buildStructure].";
+				throw new Error("Abstract method [buildStructure].");
 			},
 			setProperty : function(object, value) {
 				if (Jsonix.Util.Type.exists(value)) {

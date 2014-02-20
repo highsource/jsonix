@@ -72,8 +72,8 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 		// if (Jsonix.Util.Type.exists(structure.anyAttribute))
 		// {
 		// // TODO better exception
-		// throw "The structure already defines an any attribute
-		// property.";
+		// throw new Error("The structure already defines an any attribute
+		// property.");
 		// } else
 		// {
 		structure.anyAttribute = this;

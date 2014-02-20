@@ -55,7 +55,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var time = value.getTime();
 		if (time <= -86400000 && time >= 86400000) {
-			throw 'Invalid time [' + value + '].';
+			throw new Error('Invalid time [' + value + '].');
 		}
 		if (time >= 0) {
 			return this.printTime(new Jsonix.XML.Calendar({

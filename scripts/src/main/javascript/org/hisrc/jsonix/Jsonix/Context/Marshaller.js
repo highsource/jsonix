@@ -64,7 +64,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 
 		var elementDeclaration = this.context.getElementInfo(name);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw 'Could not find element declaration for the element [' + name.key + '].';
+			throw new Error("Could not find element declaration for the element [" + name.key + "].");
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;

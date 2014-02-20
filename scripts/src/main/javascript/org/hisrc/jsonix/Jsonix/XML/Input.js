@@ -145,13 +145,13 @@ Jsonix.XML.Input = Jsonix.Class({
 			return this.eventType;
 		} else {
 			// DOCUMENT_FRAGMENT_NODE = 11
-			throw "Node type [" + nodeType + '] is not supported.';
+			throw new Error("Node type [" + nodeType + '] is not supported.');
 		}
 	},
 	leave : function(node) {
 		if (node.nodeType === 9) {
 			if (this.eventType == 8) {
-				throw "Invalid state.";
+				throw new Error("Invalid state.");
 			} else {
 				this.node = node;
 				this.attributes = null;
@@ -220,14 +220,14 @@ Jsonix.XML.Input = Jsonix.Class({
 		}
 		if (et !== 1 && et !== 2) {
 			// TODO location
-			throw 'Expected start or end tag.';
+			throw new Error('Expected start or end tag.');
 		}
 		return et;
 
 	},
 	getElementText : function() {
 		if (this.eventType != 1) {
-			throw "Parser must be on START_ELEMENT to read next text.";
+			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 		var et = this.next();
 		var content = '';
@@ -238,14 +238,14 @@ Jsonix.XML.Input = Jsonix.Class({
 				// Skip PI or comment
 			} else if (et === 8) {
 				// End document
-				throw "Unexpected end of document when reading element text content.";
+				throw new Error("Unexpected end of document when reading element text content.");
 			} else if (et === 1) {
 				// End element
 				// TODO location
-				throw "Element text content may not contain START_ELEMENT.";
+				throw new Error("Element text content may not contain START_ELEMENT.");
 			} else {
 				// TODO location
-				throw ("Unexpected event type [" + et + "].");
+				throw new Error("Unexpected event type [" + et + "].");
 			}
 			et = this.next();
 		}
@@ -262,7 +262,7 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Number of attributes can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Number of attributes can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		return attributes.length;
 	},
@@ -277,10 +277,10 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Attribute name can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Attribute name can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		if (index < 0 || index >= attributes.length) {
-			throw "Invalid attribute index [" + index + "].";
+			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 		
@@ -302,10 +302,10 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Attribute name key can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Attribute name key can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		if (index < 0 || index >= attributes.length) {
-			throw "Invalid attribute index [" + index + "].";
+			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 
@@ -323,10 +323,10 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Attribute value can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Attribute value can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		if (index < 0 || index >= attributes.length) {
-			throw "Invalid attribute index [" + index + "].";
+			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 		return attribute.nodeValue;
@@ -337,7 +337,7 @@ Jsonix.XML.Input = Jsonix.Class({
 			this.eventType = 2;
 			return this.node;
 		} else {
-			throw "Parser must be on START_ELEMENT or END_ELEMENT to return current element.";
+			throw new Error("Parser must be on START_ELEMENT or END_ELEMENT to return current element.");
 		}
 	},
 	CLASS_NAME : "Jsonix.XML.Input"
