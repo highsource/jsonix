@@ -12,7 +12,7 @@ Jsonix advantages:
 
 ## Example
 
-Here's a working example for the purchase order schema. 
+Here's a working example for the [purchase order schema](http://www.w3.org/TR/xmlschema-0/#po.xsd).
 
 ### Generate mappings
 
