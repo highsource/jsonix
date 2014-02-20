@@ -1,5 +1,4 @@
-Jsonix
-======
+# Jsonix
 
 * Jsonix (JSON interfaces for XML) is a JavaScript library which allows you to convert between XML and JSON structures.
 * With Jsonix you can parse XML into JSON (this process is called _unmarshalling_) or serialize JSON in XML form (this is called _marshalling_).
@@ -11,12 +10,11 @@ Jsonix advantages:
 * Type-safe.
 * (Optionally) XML Schema-driven.
 
-Example
--------
+## Example
 
 Here's a working example for the purchase order schema. 
 
-1. Generate mappings
+### Generate mappings
 
 ```
 java -jar jsonix-full.jar -d mappings -p PO purchaseorder.xsd
@@ -24,7 +22,7 @@ java -jar jsonix-full.jar -d mappings -p PO purchaseorder.xsd
 
 Generates mappings for the `purchaseorder.xsd` schema in the `mappings\PO.js`; mappings will be placed in the variable `PO`.
 
-2. Unmarshalling:
+### Unmarshalling:
 
 ```javascript
 // Include or require PO.js so that PO variable is available
@@ -46,8 +44,10 @@ unmarshaller.unmarshalURL('po.xml',
         console.log(unmarshalled.value.items.item[1].productName); // Baby Monitor
     });
 ```
+
+You can also ``unmarshalString``, ``unmarshalDocument`` and (under node.js) ``unmarshalFile``.
     
-3. Marshalling
+### Marshalling
 
 ```javascript
 // Create a marshaller
@@ -74,3 +74,5 @@ var doc = marshaller.marshalDocument({
     }
 });
 ```
+
+You can also ``marshalString``.
