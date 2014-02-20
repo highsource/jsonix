@@ -18,8 +18,8 @@ Here's a working example for the purchase order schema.
 
 1. Generate mappings
 
-
-	java -jar jsonix-full.jar -d mappings -p PO purchaseorder.xsd
+```javascript
+```java -jar jsonix-full.jar -d mappings -p PO purchaseorder.xsd
 
 
 Generates mappings for the `purchaseorder.xsd` schema in the `mappings\PO.js`; mappings will be placed in the variable `PO`.
