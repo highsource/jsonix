@@ -318,6 +318,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						}
 					},
 					print : function(value) {
+						if (Jsonix.Util.Type.isString(value)) {
+							return value;
+						}
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {
