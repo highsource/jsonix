@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+  <head>
+    <meta charset='utf-8' />
+    <meta http-equiv="X-UA-Compatible" content="chrome=1" />
+    <meta name="description" content="Jsonix : " />
+
+    <link rel="stylesheet" type="text/css" media="screen" href="stylesheets/stylesheet.css">
+
+    <title>Jsonix</title>
+  </head>
+
+  <body>
+
+    <!-- HEADER -->
+    <div id="header_wrap" class="outer">
+        <header class="inner">
+          <a id="forkme_banner" href="https://github.com/highsource/jsonix">View on GitHub</a>
+
+          <h1 id="project_title">Jsonix</h1>
+          <h2 id="project_tagline"></h2>
+
+            <section id="downloads">
+              <a class="zip_download_link" href="https://github.com/highsource/jsonix/zipball/master">Download this project as a .zip file</a>
+              <a class="tar_download_link" href="https://github.com/highsource/jsonix/tarball/master">Download this project as a tar.gz file</a>
+            </section>
+        </header>
+    </div>
+
+    <!-- MAIN CONTENT -->
+    <div id="main_content_wrap" class="outer">
+      <section id="main_content" class="inner">
+        <h1>
+<a name="jsonix" class="anchor" href="#jsonix"><span class="octicon octicon-link"></span></a>Jsonix</h1>
+
+<ul>
+<li>Jsonix (JSON interfaces for XML) is a JavaScript library which allows you to convert between XML and JSON structures.</li>
+<li>With Jsonix you can parse XML into JSON (this process is called <em>unmarshalling</em>) or serialize JSON in XML form (this is called <em>marshalling</em>).</li>
+<li>These conversions are based on declarative XML/JSON mappings which can be written manually or generated from an XML Schema.</li>
+</ul><p>Jsonix advantages:</p>
+
+<ul>
+<li>Strongly structured.</li>
+<li>Type-safe.</li>
+<li>(Optionally) XML Schema-driven.</li>
+</ul><h2>
+<a name="example" class="anchor" href="#example"><span class="octicon octicon-link"></span></a>Example</h2>
+
+<p>Here's a working example for the <a href="http://www.w3.org/TR/xmlschema-0/#po.xsd">purchase order schema</a> (try it <a href="http://jsfiddle.net/lexi/LP3DC/">online in JSFiddle</a>).</p>
+
+<h3>
+<a name="generate-mappings" class="anchor" href="#generate-mappings"><span class="octicon octicon-link"></span></a>Generate mappings</h3>
+
+<pre><code>java -jar jsonix-full.jar -d mappings -p PO purchaseorder.xsd
+</code></pre>
+
+<p>Generates mappings for the <code>purchaseorder.xsd</code> schema in the <code>mappings\PO.js</code>; mappings will be placed in the variable <code>PO</code>.</p>
+
+<h3>
+<a name="unmarshalling" class="anchor" href="#unmarshalling"><span class="octicon octicon-link"></span></a>Unmarshalling:</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Include or require PO.js so that PO variable is available</span>
+<span class="c1">// For instance, in node.js:</span>
+<span class="kd">var</span> <span class="nx">PO</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'./mappings/PO'</span><span class="p">).</span><span class="nx">PO</span><span class="p">;</span>
+
+<span class="c1">// First we construct a Jsonix context - a factory for unmarshaller (parser)</span>
+<span class="c1">// and marshaller (serializer)</span>
+<span class="kd">var</span> <span class="nx">context</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">Jsonix</span><span class="p">.</span><span class="nx">Context</span><span class="p">([</span><span class="nx">PO</span><span class="p">]);</span>
+
+<span class="c1">// Then we create a unmarshaller</span>
+<span class="kd">var</span> <span class="nx">unmarshaller</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">createUnmarshaller</span><span class="p">();</span>
+
+<span class="c1">// Unmarshal an object from the XML retrieved from the URL</span>
+<span class="nx">unmarshaller</span><span class="p">.</span><span class="nx">unmarshalURL</span><span class="p">(</span><span class="s1">'po.xml'</span><span class="p">,</span>
+    <span class="c1">// This callback function will be provided with the result of the unmarshalling</span>
+    <span class="kd">function</span> <span class="p">(</span><span class="nx">unmarshalled</span><span class="p">)</span> <span class="p">{</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">unmarshalled</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">shipTo</span><span class="p">.</span><span class="nx">name</span><span class="p">);</span> <span class="c1">// Alice Smith</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">unmarshalled</span><span class="p">.</span><span class="nx">value</span><span class="p">.</span><span class="nx">items</span><span class="p">.</span><span class="nx">item</span><span class="p">[</span><span class="mi">1</span><span class="p">].</span><span class="nx">productName</span><span class="p">);</span> <span class="c1">// Baby Monitor</span>
+    <span class="p">});</span>
+</pre></div>
+
+<p>You can also <code>unmarshalString</code>, <code>unmarshalDocument</code> and (under node.js) <code>unmarshalFile</code>.</p>
+
+<h3>
+<a name="marshalling" class="anchor" href="#marshalling"><span class="octicon octicon-link"></span></a>Marshalling</h3>
+
+<div class="highlight highlight-javascript"><pre><span class="c1">// Create a marshaller</span>
+<span class="kd">var</span> <span class="nx">marshaller</span> <span class="o">=</span> <span class="nx">context</span><span class="p">.</span><span class="nx">createMarshaller</span><span class="p">();</span>
+
+<span class="c1">// Marshal a JavaScript Object as XML (DOM Document)</span>
+<span class="kd">var</span> <span class="nx">doc</span> <span class="o">=</span> <span class="nx">marshaller</span><span class="p">.</span><span class="nx">marshalDocument</span><span class="p">({</span>
+    <span class="nx">name</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">localPart</span><span class="o">:</span> <span class="s2">"purchaseOrder"</span>
+    <span class="p">},</span>
+    <span class="nx">value</span><span class="o">:</span> <span class="p">{</span>
+        <span class="nx">orderDate</span><span class="o">:</span> <span class="p">{</span> <span class="nx">year</span><span class="o">:</span> <span class="mi">1999</span><span class="p">,</span> <span class="nx">month</span><span class="o">:</span> <span class="mi">10</span><span class="p">,</span> <span class="nx">day</span><span class="o">:</span> <span class="mi">20</span> <span class="p">},</span>
+        <span class="nx">shipTo</span><span class="o">:</span> <span class="p">{</span>
+            <span class="nx">country</span><span class="o">:</span> <span class="s2">"US"</span><span class="p">,</span>
+            <span class="nx">name</span><span class="o">:</span> <span class="s2">"Alice Smith"</span><span class="p">,</span>
+            <span class="nx">street</span><span class="o">:</span> <span class="s2">"123 Maple Street"</span><span class="p">,</span>
+            <span class="nx">city</span><span class="o">:</span> <span class="s2">"Mill Valley"</span><span class="p">,</span>
+            <span class="nx">state</span><span class="o">:</span> <span class="s2">"CA"</span><span class="p">,</span>
+            <span class="nx">zip</span><span class="o">:</span> <span class="mi">90952</span>
+        <span class="p">},</span>
+        <span class="nx">billTo</span><span class="o">:</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">},</span>
+        <span class="nx">comment</span><span class="o">:</span> <span class="s1">'Hurry, my lawn is going wild!'</span><span class="p">,</span>
+        <span class="nx">items</span><span class="o">:</span> <span class="p">{</span> <span class="cm">/* ... */</span> <span class="p">}</span>
+    <span class="p">}</span>
+<span class="p">});</span>
+</pre></div>
+
+<p>You can also <code>marshalString</code>.</p>
+      </section>
+    </div>
+
+    <!-- FOOTER  -->
+    <div id="footer_wrap" class="outer">
+      <footer class="inner">
+        <p class="copyright">Jsonix maintained by <a href="https://github.com/highsource">highsource</a></p>
+        <p>Published with <a href="http://pages.github.com">GitHub Pages</a></p>
+      </footer>
+    </div>
+
+    
+
+  </body>
+</html>
