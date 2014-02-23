@@ -2,7 +2,7 @@
  * Jsonix is a JavaScript library which allows you to convert between XML
  * and JavaScript object structures.
  *
- * Copyright (c) 2010, Aleksei Valikov, Highsource.org
+ * Copyright (c) 2010 - 2014, Alexey Valikov, Highsource.org
  * All rights reserved.
  *
  * Redistribution and use in source and binary forms, with or without
@@ -12,14 +12,14 @@
  *     * Redistributions in binary form must reproduce the above copyright
  *       notice, this list of conditions and the following disclaimer in the
  *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Aleksei Valikov nor the
+ *     * Neither the name of the Alexey Valikov nor the
  *       names of contributors may be used to endorse or promote products
  *       derived from this software without specific prior written permission.
  *
  * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
  * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
  * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL ALEKSEI VALIKOV BE LIABLE FOR ANY
+ * DISCLAIMED. IN NO EVENT SHALL ALEXEY VALIKOV BE LIABLE FOR ANY
  * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
  * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
  * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
@@ -126,7 +126,7 @@ Jsonix.DOM = {
 		} else if (typeof ActiveXObject !== 'undefined') {
 			return new ActiveXObject('MSXML2.DOMDocument');
 		} else {
-			throw 'Error created the DOM document.';
+			throw new Error('Error created the DOM document.');
 		}
 	},
 	serialize : function(node) {
@@ -141,7 +141,7 @@ Jsonix.DOM = {
 		} else if (Jsonix.Util.Type.exists(node.xml)) {
 			return node.xml;
 		} else {
-			throw 'Could not serialize the node, neither XMLSerializer nor the [xml] property were found.';
+			throw new Error('Could not serialize the node, neither XMLSerializer nor the [xml] property were found.');
 		}
 	},
 	parse : function(text) {
@@ -179,12 +179,12 @@ Jsonix.DOM = {
 							} else if (Jsonix.Util.Type.isString(transport.responseText)) {
 								result = Jsonix.DOM.parse(transport.responseText);
 							} else {
-								throw 'Response does not have valid [responseXML] or [responseText].';
+								throw new Error('Response does not have valid [responseXML] or [responseText].');
 							}
 							callback(result);
 
 						}, function(transport) {
-							throw 'Could not retrieve XML from URL [' + url	+ '].';
+							throw new Error('Could not retrieve XML from URL [' + url	+ '].');
 
 						}, options);
 	}
@@ -320,7 +320,7 @@ Jsonix.Request = Jsonix
 						// TODO log
 					}
 				}
-				throw 'Could not create XML HTTP transport.';
+				throw new Error('Could not create XML HTTP transport.');
 			},
 			CLASS_NAME : 'Jsonix.Request'
 		});
@@ -676,54 +676,54 @@ Jsonix.Util.StringUtils = {
 Jsonix.Util.Ensure = {
 	ensureBoolean : function(value) {
 		if (!Jsonix.Util.Type.isBoolean(value)) {
-			throw 'Argument [' + value + '] must be a boolean.';
+			throw new Error('Argument [' + value + '] must be a boolean.');
 		}
 	},
 	ensureString : function(value) {
 		if (!Jsonix.Util.Type.isString(value)) {
-			throw 'Argument [' + value + '] must be a string.';
+			throw new Error('Argument [' + value + '] must be a string.');
 		}
 	},
 	ensureNumber : function(value) {
 		if (!Jsonix.Util.Type.isNumber(value)) {
-			throw 'Argument [' + value + '] must be a number.';
+			throw new Error('Argument [' + value + '] must be a number.');
 		}
 	},
 	ensureNumberOrNaN : function(value) {
 		if (!Jsonix.Util.Type.isNumberOrNaN(value)) {
-			throw 'Argument [' + value + '] must be a number or NaN.';
+			throw new Error('Argument [' + value + '] must be a number or NaN.');
 		}
 	},
 	ensureInteger : function(value) {
 		if (!Jsonix.Util.Type.isNumber(value)) {
-			throw 'Argument must be an integer, but it is not a number.';
+			throw new Error('Argument must be an integer, but it is not a number.');
 		} else if (!Jsonix.Util.NumberUtils.isInteger(value)) {
-			throw 'Argument [' + value + '] must be an integer.';
+			throw new Error('Argument [' + value + '] must be an integer.');
 		}
 	},
 	ensureDate : function(value) {
 		if (!(value instanceof Date)) {
-			throw 'Argument [' + value + '] must be a date.';
+			throw new Error('Argument [' + value + '] must be a date.');
 		}
 	},
 	ensureObject : function(value) {
 		if (!Jsonix.Util.Type.isObject(value)) {
-			throw 'Argument [' + value + '] must be an object.';
+			throw new Error('Argument [' + value + '] must be an object.');
 		}
 	},
 	ensureArray : function(value) {
 		if (!Jsonix.Util.Type.isArray(value)) {
-			throw 'Argument [' + value + '] must be an array.';
+			throw new Error('Argument [' + value + '] must be an array.');
 		}
 	},
 	ensureFunction : function(value) {
 		if (!Jsonix.Util.Type.isFunction(value)) {
-			throw 'Argument [' + value + '] must be a function.';
+			throw new Error('Argument [' + value + '] must be a function.');
 		}
 	},
 	ensureExists : function(value) {
 		if (!Jsonix.Util.Type.exists(value)) {
-			throw 'Argument [' + value + '] does not exist.';
+			throw new Error('Argument [' + value + '] does not exist.');
 		}
 	}
 };
@@ -849,7 +849,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.year >= -9999 && data.year <= 9999) {
 				this.year = data.year;
 			} else {
-				throw 'Invalid year [' + data.year + '].';
+				throw new Error('Invalid year [' + data.year + '].');
 			}
 
 		} else {
@@ -861,7 +861,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.month >= 1 && data.month <= 12) {
 				this.month = data.month;
 			} else {
-				throw 'Invalid month [' + data.month + '].';
+				throw new Error('Invalid month [' + data.month + '].');
 			}
 
 		} else {
@@ -873,7 +873,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.day >= 1 && data.day <= 31) {
 				this.day = data.day;
 			} else {
-				throw 'Invalid day [' + data.day + '].';
+				throw new Error('Invalid day [' + data.day + '].');
 			}
 
 		} else {
@@ -885,7 +885,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.hour >= 0 && data.hour <= 23) {
 				this.hour = data.hour;
 			} else {
-				throw 'Invalid hour [' + data.hour + '].';
+				throw new Error('Invalid hour [' + data.hour + '].');
 			}
 
 		} else {
@@ -897,7 +897,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.minute >= 0 && data.minute <= 59) {
 				this.minute = data.minute;
 			} else {
-				throw 'Invalid minute [' + data.minute + '].';
+				throw new Error('Invalid minute [' + data.minute + '].');
 			}
 
 		} else {
@@ -909,7 +909,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.second >= 0 && data.second <= 59) {
 				this.second = data.second;
 			} else {
-				throw 'Invalid second [' + data.second + '].';
+				throw new Error('Invalid second [' + data.second + '].');
 			}
 
 		} else {
@@ -921,7 +921,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 			if (data.fractionalSecond >= 0 && data.fractionalSecond < 1) {
 				this.fractionalSecond = data.fractionalSecond;
 			} else {
-				throw 'Invalid fractional second [' + data.fractionalSecond + '].';
+				throw new Error('Invalid fractional second [' + data.fractionalSecond + '].');
 			}
 
 		} else {
@@ -936,7 +936,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 				if (data.timezone >= -1440 && data.timezone < 1440) {
 					this.timezone = data.timezone;
 				} else {
-					throw 'Invalid timezone [' + data.timezone + '].';
+					throw new Error('Invalid timezone [' + data.timezone + '].');
 				}
 			}
 		} else {
@@ -1069,13 +1069,13 @@ Jsonix.XML.Input = Jsonix.Class({
 			return this.eventType;
 		} else {
 			// DOCUMENT_FRAGMENT_NODE = 11
-			throw "Node type [" + nodeType + '] is not supported.';
+			throw new Error("Node type [" + nodeType + '] is not supported.');
 		}
 	},
 	leave : function(node) {
 		if (node.nodeType === 9) {
 			if (this.eventType == 8) {
-				throw "Invalid state.";
+				throw new Error("Invalid state.");
 			} else {
 				this.node = node;
 				this.attributes = null;
@@ -1144,14 +1144,14 @@ Jsonix.XML.Input = Jsonix.Class({
 		}
 		if (et !== 1 && et !== 2) {
 			// TODO location
-			throw 'Expected start or end tag.';
+			throw new Error('Expected start or end tag.');
 		}
 		return et;
 
 	},
 	getElementText : function() {
 		if (this.eventType != 1) {
-			throw "Parser must be on START_ELEMENT to read next text.";
+			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 		var et = this.next();
 		var content = '';
@@ -1162,14 +1162,14 @@ Jsonix.XML.Input = Jsonix.Class({
 				// Skip PI or comment
 			} else if (et === 8) {
 				// End document
-				throw "Unexpected end of document when reading element text content.";
+				throw new Error("Unexpected end of document when reading element text content.");
 			} else if (et === 1) {
 				// End element
 				// TODO location
-				throw "Element text content may not contain START_ELEMENT.";
+				throw new Error("Element text content may not contain START_ELEMENT.");
 			} else {
 				// TODO location
-				throw ("Unexpected event type [" + et + "].");
+				throw new Error("Unexpected event type [" + et + "].");
 			}
 			et = this.next();
 		}
@@ -1186,7 +1186,7 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Number of attributes can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Number of attributes can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		return attributes.length;
 	},
@@ -1201,10 +1201,10 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Attribute name can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Attribute name can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		if (index < 0 || index >= attributes.length) {
-			throw "Invalid attribute index [" + index + "].";
+			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 		
@@ -1226,10 +1226,10 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Attribute name key can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Attribute name key can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		if (index < 0 || index >= attributes.length) {
-			throw "Invalid attribute index [" + index + "].";
+			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 
@@ -1247,10 +1247,10 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw "Attribute value can only be retrieved for START_ELEMENT or ATTRIBUTE.";
+			throw new Error("Attribute value can only be retrieved for START_ELEMENT or ATTRIBUTE.");
 		}
 		if (index < 0 || index >= attributes.length) {
-			throw "Invalid attribute index [" + index + "].";
+			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 		return attribute.nodeValue;
@@ -1261,7 +1261,7 @@ Jsonix.XML.Input = Jsonix.Class({
 			this.eventType = 2;
 			return this.node;
 		} else {
-			throw "Parser must be on START_ELEMENT or END_ELEMENT to return current element.";
+			throw new Error("Parser must be on START_ELEMENT or END_ELEMENT to return current element.");
 		}
 	},
 	CLASS_NAME : "Jsonix.XML.Input"
@@ -1343,7 +1343,7 @@ Jsonix.XML.Output = Jsonix.Class({
 			element = this.xmldom.createNode(1, qualifiedName, namespaceURI);
 
 		} else {
-			throw "Could not create an element node.";
+			throw new Error("Could not create an element node.");
 		}
 		this.peek().appendChild(element);
 		return this.push(element);
@@ -1359,7 +1359,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		else if (this.xmldom) {
 			node = this.xmldom.createTextNode(text);
 		} else {
-			throw "Could not create an text node.";
+			throw new Error("Could not create a text node.");
 		}
 		this.peek().appendChild(node);
 		return node;
@@ -1389,7 +1389,7 @@ Jsonix.XML.Output = Jsonix.Class({
 					attribute.nodeValue = value;
 					node.setAttributeNode(attribute);
 				} else {
-					throw "setAttributeNS not implemented";
+					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
 		}
@@ -1451,7 +1451,7 @@ Jsonix.Schema.XSD.AnyType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 	},
 	isInstance : function(value) {
-		throw 'Abstract method [isInstance].';
+		throw new Error('Abstract method [isInstance].');
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnyType'
 });
@@ -1660,7 +1660,7 @@ Jsonix.Schema.XSD.Boolean = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		} else if (text === 'false' || text === '0') {
 			return false;
 		} else {
-			throw "Either [true], [1], [0] or [false] expected as boolean value.";
+			throw new Error("Either [true], [1], [0] or [false] expected as boolean value.");
 		}
 	},
 	isInstance : function(value) {
@@ -2117,7 +2117,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						} else if (data.length >= 8 && data.charAt(2) === ':' && data.charAt(5) === ':') {
 							return this.parseTime(text);
 						} else {
-							throw 'Value [' + text + '] does not match dateTime, date or time patterns.';
+							throw new Error('Value [' + text + '] does not match dateTime, date or time patterns.');
 						}
 					},
 					parseDateTime : function(text) {
@@ -2128,7 +2128,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						var dateTimeWithTimeZone = negative ? text.substring(1) : text;
 
 						if (dateTimeWithTimeZone.length < 19 || dateTimeWithTimeZone.charAt(4) !== '-' || dateTimeWithTimeZone.charAt(7) !== '-' || dateTimeWithTimeZone.charAt(10) !== 'T' || dateTimeWithTimeZone.charAt(13) !== ':' || dateTimeWithTimeZone.charAt(16) !== ':') {
-							throw 'Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].';
+							throw new Error('Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].');
 						}
 
 						var timeZoneIndex;
@@ -2249,11 +2249,11 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseDateString : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 10) {
-							throw 'Date string [' + text + '] must be 10 characters long.';
+							throw new Error('Date string [' + text + '] must be 10 characters long.');
 						}
 
 						if (text.charAt(4) !== '-' || text.charAt(7) !== '-') {
-							throw 'Date string [' + text + '] must be a string in format [yyyy \'-\' mm \'-\' ss ].';
+							throw new Error('Date string [' + text + '] must be a string in format [yyyy \'-\' mm \'-\' ss ].');
 						}
 
 						var year = this.parseYear(text.substring(0, 4));
@@ -2269,7 +2269,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseTimeString : function(timeString) {
 						Jsonix.Util.Ensure.ensureString(timeString);
 						if (timeString.length < 8 || timeString.charAt(2) !== ':' || timeString.charAt(5) !== ':') {
-							throw 'Time string [' + timeString + '] must be a string in format [hh \':\' mm \':\' ss (\'.\' s+)?].';
+							throw new Error('Time string [' + timeString + '] must be a string in format [hh \':\' mm \':\' ss (\'.\' s+)?].');
 						}
 						var hourString = timeString.substring(0, 2);
 						var minuteString = timeString.substring(3, 5);
@@ -2296,7 +2296,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							return 0;
 						} else {
 							if (text.length !== 6) {
-								throw 'Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].';
+								throw new Error('Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].');
 							}
 							var signString = text.charAt(0);
 							var sign;
@@ -2305,7 +2305,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							} else if (signString === '-') {
 								sign = -1;
 							} else {
-								throw 'First character of the time zone [' + text + '] must be \'+\' or \'-\'.';
+								throw new Error('First character of the time zone [' + text + '] must be \'+\' or \'-\'.');
 							}
 							var hour = this.parseHour(text.substring(1, 3));
 							var minute = this.parseMinute(text.substring(4, 6));
@@ -2316,7 +2316,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseYear : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 4) {
-							throw 'Year [' + text + '] must be a four-digit number.';
+							throw new Error('Year [' + text + '] must be a four-digit number.');
 						}
 						var year = Number(text);
 						// TODO message
@@ -2326,7 +2326,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseMonth : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Month [' + text + '] must be a two-digit number.';
+							throw new Error('Month [' + text + '] must be a two-digit number.');
 						}
 						var month = Number(text);
 						// TODO message
@@ -2336,7 +2336,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseDay : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Day [' + text + '] must be a two-digit number.';
+							throw new Error('Day [' + text + '] must be a two-digit number.');
 						}
 						var day = Number(text);
 						// TODO message
@@ -2346,7 +2346,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseHour : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Hour [' + text + '] must be a two-digit number.';
+							throw new Error('Hour [' + text + '] must be a two-digit number.');
 						}
 						var hour = Number(text);
 						// TODO message
@@ -2356,7 +2356,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseMinute : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Minute [' + text + '] must be a two-digit number.';
+							throw new Error('Minute [' + text + '] must be a two-digit number.');
 						}
 						var minute = Number(text);
 						// TODO message
@@ -2366,7 +2366,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					parseSecond : function(text) {
 						Jsonix.Util.Ensure.ensureString(text);
 						if (text.length !== 2) {
-							throw 'Second [' + text + '] must be a two-digit number.';
+							throw new Error('Second [' + text + '] must be a two-digit number.');
 						}
 						var second = Number(text);
 						// TODO message
@@ -2385,6 +2385,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						}
 					},
 					print : function(value) {
+						if (Jsonix.Util.Type.isString(value)) {
+							return value;
+						}
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {
@@ -2394,7 +2397,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						} else if (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)) {
 							return this.printTime(value);
 						} else {
-							throw 'Value [' + value + '] is not recognized as dateTime, date or time.';
+							throw new Error('Value [' + value + '] is not recognized as dateTime, date or time.');
 						}
 					},
 					printDateTime : function(value) {
@@ -2524,7 +2527,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 					printFractionalSecond : function(value) {
 						Jsonix.Util.Ensure.ensureNumber(value);
 						if (value < 0 || value >= 1) {
-							throw 'Fractional second [' + value + '] must be between 0 and 1.';
+							throw new Error('Fractional second [' + value + '] must be between 0 and 1.');
 						} else if (value === 0) {
 							return '';
 						} else {
@@ -2541,13 +2544,13 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						Jsonix.Util.Ensure.ensureInteger(value);
 						Jsonix.Util.Ensure.ensureInteger(length);
 						if (length <= 0) {
-							throw 'Length [' + value + '] must be positive.';
+							throw new Error('Length [' + value + '] must be positive.');
 						}
 						if (value < 0) {
-							throw 'Value [' + value + '] must not be negative.';
+							throw new Error('Value [' + value + '] must not be negative.');
 						}
 						if (value >= Math.pow(10, length)) {
-							throw 'Value [' + value + '] must be less than [' + Math.pow(10, length) + '].';
+							throw new Error('Value [' + value + '] must be less than [' + Math.pow(10, length) + '].');
 						}
 						var result = String(value);
 						for ( var i = result.length; i < length; i++) {
@@ -2640,7 +2643,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var time = value.getTime();
 		if (time <= -86400000 && time >= 86400000) {
-			throw 'Invalid time [' + value + '].';
+			throw new Error('Invalid time [' + value + '].');
 		}
 		if (time >= 0) {
 			return this.printTime(new Jsonix.XML.Calendar({
@@ -2897,7 +2900,7 @@ Jsonix.Model.ClassInfo = Jsonix
 				};
 
 				if (input.eventType !== 1) {
-					throw "Parser must be on START_ELEMENT to read a class info.";
+					throw new Error("Parser must be on START_ELEMENT to read a class info.");
 				}
 
 				// Read attributes
@@ -2951,7 +2954,7 @@ Jsonix.Model.ClassInfo = Jsonix
 							} else {
 								// TODO report a validation error that element
 								// is not expected
-								throw 'Unexpected element [' + elementNameKey + '].';
+								throw new Error('Unexpected element [' + elementNameKey + '].');
 							}
 						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
 							// Characters and structure has a mixed property
@@ -2961,7 +2964,7 @@ Jsonix.Model.ClassInfo = Jsonix
 						} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT	|| et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 							// Ignore
 						} else {
-							throw "Illegal state: unexpected event type [" + et	+ "].";
+							throw new Error("Illegal state: unexpected event type [" + et	+ "].");
 						}
 						et = input.next();
 					}
@@ -2974,7 +2977,7 @@ Jsonix.Model.ClassInfo = Jsonix
 					input.nextTag();
 				}
 				if (input.eventType !== 2) {
-					throw "Illegal state: must be END_ELEMENT.";
+					throw new Error("Illegal state: must be END_ELEMENT.");
 				}
 				return result;
 			},
@@ -3035,7 +3038,7 @@ Jsonix.Model.ClassInfo = Jsonix
 						// Call the creator function
 						propertyInfoCreator.call(this, property);
 					} else {
-						throw "Unknown property info type [" + type + "].";
+						throw new Error("Unknown property info type [" + type + "].");
 					}
 				}
 			},
@@ -3180,10 +3183,10 @@ Jsonix.Model.PropertyInfo = Jsonix
 				}
 			},
 			doBuild : function(context, module) {
-				throw "Abstract method [doBuild].";
+				throw new Error("Abstract method [doBuild].");
 			},
 			buildStructure : function(context, structure) {
-				throw "Abstract method [buildStructure].";
+				throw new Error("Abstract method [buildStructure].");
 			},
 			setProperty : function(object, value) {
 				if (Jsonix.Util.Type.exists(value)) {
@@ -3248,8 +3251,8 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 		// if (Jsonix.Util.Type.exists(structure.anyAttribute))
 		// {
 		// // TODO better exception
-		// throw "The structure already defines an any attribute
-		// property.";
+		// throw new Error("The structure already defines an any attribute
+		// property.");
 		// } else
 		// {
 		structure.anyAttribute = this;
@@ -3325,9 +3328,9 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 		var key = this.attributeName.key;
 		// if (Jsonix.Util.Type.exists(structure.attributes[key])) {
 		// // TODO better exception
-		// throw "The structure already defines an attribute for the key
+		// throw new Error("The structure already defines an attribute for the key
 		// ["
-		// + key + "].";
+		// + key + "].");
 		// } else
 		// {
 		structure.attributes[key] = this;
@@ -3359,12 +3362,12 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		Jsonix.Util.Ensure.ensureObject(structure);
 		// if (Jsonix.Util.Type.exists(structure.value)) {
 		// // TODO better exception
-		// throw "The structure already defines a value
-		// property.";
+		// throw new Error("The structure already defines a value
+		// property.");
 		// } else
 		if (Jsonix.Util.Type.exists(structure.elements)) {
 			// TODO better exception
-			throw "The structure already defines element mappings, it cannot define a value property.";
+			throw new Error("The structure already defines element mappings, it cannot define a value property.");
 		} else {
 			structure.value = this;
 		}
@@ -3402,7 +3405,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 					result = value;
 				} else {
 					// TODO Report validation error
-					throw "Value already set.";
+					throw new Error("Value already set.");
 				}
 			}
 		};
@@ -3425,13 +3428,13 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			} else {
 				// TODO ignore comments, processing
 				// instructions
-				throw "Illegal state: unexpected event type [" + et + "].";
+				throw new Error("Illegal state: unexpected event type [" + et + "].");
 			}
 			et = input.next();
 		}
 	},
 	unmarshalElement : function(context, input, callback) {
-		throw "Abstract method [unmarshalElement].";
+		throw new Error("Abstract method [unmarshalElement].");
 	},
 	marshal : function(context, scope, value, output) {
 
@@ -3461,7 +3464,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 	},
 	marshalElement : function(context, value, output) {
-		throw "Abstract method [marshalElement].";
+		throw new Error("Abstract method [marshalElement].");
 	},
 	marshalElementTypeInfo : function(context, value, elementName, typeInfo, output) {
 		output.writeStartElement(elementName);
@@ -3472,7 +3475,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		Jsonix.Util.Ensure.ensureObject(structure);
 		if (Jsonix.Util.Type.exists(structure.value)) {
 			// TODO better exception
-			throw "The structure already defines a value property.";
+			throw new Error("The structure already defines a value property.");
 		} else if (!Jsonix.Util.Type.exists(structure.elements)) {
 			structure.elements = {};
 		}
@@ -3484,7 +3487,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 	},
 	buildStructureElements : function(context, structure) {
-		throw "Abstract method [buildStructureElements].";
+		throw new Error("Abstract method [buildStructureElements].");
 	},
 	CLASS_NAME : 'Jsonix.Model.AbstractElementsPropertyInfo'
 });
@@ -3559,7 +3562,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 							return callback(typeInfo.unmarshal(context, input));
 						}
 						// TODO better exception
-						throw "Element [" + elementNameKey + "] is not known in this context";
+						throw new Error("Element [" + elementNameKey + "] is not known in this context");
 					},
 					marshalElement : function(context, value, output) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
@@ -3572,7 +3575,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 								return;
 							}
 						}
-						throw "Could not find an element with type info supporting the value ["	+ value + "].";
+						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
 					},
 					doBuild : function(context, module) {
 						this.elementTypeInfosMap = {};
@@ -3661,7 +3664,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 								result[attributeName] = attributeValue;
 							} else {
 								// TODO Report validation error
-								throw "Value already set.";
+								throw new Error("Value was already set.");
 							}
 						}
 					}
@@ -3807,7 +3810,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			// Skip whitespace
 		} else {
 			// TODO better exception
-			throw "Illegal state: unexpected event type [" + et + "].";
+			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
 	},
 	unmarshalWrapperElement : function(context, scope, input) {
@@ -3829,7 +3832,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 						result = value;
 					} else {
 						// TODO Report validation error
-						throw "Value already set.";
+						throw new Error("Value already set.");
 					}
 				}
 			} else
@@ -3846,13 +3849,13 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 						result = text;
 					} else {
 						// TODO Report validation error
-						throw "Value already set.";
+						throw new Error("Value already set.");
 					}
 				}
 			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 				// Skip whitespace
 			} else {
-				throw "Illegal state: unexpected event type [" + et + "].";
+				throw new Error("Illegal state: unexpected event type [" + et + "].");
 			}
 			et = input.next();
 		}
@@ -3899,7 +3902,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		if (Jsonix.Util.Type.isString(value)) {
 			if (!this.mixed) {
 				// TODO
-				throw "Property is not mixed, can't handle string values.";
+				throw new Error("Property is not mixed, can't handle string values.");
 			} else {
 				output.writeCharacters(value);
 			}
@@ -3908,9 +3911,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 		} else {
 			if (this.mixed) {
-				throw "Unsupported content type, either objects or strings are supported.";
+				throw new Error("Unsupported content type, either objects or strings are supported.");
 			} else {
-				throw "Unsupported content type, only objects are supported.";
+				throw new Error("Unsupported content type, only objects are supported.");
 			}
 		}
 
@@ -3937,19 +3940,19 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			if (Jsonix.Util.Type.exists(contextElementTypeInfo)) {
 				return contextElementTypeInfo.typeInfo;
 			} else {
-				throw "Element [" + elementName.key + "] is not known in this context.";
+				throw new Error("Element [" + elementName.key + "] is not known in this context.");
 			}
 		}
 
 	},
 	getPropertyElementTypeInfo : function(elementName) {
-		throw "Abstract method [getPropertyElementTypeInfo].";
+		throw new Error("Abstract method [getPropertyElementTypeInfo].");
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);
 		if (Jsonix.Util.Type.exists(structure.value)) {
 			// TODO better exception
-			throw "The structure already defines a value property.";
+			throw new Error("The structure already defines a value property.");
 		} else if (!Jsonix.Util.Type.exists(structure.elements)) {
 			structure.elements = {};
 		}
@@ -3963,9 +3966,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		// if (Jsonix.Util.Type.exists(structure.elements[key]))
 		// {
 		// // TODO better exception
-		// throw "The structure already defines an element for
+		// throw new Error("The structure already defines an element for
 		// the key ["
-		// + key + "].";
+		// + key + "].");
 		// } else
 		// {
 		// structure.elements[key] = this;
@@ -3974,8 +3977,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		if (this.mixed && !Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			// if (Jsonix.Util.Type.exists(structure.mixed)) {
 			// // TODO better exception
-			// throw "The structure already defines the mixed
-			// property.";
+			// throw new Error("The structure already defines the mixed
+			// property.");
 			// } else
 			// {
 			structure.mixed = this;
@@ -3983,7 +3986,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 	},
 	buildStructureElements : function(context, structure) {
-		throw "Abstract method [buildStructureElements].";
+		throw new Error("Abstract method [buildStructureElements].");
 	},
 	buildStructureElementTypeInfos : function(context, structure, elementTypeInfo) {
 		structure.elements[elementTypeInfo.elementName.key] = this;
@@ -4166,7 +4169,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 
 		} else {
 			// TODO better exception
-			throw "Illegal state: unexpected event type [" + et + "].";
+			throw new Error("Illegal state: unexpected event type [" + et + "].");
 
 		}
 	},
@@ -4188,7 +4191,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			value = input.getElement();
 		} else {
 			// TODO better exception
-			throw "Element [" + name.toString() + "] is not known in this context and property does not allow DOM.";
+			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
 		}
 		if (this.collection) {
 			return [ value ];
@@ -4229,7 +4232,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 				output.writeEndElement();
 			} else {
 				// TODO better exception
-				throw "Element [" + name.toString() + "] is not known in this context";
+				throw new Error("Element [" + name.toString() + "] is not known in this context");
 			}
 		}
 	},
@@ -4240,7 +4243,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		Jsonix.Util.Ensure.ensureObject(structure);
 		if (Jsonix.Util.Type.exists(structure.value)) {
 			// TODO better exception
-			throw "The structure already defines a value property.";
+			throw new Error("The structure already defines a value property.");
 		} else if (!Jsonix.Util.Type.exists(structure.elements)) {
 			structure.elements = {};
 		}
@@ -4248,8 +4251,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		if ((this.allowDom || this.allowTypedObject)) {
 			// if (Jsonix.Util.Type.exists(structure.any)) {
 			// // TODO better exception
-			// throw "The structure already defines the any
-			// property.";
+			// throw new Error("The structure already defines the any
+			// property.");
 			// } else
 			// {
 			structure.any = this;
@@ -4258,8 +4261,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		if (this.mixed) {
 			// if (Jsonix.Util.Type.exists(structure.mixed)) {
 			// // TODO better exception
-			// throw "The structure already defines the mixed
-			// property.";
+			// throw new Error("The structure already defines the mixed
+			// property.");
 			// } else
 			// {
 			structure.mixed = this;
@@ -4348,7 +4351,7 @@ Jsonix.Model.Module = Jsonix
 						// Call the creator function
 						typeInfo = typeInfoCreator.call(this, mapping);
 					} else {
-						throw "Unknown type info type [" + type + "].";
+						throw new Error("Unknown type info type [" + type + "].");
 					}
 				}
 				return typeInfo;
@@ -4399,7 +4402,7 @@ Jsonix.Model.Module = Jsonix
 						options.name = options.localName;
 					}
 				} else {
-					throw "Neither [name] nor [localName] was provided for the class info.";
+					throw new Error("Neither [name] nor [localName] was provided for the class info.");
 				}
 				// Now both name an local name are initialized
 				var classInfo = new Jsonix.Model.ClassInfo(options);
@@ -4425,7 +4428,7 @@ Jsonix.Model.Module = Jsonix
 							this.defaultElementNamespaceURI,
 							options.elementName);
 				} else {
-					throw 'Element info [' + options + '] must provide an element name.';
+					throw new Error('Element info [' + options + '] must provide an element name.');
 				}
 				if (Jsonix.Util.Type.exists(options.substitutionHead)) {
 					if (Jsonix.Util.Type.isObject(options.substitutionHead)) {
@@ -4633,8 +4636,8 @@ Jsonix.Context = Jsonix
 				}
 				return null;
 				//
-				// throw "Element [" + name.key
-				// + "] could not be found in the given context.";
+				// throw new Error("Element [" + name.key
+				// + "] could not be found in the given context.");
 			},
 			getSubstitutionMembers : function(name) {
 				return this.substitutionMembersMap[Jsonix.XML.QName
@@ -4732,7 +4735,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 
 		var elementDeclaration = this.context.getElementInfo(name);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw 'Could not find element declaration for the element [' + name.key + '].';
+			throw new Error("Could not find element declaration for the element [" + name.key + "].");
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;
@@ -4799,7 +4802,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 	},
 	unmarshalElementNode : function(input) {
 		if (input.eventType != 1) {
-			throw "Parser must be on START_ELEMENT to read next text.";
+			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 
 		var result = null;
@@ -4807,7 +4810,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 
 		var elementDeclaration = this.context.getElementInfo(name);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw 'Could not find element declaration for the element [' + name.key + '].';
+			throw new Error("Could not find element declaration for the element [" + name.key + "].");
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;

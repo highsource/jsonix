@@ -17,7 +17,8 @@ Here's a working example for the [purchase order schema](http://www.w3.org/TR/xm
 ### Generate mappings
 
 ```
-java -jar jsonix-full.jar -d mappings -p PO purchaseorder.xsd
+java -jar node_modules/jsonix/lib/jsonix-schema-compiler-full.jar
+  -d mappings -p PO purchaseorder.xsd
 ```
 
 Generates mappings for the `purchaseorder.xsd` schema in the `mappings\PO.js`; mappings will be placed in the variable `PO`.
@@ -38,10 +39,13 @@ var unmarshaller = context.createUnmarshaller();
 
 // Unmarshal an object from the XML retrieved from the URL
 unmarshaller.unmarshalURL('po.xml',
-    // This callback function will be provided with the result of the unmarshalling
+    // This callback function will be provided
+    // with the result of the unmarshalling
     function (unmarshalled) {
-        console.log(unmarshalled.value.shipTo.name); // Alice Smith
-        console.log(unmarshalled.value.items.item[1].productName); // Baby Monitor
+        // Alice Smith
+        console.log(unmarshalled.value.shipTo.name);
+        // Baby Monitor
+        console.log(unmarshalled.value.items.item[1].productName);
     });
 ```
 
@@ -76,3 +80,8 @@ var doc = marshaller.marshalDocument({
 ```
 
 You can also ``marshalString``.
+
+## Documentation
+
+* [Homepage](http://confluence.highsource.org/display/JSNX/Jsonix) 
+* See the [User Guide](http://confluence.highsource.org/display/JSNX/User+Guide) for the extensive documentation ([PDF](https://github.com/highsource/jsonix/raw/master/docs/Jsonix.pdf)) 

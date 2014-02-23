@@ -3,6 +3,42 @@ var WMS_V_1_3_0 = {
   defaultElementNamespaceURI: 'http:\/\/www.opengis.net\/wms',
   typeInfos: [{
       type: 'classInfo',
+      localName: 'ServiceExceptionReport',
+      propertyInfos: [{
+          type: 'element',
+          name: 'serviceException',
+          collection: true,
+          elementName: {
+            localPart: 'ServiceException',
+            namespaceURI: 'http:\/\/www.opengis.net\/ogc'
+          },
+          typeInfo: 'WMS_V_1_3_0.ServiceExceptionType'
+        }, {
+          name: 'version',
+          typeInfo: 'String',
+          attributeName: 'version',
+          type: 'attribute'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'ServiceExceptionType',
+      propertyInfos: [{
+          name: 'value',
+          typeInfo: 'String',
+          type: 'value'
+        }, {
+          name: 'code',
+          typeInfo: 'String',
+          attributeName: 'code',
+          type: 'attribute'
+        }, {
+          name: 'locator',
+          typeInfo: 'String',
+          attributeName: 'locator',
+          type: 'attribute'
+        }]
+    }, {
+      type: 'classInfo',
       localName: 'Service',
       propertyInfos: [{
           type: 'element',
@@ -809,44 +845,14 @@ var WMS_V_1_3_0 = {
           elementName: 'HTTP',
           typeInfo: 'WMS_V_1_3_0.HTTP'
         }]
-    }, {
-      type: 'classInfo',
-      localName: 'ServiceExceptionReport',
-      propertyInfos: [{
-          type: 'element',
-          name: 'serviceException',
-          collection: true,
-          elementName: {
-            localPart: 'ServiceException',
-            namespaceURI: 'http:\/\/www.opengis.net\/ogc'
-          },
-          typeInfo: 'WMS_V_1_3_0.ServiceExceptionType'
-        }, {
-          name: 'version',
-          typeInfo: 'String',
-          attributeName: 'version',
-          type: 'attribute'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'ServiceExceptionType',
-      propertyInfos: [{
-          name: 'value',
-          typeInfo: 'String',
-          type: 'value'
-        }, {
-          name: 'code',
-          typeInfo: 'String',
-          attributeName: 'code',
-          type: 'attribute'
-        }, {
-          name: 'locator',
-          typeInfo: 'String',
-          attributeName: 'locator',
-          type: 'attribute'
-        }]
     }],
   elementInfos: [{
+      elementName: {
+        localPart: 'ServiceExceptionReport',
+        namespaceURI: 'http:\/\/www.opengis.net\/ogc'
+      },
+      typeInfo: 'WMS_V_1_3_0.ServiceExceptionReport'
+    }, {
       elementName: 'Service',
       typeInfo: 'WMS_V_1_3_0.Service'
     }, {
@@ -936,12 +942,6 @@ var WMS_V_1_3_0 = {
     }, {
       elementName: 'DCPType',
       typeInfo: 'WMS_V_1_3_0.DCPType'
-    }, {
-      elementName: {
-        localPart: 'ServiceExceptionReport',
-        namespaceURI: 'http:\/\/www.opengis.net\/ogc'
-      },
-      typeInfo: 'WMS_V_1_3_0.ServiceExceptionReport'
     }, {
       elementName: 'Name',
       typeInfo: 'String'
