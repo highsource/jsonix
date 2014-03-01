@@ -16,6 +16,10 @@ pause
 cd full
 call mvn -DperformRelease -Psonatype-oss-release clean deploy
 cd ..
+cd scripts
+call mvn -DperformRelease -Psonatype-oss-release clean deploy
+cd ..
+pause
 pause
 cd nodejs
 cd scripts
