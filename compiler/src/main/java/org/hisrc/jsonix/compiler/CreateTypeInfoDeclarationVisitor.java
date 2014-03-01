@@ -139,8 +139,10 @@ final class CreateTypeInfoDeclarationVisitor<T, C extends T> implements
 	private JSAssignmentExpression createTypeInfoDeclaration(
 			MPackagedTypeInfo<T, C> info) {
 		final JsonixModule module = this.jsonixCompiler.getModule(info);
-		return this.codeModel.string(module.spaceName + "."
-				+ info.getLocalName());
+		return this.codeModel
+				.string(module.spaceName
+						+ "."
+						+ info.getContainerLocalName(JsonixCompiler.DEFAULT_SCOPED_NAME_DELIMITER));
 
 	}
 

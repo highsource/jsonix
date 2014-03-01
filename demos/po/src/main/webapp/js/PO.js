@@ -37,7 +37,7 @@ var PO = {
           name: 'item',
           collection: true,
           elementName: 'item',
-          typeInfo: 'PO.Item'
+          typeInfo: 'PO.Items.Item'
         }]
     }, {
       type: 'classInfo',
@@ -75,7 +75,7 @@ var PO = {
         }]
     }, {
       type: 'classInfo',
-      localName: 'Item',
+      localName: 'Items.Item',
       propertyInfos: [{
           type: 'element',
           name: 'productName',

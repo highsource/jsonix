@@ -58,6 +58,8 @@ import org.jvnet.jaxb2_commons.xml.bind.model.util.PackageInfoQNameAnalyzer;
 
 public class JsonixCompiler<T, C extends T> {
 
+	public static final String DEFAULT_SCOPED_NAME_DELIMITER = ".";
+
 	final JSCodeModel codeModel = new CodeModelImpl();
 
 	private final MModelInfo<T, C> model;
@@ -171,8 +173,8 @@ public class JsonixCompiler<T, C extends T> {
 		final JsonixModule module = getModule(classInfo);
 		final JSObjectLiteral classInfoMapping = this.codeModel.object();
 		classInfoMapping.append("type", this.codeModel.string("classInfo"));
-		classInfoMapping.append("localName",
-				this.codeModel.string(classInfo.getLocalName()));
+		classInfoMapping.append("localName", this.codeModel.string(classInfo
+				.getContainerLocalName(DEFAULT_SCOPED_NAME_DELIMITER)));
 
 		final MClassInfo<T, C> baseTypeInfo = classInfo.getBaseTypeInfo();
 		if (baseTypeInfo != null) {

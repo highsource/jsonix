@@ -1,6 +1,6 @@
 {
 	"name" : "jsonix",
-	"version" : "2.0.0",
+	"version" : "2.0.1",
 	"description" : "Jsonix (JSON interfaces for XML) is a JavaScript library which allows converting between XML and JSON structures.",
 	"keywords" : [ "json", "xml", "unmarshal", "unmarshalling", "marshal",
 			"marshalling", "parse", "parsing", "serialize", "serializing",
