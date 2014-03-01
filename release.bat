@@ -1,14 +1,14 @@
-
 call mvn versions:set -DnewVersion=%1
 pause
 call mvn versions:commit
 pause
-call mvn clean install -DperformRelease
+rem call mvn clean install -DperformRelease
 pause
 rem  -Psamples -Ptests -Pdist
-rem call mvn scm:commit -M="Version %1"
+git commit -a -m="Version %1"
 pause
 rem call mvn scm:tag -Dtag=%1
+git tag -a %1 -m 'Version %1'
 pause
 cd compiler
 call mvn -DperformRelease -Psonatype-oss-release clean deploy
@@ -20,7 +20,6 @@ cd ..
 cd scripts
 call mvn -DperformRelease -Psonatype-oss-release clean deploy
 cd ..
-pause
 pause
 cd nodejs
 cd scripts
