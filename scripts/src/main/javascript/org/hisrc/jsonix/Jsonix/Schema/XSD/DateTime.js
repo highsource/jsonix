@@ -60,7 +60,8 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			hour : value.getHours(),
 			minute : value.getMinutes(),
 			second : value.getSeconds(),
-			fractionalSecond : (value.getMilliseconds() / 1000)
+			fractionalSecond : (value.getMilliseconds() / 1000),
+			timezone: value.getTimezoneOffset()
 		}));
 	},
 	isInstance : function(value) {
