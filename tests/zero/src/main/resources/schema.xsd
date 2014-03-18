@@ -202,6 +202,18 @@
 		</xs:complexContent>
 	</xs:complexType>
 	
+	<xs:element name="extendedExtended" type="extendedExtendedType" substitutionGroup="base"/>
+	<xs:complexType name="extendedExtendedType">
+		<xs:complexContent>
+			<xs:extension base="extendedType">
+				<xs:sequence>
+					<xs:element name="epsilon" type="xs:double" minOccurs="0"/>
+					<xs:element name="zeta" type="xs:decimal" minOccurs="0" maxOccurs="unbounded"/>
+				</xs:sequence>
+			</xs:extension>
+		</xs:complexContent>
+	</xs:complexType>
+
 	<xs:element name="enum" type="enumType"/>
 	<xs:simpleType name="enumType">
 		<xs:restriction base="xs:token">

@@ -6,10 +6,8 @@ module.exports =
 	{
 		var nodeStaticServer = new(require('node-static').Server)('./tests');
 		server = http.createServer(function (request, response) {
-			request.addListener('end', function () {
-				console.log('SERVER: Serving the request [' + request.url + '].');
-				nodeStaticServer.serve(request, response);
-		    	});
+			console.log('SERVER: Serving the request [' + request.url + '].');
+			nodeStaticServer.serve(request, response);
 		});
 		console.log('SERVER: Launching the server.');
 		server.listen(8080);

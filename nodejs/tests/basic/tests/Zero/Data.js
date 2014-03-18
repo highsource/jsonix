@@ -168,6 +168,22 @@ var org_hisrc_jsonix_tests_zero_data = {
 			}) ],
 			TYPE_NAME : 'org_hisrc_jsonix_tests_zero.ExtendedType'
 		}
+	},
+	'extendedExtended-0.xml' : {
+		name : new Jsonix.XML.QName('extendedExtended'),
+		value : {
+			alpha : 'one',
+			beta : [ 2 ],
+			gamma : 'urn:three',
+			delta : [ new Jsonix.XML.Calendar({
+				year : 2004,
+				month : 5,
+				day : 6
+			}) ],
+			epsilon : 0.7,
+			zeta : [8],
+			TYPE_NAME : 'org_hisrc_jsonix_tests_zero.ExtendedExtendedType'
+		}
 	}
 };
 if (typeof require === 'function') {

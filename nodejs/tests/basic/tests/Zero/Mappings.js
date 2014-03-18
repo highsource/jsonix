@@ -148,10 +148,10 @@ var org_hisrc_jsonix_tests_zero = {
           name: 'alphaOrBeta',
           collection: true,
           elementTypeInfos: [{
-              elementName: 'alpha',
+              elementName: 'beta',
               typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType'
             }, {
-              elementName: 'beta',
+              elementName: 'alpha',
               typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType'
             }],
           type: 'elementRefs'
@@ -396,6 +396,22 @@ var org_hisrc_jsonix_tests_zero = {
         }]
     }, {
       type: 'classInfo',
+      localName: 'ExtendedExtendedType',
+      baseTypeInfo: 'org_hisrc_jsonix_tests_zero.ExtendedType',
+      propertyInfos: [{
+          type: 'element',
+          name: 'epsilon',
+          elementName: 'epsilon',
+          typeInfo: 'Double'
+        }, {
+          type: 'element',
+          name: 'zeta',
+          collection: true,
+          elementName: 'zeta',
+          typeInfo: 'Decimal'
+        }]
+    }, {
+      type: 'classInfo',
       localName: 'ElementsType',
       propertyInfos: [{
           name: 'stringOrInteger',
@@ -472,6 +488,10 @@ var org_hisrc_jsonix_tests_zero = {
       elementName: 'elements',
       typeInfo: 'org_hisrc_jsonix_tests_zero.ElementsType'
     }, {
+      elementName: 'extendedExtended',
+      typeInfo: 'org_hisrc_jsonix_tests_zero.ExtendedExtendedType',
+      substitutionHead: 'base'
+    }, {
       elementName: 'alpha',
       typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType',
       scope: 'org_hisrc_jsonix_tests_zero.ElementRefsType'
@@ -480,16 +500,16 @@ var org_hisrc_jsonix_tests_zero = {
       typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType',
       scope: 'org_hisrc_jsonix_tests_zero.ElementRefsType'
     }, {
+      elementName: 'value',
+      typeInfo: 'String',
+      scope: 'org_hisrc_jsonix_tests_zero.ElementRefMixedType'
+    }, {
       elementName: 'items',
       typeInfo: {
         type: 'list',
         typeInfo: 'String'
       },
       scope: 'org_hisrc_jsonix_tests_zero.ElementType'
-    }, {
-      elementName: 'value',
-      typeInfo: 'String',
-      scope: 'org_hisrc_jsonix_tests_zero.ElementRefMixedType'
     }]
 };
 if (typeof require === 'function') {

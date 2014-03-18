@@ -24,9 +24,9 @@ module.exports =
 	"Context" : function (test)
 	{
 		var context = new Jsonix.Context([ Zero ]);
-		test.equal(21, context.elementInfos.length);
+		test.equal(22, context.elementInfos.length);
 		var substitutionMembers = context.getSubstitutionMembers(new Jsonix.XML.QName('base'));
-		test.equal(1, substitutionMembers.length);
+		test.equal(2, substitutionMembers.length);
 		test.done();
 	},
 	"Roundtrips" : {
@@ -42,6 +42,7 @@ module.exports =
 		"elementRefs-0.xml" : function(test) {roundtrip(test, "elementRefs-0.xml", ZeroData["elementRefs-0.xml"])},
 		"elements-0.xml" : function(test) {roundtrip(test, "elements-0.xml", ZeroData["elements-0.xml"])},
 		"extended-0.xml" : function(test) {roundtrip(test, "extended-0.xml", ZeroData["extended-0.xml"])},
+		"extendedExtended-0.xml" : function(test) {roundtrip(test, "extendedExtended-0.xml", ZeroData["extendedExtended-0.xml"])},
 		"string-0.xml" : function(test) {roundtrip(test, "string-0.xml", ZeroData["string-0.xml"])},
 		"value-0.xml" : function(test) {roundtrip(test, "value-0.xml", ZeroData["value-0.xml"])}
 	}
