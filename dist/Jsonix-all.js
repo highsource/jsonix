@@ -2606,7 +2606,8 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			hour : value.getHours(),
 			minute : value.getMinutes(),
 			second : value.getSeconds(),
-			fractionalSecond : (value.getMilliseconds() / 1000)
+			fractionalSecond : (value.getMilliseconds() / 1000),
+			timezone: value.getTimezoneOffset()
 		}));
 	},
 	isInstance : function(value) {
@@ -2616,6 +2617,7 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 });
 Jsonix.Schema.XSD.DateTime.INSTANCE = new Jsonix.Schema.XSD.DateTime();
 Jsonix.Schema.XSD.DateTime.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
+
 Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Time',
 	typeName : Jsonix.Schema.XSD.qname('time'),
@@ -2865,6 +2867,9 @@ Jsonix.Model.ClassInfo = Jsonix
 				if (!this.built) {
 					this.baseTypeInfo = context
 						.resolveTypeInfo(this.baseTypeInfo, module);
+					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
+						this.baseTypeInfo.build(context, module);
+					}
 
 					// Build properties in this context
 					for ( var index = 0; index < this.properties.length; index++) {
@@ -2880,14 +2885,14 @@ Jsonix.Model.ClassInfo = Jsonix
 						value : null,
 						any : null
 					};
-					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
-						this.baseTypeInfo.buildStructure(context, structure);
-					}
 					this.buildStructure(context, structure);
 					this.structure = structure;
 				}
 			},
 			buildStructure : function(context, structure) {
+				if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
+					this.baseTypeInfo.buildStructure(context, structure);
+				}
 				for ( var index = 0; index < this.properties.length; index++) {
 					var propertyInfo = this.properties[index];
 					propertyInfo.buildStructure(context, structure);

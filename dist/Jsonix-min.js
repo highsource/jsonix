@@ -1091,7 +1091,7 @@ if(Jsonix.Util.Type.isNumber(f.fractionalSecond)){e.setMilliseconds(Math.floor(1
 }if(Jsonix.Util.NumberUtils.isInteger(f.timezone)){return new Date(e.getTime()-(60000*e.getTimezoneOffset())+(f.timezone*60000))
 }else{return e
 }},print:function(b){Jsonix.Util.Ensure.ensureDate(b);
-return this.printDateTime(new Jsonix.XML.Calendar({year:b.getFullYear(),month:b.getMonth()+1,day:b.getDate(),hour:b.getHours(),minute:b.getMinutes(),second:b.getSeconds(),fractionalSecond:(b.getMilliseconds()/1000)}))
+return this.printDateTime(new Jsonix.XML.Calendar({year:b.getFullYear(),month:b.getMonth()+1,day:b.getDate(),hour:b.getHours(),minute:b.getMinutes(),second:b.getSeconds(),fractionalSecond:(b.getMilliseconds()/1000),timezone:b.getTimezoneOffset()}))
 },isInstance:function(b){return Jsonix.Util.Type.isDate(b)
 },CLASS_NAME:"Jsonix.Schema.XSD.DateTime"});
 Jsonix.Schema.XSD.DateTime.INSTANCE=new Jsonix.Schema.XSD.DateTime();
@@ -1194,15 +1194,16 @@ for(var d=0;
 d<c.propertyInfos.length;
 d++){this.p(c.propertyInfos[d])
 }}},destroy:function(){},build:function(i,j){if(!this.built){this.baseTypeInfo=i.resolveTypeInfo(this.baseTypeInfo,j);
-for(var f=0;
+if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.build(i,j)
+}for(var f=0;
 f<this.properties.length;
 f++){var h=this.properties[f];
 h.build(i,j)
 }var g={elements:null,attributes:{},anyAttribute:null,value:null,any:null};
-if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.buildStructure(i,g)
-}this.buildStructure(i,g);
+this.buildStructure(i,g);
 this.structure=g
-}},buildStructure:function(h,f){for(var e=0;
+}},buildStructure:function(h,f){if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.buildStructure(h,f)
+}for(var e=0;
 e<this.properties.length;
 e++){var g=this.properties[e];
 g.buildStructure(h,f)
