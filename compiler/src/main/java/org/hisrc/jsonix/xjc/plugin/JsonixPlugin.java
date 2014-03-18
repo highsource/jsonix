@@ -43,7 +43,7 @@ import java.util.Map;
 
 import javax.xml.bind.JAXBException;
 
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.Validate;
 import org.hisrc.jscm.codemodel.JSProgram;
 import org.hisrc.jscm.codemodel.writer.CodeWriter;
 import org.hisrc.jsonix.compiler.JsonixCompiler;

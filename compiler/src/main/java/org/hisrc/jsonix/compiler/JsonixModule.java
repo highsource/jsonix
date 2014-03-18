@@ -35,9 +35,9 @@ package org.hisrc.jsonix.compiler;
 
 import javax.xml.namespace.QName;
 
-import org.apache.commons.lang.ObjectUtils;
-import org.apache.commons.lang.StringUtils;
-import org.apache.commons.lang.Validate;
+import org.apache.commons.lang3.ObjectUtils;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.commons.lang3.Validate;
 import org.hisrc.jscm.codemodel.JSCodeModel;
 import org.hisrc.jscm.codemodel.JSProgram;
 import org.hisrc.jscm.codemodel.expression.JSArrayLiteral;
