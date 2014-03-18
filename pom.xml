@@ -3,7 +3,7 @@
 	<groupId>org.hisrc.jsonix</groupId>
 	<artifactId>jsonix-project</artifactId>
 	<packaging>pom</packaging>
-	<version>2.0.2-SNAPSHOT</version>
+	<version>2.0.11-SNAPHSHOT</version>
 	<name>Jsonix</name>
 	<url>http://static.highsource.org/jsonix/</url>
 	<parent>
@@ -98,7 +98,7 @@
 	</mailingLists>
 	<properties> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-		<jaxb2-basics.version>0.6.5</jaxb2-basics.version>
+		<jaxb2-basics.version>0.6.6-SNAPSHOT</jaxb2-basics.version>
 		<js-codemodel.version>1.1</js-codemodel.version>
 		<jaxb-ri.version>2.1.13</jaxb-ri.version>
 		<maven-jaxb2-plugin.version>0.8.2</maven-jaxb2-plugin.version>
