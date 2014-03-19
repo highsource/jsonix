@@ -48,7 +48,7 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
 			return new Date(date.getTime() - (60000 * date.getTimezoneOffset()) + (calendar.timezone * 60000));
 		} else {
-			return date;
+			return new Date(date.getTime() - (60000 * date.getTimezoneOffset()));
 		}
 	},
 	print : function(value) {

@@ -242,7 +242,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							}
 							var hour = this.parseHour(text.substring(1, 3));
 							var minute = this.parseMinute(text.substring(4, 6));
-							return sign * (hour * 60 + minute);
+							return -1 * sign * (hour * 60 + minute);
 						}
 
 					},
@@ -428,9 +428,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 								return 'Z';
 							} else {
 								if (sign > 0) {
-									result = '+';
-								} else if (sign < 0) {
 									result = '-';
+								} else if (sign < 0) {
+									result = '+';
 								}
 								result = result + this.printHour(hour);
 								result = result + ':';
