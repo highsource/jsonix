@@ -46,10 +46,10 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				return this.parse(context, scope, value);
 			},
 			parse : function(context, scope, value) {
-				return this.typeInfo.parse(value);
+				return this.typeInfo.parse(value, context, scope);
 			},
 			print : function(context, scope, value) {
-				return this.typeInfo.print(value);
+				return this.typeInfo.print(value, context, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});
