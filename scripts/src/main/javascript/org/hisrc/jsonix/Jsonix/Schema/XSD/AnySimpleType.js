@@ -41,14 +41,14 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	unmarshal : function(context, input) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text);
+			return this.parse(text, context);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(context, value, output) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.print(value));
+			output.writeCharacters(this.print(value, context));
 		}
 	},
 	build: function(context, module)
