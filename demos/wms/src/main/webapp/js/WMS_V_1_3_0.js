@@ -3,38 +3,226 @@ var WMS_V_1_3_0 = {
   defaultElementNamespaceURI: 'http:\/\/www.opengis.net\/wms',
   typeInfos: [{
       type: 'classInfo',
-      localName: 'ServiceExceptionReport',
+      localName: 'DCPType',
       propertyInfos: [{
           type: 'element',
-          name: 'serviceException',
-          collection: true,
-          elementName: {
-            localPart: 'ServiceException',
-            namespaceURI: 'http:\/\/www.opengis.net\/ogc'
-          },
-          typeInfo: 'WMS_V_1_3_0.ServiceExceptionType'
+          name: 'http',
+          elementName: 'HTTP',
+          typeInfo: 'WMS_V_1_3_0.HTTP'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'HTTP',
+      propertyInfos: [{
+          type: 'element',
+          name: 'get',
+          elementName: 'Get',
+          typeInfo: 'WMS_V_1_3_0.Get'
         }, {
-          name: 'version',
+          type: 'element',
+          name: 'post',
+          elementName: 'Post',
+          typeInfo: 'WMS_V_1_3_0.Post'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'Get',
+      propertyInfos: [{
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'OnlineResource',
+      propertyInfos: [{
+          name: 'type',
           typeInfo: 'String',
-          attributeName: 'version',
+          attributeName: {
+            localPart: 'type',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
+          type: 'attribute'
+        }, {
+          name: 'href',
+          typeInfo: 'String',
+          attributeName: {
+            localPart: 'href',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
+          type: 'attribute'
+        }, {
+          name: 'role',
+          typeInfo: 'String',
+          attributeName: {
+            localPart: 'role',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
+          type: 'attribute'
+        }, {
+          name: 'arcrole',
+          typeInfo: 'String',
+          attributeName: {
+            localPart: 'arcrole',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
+          type: 'attribute'
+        }, {
+          name: 'title',
+          typeInfo: 'String',
+          attributeName: {
+            localPart: 'title',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
+          type: 'attribute'
+        }, {
+          name: 'show',
+          typeInfo: 'String',
+          attributeName: {
+            localPart: 'show',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
+          type: 'attribute'
+        }, {
+          name: 'actuate',
+          typeInfo: 'String',
+          attributeName: {
+            localPart: 'actuate',
+            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
+          },
           type: 'attribute'
         }]
     }, {
       type: 'classInfo',
-      localName: 'ServiceExceptionType',
+      localName: 'Post',
+      propertyInfos: [{
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'FeatureListURL',
+      propertyInfos: [{
+          type: 'element',
+          name: 'format',
+          elementName: 'Format',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'LogoURL',
+      propertyInfos: [{
+          type: 'element',
+          name: 'format',
+          elementName: 'Format',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }, {
+          name: 'width',
+          typeInfo: 'Integer',
+          attributeName: 'width',
+          type: 'attribute'
+        }, {
+          name: 'height',
+          typeInfo: 'Integer',
+          attributeName: 'height',
+          type: 'attribute'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'ContactPersonPrimary',
+      propertyInfos: [{
+          type: 'element',
+          name: 'contactPerson',
+          elementName: 'ContactPerson',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'contactOrganization',
+          elementName: 'ContactOrganization',
+          typeInfo: 'String'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'Identifier',
       propertyInfos: [{
           name: 'value',
           typeInfo: 'String',
           type: 'value'
         }, {
-          name: 'code',
+          name: 'authority',
           typeInfo: 'String',
-          attributeName: 'code',
+          attributeName: 'authority',
+          type: 'attribute'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'ContactAddress',
+      propertyInfos: [{
+          type: 'element',
+          name: 'addressType',
+          elementName: 'AddressType',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'address',
+          elementName: 'Address',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'city',
+          elementName: 'City',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'stateOrProvince',
+          elementName: 'StateOrProvince',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'postCode',
+          elementName: 'PostCode',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'country',
+          elementName: 'Country',
+          typeInfo: 'String'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'WMSCapabilities',
+      propertyInfos: [{
+          type: 'element',
+          name: 'service',
+          elementName: 'Service',
+          typeInfo: 'WMS_V_1_3_0.Service'
+        }, {
+          type: 'element',
+          name: 'capability',
+          elementName: 'Capability',
+          typeInfo: 'WMS_V_1_3_0.Capability'
+        }, {
+          name: 'version',
+          typeInfo: 'String',
+          attributeName: 'version',
           type: 'attribute'
         }, {
-          name: 'locator',
+          name: 'updateSequence',
           typeInfo: 'String',
-          attributeName: 'locator',
+          attributeName: 'updateSequence',
           type: 'attribute'
         }]
     }, {
@@ -121,66 +309,6 @@ var WMS_V_1_3_0 = {
         }]
     }, {
       type: 'classInfo',
-      localName: 'OnlineResource',
-      propertyInfos: [{
-          name: 'type',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'type',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }, {
-          name: 'href',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'href',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }, {
-          name: 'role',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'role',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }, {
-          name: 'arcrole',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'arcrole',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }, {
-          name: 'title',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'title',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }, {
-          name: 'show',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'show',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }, {
-          name: 'actuate',
-          typeInfo: 'String',
-          attributeName: {
-            localPart: 'actuate',
-            namespaceURI: 'http:\/\/www.w3.org\/1999\/xlink'
-          },
-          type: 'attribute'
-        }]
-    }, {
-      type: 'classInfo',
       localName: 'ContactInformation',
       propertyInfos: [{
           type: 'element',
@@ -212,254 +340,6 @@ var WMS_V_1_3_0 = {
           name: 'contactElectronicMailAddress',
           elementName: 'ContactElectronicMailAddress',
           typeInfo: 'String'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'ContactPersonPrimary',
-      propertyInfos: [{
-          type: 'element',
-          name: 'contactPerson',
-          elementName: 'ContactPerson',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'contactOrganization',
-          elementName: 'ContactOrganization',
-          typeInfo: 'String'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'ContactAddress',
-      propertyInfos: [{
-          type: 'element',
-          name: 'addressType',
-          elementName: 'AddressType',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'address',
-          elementName: 'Address',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'city',
-          elementName: 'City',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'stateOrProvince',
-          elementName: 'StateOrProvince',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'postCode',
-          elementName: 'PostCode',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'country',
-          elementName: 'Country',
-          typeInfo: 'String'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'Attribution',
-      propertyInfos: [{
-          type: 'element',
-          name: 'title',
-          elementName: 'Title',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }, {
-          type: 'element',
-          name: 'logoURL',
-          elementName: 'LogoURL',
-          typeInfo: 'WMS_V_1_3_0.LogoURL'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'LogoURL',
-      propertyInfos: [{
-          type: 'element',
-          name: 'format',
-          elementName: 'Format',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }, {
-          name: 'width',
-          typeInfo: 'Integer',
-          attributeName: 'width',
-          type: 'attribute'
-        }, {
-          name: 'height',
-          typeInfo: 'Integer',
-          attributeName: 'height',
-          type: 'attribute'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'HTTP',
-      propertyInfos: [{
-          type: 'element',
-          name: 'get',
-          elementName: 'Get',
-          typeInfo: 'WMS_V_1_3_0.Get'
-        }, {
-          type: 'element',
-          name: 'post',
-          elementName: 'Post',
-          typeInfo: 'WMS_V_1_3_0.Post'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'Get',
-      propertyInfos: [{
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'Post',
-      propertyInfos: [{
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'AuthorityURL',
-      propertyInfos: [{
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }, {
-          name: 'name',
-          typeInfo: 'String',
-          attributeName: 'name',
-          type: 'attribute'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'Style',
-      propertyInfos: [{
-          type: 'element',
-          name: 'name',
-          elementName: 'Name',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'title',
-          elementName: 'Title',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: '_abstract',
-          elementName: 'Abstract',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'legendURL',
-          collection: true,
-          elementName: 'LegendURL',
-          typeInfo: 'WMS_V_1_3_0.LegendURL'
-        }, {
-          type: 'element',
-          name: 'styleSheetURL',
-          elementName: 'StyleSheetURL',
-          typeInfo: 'WMS_V_1_3_0.StyleSheetURL'
-        }, {
-          type: 'element',
-          name: 'styleURL',
-          elementName: 'StyleURL',
-          typeInfo: 'WMS_V_1_3_0.StyleURL'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'LegendURL',
-      propertyInfos: [{
-          type: 'element',
-          name: 'format',
-          elementName: 'Format',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }, {
-          name: 'width',
-          typeInfo: 'Integer',
-          attributeName: 'width',
-          type: 'attribute'
-        }, {
-          name: 'height',
-          typeInfo: 'Integer',
-          attributeName: 'height',
-          type: 'attribute'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'StyleSheetURL',
-      propertyInfos: [{
-          type: 'element',
-          name: 'format',
-          elementName: 'Format',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'StyleURL',
-      propertyInfos: [{
-          type: 'element',
-          name: 'format',
-          elementName: 'Format',
-          typeInfo: 'String'
-        }, {
-          type: 'element',
-          name: 'onlineResource',
-          elementName: 'OnlineResource',
-          typeInfo: 'WMS_V_1_3_0.OnlineResource'
-        }]
-    }, {
-      type: 'classInfo',
-      localName: 'WMSCapabilities',
-      propertyInfos: [{
-          type: 'element',
-          name: 'service',
-          elementName: 'Service',
-          typeInfo: 'WMS_V_1_3_0.Service'
-        }, {
-          type: 'element',
-          name: 'capability',
-          elementName: 'Capability',
-          typeInfo: 'WMS_V_1_3_0.Capability'
-        }, {
-          name: 'version',
-          typeInfo: 'String',
-          attributeName: 'version',
-          type: 'attribute'
-        }, {
-          name: 'updateSequence',
-          typeInfo: 'String',
-          attributeName: 'updateSequence',
-          type: 'attribute'
         }]
     }, {
       type: 'classInfo',
@@ -778,15 +658,35 @@ var WMS_V_1_3_0 = {
         }]
     }, {
       type: 'classInfo',
-      localName: 'Identifier',
+      localName: 'Attribution',
       propertyInfos: [{
-          name: 'value',
-          typeInfo: 'String',
-          type: 'value'
+          type: 'element',
+          name: 'title',
+          elementName: 'Title',
+          typeInfo: 'String'
         }, {
-          name: 'authority',
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }, {
+          type: 'element',
+          name: 'logoURL',
+          elementName: 'LogoURL',
+          typeInfo: 'WMS_V_1_3_0.LogoURL'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'AuthorityURL',
+      propertyInfos: [{
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }, {
+          name: 'name',
           typeInfo: 'String',
-          attributeName: 'authority',
+          attributeName: 'name',
           type: 'attribute'
         }]
     }, {
@@ -824,7 +724,66 @@ var WMS_V_1_3_0 = {
         }]
     }, {
       type: 'classInfo',
-      localName: 'FeatureListURL',
+      localName: 'Style',
+      propertyInfos: [{
+          type: 'element',
+          name: 'name',
+          elementName: 'Name',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'title',
+          elementName: 'Title',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: '_abstract',
+          elementName: 'Abstract',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'legendURL',
+          collection: true,
+          elementName: 'LegendURL',
+          typeInfo: 'WMS_V_1_3_0.LegendURL'
+        }, {
+          type: 'element',
+          name: 'styleSheetURL',
+          elementName: 'StyleSheetURL',
+          typeInfo: 'WMS_V_1_3_0.StyleSheetURL'
+        }, {
+          type: 'element',
+          name: 'styleURL',
+          elementName: 'StyleURL',
+          typeInfo: 'WMS_V_1_3_0.StyleURL'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'LegendURL',
+      propertyInfos: [{
+          type: 'element',
+          name: 'format',
+          elementName: 'Format',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }, {
+          name: 'width',
+          typeInfo: 'Integer',
+          attributeName: 'width',
+          type: 'attribute'
+        }, {
+          name: 'height',
+          typeInfo: 'Integer',
+          attributeName: 'height',
+          type: 'attribute'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'StyleSheetURL',
       propertyInfos: [{
           type: 'element',
           name: 'format',
@@ -838,20 +797,88 @@ var WMS_V_1_3_0 = {
         }]
     }, {
       type: 'classInfo',
-      localName: 'DCPType',
+      localName: 'StyleURL',
       propertyInfos: [{
           type: 'element',
-          name: 'http',
-          elementName: 'HTTP',
-          typeInfo: 'WMS_V_1_3_0.HTTP'
+          name: 'format',
+          elementName: 'Format',
+          typeInfo: 'String'
+        }, {
+          type: 'element',
+          name: 'onlineResource',
+          elementName: 'OnlineResource',
+          typeInfo: 'WMS_V_1_3_0.OnlineResource'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'ServiceExceptionReport',
+      propertyInfos: [{
+          type: 'element',
+          name: 'serviceException',
+          collection: true,
+          elementName: {
+            localPart: 'ServiceException',
+            namespaceURI: 'http:\/\/www.opengis.net\/ogc'
+          },
+          typeInfo: 'WMS_V_1_3_0.ServiceExceptionType'
+        }, {
+          name: 'version',
+          typeInfo: 'String',
+          attributeName: 'version',
+          type: 'attribute'
+        }]
+    }, {
+      type: 'classInfo',
+      localName: 'ServiceExceptionType',
+      propertyInfos: [{
+          name: 'value',
+          typeInfo: 'String',
+          type: 'value'
+        }, {
+          name: 'code',
+          typeInfo: 'String',
+          attributeName: 'code',
+          type: 'attribute'
+        }, {
+          name: 'locator',
+          typeInfo: 'String',
+          attributeName: 'locator',
+          type: 'attribute'
         }]
     }],
   elementInfos: [{
-      elementName: {
-        localPart: 'ServiceExceptionReport',
-        namespaceURI: 'http:\/\/www.opengis.net\/ogc'
-      },
-      typeInfo: 'WMS_V_1_3_0.ServiceExceptionReport'
+      elementName: 'DCPType',
+      typeInfo: 'WMS_V_1_3_0.DCPType'
+    }, {
+      elementName: 'HTTP',
+      typeInfo: 'WMS_V_1_3_0.HTTP'
+    }, {
+      elementName: 'Get',
+      typeInfo: 'WMS_V_1_3_0.Get'
+    }, {
+      elementName: 'OnlineResource',
+      typeInfo: 'WMS_V_1_3_0.OnlineResource'
+    }, {
+      elementName: 'Post',
+      typeInfo: 'WMS_V_1_3_0.Post'
+    }, {
+      elementName: 'FeatureListURL',
+      typeInfo: 'WMS_V_1_3_0.FeatureListURL'
+    }, {
+      elementName: 'LogoURL',
+      typeInfo: 'WMS_V_1_3_0.LogoURL'
+    }, {
+      elementName: 'ContactPersonPrimary',
+      typeInfo: 'WMS_V_1_3_0.ContactPersonPrimary'
+    }, {
+      elementName: 'Identifier',
+      typeInfo: 'WMS_V_1_3_0.Identifier'
+    }, {
+      elementName: 'ContactAddress',
+      typeInfo: 'WMS_V_1_3_0.ContactAddress'
+    }, {
+      elementName: 'WMS_Capabilities',
+      typeInfo: 'WMS_V_1_3_0.WMSCapabilities'
     }, {
       elementName: 'Service',
       typeInfo: 'WMS_V_1_3_0.Service'
@@ -862,50 +889,8 @@ var WMS_V_1_3_0 = {
       elementName: 'Keyword',
       typeInfo: 'WMS_V_1_3_0.Keyword'
     }, {
-      elementName: 'OnlineResource',
-      typeInfo: 'WMS_V_1_3_0.OnlineResource'
-    }, {
       elementName: 'ContactInformation',
       typeInfo: 'WMS_V_1_3_0.ContactInformation'
-    }, {
-      elementName: 'ContactPersonPrimary',
-      typeInfo: 'WMS_V_1_3_0.ContactPersonPrimary'
-    }, {
-      elementName: 'ContactAddress',
-      typeInfo: 'WMS_V_1_3_0.ContactAddress'
-    }, {
-      elementName: 'Attribution',
-      typeInfo: 'WMS_V_1_3_0.Attribution'
-    }, {
-      elementName: 'LogoURL',
-      typeInfo: 'WMS_V_1_3_0.LogoURL'
-    }, {
-      elementName: 'HTTP',
-      typeInfo: 'WMS_V_1_3_0.HTTP'
-    }, {
-      elementName: 'Get',
-      typeInfo: 'WMS_V_1_3_0.Get'
-    }, {
-      elementName: 'Post',
-      typeInfo: 'WMS_V_1_3_0.Post'
-    }, {
-      elementName: 'AuthorityURL',
-      typeInfo: 'WMS_V_1_3_0.AuthorityURL'
-    }, {
-      elementName: 'Style',
-      typeInfo: 'WMS_V_1_3_0.Style'
-    }, {
-      elementName: 'LegendURL',
-      typeInfo: 'WMS_V_1_3_0.LegendURL'
-    }, {
-      elementName: 'StyleSheetURL',
-      typeInfo: 'WMS_V_1_3_0.StyleSheetURL'
-    }, {
-      elementName: 'StyleURL',
-      typeInfo: 'WMS_V_1_3_0.StyleURL'
-    }, {
-      elementName: 'WMS_Capabilities',
-      typeInfo: 'WMS_V_1_3_0.WMSCapabilities'
     }, {
       elementName: 'Capability',
       typeInfo: 'WMS_V_1_3_0.Capability'
@@ -928,8 +913,11 @@ var WMS_V_1_3_0 = {
       elementName: 'Dimension',
       typeInfo: 'WMS_V_1_3_0.Dimension'
     }, {
-      elementName: 'Identifier',
-      typeInfo: 'WMS_V_1_3_0.Identifier'
+      elementName: 'Attribution',
+      typeInfo: 'WMS_V_1_3_0.Attribution'
+    }, {
+      elementName: 'AuthorityURL',
+      typeInfo: 'WMS_V_1_3_0.AuthorityURL'
     }, {
       elementName: 'MetadataURL',
       typeInfo: 'WMS_V_1_3_0.MetadataURL'
@@ -937,17 +925,26 @@ var WMS_V_1_3_0 = {
       elementName: 'DataURL',
       typeInfo: 'WMS_V_1_3_0.DataURL'
     }, {
-      elementName: 'FeatureListURL',
-      typeInfo: 'WMS_V_1_3_0.FeatureListURL'
+      elementName: 'Style',
+      typeInfo: 'WMS_V_1_3_0.Style'
     }, {
-      elementName: 'DCPType',
-      typeInfo: 'WMS_V_1_3_0.DCPType'
+      elementName: 'LegendURL',
+      typeInfo: 'WMS_V_1_3_0.LegendURL'
     }, {
-      elementName: 'Name',
+      elementName: 'StyleSheetURL',
+      typeInfo: 'WMS_V_1_3_0.StyleSheetURL'
+    }, {
+      elementName: 'StyleURL',
+      typeInfo: 'WMS_V_1_3_0.StyleURL'
+    }, {
+      elementName: {
+        localPart: 'ServiceExceptionReport',
+        namespaceURI: 'http:\/\/www.opengis.net\/ogc'
+      },
+      typeInfo: 'WMS_V_1_3_0.ServiceExceptionReport'
+    }, {
+      elementName: 'AddressType',
       typeInfo: 'String'
-    }, {
-      elementName: 'MinScaleDenominator',
-      typeInfo: 'Double'
     }, {
       elementName: 'PostCode',
       typeInfo: 'String'
@@ -955,22 +952,43 @@ var WMS_V_1_3_0 = {
       elementName: 'MaxHeight',
       typeInfo: 'Integer'
     }, {
-      elementName: 'Address',
+      elementName: 'Country',
       typeInfo: 'String'
     }, {
-      elementName: 'ContactFacsimileTelephone',
+      elementName: 'GetFeatureInfo',
+      typeInfo: 'WMS_V_1_3_0.OperationType'
+    }, {
+      elementName: '_ExtendedOperation',
+      typeInfo: 'WMS_V_1_3_0.OperationType'
+    }, {
+      elementName: 'ContactElectronicMailAddress',
       typeInfo: 'String'
     }, {
-      elementName: 'AddressType',
+      elementName: 'Fees',
       typeInfo: 'String'
     }, {
-      elementName: 'ContactVoiceTelephone',
+      elementName: 'City',
+      typeInfo: 'String'
+    }, {
+      elementName: 'GetMap',
+      typeInfo: 'WMS_V_1_3_0.OperationType'
+    }, {
+      elementName: 'Title',
+      typeInfo: 'String'
+    }, {
+      elementName: 'ContactPosition',
       typeInfo: 'String'
     }, {
       elementName: 'Abstract',
       typeInfo: 'String'
     }, {
-      elementName: 'MaxWidth',
+      elementName: 'StateOrProvince',
+      typeInfo: 'String'
+    }, {
+      elementName: 'ContactVoiceTelephone',
+      typeInfo: 'String'
+    }, {
+      elementName: 'LayerLimit',
       typeInfo: 'Integer'
     }, {
       elementName: 'AccessConstraints',
@@ -979,55 +997,37 @@ var WMS_V_1_3_0 = {
       elementName: '_ExtendedCapabilities',
       typeInfo: 'AnyType'
     }, {
-      elementName: 'ContactPerson',
+      elementName: 'MinScaleDenominator',
+      typeInfo: 'Double'
+    }, {
+      elementName: 'ContactOrganization',
+      typeInfo: 'String'
+    }, {
+      elementName: 'ContactFacsimileTelephone',
       typeInfo: 'String'
     }, {
       elementName: 'GetCapabilities',
       typeInfo: 'WMS_V_1_3_0.OperationType'
     }, {
-      elementName: 'LayerLimit',
+      elementName: 'MaxWidth',
       typeInfo: 'Integer'
-    }, {
-      elementName: 'ContactOrganization',
-      typeInfo: 'String'
-    }, {
-      elementName: '_ExtendedOperation',
-      typeInfo: 'WMS_V_1_3_0.OperationType'
-    }, {
-      elementName: 'Country',
-      typeInfo: 'String'
-    }, {
-      elementName: 'City',
-      typeInfo: 'String'
-    }, {
-      elementName: 'Title',
-      typeInfo: 'String'
-    }, {
-      elementName: 'Fees',
-      typeInfo: 'String'
-    }, {
-      elementName: 'GetMap',
-      typeInfo: 'WMS_V_1_3_0.OperationType'
-    }, {
-      elementName: 'GetFeatureInfo',
-      typeInfo: 'WMS_V_1_3_0.OperationType'
-    }, {
-      elementName: 'StateOrProvince',
-      typeInfo: 'String'
     }, {
       elementName: 'Format',
       typeInfo: 'String'
     }, {
-      elementName: 'CRS',
+      elementName: 'ContactPerson',
+      typeInfo: 'String'
+    }, {
+      elementName: 'Name',
+      typeInfo: 'String'
+    }, {
+      elementName: 'Address',
       typeInfo: 'String'
     }, {
       elementName: 'MaxScaleDenominator',
       typeInfo: 'Double'
     }, {
-      elementName: 'ContactElectronicMailAddress',
-      typeInfo: 'String'
-    }, {
-      elementName: 'ContactPosition',
+      elementName: 'CRS',
       typeInfo: 'String'
     }]
 };

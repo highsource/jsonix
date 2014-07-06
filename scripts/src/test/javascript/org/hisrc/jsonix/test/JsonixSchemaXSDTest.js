@@ -182,7 +182,7 @@ function testSchemaXSDCalendar() {
 	assertEquals(2001, ds0.year);
 	assertEquals(2, ds0.month);
 	assertEquals(3, ds0.day);
-	assertEquals(+306, ds0.timezone);
+	assertEquals(306, ds0.timezone);
 	assertEquals('2001-02-03-05:06', Jsonix.Schema.XSD.Calendar.INSTANCE.print(ds0));
 
 	var ds1 = Jsonix.Schema.XSD.Calendar.INSTANCE.parse('-0004-02-03');

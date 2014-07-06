@@ -1469,14 +1469,14 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	unmarshal : function(context, input) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text);
+			return this.parse(text, context);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(context, value, output) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.print(value));
+			output.writeCharacters(this.print(value, context));
 		}
 	},
 	build: function(context, module)
@@ -1531,7 +1531,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.built = true;
 						}
 					},
-					print : function(value) {
+					print : function(value, context) {
 						if (!Jsonix.Util.Type.exists(value)) {
 							return null;
 						}
@@ -1542,11 +1542,11 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.print(value[index]);
+							result = result + this.typeInfo.print(value[index], context);
 						}
 						return result;
 					},
-					parse : function(text) {
+					parse : function(text, context) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var items = Jsonix.Util.StringUtils
 								.splitBySeparatorChars(text,
@@ -1555,7 +1555,7 @@ Jsonix.Schema.XSD.List = Jsonix
 						for ( var index = 0; index < items.length; index++) {
 							result.push(this.typeInfo
 									.parse(Jsonix.Util.StringUtils
-											.trim(items[index])));
+											.trim(items[index]), context));
 						}
 						return result;
 					},
@@ -2309,7 +2309,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							}
 							var hour = this.parseHour(text.substring(1, 3));
 							var minute = this.parseMinute(text.substring(4, 6));
-							return sign * (hour * 60 + minute);
+							return -1 * sign * (hour * 60 + minute);
 						}
 
 					},
@@ -2495,9 +2495,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 								return 'Z';
 							} else {
 								if (sign > 0) {
-									result = '+';
-								} else if (sign < 0) {
 									result = '-';
+								} else if (sign < 0) {
+									result = '+';
 								}
 								result = result + this.printHour(hour);
 								result = result + ':';
@@ -2589,25 +2589,77 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
 			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
-
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			return new Date(date.getTime() - (60000 * date.getTimezoneOffset()) + (calendar.timezone * 60000));
-		} else {
-			return date;
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
 		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
-		return this.printDateTime(new Jsonix.XML.Calendar({
-			year : value.getFullYear(),
-			month : value.getMonth() + 1,
-			day : value.getDate(),
-			hour : value.getHours(),
-			minute : value.getMinutes(),
-			second : value.getSeconds(),
-			fractionalSecond : (value.getMilliseconds() / 1000)
-		}));
+		var timezoneOffset;
+		var localTimezoneOffset = value.getTimezoneOffset();
+		var correctedValue;
+		// If original time zone was unknown, print the given value without
+		// the timezone
+		if (value.originalTimezoneOffset === null)
+		{
+			return this.printDateTime(new Jsonix.XML.Calendar({
+				year : value.getFullYear(),
+				month : value.getMonth() + 1,
+				day : value.getDate(),
+				hour : value.getHours(),
+				minute : value.getMinutes(),
+				second : value.getSeconds(),
+				fractionalSecond : (value.getMilliseconds() / 1000)
+			}));
+		}
+		else
+		{
+			// If original timezone was known, correct and print the value with the timezone
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				timezoneOffset = value.originalTimezoneOffset;
+				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+			}
+			// If original timezone was not specified, do not correct and use the local time zone
+			else
+			{
+				timezoneOffset = localTimezoneOffset;
+				correctedValue = value;
+			}
+			return this.printDateTime(new Jsonix.XML.Calendar({
+				year : correctedValue.getFullYear(),
+				month : correctedValue.getMonth() + 1,
+				day : correctedValue.getDate(),
+				hour : correctedValue.getHours(),
+				minute : correctedValue.getMinutes(),
+				second : correctedValue.getSeconds(),
+				fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+				timezone: timezoneOffset
+			}));
+		}
 	},
 	isInstance : function(value) {
 		return Jsonix.Util.Type.isDate(value);
@@ -2616,28 +2668,48 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 });
 Jsonix.Schema.XSD.DateTime.INSTANCE = new Jsonix.Schema.XSD.DateTime();
 Jsonix.Schema.XSD.DateTime.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
+
 Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Time',
 	typeName : Jsonix.Schema.XSD.qname('time'),
 	parse : function(value) {
 		var calendar = this.parseTime(value);
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			var date = new Date(70, 0, 1, calendar.hour, calendar.minute, calendar.second);
-			if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
-				date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
-			}
-
-			var time = date.getTime() - (calendar.timezone * 60000);
-			return new Date(time - (60000 * date.getTimezoneOffset()));
-
-		} else {
-			var result = new Date(70, 0, 1, calendar.hour, calendar.minute, calendar.second);
-			if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
-				result.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
-			}
-			return result;
+		var date = new Date();
+		date.setFullYear(1970);
+		date.setMonth(0);
+		date.setDate(1);
+		date.setHours(calendar.hour);
+		date.setMinutes(calendar.minute);
+		date.setSeconds(calendar.second);
+		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
+			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
+		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
@@ -2645,22 +2717,50 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (time <= -86400000 && time >= 86400000) {
 			throw new Error('Invalid time [' + value + '].');
 		}
-		if (time >= 0) {
+		// Original timezone was unknown, just use current time, no timezone
+		if (value.originalTimezoneOffset === null)
+		{
 			return this.printTime(new Jsonix.XML.Calendar({
 				hour : value.getHours(),
 				minute : value.getMinutes(),
 				second : value.getSeconds(),
 				fractionalSecond : (value.getMilliseconds() / 1000)
 			}));
-		} else {
-			var timezoneOffsetHours = Math.ceil(-time / 3600000);
-			return this.printTime(new Jsonix.XML.Calendar({
-				hour : (value.getUTCHours() + timezoneOffsetHours) % 24,
-				minute : value.getUTCMinutes(),
-				second : value.getUTCSeconds(),
-				fractionalSecond : (value.getUTCMilliseconds() / 1000),
-				timezone : timezoneOffsetHours * 60
-			}));
+		}
+		else
+		{
+			var correctedValue;
+			var timezoneOffset;
+			var localTimezoneOffset = value.getTimezoneOffset();
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				timezoneOffset = value.originalTimezoneOffset;
+				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+			}
+			else
+			{
+				timezoneOffset = localTimezoneOffset;
+				correctedValue = value;
+			}
+			var correctedTime = correctedValue.getTime();
+			if (correctedTime >= 0) {
+				return this.printTime(new Jsonix.XML.Calendar({
+					hour : correctedValue.getHours(),
+					minute : correctedValue.getMinutes(),
+					second : correctedValue.getSeconds(),
+					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+					timezone: timezoneOffset
+				}));
+			} else {
+				var timezoneOffsetHours = Math.ceil(-correctedTime / 3600000);
+				return this.printTime(new Jsonix.XML.Calendar({
+					hour : (correctedValue.getHours() + timezoneOffsetHours + timezoneOffset / 60 ) % 24,
+					minute : correctedValue.getMinutes(),
+					second : correctedValue.getSeconds(),
+					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+					timezone : - timezoneOffsetHours * 60
+				}));
+			}
 		}
 	},
 	isInstance : function(value) {
@@ -2675,28 +2775,43 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	typeName : Jsonix.Schema.XSD.qname('date'),
 	parse : function(value) {
 		var calendar = this.parseDate(value);
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			var date = new Date();
-			date.setFullYear(calendar.year);
-			date.setMonth(calendar.month - 1);
-			date.setDate(calendar.day);
-			date.setHours(0);
-			date.setMinutes(0);
-			date.setSeconds(0);
-			date.setMilliseconds(0);
-			return new Date(date.getTime() - (60000 * date.getTimezoneOffset()) + (calendar.timezone * 60000));
-		} else {
-			var result = new Date();
-			result.setFullYear(calendar.year);
-			result.setMonth(calendar.month - 1);
-			result.setDate(calendar.day);
-			result.setHours(0);
-			result.setMinutes(0);
-			result.setSeconds(0);
-			result.setMilliseconds(0);
-			return result;
+		var date = new Date();
+		date.setFullYear(calendar.year);
+		date.setMonth(calendar.month - 1);
+		date.setDate(calendar.day);
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		date.setMilliseconds(0);
+		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
+			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
+		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
@@ -2705,31 +2820,61 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		localDate.setMinutes(0);
 		localDate.setSeconds(0);
 		localDate.setMilliseconds(0);
-
-		var localTimezoneOffset = value.getTime() - localDate.getTime();
-		if (localTimezoneOffset === 0) {
+		
+		// Original timezone is unknown
+		if (value.originalTimezoneOffset === null)
+		{
 			return this.printDate(new Jsonix.XML.Calendar({
 				year : value.getFullYear(),
 				month : value.getMonth() + 1,
 				day : value.getDate()
 			}));
-		} else {
-			var timezoneOffset = localTimezoneOffset + (60000 * value.getTimezoneOffset());
-			if (timezoneOffset <= 43200000) {
+		}
+		else
+		{
+			// If original timezone was known, correct and print the value with the timezone
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				var correctedValue = new Date(value.getTime() - (60000 * (value.originalTimezoneOffset - value.getTimezoneOffset())));
 				return this.printDate(new Jsonix.XML.Calendar({
-					year : value.getFullYear(),
-					month : value.getMonth() + 1,
-					day : value.getDate(),
-					timezone : Math.floor(timezoneOffset / (60000))
+					year : correctedValue.getFullYear(),
+					month : correctedValue.getMonth() + 1,
+					day : correctedValue.getDate(),
+					timezone : value.originalTimezoneOffset
 				}));
-			} else {
-				var nextDay = new Date(value.getTime() + 86400000);
-				return this.printDate(new Jsonix.XML.Calendar({
-					year : nextDay.getFullYear(),
-					month : nextDay.getMonth() + 1,
-					day : nextDay.getDate(),
-					timezone : (Math.floor(timezoneOffset / (60000)) - 1440)
-				}));
+			}
+			// If original timezone was not specified, do not correct and use the local time zone
+			else
+			{
+				// We assume that the difference between the date value and local midnight
+				// should be interpreted as a timezone offset.
+				// In case there's no difference, we assume default/unknown timezone
+				var localTimezoneOffset = value.getTime() - localDate.getTime();
+				if (localTimezoneOffset === 0) {
+					return this.printDate(new Jsonix.XML.Calendar({
+						year : value.getFullYear(),
+						month : value.getMonth() + 1,
+						day : value.getDate()
+					}));
+				} else {
+					var timezoneOffset = localTimezoneOffset + (60000 * value.getTimezoneOffset());
+					if (timezoneOffset <= 43200000) {
+						return this.printDate(new Jsonix.XML.Calendar({
+							year : value.getFullYear(),
+							month : value.getMonth() + 1,
+							day : value.getDate(),
+							timezone : Math.floor(timezoneOffset / 60000)
+						}));
+					} else {
+						var nextDay = new Date(value.getTime() + 86400000);
+						return this.printDate(new Jsonix.XML.Calendar({
+							year : nextDay.getFullYear(),
+							month : nextDay.getMonth() + 1,
+							day : nextDay.getDate(),
+							timezone : (Math.floor(timezoneOffset / 60000) - 1440)
+						}));
+					}
+				}
 			}
 		}
 	},
@@ -2865,6 +3010,9 @@ Jsonix.Model.ClassInfo = Jsonix
 				if (!this.built) {
 					this.baseTypeInfo = context
 						.resolveTypeInfo(this.baseTypeInfo, module);
+					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
+						this.baseTypeInfo.build(context, module);
+					}
 
 					// Build properties in this context
 					for ( var index = 0; index < this.properties.length; index++) {
@@ -2880,14 +3028,14 @@ Jsonix.Model.ClassInfo = Jsonix
 						value : null,
 						any : null
 					};
-					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
-						this.baseTypeInfo.buildStructure(context, structure);
-					}
 					this.buildStructure(context, structure);
 					this.structure = structure;
 				}
 			},
 			buildStructure : function(context, structure) {
+				if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
+					this.baseTypeInfo.buildStructure(context, structure);
+				}
 				for ( var index = 0; index < this.properties.length; index++) {
 					var propertyInfo = this.properties[index];
 					propertyInfo.buildStructure(context, structure);
@@ -3279,10 +3427,10 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				return this.parse(context, scope, value);
 			},
 			parse : function(context, scope, value) {
-				return this.typeInfo.parse(value);
+				return this.typeInfo.parse(value, context, scope);
 			},
 			print : function(context, scope, value) {
-				return this.typeInfo.print(value);
+				return this.typeInfo.print(value, context, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});

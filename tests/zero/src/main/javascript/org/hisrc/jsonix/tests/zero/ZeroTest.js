@@ -7,7 +7,7 @@ function testZero() {
 function testSubstitutionMembers() {
 	var context = new Jsonix.Context([ org_hisrc_jsonix_tests_zero ]);
 	var substitutionMemebers = context.getSubstitutionMembers(new Jsonix.XML.QName('base'));
-	assertEquals(1, substitutionMemebers.length);
+	assertEquals(2, substitutionMemebers.length);
 }
 
 function testString0() {
