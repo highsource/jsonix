@@ -33,22 +33,42 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	typeName : Jsonix.Schema.XSD.qname('time'),
 	parse : function(value) {
 		var calendar = this.parseTime(value);
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			var date = new Date(70, 0, 1, calendar.hour, calendar.minute, calendar.second);
-			if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
-				date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
-			}
-			var time = date.getTime() + (calendar.timezone * 60000);
-			return new Date(time - (60000 * date.getTimezoneOffset()));
-
-		} else {
-			var result = new Date(70, 0, 1, calendar.hour, calendar.minute, calendar.second);
-			if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
-				result.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
-			}
-			return new Date(result.getTime() - (60000 * result.getTimezoneOffset()));
+		var date = new Date();
+		date.setFullYear(1970);
+		date.setMonth(0);
+		date.setDate(1);
+		date.setHours(calendar.hour);
+		date.setMinutes(calendar.minute);
+		date.setSeconds(calendar.second);
+		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
+			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
+		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
@@ -56,23 +76,50 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (time <= -86400000 && time >= 86400000) {
 			throw new Error('Invalid time [' + value + '].');
 		}
-		if (time >= 0) {
+		// Original timezone was unknown, just use current time, no timezone
+		if (value.originalTimezoneOffset === null)
+		{
 			return this.printTime(new Jsonix.XML.Calendar({
 				hour : value.getHours(),
 				minute : value.getMinutes(),
 				second : value.getSeconds(),
-				fractionalSecond : (value.getMilliseconds() / 1000),
-				timezone: value.getTimezoneOffset()
+				fractionalSecond : (value.getMilliseconds() / 1000)
 			}));
-		} else {
-			var timezoneOffsetHours = Math.ceil(-time / 3600000);
-			return this.printTime(new Jsonix.XML.Calendar({
-				hour : (value.getUTCHours() + timezoneOffsetHours) % 24,
-				minute : value.getUTCMinutes(),
-				second : value.getUTCSeconds(),
-				fractionalSecond : (value.getUTCMilliseconds() / 1000),
-				timezone : - timezoneOffsetHours * 60
-			}));
+		}
+		else
+		{
+			var correctedValue;
+			var timezoneOffset;
+			var localTimezoneOffset = value.getTimezoneOffset();
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				timezoneOffset = value.originalTimezoneOffset;
+				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+			}
+			else
+			{
+				timezoneOffset = localTimezoneOffset;
+				correctedValue = value;
+			}
+			var correctedTime = correctedValue.getTime();
+			if (correctedTime >= 0) {
+				return this.printTime(new Jsonix.XML.Calendar({
+					hour : correctedValue.getHours(),
+					minute : correctedValue.getMinutes(),
+					second : correctedValue.getSeconds(),
+					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+					timezone: timezoneOffset
+				}));
+			} else {
+				var timezoneOffsetHours = Math.ceil(-correctedTime / 3600000);
+				return this.printTime(new Jsonix.XML.Calendar({
+					hour : (correctedValue.getHours() + timezoneOffsetHours + timezoneOffset / 60 ) % 24,
+					minute : correctedValue.getMinutes(),
+					second : correctedValue.getSeconds(),
+					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+					timezone : - timezoneOffsetHours * 60
+				}));
+			}
 		}
 	},
 	isInstance : function(value) {
