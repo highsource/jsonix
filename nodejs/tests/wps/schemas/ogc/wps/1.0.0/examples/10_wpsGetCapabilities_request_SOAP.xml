@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!-- WPS GetCapabilities request encoded in SOAP -->
+<!-- Equivalent GET request is http://foo.bar/foo?Service=WPS&Version=1.0.0&Request=GetCapabilities&Language=en-CA -->
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xsi:schemaLocation="http://www.w3.org/2003/05/soap-envelope
+	http://www.w3.org/2003/05/soap-envelope">
+	<soap:Body>
+		<GetCapabilities xmlns="http://www.opengis.net/wps/1.0.0"
+			xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 ../wpsGetCapabilities_request.xsd"
+			language="en-CA" service="WPS">
+			<AcceptVersions>
+				<ows:Version>1.0.0</ows:Version>
+			</AcceptVersions>
+		</GetCapabilities>
+	</soap:Body>
+</soap:Envelope>

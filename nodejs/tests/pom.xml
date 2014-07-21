@@ -12,6 +12,7 @@
 	<modules>
 		<module>basic</module>
 		<module>po</module>
+		<module>wps</module>
 	</modules>
 	<build>
 		<plugins>

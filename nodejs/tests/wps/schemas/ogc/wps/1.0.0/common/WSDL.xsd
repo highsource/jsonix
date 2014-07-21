@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<schema xmlns="http://www.w3.org/2001/XMLSchema" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:wps="http://www.opengis.net/wps/1.0.0" targetNamespace="http://www.opengis.net/wps/1.0.0" elementFormDefault="qualified" xml:lang="en" version="1.0.0.2">
+	<annotation>
+		<appinfo>$Id: WSDL.xsd 2007-05-01 $</appinfo>
+		<documentation>
+			<description>Location of a WSDL document.</description>
+			<copyright>
+	WPS is an OGC Standard.
+	Copyright (c) 2007,2010 Open Geospatial Consortium.
+	To obtain additional rights of use, visit http://www.opengeospatial.org/legal/ .
+			</copyright>
+		</documentation>
+	</annotation>
+	<!-- ==============================================================-->
+	<import namespace="http://www.w3.org/1999/xlink" schemaLocation="http://www.w3.org/1999/xlink.xsd"/>
+	<!-- ==============================================================-->
+	<element name="WSDL">
+		<annotation>
+			<documentation>Location of a WSDL document.</documentation>
+		</annotation>
+		<complexType>
+			<attribute ref="xlink:href" use="required">
+				<annotation>
+					<documentation>The URL from which the WSDL document can be retrieved.</documentation>
+				</annotation>
+			</attribute>
+		</complexType>
+	</element>
+</schema>

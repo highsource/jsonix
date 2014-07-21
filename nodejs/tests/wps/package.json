@@ -1,0 +1,20 @@
+{
+	"name": "jsonix-tests-wps",
+	"description": "Jsonix Tests WPS.",
+	"version": "2.0.11",
+	"engines": [
+		"node >= 0.8.0"
+	],
+	"main": "jsonix-tests-wps.js",
+	"dependencies": {
+		"jsonix": "~2.0.11"
+	},
+	"devDependencies" : {
+		"nodeunit" : "~0.8.6",
+		"node-static" : "~0.7.3"
+	},
+	"scripts": {
+		"preinstall" : "java -jar node_modules/jsonix/lib/jsonix-schema-compiler-full.jar -catalog catalog/catalog.cat -extension -d mappings schemas/ogc/wps/1.0.0/wpsAll.xsd -b bindings/bindings.xjb",
+		"test": "nodeunit tests/tests.js" 
+	}
+}

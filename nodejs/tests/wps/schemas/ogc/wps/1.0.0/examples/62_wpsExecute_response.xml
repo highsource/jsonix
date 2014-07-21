@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<wps:ExecuteResponse xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 ../wpsExecute_response.xsd" service="WPS" version="1.0.0" xml:lang="en-CA" serviceInstance="http://foo.bar/foo" statusLocation="http://foo.bar/execute_response_url.xml">
+	<wps:Process wps:processVersion="1">
+		<ows:Identifier>Buffer</ows:Identifier>
+		<ows:Title>Create a buffer around a polygon.</ows:Title>
+		<ows:Abstract>String</ows:Abstract>
+		<wps:Profile>OGC:WPS:Buffer</wps:Profile>
+		<wps:WSDL xlink:href="http://foo.bar/foo"/>
+	</wps:Process>
+	<wps:Status creationTime="2007-04-18T12:13:14Z">
+		<wps:ProcessSucceeded/>
+	</wps:Status>
+	<wps:DataInputs>
+		<wps:Input>
+			<ows:Identifier>InputPolygon</ows:Identifier>
+			<ows:Title>Playground area</ows:Title>
+			<wps:Reference xlink:href="http://foo.bar/some_WFS_request.xml" method="GET" mimeType="text/xml" encoding="UTF-8" schema="http://foo.bar/gml_polygon_schema.xsd"/>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>BufferDistance</ows:Identifier>
+			<ows:Title>Distance which people will walk to get to a playground</ows:Title>
+			<wps:Data>
+				<wps:LiteralData uom="meters">400</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+	</wps:DataInputs>
+	<wps:OutputDefinitions>
+		<wps:Output mimeType="text/xml" encoding="UTF-8" schema="http://foo.bar/gml_polygon_schema.xsd" asReference="true">
+			<ows:Identifier>BufferedPolygon</ows:Identifier>
+			<ows:Title>Area serviced by playground.</ows:Title>
+			<ows:Abstract>Area within which most users of this playground will live.</ows:Abstract>
+		</wps:Output>
+	</wps:OutputDefinitions>
+	<wps:ProcessOutputs>
+		<wps:Output>
+			<ows:Identifier>BufferedPolygon</ows:Identifier>
+			<ows:Title>Area serviced by playground.</ows:Title>
+			<ows:Abstract>Area within which most users of this playground will live.</ows:Abstract>
+			<wps:Reference href="http://foo.bar/buffered_polygon.xml" mimeType="text/xml" encoding="UTF-8" schema="http://foo.bar/gml_polygon_schema.xsd"/>
+		</wps:Output>
+	</wps:ProcessOutputs>
+</wps:ExecuteResponse>

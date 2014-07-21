@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Execute operation request assuming use of optional formats and output elements.-->
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0
+../wpsExecute_request.xsd">
+	<ows:Identifier>Reclassification</ows:Identifier>
+	<wps:DataInputs>
+		<wps:Input>
+			<ows:Identifier>InputLayer</ows:Identifier>
+			<ows:Title>The layer which's values shall be reclassified</ows:Title>
+			<wps:Reference xlink:href="http://orchestra.pisa.intecs.it/geoserver/test/height.tif" method="GET"/>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>BufferDistance</ows:Identifier>
+			<ows:Title>Distance which people will walk to get to a playground.</ows:Title>
+			<wps:Data>
+				<wps:ComplexData>
+					<!--embedded XML begins here.-->
+					<RangeToValueMappings xmlns="http://mas.orchestra.jrc.it" xmlns:ows="http://www.opengeospatial.net/ows" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance">
+						<Mapping>
+							<ows:Range ows:rangeClosure="closed-open">
+								<ows:MinimumValue>0</ows:MinimumValue>
+								<ows:MaximumValue>119</ows:MaximumValue>
+							</ows:Range>
+							<ows:Value>A</ows:Value>
+						</Mapping>
+						<Mapping>
+							<ows:Range ows:rangeClosure="closed-open">
+								<ows:MinimumValue>120</ows:MinimumValue>
+								<ows:MaximumValue/>
+							</ows:Range>
+							<ows:Value>B</ows:Value>
+						</Mapping>
+					</RangeToValueMappings>
+					<!--embedded XML ends here.-->
+				</wps:ComplexData>
+			</wps:Data>
+		</wps:Input>
+	</wps:DataInputs>
+	<wps:ResponseForm>
+		<wps:ResponseDocument storeExecuteResponse="true" lineage="true" status="true">
+			<wps:Output asReference="true">
+				<ows:Identifier>Outlayer</ows:Identifier>
+				<ows:Title>Reclassified Layer.</ows:Title>
+				<ows:Abstract>Layer classified into two classes, where class A is less than or equal 120 and class B is more than 120.</ows:Abstract>
+			</wps:Output>
+		</wps:ResponseDocument>
+	</wps:ResponseForm>
+</wps:Execute>

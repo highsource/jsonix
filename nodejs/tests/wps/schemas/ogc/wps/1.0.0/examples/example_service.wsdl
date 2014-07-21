@@ -1,0 +1,2131 @@
+<?xml version="1.0" encoding="UTF-8" ?> 
+<wsdl:definitions name="SpatialAnalysis" targetNamespace="http://wpsint.tigris.org/soap/SpatialAnalysis" xmlns:tns="http://wpsint.tigris.org/soap/SpatialAnalysis" xmlns:mime="http://schemas.xmlsoap.org/wsdl/mime/" xmlns:soap12="http://schemas.xmlsoap.org/wsdl/soap12/" xmlns:http="http://schemas.xmlsoap.org/wsdl/http/" xmlns:soapenc="http://schemas.xmlsoap.org/soap/encoding/" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:soap="http://schemas.xmlsoap.org/wsdl/soap/" xmlns:wsdl="http://schemas.xmlsoap.org/wsdl/">
+<wsdl:types>
+<xsd:schema elementFormDefault="qualified" targetNamespace="http://wpsint.tigris.org/soap/SpatialAnalysis">
+<xsd:element name="GetCapabilities">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="acceptFormats" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="acceptVersions" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="GetCapabilitiesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GetCapabilitiesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_All">
+  <xsd:complexType /> 
+  </xsd:element>
+<xsd:element name="DescribeProcess_AllResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_AllResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="EvaluateWPS">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="wpsRequestDocument" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="EvaluateWPSResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="EvaluateWPSResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLAreaGeometries">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLAreaGeometriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLAreaGeometriesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLAreaGeometries">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResource" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLAreaGeometriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLAreaGeometriesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLBuffer">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLBufferResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLBufferResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLBuffer">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResource" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Distance" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Simplification" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="ToleranceDistance" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="QuadrantSegments" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="EndCapStyle" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLBufferResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLBufferResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLConvexHull">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLConvexHullResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLConvexHullResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLConvexHull">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResource" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Simplification" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="ToleranceDistance" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLConvexHullResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLConvexHullResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLCountGeometries">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLCountGeometriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLCountGeometriesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLCountGeometries">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResource" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLCountGeometriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLCountGeometriesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLCountPoints">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLCountPointsResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLCountPointsResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLCountPoints">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResource" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLCountPointsResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLCountPointsResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLDifference">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLDifferenceResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLDifferenceResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLDifference">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceFrom" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceWith" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Simplification" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="ToleranceDistance" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLDifferenceResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLDifferenceResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLIntersect">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLIntersectResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLIntersectResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLIntersect">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceFrom" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceWith" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Simplification" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="ToleranceDistance" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLIntersectResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLIntersectResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLLengthGeometries">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLLengthGeometriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLLengthGeometriesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLLengthGeometries">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResource" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLLengthGeometriesResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLLengthGeometriesResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLSymDifference">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLSymDifferenceResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLSymDifferenceResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLSymDifference">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceFrom" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceWith" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Simplification" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="ToleranceDistance" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLSymDifferenceResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLSymDifferenceResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLUnion">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="updateSequence" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="DescribeProcess_GMLUnionResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="DescribeProcess_GMLUnionResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLUnion">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceFrom" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="GmlUrlResourceWith" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="Simplification" type="xsd:string" /> 
+  <xsd:element maxOccurs="1" minOccurs="0" name="ToleranceDistance" type="xsd:string" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+<xsd:element name="ExecuteProcess_GMLUnionResponse">
+<xsd:complexType>
+<xsd:sequence>
+  <xsd:element maxOccurs="1" minOccurs="0" name="ExecuteProcess_GMLUnionResult" /> 
+  </xsd:sequence>
+  </xsd:complexType>
+  </xsd:element>
+  <xsd:element name="DocumentReturn" nillable="true" type="xsd:string" /> 
+  </xsd:schema>
+  </wsdl:types>
+<wsdl:message name="DescribeProcess_GMLUnionSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLUnion" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLBufferHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLIntersectSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLIntersectResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLDifferenceHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLCountGeometriesSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountGeometries" /> 
+  </wsdl:message>
+  <wsdl:message name="EvaluateWPSHttpGetRequest" /> 
+<wsdl:message name="GetCapabilitiesSoapResponse">
+  <wsdl:part name="parameters" element="tns:GetCapabilitiesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLBufferHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLDifferenceHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLDifferenceHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_AllSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_AllResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLBufferSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLBufferResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLAreaGeometriesHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLBufferHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountGeometriesSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLAreaGeometriesSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLAreaGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLUnionSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLUnion" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountGeometriesSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLDifferenceSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLDifferenceResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLCountPointsHttpPostRequest" /> 
+  <wsdl:message name="GetCapabilitiesHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLCountGeometriesSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountGeometriesResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLSymDifferenceHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLIntersectHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountPointsSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountPoints" /> 
+  </wsdl:message>
+<wsdl:message name="EvaluateWPSHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLConvexHullSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLConvexHull" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLIntersectSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLIntersect" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLDifferenceHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountGeometriesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLSymDifferenceSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLSymDifference" /> 
+  </wsdl:message>
+<wsdl:message name="EvaluateWPSSoap12Request">
+  <wsdl:part name="parameters" element="tns:EvaluateWPS" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLLengthGeometriesHttpPostRequest" /> 
+  <wsdl:message name="ExecuteProcess_GMLConvexHullHttpPostRequest" /> 
+  <wsdl:message name="DescribeProcess_GMLCountGeometriesHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLBufferSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLBuffer" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLLengthGeometriesSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLLengthGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountPointsSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountPointsResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="GetCapabilitiesHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLBufferSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLBuffer" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLAreaGeometriesSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLAreaGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLDifferenceHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLSymDifferenceSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLSymDifference" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountPointsHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLUnionHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLIntersectSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLIntersect" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLDifferenceHttpPostRequest" /> 
+  <wsdl:message name="DescribeProcess_GMLBufferHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLConvexHullSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLConvexHull" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLIntersectSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLIntersect" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLAreaGeometriesSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLAreaGeometriesResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLIntersectHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLSymDifferenceSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLSymDifferenceResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLUnionHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLLengthGeometriesSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLLengthGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountPointsHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLAreaGeometriesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLIntersectHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLConvexHullSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLConvexHullResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountPointsSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountPointsResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountPointsSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountPointsResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLIntersectHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLIntersectSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLIntersectResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLDifferenceHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLAreaGeometriesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_AllSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_All" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLAreaGeometriesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_AllSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_AllResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLConvexHullSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLConvexHull" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLConvexHullHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLCountPointsHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLBufferSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLBuffer" /> 
+  </wsdl:message>
+<wsdl:message name="EvaluateWPSHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLIntersectHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLCountPointsSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountPoints" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountGeometriesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountPointsHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLConvexHullSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLConvexHullResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_AllSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_All" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLUnionSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLUnion" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLAreaGeometriesHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLConvexHullSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLConvexHull" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLSymDifferenceSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLSymDifference" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLDifferenceSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLDifferenceResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_AllHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLDifferenceSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLDifference" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLDifferenceSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLDifference" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_AllHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLAreaGeometriesSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLAreaGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountPointsHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLAreaGeometriesHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLConvexHullHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLLengthGeometriesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="GetCapabilitiesSoapRequest">
+  <wsdl:part name="parameters" element="tns:GetCapabilities" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLUnionHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLCountGeometriesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLDifferenceSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLDifferenceResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLDifferenceSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLDifference" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLAreaGeometriesSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLAreaGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLIntersectSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLIntersectResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLBufferHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_AllHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="GetCapabilitiesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="EvaluateWPSSoapRequest">
+  <wsdl:part name="parameters" element="tns:EvaluateWPS" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLLengthGeometriesHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLConvexHullSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLConvexHullResponse" /> 
+  </wsdl:message>
+<wsdl:message name="GetCapabilitiesSoap12Response">
+  <wsdl:part name="parameters" element="tns:GetCapabilitiesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountGeometriesSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountGeometriesResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLCountPointsHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLLengthGeometriesSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLLengthGeometries" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLIntersectHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLAreaGeometriesSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLAreaGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="GetCapabilitiesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLAreaGeometriesSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLAreaGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLBufferSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLBufferResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLLengthGeometriesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="GetCapabilitiesSoap12Request">
+  <wsdl:part name="parameters" element="tns:GetCapabilities" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLConvexHullHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLSymDifferenceSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLSymDifferenceResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLSymDifferenceHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLAreaGeometriesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLAreaGeometriesSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLAreaGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="EvaluateWPSSoap12Response">
+  <wsdl:part name="parameters" element="tns:EvaluateWPSResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLCountGeometriesHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLCountPointsSoap12Request">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountPoints" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLLengthGeometriesSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLLengthGeometries" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLBufferSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLBufferResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="EvaluateWPSHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLSymDifferenceSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLSymDifferenceResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountGeometriesSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountGeometries" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLSymDifferenceHttpGetRequest" /> 
+  <wsdl:message name="DescribeProcess_GMLAreaGeometriesHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLBufferSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLBufferResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLUnionHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLUnionHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLUnionSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLUnionResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLSymDifferenceHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLBufferSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLBuffer" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountGeometriesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLConvexHullHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLCountGeometriesSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountGeometries" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLCountGeometriesHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLSymDifferenceSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLSymDifferenceResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLCountPointsHttpGetRequest" /> 
+  <wsdl:message name="DescribeProcess_GMLBufferHttpGetRequest" /> 
+  <wsdl:message name="ExecuteProcess_GMLIntersectHttpPostRequest" /> 
+<wsdl:message name="DescribeProcess_GMLCountGeometriesSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLCountGeometriesResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLCountGeometriesHttpGetRequest" /> 
+  <wsdl:message name="DescribeProcess_GMLLengthGeometriesHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLCountPointsSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountPoints" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLLengthGeometriesHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLBufferHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLUnionHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLLengthGeometriesHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLUnionSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLUnionResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLDifferenceSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLDifferenceResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLUnionSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLUnion" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLUnionSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLUnionResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLLengthGeometriesSoap12Response">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLLengthGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLCountPointsSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLCountPointsResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLSymDifferenceHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLLengthGeometriesSoapRequest">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLLengthGeometries" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLLengthGeometriesHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLIntersectSoap12Request">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLIntersect" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLConvexHullHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLConvexHullSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLConvexHullResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLDifferenceSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLDifference" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLConvexHullHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLSymDifferenceHttpPostResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLBufferHttpPostRequest" /> 
+  <wsdl:message name="DescribeProcess_AllHttpPostRequest" /> 
+  <wsdl:message name="DescribeProcess_GMLSymDifferenceHttpGetRequest" /> 
+<wsdl:message name="DescribeProcess_GMLIntersectHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="EvaluateWPSSoapResponse">
+  <wsdl:part name="parameters" element="tns:EvaluateWPSResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLUnionHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLSymDifferenceSoapRequest">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLSymDifference" /> 
+  </wsdl:message>
+  <wsdl:message name="ExecuteProcess_GMLUnionHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLUnionSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLUnionResponse" /> 
+  </wsdl:message>
+<wsdl:message name="ExecuteProcess_GMLLengthGeometriesSoap12Response">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLLengthGeometriesResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLSymDifferenceHttpPostRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLLengthGeometriesSoapResponse">
+  <wsdl:part name="parameters" element="tns:ExecuteProcess_GMLLengthGeometriesResponse" /> 
+  </wsdl:message>
+<wsdl:message name="DescribeProcess_GMLIntersectSoapResponse">
+  <wsdl:part name="parameters" element="tns:DescribeProcess_GMLIntersectResponse" /> 
+  </wsdl:message>
+  <wsdl:message name="DescribeProcess_GMLDifferenceHttpGetRequest" /> 
+<wsdl:message name="ExecuteProcess_GMLConvexHullHttpGetResponse">
+  <wsdl:part name="Body" element="tns:DocumentReturn" /> 
+  </wsdl:message>
+<wsdl:portType name="SpatialAnalysisSoap">
+<wsdl:operation name="GetCapabilities">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of this operation. The response will be an embedded WPS XML GetCapabilities Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="GetCapabilitiesRequest" message="tns:GetCapabilitiesSoapRequest" /> 
+  <wsdl:output name="GetCapabilitiesResponse" message="tns:GetCapabilitiesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of all processes provided by this operation. The response will be an embedded WPS XML DescribeProcess Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_AllRequest" message="tns:DescribeProcess_AllSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_AllResponse" message="tns:DescribeProcess_AllSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <wsdl:documentation>This web method will require a good undestanding of the WPS Schema. This method will evaluate your WPS XML Request, will process it and will response by an embbeded WPS XML Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="EvaluateWPSRequest" message="tns:EvaluateWPSSoapRequest" /> 
+  <wsdl:output name="EvaluateWPSResponse" message="tns:EvaluateWPSSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <wsdl:documentation>Area of the Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest" message="tns:DescribeProcess_GMLAreaGeometriesSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse" message="tns:DescribeProcess_GMLAreaGeometriesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <wsdl:documentation>Returns the area of this Geometry(s). Areal Geometries have a non-zero area. They override this function to compute the area. Others return 0.0</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest" message="tns:ExecuteProcess_GMLAreaGeometriesSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse" message="tns:ExecuteProcess_GMLAreaGeometriesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <wsdl:documentation>Buffer geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLBufferRequest" message="tns:DescribeProcess_GMLBufferSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLBufferResponse" message="tns:DescribeProcess_GMLBufferSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <wsdl:documentation>The buffer of a Geometry at a distance d is the Polygon or MultiPolygon which contains all points within a distance d of the Geometry. The distance d is interpreted according to the Precision Model of the Geometry. Both positive and negative distances are supported.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLBufferRequest" message="tns:ExecuteProcess_GMLBufferSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLBufferResponse" message="tns:ExecuteProcess_GMLBufferSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <wsdl:documentation>Convex Hull geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLConvexHullRequest" message="tns:DescribeProcess_GMLConvexHullSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLConvexHullResponse" message="tns:DescribeProcess_GMLConvexHullSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <wsdl:documentation>The convex hull of a Geometry is the smallest convex Polygon that contains all the points in the Geometry. If the convex hull contains fewer than 3 points, a lower dimension Geometry is returned. It will return a Geometry with the minimal number of points needed to represent the convex hull. In particular, no more than two consecutive points will be collinear.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLConvexHullRequest" message="tns:ExecuteProcess_GMLConvexHullSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLConvexHullResponse" message="tns:ExecuteProcess_GMLConvexHullSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <wsdl:documentation>Number of Geometries</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountGeometriesRequest" message="tns:DescribeProcess_GMLCountGeometriesSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLCountGeometriesResponse" message="tns:DescribeProcess_GMLCountGeometriesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <wsdl:documentation>Returns the number of Geometries in a GeometryCollection (or 1, if the geometry is not a collection).</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest" message="tns:ExecuteProcess_GMLCountGeometriesSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse" message="tns:ExecuteProcess_GMLCountGeometriesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <wsdl:documentation>Number of vertices in Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountPointsRequest" message="tns:DescribeProcess_GMLCountPointsSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLCountPointsResponse" message="tns:DescribeProcess_GMLCountPointsSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <wsdl:documentation>Returns the count of this Geometrys vertices. The Geometrys contained by composite Geometrys must be Geometry's.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountPointsRequest" message="tns:ExecuteProcess_GMLCountPointsSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountPointsResponse" message="tns:ExecuteProcess_GMLCountPointsSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <wsdl:documentation>Difference between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLDifferenceRequest" message="tns:DescribeProcess_GMLDifferenceSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLDifferenceResponse" message="tns:DescribeProcess_GMLDifferenceSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <wsdl:documentation>The difference between two Geometries A and B is the set of all points which lie in A but not in B. This method returns the closure of the resultant Geometry. a.difference(b) = closure( { x Â³ Â¥2 | x Â³ a Ãš x Â´ b } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLDifferenceRequest" message="tns:ExecuteProcess_GMLDifferenceSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLDifferenceResponse" message="tns:ExecuteProcess_GMLDifferenceSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <wsdl:documentation>Intersect geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLIntersectRequest" message="tns:DescribeProcess_GMLIntersectSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLIntersectResponse" message="tns:DescribeProcess_GMLIntersectSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <wsdl:documentation>The intersection of two Geometries A and B is the set of all points which lie in both A and B. a.intersection(b) = { x Â³ Â¥2 | x Â³ a Ã™ x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLIntersectRequest" message="tns:ExecuteProcess_GMLIntersectSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLIntersectResponse" message="tns:ExecuteProcess_GMLIntersectSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <wsdl:documentation>Length of the Geometry</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest" message="tns:DescribeProcess_GMLLengthGeometriesSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse" message="tns:DescribeProcess_GMLLengthGeometriesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <wsdl:documentation>Returns the length of this Geometry. Linear geometries return their length. Areal geometries return their perimeter.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest" message="tns:ExecuteProcess_GMLLengthGeometriesSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse" message="tns:ExecuteProcess_GMLLengthGeometriesSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <wsdl:documentation>Symmetric diffrence between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLSymDifferenceRequest" message="tns:DescribeProcess_GMLSymDifferenceSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLSymDifferenceResponse" message="tns:DescribeProcess_GMLSymDifferenceSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <wsdl:documentation>The symmetric difference of two Geometries A and B is the set of all points which lie in either A or B but not both. This method returns the closure of the resultant Geometry. a.symDifference(b) = closure( { x Â³ Â¥2 | (x Â³ a Ã™ x Â´ b) Ãš (x Â´ a Ã™ x Â³ b) } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest" message="tns:ExecuteProcess_GMLSymDifferenceSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse" message="tns:ExecuteProcess_GMLSymDifferenceSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <wsdl:documentation>Union geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLUnionRequest" message="tns:DescribeProcess_GMLUnionSoapRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLUnionResponse" message="tns:DescribeProcess_GMLUnionSoapResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <wsdl:documentation>The union of two Geometries A and B is the set of all points which lie in A or B. a.union(b) = { x Â³ Â¥2 | x Â³ a Ãš x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLUnionRequest" message="tns:ExecuteProcess_GMLUnionSoapRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLUnionResponse" message="tns:ExecuteProcess_GMLUnionSoapResponse" /> 
+  </wsdl:operation>
+  </wsdl:portType>
+<wsdl:portType name="SpatialAnalysisHttpPost">
+<wsdl:operation name="GetCapabilities">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of this operation. The response will be an embedded WPS XML GetCapabilities Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="GetCapabilitiesRequest" message="tns:GetCapabilitiesHttpPostRequest" /> 
+  <wsdl:output name="GetCapabilitiesResponse" message="tns:GetCapabilitiesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of all processes provided by this operation. The response will be an embedded WPS XML DescribeProcess Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_AllRequest" message="tns:DescribeProcess_AllHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_AllResponse" message="tns:DescribeProcess_AllHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <wsdl:documentation>This web method will require a good undestanding of the WPS Schema. This method will evaluate your WPS XML Request, will process it and will response by an embbeded WPS XML Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="EvaluateWPSRequest" message="tns:EvaluateWPSHttpPostRequest" /> 
+  <wsdl:output name="EvaluateWPSResponse" message="tns:EvaluateWPSHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <wsdl:documentation>Area of the Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest" message="tns:DescribeProcess_GMLAreaGeometriesHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse" message="tns:DescribeProcess_GMLAreaGeometriesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <wsdl:documentation>Returns the area of this Geometry(s). Areal Geometries have a non-zero area. They override this function to compute the area. Others return 0.0</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest" message="tns:ExecuteProcess_GMLAreaGeometriesHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse" message="tns:ExecuteProcess_GMLAreaGeometriesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <wsdl:documentation>Buffer geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLBufferRequest" message="tns:DescribeProcess_GMLBufferHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLBufferResponse" message="tns:DescribeProcess_GMLBufferHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <wsdl:documentation>The buffer of a Geometry at a distance d is the Polygon or MultiPolygon which contains all points within a distance d of the Geometry. The distance d is interpreted according to the Precision Model of the Geometry. Both positive and negative distances are supported.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLBufferRequest" message="tns:ExecuteProcess_GMLBufferHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLBufferResponse" message="tns:ExecuteProcess_GMLBufferHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <wsdl:documentation>Convex Hull geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLConvexHullRequest" message="tns:DescribeProcess_GMLConvexHullHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLConvexHullResponse" message="tns:DescribeProcess_GMLConvexHullHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <wsdl:documentation>The convex hull of a Geometry is the smallest convex Polygon that contains all the points in the Geometry. If the convex hull contains fewer than 3 points, a lower dimension Geometry is returned. It will return a Geometry with the minimal number of points needed to represent the convex hull. In particular, no more than two consecutive points will be collinear.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLConvexHullRequest" message="tns:ExecuteProcess_GMLConvexHullHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLConvexHullResponse" message="tns:ExecuteProcess_GMLConvexHullHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <wsdl:documentation>Number of Geometries</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountGeometriesRequest" message="tns:DescribeProcess_GMLCountGeometriesHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLCountGeometriesResponse" message="tns:DescribeProcess_GMLCountGeometriesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <wsdl:documentation>Returns the number of Geometries in a GeometryCollection (or 1, if the geometry is not a collection).</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest" message="tns:ExecuteProcess_GMLCountGeometriesHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse" message="tns:ExecuteProcess_GMLCountGeometriesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <wsdl:documentation>Number of vertices in Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountPointsRequest" message="tns:DescribeProcess_GMLCountPointsHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLCountPointsResponse" message="tns:DescribeProcess_GMLCountPointsHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <wsdl:documentation>Returns the count of this Geometrys vertices. The Geometrys contained by composite Geometrys must be Geometry's.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountPointsRequest" message="tns:ExecuteProcess_GMLCountPointsHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountPointsResponse" message="tns:ExecuteProcess_GMLCountPointsHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <wsdl:documentation>Difference between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLDifferenceRequest" message="tns:DescribeProcess_GMLDifferenceHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLDifferenceResponse" message="tns:DescribeProcess_GMLDifferenceHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <wsdl:documentation>The difference between two Geometries A and B is the set of all points which lie in A but not in B. This method returns the closure of the resultant Geometry. a.difference(b) = closure( { x Â³ Â¥2 | x Â³ a Ãš x Â´ b } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLDifferenceRequest" message="tns:ExecuteProcess_GMLDifferenceHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLDifferenceResponse" message="tns:ExecuteProcess_GMLDifferenceHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <wsdl:documentation>Intersect geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLIntersectRequest" message="tns:DescribeProcess_GMLIntersectHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLIntersectResponse" message="tns:DescribeProcess_GMLIntersectHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <wsdl:documentation>The intersection of two Geometries A and B is the set of all points which lie in both A and B. a.intersection(b) = { x Â³ Â¥2 | x Â³ a Ã™ x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLIntersectRequest" message="tns:ExecuteProcess_GMLIntersectHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLIntersectResponse" message="tns:ExecuteProcess_GMLIntersectHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <wsdl:documentation>Length of the Geometry</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest" message="tns:DescribeProcess_GMLLengthGeometriesHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse" message="tns:DescribeProcess_GMLLengthGeometriesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <wsdl:documentation>Returns the length of this Geometry. Linear geometries return their length. Areal geometries return their perimeter.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest" message="tns:ExecuteProcess_GMLLengthGeometriesHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse" message="tns:ExecuteProcess_GMLLengthGeometriesHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <wsdl:documentation>Symmetric diffrence between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLSymDifferenceRequest" message="tns:DescribeProcess_GMLSymDifferenceHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLSymDifferenceResponse" message="tns:DescribeProcess_GMLSymDifferenceHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <wsdl:documentation>The symmetric difference of two Geometries A and B is the set of all points which lie in either A or B but not both. This method returns the closure of the resultant Geometry. a.symDifference(b) = closure( { x Â³ Â¥2 | (x Â³ a Ã™ x Â´ b) Ãš (x Â´ a Ã™ x Â³ b) } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest" message="tns:ExecuteProcess_GMLSymDifferenceHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse" message="tns:ExecuteProcess_GMLSymDifferenceHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <wsdl:documentation>Union geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLUnionRequest" message="tns:DescribeProcess_GMLUnionHttpPostRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLUnionResponse" message="tns:DescribeProcess_GMLUnionHttpPostResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <wsdl:documentation>The union of two Geometries A and B is the set of all points which lie in A or B. a.union(b) = { x Â³ Â¥2 | x Â³ a Ãš x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLUnionRequest" message="tns:ExecuteProcess_GMLUnionHttpPostRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLUnionResponse" message="tns:ExecuteProcess_GMLUnionHttpPostResponse" /> 
+  </wsdl:operation>
+  </wsdl:portType>
+<wsdl:portType name="SpatialAnalysisSoap12">
+<wsdl:operation name="GetCapabilities">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of this operation. The response will be an embedded WPS XML GetCapabilities Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="GetCapabilitiesRequest" message="tns:GetCapabilitiesSoap12Request" /> 
+  <wsdl:output name="GetCapabilitiesResponse" message="tns:GetCapabilitiesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of all processes provided by this operation. The response will be an embedded WPS XML DescribeProcess Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_AllRequest" message="tns:DescribeProcess_AllSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_AllResponse" message="tns:DescribeProcess_AllSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <wsdl:documentation>This web method will require a good undestanding of the WPS Schema. This method will evaluate your WPS XML Request, will process it and will response by an embbeded WPS XML Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="EvaluateWPSRequest" message="tns:EvaluateWPSSoap12Request" /> 
+  <wsdl:output name="EvaluateWPSResponse" message="tns:EvaluateWPSSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <wsdl:documentation>Area of the Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest" message="tns:DescribeProcess_GMLAreaGeometriesSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse" message="tns:DescribeProcess_GMLAreaGeometriesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <wsdl:documentation>Returns the area of this Geometry(s). Areal Geometries have a non-zero area. They override this function to compute the area. Others return 0.0</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest" message="tns:ExecuteProcess_GMLAreaGeometriesSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse" message="tns:ExecuteProcess_GMLAreaGeometriesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <wsdl:documentation>Buffer geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLBufferRequest" message="tns:DescribeProcess_GMLBufferSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLBufferResponse" message="tns:DescribeProcess_GMLBufferSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <wsdl:documentation>The buffer of a Geometry at a distance d is the Polygon or MultiPolygon which contains all points within a distance d of the Geometry. The distance d is interpreted according to the Precision Model of the Geometry. Both positive and negative distances are supported.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLBufferRequest" message="tns:ExecuteProcess_GMLBufferSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLBufferResponse" message="tns:ExecuteProcess_GMLBufferSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <wsdl:documentation>Convex Hull geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLConvexHullRequest" message="tns:DescribeProcess_GMLConvexHullSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLConvexHullResponse" message="tns:DescribeProcess_GMLConvexHullSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <wsdl:documentation>The convex hull of a Geometry is the smallest convex Polygon that contains all the points in the Geometry. If the convex hull contains fewer than 3 points, a lower dimension Geometry is returned. It will return a Geometry with the minimal number of points needed to represent the convex hull. In particular, no more than two consecutive points will be collinear.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLConvexHullRequest" message="tns:ExecuteProcess_GMLConvexHullSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLConvexHullResponse" message="tns:ExecuteProcess_GMLConvexHullSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <wsdl:documentation>Number of Geometries</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountGeometriesRequest" message="tns:DescribeProcess_GMLCountGeometriesSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLCountGeometriesResponse" message="tns:DescribeProcess_GMLCountGeometriesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <wsdl:documentation>Returns the number of Geometries in a GeometryCollection (or 1, if the geometry is not a collection).</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest" message="tns:ExecuteProcess_GMLCountGeometriesSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse" message="tns:ExecuteProcess_GMLCountGeometriesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <wsdl:documentation>Number of vertices in Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountPointsRequest" message="tns:DescribeProcess_GMLCountPointsSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLCountPointsResponse" message="tns:DescribeProcess_GMLCountPointsSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <wsdl:documentation>Returns the count of this Geometrys vertices. The Geometrys contained by composite Geometrys must be Geometry's.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountPointsRequest" message="tns:ExecuteProcess_GMLCountPointsSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountPointsResponse" message="tns:ExecuteProcess_GMLCountPointsSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <wsdl:documentation>Difference between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLDifferenceRequest" message="tns:DescribeProcess_GMLDifferenceSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLDifferenceResponse" message="tns:DescribeProcess_GMLDifferenceSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <wsdl:documentation>The difference between two Geometries A and B is the set of all points which lie in A but not in B. This method returns the closure of the resultant Geometry. a.difference(b) = closure( { x Â³ Â¥2 | x Â³ a Ãš x Â´ b } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLDifferenceRequest" message="tns:ExecuteProcess_GMLDifferenceSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLDifferenceResponse" message="tns:ExecuteProcess_GMLDifferenceSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <wsdl:documentation>Intersect geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLIntersectRequest" message="tns:DescribeProcess_GMLIntersectSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLIntersectResponse" message="tns:DescribeProcess_GMLIntersectSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <wsdl:documentation>The intersection of two Geometries A and B is the set of all points which lie in both A and B. a.intersection(b) = { x Â³ Â¥2 | x Â³ a Ã™ x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLIntersectRequest" message="tns:ExecuteProcess_GMLIntersectSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLIntersectResponse" message="tns:ExecuteProcess_GMLIntersectSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <wsdl:documentation>Length of the Geometry</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest" message="tns:DescribeProcess_GMLLengthGeometriesSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse" message="tns:DescribeProcess_GMLLengthGeometriesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <wsdl:documentation>Returns the length of this Geometry. Linear geometries return their length. Areal geometries return their perimeter.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest" message="tns:ExecuteProcess_GMLLengthGeometriesSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse" message="tns:ExecuteProcess_GMLLengthGeometriesSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <wsdl:documentation>Symmetric diffrence between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLSymDifferenceRequest" message="tns:DescribeProcess_GMLSymDifferenceSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLSymDifferenceResponse" message="tns:DescribeProcess_GMLSymDifferenceSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <wsdl:documentation>The symmetric difference of two Geometries A and B is the set of all points which lie in either A or B but not both. This method returns the closure of the resultant Geometry. a.symDifference(b) = closure( { x Â³ Â¥2 | (x Â³ a Ã™ x Â´ b) Ãš (x Â´ a Ã™ x Â³ b) } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest" message="tns:ExecuteProcess_GMLSymDifferenceSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse" message="tns:ExecuteProcess_GMLSymDifferenceSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <wsdl:documentation>Union geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLUnionRequest" message="tns:DescribeProcess_GMLUnionSoap12Request" /> 
+  <wsdl:output name="DescribeProcess_GMLUnionResponse" message="tns:DescribeProcess_GMLUnionSoap12Response" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <wsdl:documentation>The union of two Geometries A and B is the set of all points which lie in A or B. a.union(b) = { x Â³ Â¥2 | x Â³ a Ãš x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLUnionRequest" message="tns:ExecuteProcess_GMLUnionSoap12Request" /> 
+  <wsdl:output name="ExecuteProcess_GMLUnionResponse" message="tns:ExecuteProcess_GMLUnionSoap12Response" /> 
+  </wsdl:operation>
+  </wsdl:portType>
+<wsdl:portType name="SpatialAnalysisHttpGet">
+<wsdl:operation name="GetCapabilities">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of this operation. The response will be an embedded WPS XML GetCapabilities Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="GetCapabilitiesRequest" message="tns:GetCapabilitiesHttpGetRequest" /> 
+  <wsdl:output name="GetCapabilitiesResponse" message="tns:GetCapabilitiesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <wsdl:documentation>This standard web method is automatically generated to give a full description of all processes provided by this operation. The response will be an embedded WPS XML DescribeProcess Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_AllRequest" message="tns:DescribeProcess_AllHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_AllResponse" message="tns:DescribeProcess_AllHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <wsdl:documentation>This web method will require a good undestanding of the WPS Schema. This method will evaluate your WPS XML Request, will process it and will response by an embbeded WPS XML Response. Please consult the OGC Web Site for the WPS 0.4.0 specification.</wsdl:documentation> 
+  <wsdl:input name="EvaluateWPSRequest" message="tns:EvaluateWPSHttpGetRequest" /> 
+  <wsdl:output name="EvaluateWPSResponse" message="tns:EvaluateWPSHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <wsdl:documentation>Area of the Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest" message="tns:DescribeProcess_GMLAreaGeometriesHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse" message="tns:DescribeProcess_GMLAreaGeometriesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <wsdl:documentation>Returns the area of this Geometry(s). Areal Geometries have a non-zero area. They override this function to compute the area. Others return 0.0</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest" message="tns:ExecuteProcess_GMLAreaGeometriesHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse" message="tns:ExecuteProcess_GMLAreaGeometriesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <wsdl:documentation>Buffer geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLBufferRequest" message="tns:DescribeProcess_GMLBufferHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLBufferResponse" message="tns:DescribeProcess_GMLBufferHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <wsdl:documentation>The buffer of a Geometry at a distance d is the Polygon or MultiPolygon which contains all points within a distance d of the Geometry. The distance d is interpreted according to the Precision Model of the Geometry. Both positive and negative distances are supported.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLBufferRequest" message="tns:ExecuteProcess_GMLBufferHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLBufferResponse" message="tns:ExecuteProcess_GMLBufferHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <wsdl:documentation>Convex Hull geometry(ie) from a GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLConvexHullRequest" message="tns:DescribeProcess_GMLConvexHullHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLConvexHullResponse" message="tns:DescribeProcess_GMLConvexHullHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <wsdl:documentation>The convex hull of a Geometry is the smallest convex Polygon that contains all the points in the Geometry. If the convex hull contains fewer than 3 points, a lower dimension Geometry is returned. It will return a Geometry with the minimal number of points needed to represent the convex hull. In particular, no more than two consecutive points will be collinear.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLConvexHullRequest" message="tns:ExecuteProcess_GMLConvexHullHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLConvexHullResponse" message="tns:ExecuteProcess_GMLConvexHullHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <wsdl:documentation>Number of Geometries</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountGeometriesRequest" message="tns:DescribeProcess_GMLCountGeometriesHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLCountGeometriesResponse" message="tns:DescribeProcess_GMLCountGeometriesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <wsdl:documentation>Returns the number of Geometries in a GeometryCollection (or 1, if the geometry is not a collection).</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest" message="tns:ExecuteProcess_GMLCountGeometriesHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse" message="tns:ExecuteProcess_GMLCountGeometriesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <wsdl:documentation>Number of vertices in Geometry(s)</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLCountPointsRequest" message="tns:DescribeProcess_GMLCountPointsHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLCountPointsResponse" message="tns:DescribeProcess_GMLCountPointsHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <wsdl:documentation>Returns the count of this Geometrys vertices. The Geometrys contained by composite Geometrys must be Geometry's.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLCountPointsRequest" message="tns:ExecuteProcess_GMLCountPointsHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLCountPointsResponse" message="tns:ExecuteProcess_GMLCountPointsHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <wsdl:documentation>Difference between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLDifferenceRequest" message="tns:DescribeProcess_GMLDifferenceHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLDifferenceResponse" message="tns:DescribeProcess_GMLDifferenceHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <wsdl:documentation>The difference between two Geometries A and B is the set of all points which lie in A but not in B. This method returns the closure of the resultant Geometry. a.difference(b) = closure( { x Â³ Â¥2 | x Â³ a Ãš x Â´ b } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLDifferenceRequest" message="tns:ExecuteProcess_GMLDifferenceHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLDifferenceResponse" message="tns:ExecuteProcess_GMLDifferenceHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <wsdl:documentation>Intersect geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLIntersectRequest" message="tns:DescribeProcess_GMLIntersectHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLIntersectResponse" message="tns:DescribeProcess_GMLIntersectHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <wsdl:documentation>The intersection of two Geometries A and B is the set of all points which lie in both A and B. a.intersection(b) = { x Â³ Â¥2 | x Â³ a Ã™ x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLIntersectRequest" message="tns:ExecuteProcess_GMLIntersectHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLIntersectResponse" message="tns:ExecuteProcess_GMLIntersectHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <wsdl:documentation>Length of the Geometry</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest" message="tns:DescribeProcess_GMLLengthGeometriesHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse" message="tns:DescribeProcess_GMLLengthGeometriesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <wsdl:documentation>Returns the length of this Geometry. Linear geometries return their length. Areal geometries return their perimeter.</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest" message="tns:ExecuteProcess_GMLLengthGeometriesHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse" message="tns:ExecuteProcess_GMLLengthGeometriesHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <wsdl:documentation>Symmetric diffrence between geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLSymDifferenceRequest" message="tns:DescribeProcess_GMLSymDifferenceHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLSymDifferenceResponse" message="tns:DescribeProcess_GMLSymDifferenceHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <wsdl:documentation>The symmetric difference of two Geometries A and B is the set of all points which lie in either A or B but not both. This method returns the closure of the resultant Geometry. a.symDifference(b) = closure( { x Â³ Â¥2 | (x Â³ a Ã™ x Â´ b) Ãš (x Â´ a Ã™ x Â³ b) } )</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest" message="tns:ExecuteProcess_GMLSymDifferenceHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse" message="tns:ExecuteProcess_GMLSymDifferenceHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <wsdl:documentation>Union geometry(ie) from a GML stream with another GML stream</wsdl:documentation> 
+  <wsdl:input name="DescribeProcess_GMLUnionRequest" message="tns:DescribeProcess_GMLUnionHttpGetRequest" /> 
+  <wsdl:output name="DescribeProcess_GMLUnionResponse" message="tns:DescribeProcess_GMLUnionHttpGetResponse" /> 
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <wsdl:documentation>The union of two Geometries A and B is the set of all points which lie in A or B. a.union(b) = { x Â³ Â¥2 | x Â³ a Ãš x Â³ b }</wsdl:documentation> 
+  <wsdl:input name="ExecuteProcess_GMLUnionRequest" message="tns:ExecuteProcess_GMLUnionHttpGetRequest" /> 
+  <wsdl:output name="ExecuteProcess_GMLUnionResponse" message="tns:ExecuteProcess_GMLUnionHttpGetResponse" /> 
+  </wsdl:operation>
+  </wsdl:portType>
+<wsdl:binding name="SpatialAnalysisSoap" type="tns:SpatialAnalysisSoap">
+  <soap:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" /> 
+<wsdl:operation name="GetCapabilities">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/GetCapabilities" style="document" /> 
+<wsdl:input name="GetCapabilitiesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="GetCapabilitiesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_All" style="document" /> 
+<wsdl:input name="DescribeProcess_AllRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_AllResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/EvaluateWPS" style="document" /> 
+<wsdl:input name="EvaluateWPSRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="EvaluateWPSResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLAreaGeometries" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLAreaGeometries" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLBuffer" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLBufferRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLBufferResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLBuffer" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLBufferRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLBufferResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLConvexHull" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLConvexHullRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLConvexHullResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLConvexHull" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLConvexHullRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLConvexHullResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLCountGeometries" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLCountGeometriesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountGeometriesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLCountGeometries" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLCountPoints" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLCountPointsRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountPointsResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLCountPoints" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLCountPointsRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountPointsResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLDifference" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLDifferenceRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLDifferenceResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLDifference" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLDifferenceRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLDifferenceResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLIntersect" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLIntersectRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLIntersectResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLIntersect" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLIntersectRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLIntersectResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLLengthGeometries" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLLengthGeometries" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLSymDifference" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLSymDifferenceRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLSymDifferenceResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLSymDifference" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLUnion" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLUnionRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLUnionResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <soap:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLUnion" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLUnionRequest">
+  <soap:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLUnionResponse">
+  <soap:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+  </wsdl:binding>
+<wsdl:binding name="SpatialAnalysisHttpPost" type="tns:SpatialAnalysisHttpPost">
+  <http:binding verb="POST" /> 
+<wsdl:operation name="GetCapabilities">
+  <http:operation location="/GetCapabilities" /> 
+<wsdl:input name="GetCapabilitiesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="GetCapabilitiesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <http:operation location="/DescribeProcess_All" /> 
+<wsdl:input name="DescribeProcess_AllRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_AllResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <http:operation location="/EvaluateWPS" /> 
+<wsdl:input name="EvaluateWPSRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="EvaluateWPSResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <http:operation location="/DescribeProcess_GMLAreaGeometries" /> 
+<wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <http:operation location="/ExecuteProcess_GMLAreaGeometries" /> 
+<wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <http:operation location="/DescribeProcess_GMLBuffer" /> 
+<wsdl:input name="DescribeProcess_GMLBufferRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLBufferResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <http:operation location="/ExecuteProcess_GMLBuffer" /> 
+<wsdl:input name="ExecuteProcess_GMLBufferRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLBufferResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <http:operation location="/DescribeProcess_GMLConvexHull" /> 
+<wsdl:input name="DescribeProcess_GMLConvexHullRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLConvexHullResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <http:operation location="/ExecuteProcess_GMLConvexHull" /> 
+<wsdl:input name="ExecuteProcess_GMLConvexHullRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLConvexHullResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <http:operation location="/DescribeProcess_GMLCountGeometries" /> 
+<wsdl:input name="DescribeProcess_GMLCountGeometriesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <http:operation location="/ExecuteProcess_GMLCountGeometries" /> 
+<wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <http:operation location="/DescribeProcess_GMLCountPoints" /> 
+<wsdl:input name="DescribeProcess_GMLCountPointsRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountPointsResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <http:operation location="/ExecuteProcess_GMLCountPoints" /> 
+<wsdl:input name="ExecuteProcess_GMLCountPointsRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountPointsResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <http:operation location="/DescribeProcess_GMLDifference" /> 
+<wsdl:input name="DescribeProcess_GMLDifferenceRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <http:operation location="/ExecuteProcess_GMLDifference" /> 
+<wsdl:input name="ExecuteProcess_GMLDifferenceRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <http:operation location="/DescribeProcess_GMLIntersect" /> 
+<wsdl:input name="DescribeProcess_GMLIntersectRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLIntersectResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <http:operation location="/ExecuteProcess_GMLIntersect" /> 
+<wsdl:input name="ExecuteProcess_GMLIntersectRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLIntersectResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <http:operation location="/DescribeProcess_GMLLengthGeometries" /> 
+<wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <http:operation location="/ExecuteProcess_GMLLengthGeometries" /> 
+<wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <http:operation location="/DescribeProcess_GMLSymDifference" /> 
+<wsdl:input name="DescribeProcess_GMLSymDifferenceRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLSymDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <http:operation location="/ExecuteProcess_GMLSymDifference" /> 
+<wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <http:operation location="/DescribeProcess_GMLUnion" /> 
+<wsdl:input name="DescribeProcess_GMLUnionRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLUnionResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <http:operation location="/ExecuteProcess_GMLUnion" /> 
+<wsdl:input name="ExecuteProcess_GMLUnionRequest">
+  <mime:content type="application/x-www-form-urlencoded" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLUnionResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+  </wsdl:binding>
+<wsdl:binding name="SpatialAnalysisSoap12" type="tns:SpatialAnalysisSoap12">
+  <soap12:binding style="document" transport="http://schemas.xmlsoap.org/soap/http" /> 
+<wsdl:operation name="GetCapabilities">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/GetCapabilities" style="document" /> 
+<wsdl:input name="GetCapabilitiesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="GetCapabilitiesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_All" style="document" /> 
+<wsdl:input name="DescribeProcess_AllRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_AllResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/EvaluateWPS" style="document" /> 
+<wsdl:input name="EvaluateWPSRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="EvaluateWPSResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLAreaGeometries" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLAreaGeometries" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLBuffer" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLBufferRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLBufferResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLBuffer" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLBufferRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLBufferResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLConvexHull" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLConvexHullRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLConvexHullResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLConvexHull" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLConvexHullRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLConvexHullResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLCountGeometries" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLCountGeometriesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountGeometriesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLCountGeometries" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLCountPoints" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLCountPointsRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountPointsResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLCountPoints" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLCountPointsRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountPointsResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLDifference" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLDifferenceRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLDifferenceResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLDifference" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLDifferenceRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLDifferenceResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLIntersect" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLIntersectRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLIntersectResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLIntersect" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLIntersectRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLIntersectResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLLengthGeometries" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLLengthGeometries" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLSymDifference" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLSymDifferenceRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLSymDifferenceResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLSymDifference" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/DescribeProcess_GMLUnion" style="document" /> 
+<wsdl:input name="DescribeProcess_GMLUnionRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLUnionResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <soap12:operation soapAction="http://wpsint.tigris.org/soap/SpatialAnalysis/ExecuteProcess_GMLUnion" style="document" /> 
+<wsdl:input name="ExecuteProcess_GMLUnionRequest">
+  <soap12:body use="literal" /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLUnionResponse">
+  <soap12:body use="literal" /> 
+  </wsdl:output>
+  </wsdl:operation>
+  </wsdl:binding>
+<wsdl:binding name="SpatialAnalysisHttpGet" type="tns:SpatialAnalysisHttpGet">
+  <http:binding verb="GET" /> 
+<wsdl:operation name="GetCapabilities">
+  <http:operation location="/GetCapabilities" /> 
+<wsdl:input name="GetCapabilitiesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="GetCapabilitiesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_All">
+  <http:operation location="/DescribeProcess_All" /> 
+<wsdl:input name="DescribeProcess_AllRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_AllResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="EvaluateWPS">
+  <http:operation location="/EvaluateWPS" /> 
+<wsdl:input name="EvaluateWPSRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="EvaluateWPSResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLAreaGeometries">
+  <http:operation location="/DescribeProcess_GMLAreaGeometries" /> 
+<wsdl:input name="DescribeProcess_GMLAreaGeometriesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLAreaGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLAreaGeometries">
+  <http:operation location="/ExecuteProcess_GMLAreaGeometries" /> 
+<wsdl:input name="ExecuteProcess_GMLAreaGeometriesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLAreaGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLBuffer">
+  <http:operation location="/DescribeProcess_GMLBuffer" /> 
+<wsdl:input name="DescribeProcess_GMLBufferRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLBufferResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLBuffer">
+  <http:operation location="/ExecuteProcess_GMLBuffer" /> 
+<wsdl:input name="ExecuteProcess_GMLBufferRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLBufferResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLConvexHull">
+  <http:operation location="/DescribeProcess_GMLConvexHull" /> 
+<wsdl:input name="DescribeProcess_GMLConvexHullRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLConvexHullResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLConvexHull">
+  <http:operation location="/ExecuteProcess_GMLConvexHull" /> 
+<wsdl:input name="ExecuteProcess_GMLConvexHullRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLConvexHullResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountGeometries">
+  <http:operation location="/DescribeProcess_GMLCountGeometries" /> 
+<wsdl:input name="DescribeProcess_GMLCountGeometriesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountGeometries">
+  <http:operation location="/ExecuteProcess_GMLCountGeometries" /> 
+<wsdl:input name="ExecuteProcess_GMLCountGeometriesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLCountPoints">
+  <http:operation location="/DescribeProcess_GMLCountPoints" /> 
+<wsdl:input name="DescribeProcess_GMLCountPointsRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLCountPointsResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLCountPoints">
+  <http:operation location="/ExecuteProcess_GMLCountPoints" /> 
+<wsdl:input name="ExecuteProcess_GMLCountPointsRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLCountPointsResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLDifference">
+  <http:operation location="/DescribeProcess_GMLDifference" /> 
+<wsdl:input name="DescribeProcess_GMLDifferenceRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLDifference">
+  <http:operation location="/ExecuteProcess_GMLDifference" /> 
+<wsdl:input name="ExecuteProcess_GMLDifferenceRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLIntersect">
+  <http:operation location="/DescribeProcess_GMLIntersect" /> 
+<wsdl:input name="DescribeProcess_GMLIntersectRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLIntersectResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLIntersect">
+  <http:operation location="/ExecuteProcess_GMLIntersect" /> 
+<wsdl:input name="ExecuteProcess_GMLIntersectRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLIntersectResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLLengthGeometries">
+  <http:operation location="/DescribeProcess_GMLLengthGeometries" /> 
+<wsdl:input name="DescribeProcess_GMLLengthGeometriesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLLengthGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLLengthGeometries">
+  <http:operation location="/ExecuteProcess_GMLLengthGeometries" /> 
+<wsdl:input name="ExecuteProcess_GMLLengthGeometriesRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLLengthGeometriesResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLSymDifference">
+  <http:operation location="/DescribeProcess_GMLSymDifference" /> 
+<wsdl:input name="DescribeProcess_GMLSymDifferenceRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLSymDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLSymDifference">
+  <http:operation location="/ExecuteProcess_GMLSymDifference" /> 
+<wsdl:input name="ExecuteProcess_GMLSymDifferenceRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLSymDifferenceResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="DescribeProcess_GMLUnion">
+  <http:operation location="/DescribeProcess_GMLUnion" /> 
+<wsdl:input name="DescribeProcess_GMLUnionRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="DescribeProcess_GMLUnionResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+<wsdl:operation name="ExecuteProcess_GMLUnion">
+  <http:operation location="/ExecuteProcess_GMLUnion" /> 
+<wsdl:input name="ExecuteProcess_GMLUnionRequest">
+  <http:urlEncoded /> 
+  </wsdl:input>
+<wsdl:output name="ExecuteProcess_GMLUnionResponse">
+  <mime:mimeXml part="Body" /> 
+  </wsdl:output>
+  </wsdl:operation>
+  </wsdl:binding>
+<wsdl:service name="SpatialAnalysisService">
+  <wsdl:documentation>Perform spatial analysis on GML (xml document) version 2.1.2 or 3.0. This operation supports GML coming from a WMS or WFS Service. . The spatial analysis methods (like buffer,intersect,union,difference,symDifference,convexHull) will return the most specific class possible to represent the result. If the result is homogeneous, a Point, LineString, or Polygon will be returned if the result contains a single element; otherwise, a MultiPoint, MultiLineString, or MultiPolygon will be returned. If the result is heterogeneous a GeometryCollection will be returned. For faster spatial analysis, use simplication (option available for all processs) either Douglas-Peucker or Topology Preserving algorithm. It will ensure that any polygonal geometries returned are valid BUT simple lines are not guaranteed to remain simple after simplification. Important note: Using Douglas-Peucker simplification does not preserve topology; e.g. polygons can be split, collapse to lines or disappear holes can be created or disappear, and lines can cross.</wsdl:documentation> 
+<wsdl:port name="SpatialAnalysisHttpGet" binding="tns:SpatialAnalysisHttpGet">
+  <http:address location="http://ONOTTA499199:7080/nlwis_ws/SpatialAnalysis/service.soap" /> 
+  </wsdl:port>
+<wsdl:port name="SpatialAnalysisSoap" binding="tns:SpatialAnalysisSoap">
+  <soap:address location="http://ONOTTA499199:7080/nlwis_ws/SpatialAnalysis/service.soap" /> 
+  </wsdl:port>
+<wsdl:port name="SpatialAnalysisHttpPost" binding="tns:SpatialAnalysisHttpPost">
+  <http:address location="http://ONOTTA499199:7080/nlwis_ws/SpatialAnalysis/service.soap" /> 
+  </wsdl:port>
+<wsdl:port name="SpatialAnalysisSoap12" binding="tns:SpatialAnalysisSoap12">
+  <soap12:address location="http://ONOTTA499199:7080/nlwis_ws/SpatialAnalysis/service.soap" /> 
+  </wsdl:port>
+  </wsdl:service>
+  </wsdl:definitions>
+

@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<soap:Envelope xmlns:soap="http://www.w3.org/2003/05/soap-envelope"
+	xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+	xmlns:xsd="http://www.w3.org/2001/XMLSchema"
+	xsi:schemaLocation="http://www.w3.org/2003/05/soap-envelope
+	http://www.w3.org/2003/05/soap-envelope">
+	<soap:Body>
+		<DescribeProcess xmlns="http://www.opengis.net/wps/1.0.0"
+			xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink"
+			xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+			xsi:schemaLocation="http://www.opengis.net/wps/1.0.0 ../wpsDescribeProcess_request.xsd"
+			service="WPS" version="1.0.0" language="en-CA">
+			<ows:Identifier>intersection</ows:Identifier>
+			<ows:Identifier>union</ows:Identifier>
+		</DescribeProcess>
+	</soap:Body>
+</soap:Envelope>

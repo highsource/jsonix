@@ -1,0 +1,36 @@
+<?xml version="1.0" encoding="UTF-8" standalone="yes"?>
+<!-- Execute operation request assuming use of default formats, and RawDataOutput.-->
+<!-- Equivalent GET request is 
+		http://foo.bar/foo?
+			Service=WPS&
+			Version=1.0.0&
+			Language=en-CA&
+			Request=Execute&
+			Identifier=Buffer&
+			DataInputs=[InputPolygon=@xlink:href=http%3A%2F%2Ffoo.bar%2Fsome_WFS_request.xml;BufferDistance=400]&
+			RawDataOutput=[BufferedPolygon]
+
+-->
+<wps:Execute service="WPS" version="1.0.0" xmlns:wps="http://www.opengis.net/wps/1.0.0" xmlns:ows="http://www.opengis.net/ows/1.1" xmlns:xlink="http://www.w3.org/1999/xlink" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.opengis.net/wps/1.0.0
+../wpsExecute_request.xsd">
+	<ows:Identifier>Buffer</ows:Identifier>
+	<wps:DataInputs>
+		<wps:Input>
+			<ows:Identifier>InputPolygon</ows:Identifier>
+			<ows:Title>Playground area</ows:Title>
+			<wps:Reference xlink:href="http://foo.bar/some_WFS_request.xml"/>
+		</wps:Input>
+		<wps:Input>
+			<ows:Identifier>BufferDistance</ows:Identifier>
+			<ows:Title>Distance which people will walk to get to a playground.</ows:Title>
+			<wps:Data>
+				<wps:LiteralData>400</wps:LiteralData>
+			</wps:Data>
+		</wps:Input>
+	</wps:DataInputs>
+	<wps:ResponseForm>
+		<wps:RawDataOutput>
+			<ows:Identifier>BufferedPolygon</ows:Identifier>
+		</wps:RawDataOutput>
+	</wps:ResponseForm>
+</wps:Execute>
