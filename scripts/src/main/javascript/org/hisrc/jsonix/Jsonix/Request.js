@@ -43,7 +43,7 @@ Jsonix.Request = Jsonix
 				return new ActiveXObject('Microsoft.XMLHTTP');
 			}, function() {
 				// Node.js
-				if (typeof require === 'function')
+				if (typeof window === 'undefined')
 				{
 					var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
 					return new XMLHttpRequest();

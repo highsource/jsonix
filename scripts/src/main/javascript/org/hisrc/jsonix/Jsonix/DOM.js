@@ -32,7 +32,7 @@ Jsonix.DOM = {
 	createDocument : function() {
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof window === 'undefined')
 		{
 			return new (require('xmldom').DOMImplementation)().createDocument();
 		} else if (typeof document !== 'undefined' && Jsonix.Util.Type.exists(document.implementation) && Jsonix.Util.Type.isFunction(document.implementation.createDocument)) {
@@ -47,7 +47,7 @@ Jsonix.DOM = {
 		Jsonix.Util.Ensure.ensureExists(node);
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof window === 'undefined')
 		{
 			return (new (require('xmldom')).XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(XMLSerializer)) {
@@ -60,7 +60,7 @@ Jsonix.DOM = {
 	},
 	parse : function(text) {
 		Jsonix.Util.Ensure.ensureExists(text);
-		if (typeof require === 'function')
+		if (typeof window === 'undefined')
 		{
 			return (new (require('xmldom')).DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof DOMParser != 'undefined') {

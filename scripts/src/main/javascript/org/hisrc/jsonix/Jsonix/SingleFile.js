@@ -33,6 +33,6 @@ var Jsonix = {
 };
 
 // Node.js
-if(typeof require === 'function'){
+if(typeof window === 'undefined'){
 	module.exports.Jsonix = Jsonix;
 }
