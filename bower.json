@@ -1,0 +1,49 @@
+{
+  "name": "jsonix",
+  "version": "2.0.11",
+  "homepage": "http://confluence.highsource.org/display/JSNX/Jsonix",
+  "authors": [
+    "Alexey Valikov"
+  ],
+  "description": "Jsonix (JSON interfaces for XML) is a JavaScript library which allows converting between XML and JSON structures.",
+  "main": "dist/Jsonix-all.js",
+  "keywords": [
+    "json",
+    "xml",
+    "unmarshal",
+    "unmarshalling",
+    "marshal",
+    "marshalling",
+    "parse",
+    "parsing",
+    "serialize",
+    "serializing",
+    "javascript",
+    "objects",
+    "dom",
+    "util",
+    "utility",
+    "jaxb",
+    "jsonix"
+  ],
+  "license": "BSD-3-Clause",
+  "ignore": [
+    "**/.*",
+    "tests",
+    "README.md",
+    "node_modules",
+    "compiler",
+    "demos",
+    "docs",
+    "fiddles",
+    "formats",
+    "full",
+    "misc",
+    "nodejs",
+    "pom.xml",
+    "release.bat",
+    "samples",
+    "scripts",
+    "src"
+  ]
+}
