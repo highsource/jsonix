@@ -1,0 +1,16 @@
+{
+	"name": "jsonix",
+	"version": "2.0.11",
+	"homepage": "https://github.com/highsource/jsonix",
+	"authors": [
+		"Alexey Valikov"
+	],
+	"description": "Jsonix (JSON interfaces for XML) is a JavaScript library which allows converting between XML and JSON structures.",
+	"main": "jsonix.js",
+	"keywords" : [ "json", "xml", "unmarshal", "unmarshalling", "marshal",
+			"marshalling", "parse", "parsing", "serialize", "serializing",
+			"javascript objects", "dom", "util", "utility", "jaxb", "jsonix" ],
+
+	"license": "BSD-3-Clause",
+	"ignore": [ "**/.*", "lib", "node_modules", "tests", "mnpm.bat", "package.json", "pom.xml", "README.md" ]
+}
