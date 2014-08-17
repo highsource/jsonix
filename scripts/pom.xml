@@ -65,6 +65,9 @@
 							<includes>
 								<include>**/*.js</include>
 							</includes>
+							<excludes>
+								<include>**/*.fragmentjs</include>
+							</excludes>
 						</configuration>
 					</execution>
 					<execution>
@@ -116,8 +119,10 @@
 						</goals>
 						<configuration>
 							<fileSetDescriptors>
+								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/Header.scripts</fileSetDescriptor>
 								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/SingleFile.scripts</fileSetDescriptor>
 								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/Jsonix.scripts</fileSetDescriptor>
+								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/Footer.scripts</fileSetDescriptor>
 							</fileSetDescriptors>
 							<sourceDirectory>${project.build.directory}/scripts</sourceDirectory>
 							<targetDirectory>${project.build.outputDirectory}</targetDirectory>
@@ -133,8 +138,10 @@
 						</goals>
 						<configuration>
 							<fileSetDescriptors>
+								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/Header.scripts</fileSetDescriptor>
 								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/SingleFile.scripts</fileSetDescriptor>
 								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/Jsonix.scripts</fileSetDescriptor>
+								<fileSetDescriptor>src/main/resources/org/hisrc/jsonix/Footer.scripts</fileSetDescriptor>
 							</fileSetDescriptors>
 							<sourceDirectory>${project.build.directory}/compressed-scripts</sourceDirectory>
 							<targetDirectory>${project.build.outputDirectory}</targetDirectory>
@@ -172,6 +179,13 @@
 								<copy todir="${project.build.directory}/scripts">
 									<fileset dir="${basedir}/src/main/javascript">
 										<include name="**/*.js" />
+										<include name="**/*.fragmentjs" />
+									</fileset>
+								</copy>
+								<mkdir dir="${project.build.directory}/compressed-scripts" />
+								<copy todir="${project.build.directory}/compressed-scripts">
+									<fileset dir="${basedir}/src/main/javascript">
+										<include name="**/*.fragmentjs" />
 									</fileset>
 								</copy>
 							</tasks>
