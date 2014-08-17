@@ -33,16 +33,20 @@
 
 package org.hisrc.jsonix.compiler;
 
+import java.util.Objects;
+
 import javax.xml.namespace.QName;
 
-import org.apache.commons.lang3.ObjectUtils;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.commons.lang3.Validate;
 import org.hisrc.jscm.codemodel.JSCodeModel;
 import org.hisrc.jscm.codemodel.JSProgram;
 import org.hisrc.jscm.codemodel.expression.JSArrayLiteral;
+import org.hisrc.jscm.codemodel.expression.JSFunctionExpression.Function;
+import org.hisrc.jscm.codemodel.expression.JSGlobalVariable;
 import org.hisrc.jscm.codemodel.expression.JSMemberExpression;
 import org.hisrc.jscm.codemodel.expression.JSObjectLiteral;
+import org.hisrc.jscm.codemodel.statement.JSIfStatement;
 import org.hisrc.jscm.codemodel.statement.JSVariableStatement;
 import org.hisrc.jsonix.xjc.customizations.PackageMapping;
 
@@ -53,15 +57,17 @@ public class JsonixModule {
 	public final String spaceName;
 	public final JSProgram declarations;
 	public final JSProgram exportDeclarations;
-	public final JSVariableStatement space;
+	private final JSVariableStatement spaceFactoryVariable;
+	private final JSVariableStatement space;
 
-	public final String defaultElementNamespaceURI;
-	public final String defaultAttributeNamespaceURI;
+	private final String defaultElementNamespaceURI;
+	private final String defaultAttributeNamespaceURI;
 
 	public final String directory;
 	public final String fileName;
 	private JSArrayLiteral typeInfos;
 	private JSArrayLiteral elementInfos;
+	private Function spaceFactoryFunction;
 
 	public JsonixModule(JSCodeModel codeModel, PackageMapping packageMapping) {
 		Validate.notEmpty(packageMapping.getSpaceName());
@@ -94,17 +100,46 @@ public class JsonixModule {
 					codeModel.string(this.defaultAttributeNamespaceURI));
 		}
 
-		this.space = this.declarations.var(this.spaceName, spaceBody);
+		this.spaceFactoryFunction = codeModel.function();
+		this.spaceFactoryVariable = this.declarations.var("_" + this.spaceName
+				+ "_factory", this.spaceFactoryFunction);
 
-		this.exportDeclarations
-				._if(this.codeModel.globalVariable("require").typeof()
-						.eeq(codeModel.string("function")))
+		this.space = this.spaceFactoryFunction.getBody().var(this.spaceName,
+				spaceBody);
+		this.spaceFactoryFunction.getBody()._return(
+				codeModel.object().append(this.spaceName, this.space.getVariable()));
+
+		final JSGlobalVariable define = this.codeModel.globalVariable("define");
+		final JSIfStatement ifDefine = this.exportDeclarations._if(define
+				.typeof().eeq(codeModel.string("function"))
+				.and(define.p("amd")));
+
+		ifDefine._then()
+				.block()
+				.expression(
+						define.i().args(codeModel.array(),
+								this.spaceFactoryVariable.getVariable()));
+
+		final JSGlobalVariable module = this.codeModel.globalVariable("module");
+		final JSIfStatement ifModuleExports = ifDefine
+				._else()
+				.block()
+				._if(module.typeof().nee(codeModel.string("undefined"))
+						.and(module.p("exports")));
+		ifModuleExports
 				._then()
 				.block()
 				.expression(
-						codeModel.globalVariable("module").p("exports")
+						module.p("exports")
 								.p(this.spaceName)
-								.assign(this.space.getVariable()));
+								.assign(this.spaceFactoryVariable.getVariable()
+										.i().p(this.spaceName)));
+
+		ifModuleExports
+				._else()
+				.block()
+				.var(this.spaceName,
+						this.spaceFactoryVariable.getVariable().i().p(this.spaceName));
 
 		typeInfos = codeModel.array();
 		spaceBody.append("typeInfos", typeInfos);
@@ -130,7 +165,7 @@ public class JsonixModule {
 		final String namespaceURI = StringUtils.isEmpty(draftNamespaceURI) ? null
 				: draftNamespaceURI;
 
-		if (ObjectUtils.equals(defaultNamespaceURI, namespaceURI)) {
+		if (Objects.equals(defaultNamespaceURI, namespaceURI)) {
 			return this.codeModel.string(name.getLocalPart());
 		} else {
 
