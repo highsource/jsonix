@@ -63,7 +63,7 @@
 									<version>${project.version}</version>
 									<type>war</type>
 									<outputDirectory>src/main/webapp</outputDirectory>
-									<includes>index.html,po.xml,WEB-INF/web.xml</includes>
+									<includes>index.html,po.xml,js/require.js,js/main.js,WEB-INF/web.xml</includes>
 								</artifactItem>
 								<artifactItem>
 									<groupId>${project.groupId}</groupId>
