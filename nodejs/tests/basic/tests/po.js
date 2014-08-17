@@ -41,7 +41,7 @@ module.exports =
 						street : "8 Oak Avenue",
 						city : "Old Town",
 						state : "PA",
-						zip : 95819,
+						zip : "95819",
 						country : "US"
 					},
 					comment : 'Hurry, my lawn is going wild!',

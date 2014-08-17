@@ -39,7 +39,13 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 		throw new Error('Abstract method [parse].');
 	},
 	reprint : function(value, context, scope) {
-		return this.print(this.parse(value, context, scope), context, scope);
+		if (Jsonix.Util.Type.isString(value)) {
+			return this.print(this.parse(value, context, scope), context, scope);
+		}
+		else
+		{
+			return this.print(value, context, scope);
+		}
 	},
 	unmarshal : function(context, input) {
 		var text = input.getElementText();
@@ -51,7 +57,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	},
 	marshal : function(context, value, output) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.print(value, context));
+			output.writeCharacters(this.reprint(value, context));
 		}
 	},
 	build: function(context, module)

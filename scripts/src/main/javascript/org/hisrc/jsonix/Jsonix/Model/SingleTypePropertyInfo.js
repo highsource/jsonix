@@ -49,11 +49,7 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				return this.typeInfo.parse(value, context, scope);
 			},
 			print : function(context, scope, value) {
-				// If given value is string, reparse the value
-				if (Jsonix.Util.Type.isString(value)) {
-					return this.typeInfo.reprint(value, context, scope);
-				}
-				return this.typeInfo.print(value, context, scope);
+				return this.typeInfo.reprint(value, context, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});

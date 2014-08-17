@@ -84,7 +84,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.print(value[index], context);
+							result = result + this.typeInfo.reprint(value[index], context);
 						}
 						return result;
 					},

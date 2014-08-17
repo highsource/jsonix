@@ -18,6 +18,27 @@ function roundtrip(test, resource, zero) {
 		test.done();
 	});
 }
+function forward(test, resource, zero) {
+	var context = new Jsonix.Context([ Zero ]);
+	console.log('Unmarshalling [' + resource + '].');
+	var unmarshallerOne = context.createUnmarshaller();
+	var marshallerOne = context.createMarshaller();
+	var marshalledZero = marshallerOne.marshalDocument(zero);
+		console.log("Unmarshalled 1");
+		console.log(marshalledZero);
+	unmarshallerOne.unmarshalURL('http://localhost:8080/Zero/' + resource, function(one) {
+		console.log("Unmarshalled 0");
+		var marshalledZero = marshallerOne.marshalDocument(zero);
+		console.log("Unmarshalled 1");
+		console.log(marshalledZero);
+		var unmarshalledZero = context.createUnmarshaller().unmarshalDocument(marshalledZero);
+		console.log("Unmarshalled 2");
+		console.log(unmarshalledZero);
+		console.log(context.createMarshaller().marshalString(zero));
+		test.ok(Jsonix.Util.Type.isEqual(unmarshalledZero, one, function(text) {console.log(text)}), 'Roundtrip [' + resource + '] failed in phase two. Objects must be equal.');
+		test.done();
+	});
+}
 
 module.exports =
 {
@@ -45,5 +66,8 @@ module.exports =
 		"extendedExtended-0.xml" : function(test) {roundtrip(test, "extendedExtended-0.xml", ZeroData["extendedExtended-0.xml"])},
 		"string-0.xml" : function(test) {roundtrip(test, "string-0.xml", ZeroData["string-0.xml"])},
 		"value-0.xml" : function(test) {roundtrip(test, "value-0.xml", ZeroData["value-0.xml"])}
+	},
+	"Forwards" : {
+		"attribute-1.xml" : function(test) {forward(test, "attribute-1.xml", ZeroData["attribute-1.xml"])}
 	}
 };

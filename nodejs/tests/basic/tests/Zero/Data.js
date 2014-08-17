@@ -184,6 +184,15 @@ var org_hisrc_jsonix_tests_zero_data = {
 			zeta : [8],
 			TYPE_NAME : 'org_hisrc_jsonix_tests_zero.ExtendedExtendedType'
 		}
+	},
+	'attribute-1.xml' : {
+		name : new Jsonix.XML.QName('attribute'),
+		value : {
+			value : 'test',
+			string : 'zero',
+			integers : [ '1', '2' ],
+			TYPE_NAME : 'org_hisrc_jsonix_tests_zero.AttributeType'
+		}
 	}
 };
 if (typeof require === 'function') {

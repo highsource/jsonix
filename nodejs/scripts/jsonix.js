@@ -1464,6 +1464,15 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	parse : function(text) {
 		throw new Error('Abstract method [parse].');
 	},
+	reprint : function(value, context, scope) {
+		if (Jsonix.Util.Type.isString(value)) {
+			return this.print(this.parse(value, context, scope), context, scope);
+		}
+		else
+		{
+			return this.print(value, context, scope);
+		}
+	},
 	unmarshal : function(context, input) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
@@ -1474,7 +1483,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	},
 	marshal : function(context, value, output) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.print(value, context));
+			output.writeCharacters(this.reprint(value, context));
 		}
 	},
 	build: function(context, module)
@@ -1540,7 +1549,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.print(value[index], context);
+							result = result + this.typeInfo.reprint(value[index], context);
 						}
 						return result;
 					},
@@ -2383,9 +2392,6 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						}
 					},
 					print : function(value) {
-						if (Jsonix.Util.Type.isString(value)) {
-							return value;
-						}
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {
@@ -3428,7 +3434,7 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				return this.typeInfo.parse(value, context, scope);
 			},
 			print : function(context, scope, value) {
-				return this.typeInfo.print(value, context, scope);
+				return this.typeInfo.reprint(value, context, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});
