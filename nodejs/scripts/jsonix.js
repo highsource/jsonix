@@ -28,15 +28,12 @@
  * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
  */
 
+var _jsonix_factory = function(_jsonix_xmldom, _jsonix_xmlhttprequest, _jsonix_fs)
+{
+	// Complete Jsonix script is included below 
 var Jsonix = {
 	singleFile : true
 };
-
-// Node.js
-if(typeof require === 'function'){
-	module.exports.Jsonix = Jsonix;
-}
-
 Jsonix.Util = {};
 
 Jsonix.Util.extend = function(destination, source) {
@@ -118,9 +115,9 @@ Jsonix.DOM = {
 	createDocument : function() {
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return new (require('xmldom').DOMImplementation)().createDocument();
+			return new (_jsonix_xmldom.DOMImplementation)().createDocument();
 		} else if (typeof document !== 'undefined' && Jsonix.Util.Type.exists(document.implementation) && Jsonix.Util.Type.isFunction(document.implementation.createDocument)) {
 			return document.implementation.createDocument('', '', null);
 		} else if (typeof ActiveXObject !== 'undefined') {
@@ -133,9 +130,9 @@ Jsonix.DOM = {
 		Jsonix.Util.Ensure.ensureExists(node);
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return (new (require('xmldom')).XMLSerializer()).serializeToString(node);
+			return (new (_jsonix_xmldom).XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(XMLSerializer)) {
 			return (new XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(node.xml)) {
@@ -146,9 +143,9 @@ Jsonix.DOM = {
 	},
 	parse : function(text) {
 		Jsonix.Util.Ensure.ensureExists(text);
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return (new (require('xmldom')).DOMParser()).parseFromString(text, 'application/xml');
+			return (new (_jsonix_xmldom).DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof DOMParser != 'undefined') {
 			return (new DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof ActiveXObject != 'undefined') {
@@ -204,9 +201,9 @@ Jsonix.Request = Jsonix
 				return new ActiveXObject('Microsoft.XMLHTTP');
 			}, function() {
 				// Node.js
-				if (typeof require === 'function')
+				if (typeof _jsonix_xmlhttprequest !== 'undefined')
 				{
-					var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+					var XMLHttpRequest = _jsonix_xmlhttprequest.XMLHttpRequest;
 					return new XMLHttpRequest();
 				}
 				else
@@ -1253,7 +1250,7 @@ Jsonix.XML.Input = Jsonix.Class({
 			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
-		return attribute.nodeValue;
+		return attribute.value;
 	},
 	getElement : function() {
 		if (this.eventType === 1 || this.eventType === 2) {
@@ -1283,6 +1280,7 @@ Jsonix.XML.Input.CDATA = 12;
 Jsonix.XML.Input.NAMESPACE = 13;
 Jsonix.XML.Input.NOTATION_DECLARATION = 14;
 Jsonix.XML.Input.ENTITY_DECLARATION = 15;
+
 Jsonix.XML.Output = Jsonix.Class({
 	document : null,
 	node : null,
@@ -4919,14 +4917,17 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		}, options);
 	},
 	unmarshalFile : function(fileName, callback, options) {
+		if (typeof _jsonix_fs === 'undefined')
+		{
+			throw new Error("File unmarshalling is only available in environments which support file systems.");
+		}
 		Jsonix.Util.Ensure.ensureString(fileName);
 		Jsonix.Util.Ensure.ensureFunction(callback);
 		if (Jsonix.Util.Type.exists(options)) {
 			Jsonix.Util.Ensure.ensureObject(options);
 		}
 		that = this;
-
-		var fs = require('fs');
+		var fs =_jsonix_fs;
 		fs.readFile(fileName, options, function(err, data) {
 			if (err)
 			{
@@ -4974,3 +4975,29 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 	},
 	CLASS_NAME : 'Jsonix.Context.Unmarshaller'
 });
+	// Complete Jsonix script is included above
+	return { Jsonix: Jsonix };
+};
+
+// If the require function exists ...
+if (typeof require === 'function') {
+	// ... but the define function does not exists
+	if (typeof define !== 'function') {
+		// Assume we're in the Node.js environment
+		// In this case, load the define function via amdefine
+		var define = require('amdefine')(module);
+		// Use xmldom and xmlhttprequests as dependencies
+		define(["xmldom", "xmlhttprequest", "fs"], _jsonix_factory);
+	}
+	else {
+		// Otherwise assume we're in the browser/RequireJS environment
+		// Load the module without xmldom and xmlhttprequests dependencies
+		define([], _jsonix_factory);
+	}
+}
+// If the require function does not exists, we're not in Node.js and therefore in browser environment
+else
+{
+	// Just call the factory and set Jsonix as global.
+	var Jsonix = _jsonix_factory().Jsonix;
+}
