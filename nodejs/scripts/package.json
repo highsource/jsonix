@@ -31,6 +31,7 @@
 		"test" : "nodeunit tests/tests.js"
 	},
 	"dependencies" : {
+		"amdefine" : ">=0.1.0",
 		"xmldom" : "~0.1.19",
 		"xmlhttprequest" : "~1.6.0"
 	},
