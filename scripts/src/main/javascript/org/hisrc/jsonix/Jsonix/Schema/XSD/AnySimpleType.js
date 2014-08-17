@@ -38,6 +38,9 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	parse : function(text) {
 		throw new Error('Abstract method [parse].');
 	},
+	reprint : function(value, context, scope) {
+		return this.print(this.parse(value, context, scope), context, scope);
+	},
 	unmarshal : function(context, input) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
