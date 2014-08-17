@@ -1,0 +1,3 @@
+var _jsonix_factory = function(_jsonix_xmldom, _jsonix_xmlhttprequest, _jsonix_fs)
+{
+	// Complete Jsonix script is included below 

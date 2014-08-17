@@ -1,0 +1,26 @@
+	// Complete Jsonix script is included above
+	return { Jsonix: Jsonix };
+};
+
+// If the require function exists ...
+if (typeof require === 'function') {
+	// ... but the define function does not exists
+	if (typeof define !== 'function') {
+		// Assume we're in the Node.js environment
+		// In this case, load the define function via amdefine
+		var define = require('amdefine')(module);
+		// Use xmldom and xmlhttprequests as dependencies
+		define(["xmldom", "xmlhttprequest", "fs"], _jsonix_factory);
+	}
+	else {
+		// Otherwise assume we're in the browser/RequireJS environment
+		// Load the module without xmldom and xmlhttprequests dependencies
+		define([], _jsonix_factory);
+	}
+}
+// If the require function does not exists, we're not in Node.js and therefore in browser environment
+else
+{
+	// Just call the factory and set Jsonix as global.
+	var Jsonix = _jsonix_factory().Jsonix;
+}
