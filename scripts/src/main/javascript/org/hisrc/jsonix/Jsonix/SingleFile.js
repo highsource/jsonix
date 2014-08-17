@@ -31,8 +31,3 @@
 var Jsonix = {
 	singleFile : true
 };
-
-// Node.js
-if(typeof require === 'function'){
-	module.exports.Jsonix = Jsonix;
-}
