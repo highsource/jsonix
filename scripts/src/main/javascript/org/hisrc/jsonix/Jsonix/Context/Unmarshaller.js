@@ -51,14 +51,17 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		}, options);
 	},
 	unmarshalFile : function(fileName, callback, options) {
+		if (typeof _jsonix_fs === 'undefined')
+		{
+			throw new Error("File unmarshalling is only available in environments which support file systems.");
+		}
 		Jsonix.Util.Ensure.ensureString(fileName);
 		Jsonix.Util.Ensure.ensureFunction(callback);
 		if (Jsonix.Util.Type.exists(options)) {
 			Jsonix.Util.Ensure.ensureObject(options);
 		}
 		that = this;
-
-		var fs = require('fs');
+		var fs =_jsonix_fs;
 		fs.readFile(fileName, options, function(err, data) {
 			if (err)
 			{

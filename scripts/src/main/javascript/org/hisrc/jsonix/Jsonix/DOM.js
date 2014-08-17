@@ -32,9 +32,9 @@ Jsonix.DOM = {
 	createDocument : function() {
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return new (require('xmldom').DOMImplementation)().createDocument();
+			return new (_jsonix_xmldom.DOMImplementation)().createDocument();
 		} else if (typeof document !== 'undefined' && Jsonix.Util.Type.exists(document.implementation) && Jsonix.Util.Type.isFunction(document.implementation.createDocument)) {
 			return document.implementation.createDocument('', '', null);
 		} else if (typeof ActiveXObject !== 'undefined') {
@@ -47,9 +47,9 @@ Jsonix.DOM = {
 		Jsonix.Util.Ensure.ensureExists(node);
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return (new (require('xmldom')).XMLSerializer()).serializeToString(node);
+			return (new (_jsonix_xmldom).XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(XMLSerializer)) {
 			return (new XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(node.xml)) {
@@ -60,9 +60,9 @@ Jsonix.DOM = {
 	},
 	parse : function(text) {
 		Jsonix.Util.Ensure.ensureExists(text);
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return (new (require('xmldom')).DOMParser()).parseFromString(text, 'application/xml');
+			return (new (_jsonix_xmldom).DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof DOMParser != 'undefined') {
 			return (new DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof ActiveXObject != 'undefined') {
