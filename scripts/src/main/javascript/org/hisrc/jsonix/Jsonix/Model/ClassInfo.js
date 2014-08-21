@@ -32,6 +32,7 @@ Jsonix.Model.ClassInfo = Jsonix
 		.Class(Jsonix.Model.TypeInfo, {
 			name : null,
 			baseTypeInfo : null,
+			typeInfo : null,
 			properties : null,
 			structure : null,
 			defaultElementNamespaceURI : '',
@@ -52,6 +53,9 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 				if (Jsonix.Util.Type.exists(options.baseTypeInfo)) {
 					this.baseTypeInfo = options.baseTypeInfo;
+				}
+				if (Jsonix.Util.Type.isFunction(options.typeInfo)) {
+					this.typeInfo = options.typeInfo;
 				}
 				this.properties = [];
 				if (Jsonix.Util.Type.exists(options.propertyInfos)) {
@@ -101,9 +105,14 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			unmarshal : function(context, input) {
 				this.build(context);
-				var result = {
-					TYPE_NAME : this.name
-				};
+				var result;
+				if (this.typeInfo) {
+					result = new this.typeInfo();
+				} else {
+					result = {
+						TYPE_NAME: this.name
+					};
+				}
 
 				if (input.eventType !== 1) {
 					throw new Error("Parser must be on START_ELEMENT to read a class info.");
