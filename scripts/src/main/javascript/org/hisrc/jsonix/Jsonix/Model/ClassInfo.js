@@ -221,8 +221,12 @@ Jsonix.Model.ClassInfo = Jsonix
 					}
 				}
 			},
-			isInstance : function(value) {
-				return Jsonix.Util.Type.isObject(value)	&& Jsonix.Util.Type.isString(value.TYPE_NAME) && value.TYPE_NAME === this.name;
+			isInstance : function (value) {
+				if (this.instanceFactory) {
+					return value instanceof this.instanceFactory;
+				} else {
+					return Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type.isString(value.TYPE_NAME) && value.TYPE_NAME === this.name;
+				}
 			},
 
 			// Obsolete, left for backwards compatibility
