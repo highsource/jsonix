@@ -2,6 +2,7 @@ Jsonix.Model.ClassInfo = Jsonix
 		.Class(Jsonix.Model.TypeInfo, {
 			name : null,
 			baseTypeInfo : null,
+			instanceFactory : null,
 			properties : null,
 			structure : null,
 			defaultElementNamespaceURI : '',
@@ -22,6 +23,9 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 				if (Jsonix.Util.Type.exists(options.baseTypeInfo)) {
 					this.baseTypeInfo = options.baseTypeInfo;
+				}
+				if (Jsonix.Util.Type.isFunction(options.instanceFactory)) {
+				    this.instanceFactory = options.instanceFactory;
 				}
 				this.properties = [];
 				if (Jsonix.Util.Type.exists(options.propertyInfos)) {
@@ -71,9 +75,14 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			unmarshal : function(context, input) {
 				this.build(context);
-				var result = {
-					TYPE_NAME : this.name
-				};
+				var result;
+				if (this.instanceFactory) {
+				    result = new this.instanceFactory();
+				} else {
+					result = {
+						TYPE_NAME: this.name
+					};
+				}
 
 				if (input.eventType !== 1) {
 					throw new Error("Parser must be on START_ELEMENT to read a class info.");
@@ -182,8 +191,12 @@ Jsonix.Model.ClassInfo = Jsonix
 					}
 				}
 			},
-			isInstance : function(value) {
-				return Jsonix.Util.Type.isObject(value)	&& Jsonix.Util.Type.isString(value.TYPE_NAME) && value.TYPE_NAME === this.name;
+			isInstance : function (value) {
+				if (this.instanceFactory) {
+					return value instanceof this.instanceFactory;
+				} else {
+					return Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type.isString(value.TYPE_NAME) && value.TYPE_NAME === this.name;
+				}
 			},
 
 			// Obsolete, left for backwards compatibility
