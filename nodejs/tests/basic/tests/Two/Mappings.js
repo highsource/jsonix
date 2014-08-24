@@ -1,3 +1,12 @@
+var Jsonix = require('jsonix').Jsonix;
+var org_hisrc_jsonix_tests_two_CustomValueClass = Jsonix.Class({
+	value : null,
+	attribute: null,
+	initialize : function(value, attribute) {
+		if (value) { this.value = value; }
+		if (attribute) { this.attribute = attribute; }
+	}
+});
 var org_hisrc_jsonix_tests_two = {
   name: 'org_hisrc_jsonix_tests_two',
   typeInfos: [{
@@ -66,6 +75,20 @@ var org_hisrc_jsonix_tests_two = {
           attributeName: {namespaceURI:'urn:test', localPart: 'attribute'},
           type: 'attribute'
         }]
+    }, {
+      type: 'classInfo',
+      localName: 'CustomClassValueType',
+      instanceFactory: org_hisrc_jsonix_tests_two_CustomValueClass,
+      propertyInfos: [{
+          name: 'value',
+          typeInfo: 'String',
+          type: 'value'
+        }, {
+          name: 'attribute',
+          typeInfo: 'String',
+          attributeName: {namespaceURI:'urn:test', localPart: 'attribute'},
+          type: 'attribute'
+        }]
     }],
   elementInfos: [{
       elementName: {namespaceURI:'urn:test', localPart: 'element'},
@@ -79,8 +102,12 @@ var org_hisrc_jsonix_tests_two = {
     }, {
       elementName: {namespaceURI:'urn:test', localPart: 'value'},
       typeInfo: 'org_hisrc_jsonix_tests_two.ValueType'
+    }, {
+      elementName: {namespaceURI:'urn:test', localPart: 'customClassValue'},
+      typeInfo: 'org_hisrc_jsonix_tests_two.CustomClassValueType'
     }]
 };
 if (typeof require === 'function') {
   module.exports.org_hisrc_jsonix_tests_two = org_hisrc_jsonix_tests_two;
+  module.exports.org_hisrc_jsonix_tests_two_CustomValueClass = org_hisrc_jsonix_tests_two_CustomValueClass;
 }

@@ -1,6 +1,5 @@
-if (typeof Jsonix === 'undefined' && typeof require === 'function') {
-  var Jsonix = require('jsonix').Jsonix;
-}
+var Jsonix = require('jsonix').Jsonix;
+var org_hisrc_jsonix_tests_two_CustomValueClass = require('./Mappings').org_hisrc_jsonix_tests_two_CustomValueClass;
 var org_hisrc_jsonix_tests_two_data = {
 	'string-0.xml' : {
 		name : new Jsonix.XML.QName('urn:test', 'string', 'test'),
@@ -13,6 +12,10 @@ var org_hisrc_jsonix_tests_two_data = {
 			attribute : 'check',
 			TYPE_NAME : 'org_hisrc_jsonix_tests_two.ValueType'
 		}
+	},
+	'customClassValue-0.xml' : {
+		name : new Jsonix.XML.QName('urn:test', 'customClassValue', 'test'),
+		value : new org_hisrc_jsonix_tests_two_CustomValueClass('test', 'check')
 	},
 	'element-0.xml' : {
 		name : new Jsonix.XML.QName('urn:test', 'element', 'test'),

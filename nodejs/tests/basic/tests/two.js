@@ -26,13 +26,14 @@ module.exports =
 	"Context" : function (test)
 	{
 		var context = new Jsonix.Context([ Two ]);
-		test.equal(4, context.elementInfos.length);
+		test.equal(5, context.elementInfos.length);
 		test.done();
 	},
 	"Roundtrips" : {
 		"attribute-0.xml" : function(test) {roundtrip(test, "attribute-0.xml", TwoData["attribute-0.xml"])},
 		"element-0.xml" : function(test) {roundtrip(test, "element-0.xml", TwoData["element-0.xml"])},
 		"string-0.xml" : function(test) {roundtrip(test, "string-0.xml", TwoData["string-0.xml"])},
-		"value-0.xml" : function(test) {roundtrip(test, "value-0.xml", TwoData["value-0.xml"])}
+		"value-0.xml" : function(test) {roundtrip(test, "value-0.xml", TwoData["value-0.xml"])},
+		"customClassValue-0.xml" : function(test) {roundtrip(test, "customClassValue-0.xml", TwoData["customClassValue-0.xml"])}
 	}
 };
