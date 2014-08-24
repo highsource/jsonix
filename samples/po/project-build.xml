@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<project name="jsonix-samples-po-ant" default="install">
-	<property name="artifactId" value="jsonix-samples-po-ant"/>
+<project name="jsonix-sample-po-ant" default="install">
+	<property name="artifactId" value="jsonix-sample-po-ant"/>
 	<target name="clean">
 		<delete dir="${basedir}/target/"/>
 		<delete dir="${basedir}/src/main/webapp/js/PO"/>

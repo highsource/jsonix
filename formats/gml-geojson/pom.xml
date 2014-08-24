@@ -105,7 +105,6 @@
 								<plugin>
 									<groupId>org.hisrc.jsonix</groupId>
 									<artifactId>jsonix-schema-compiler</artifactId>
-									<version>${project.version}</version>
 								</plugin>
 							</plugins>
 						</configuration>

@@ -5,11 +5,11 @@
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
-	id="jsonix-demos-wms"
+	id="jsonix-demo-wms"
 
 	version="2.5">
 	
-	<display-name>Jsonix Demos [wms]</display-name>
+	<display-name>Jsonix Demo [wms]</display-name>
 
 	<servlet>
 		<servlet-name>net.disy.legato.tools.servlet.ProxyServlet</servlet-name>

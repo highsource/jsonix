@@ -1,12 +1,12 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>jsonix-demos-po</artifactId>
+	<artifactId>jsonix-demo-po</artifactId>
 	<packaging>war</packaging>
 	<name>Jsonix Demo [po]</name>
 	<parent>
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-demos</artifactId>
-		<version>2.0.11-SNAPHSHOT</version>
+		<version>2.0.11-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
@@ -32,7 +32,6 @@
 								<plugin>
 									<groupId>org.hisrc.jsonix</groupId>
 									<artifactId>jsonix-schema-compiler</artifactId>
-									<version>${project.version}</version>
 								</plugin>
 							</plugins>
 						</configuration>

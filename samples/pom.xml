@@ -7,21 +7,9 @@
 	<parent>
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-project</artifactId>
-		<version>2.0.11-SNAPHSHOT</version>
+		<version>2.0.11-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<distributionManagement>
-		<repository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>org.highsource.repository.maven2.releases</id>
-			<url>${sftp.repository.highsource.org}/maven2/releases</url>
-		</repository>
-		<snapshotRepository>
-			<uniqueVersion>false</uniqueVersion>
-			<id>org.highsource.repository.maven2.snapshots</id>
-			<url>${sftp.repository.highsource.org}/maven2/snapshots</url>
-		</snapshotRepository>
-	</distributionManagement>
 	<modules>
 		<module>po</module>
 	</modules>
@@ -84,7 +72,7 @@
 						<configuration>
 							<tasks>
 								<mkdir dir="target/test-maven-repository" />
-								<unzip src="target/${pom.artifactId}-${pom.version}-maven-src.zip" dest="${basedir}/target/test-maven-assembly" />
+								<unzip src="target/${project.artifactId}-${project.version}-maven-src.zip" dest="${basedir}/target/test-maven-assembly" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -97,7 +85,7 @@
 						<phase>none</phase>
 						<configuration>
 							<tasks>
-								<unzip src="${basedir}/target/${pom.artifactId}-${pom.version}-ant-src.zip" dest="${basedir}/target/test-ant-assembly" />
+								<unzip src="${basedir}/target/${project.artifactId}-${project.version}-ant-src.zip" dest="${basedir}/target/test-ant-assembly" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -110,7 +98,7 @@
 						<phase>none</phase>
 						<configuration>
 							<tasks>
-								<unzip src="${basedir}/target/${pom.artifactId}-${pom.version}-batch-src.zip" dest="${basedir}/target/test-batch-assembly" />
+								<unzip src="${basedir}/target/${project.artifactId}-${project.version}-batch-src.zip" dest="${basedir}/target/test-batch-assembly" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -123,7 +111,7 @@
 						<phase>none</phase>
 						<configuration>
 							<tasks>
-								<ant dir="${basedir}/target/test-ant-assembly/${pom.artifactId}-${pom.version}" target="package" />
+								<ant dir="${basedir}/target/test-ant-assembly/${project.artifactId}-${project.version}" target="package" />
 							</tasks>
 						</configuration>
 						<goals>
@@ -146,7 +134,6 @@
 						<configuration>
 							<debug>true</debug>
 							<projectsDirectory>${basedir}/target/test-maven-assembly</projectsDirectory>
-							<!--localRepositoryPath>${basedir}/target/test-maven-repository</localRepositoryPath-->
 						</configuration>
 					</execution>
 				</executions>
@@ -154,7 +141,6 @@
 			<plugin>
 				<groupId>org.codehaus.mojo</groupId>
 				<artifactId>exec-maven-plugin</artifactId>
-				<inherited>true</inherited>
 				<executions>
 					<execution>
 						<id>batch-integration-test</id>
@@ -165,10 +151,17 @@
 						</goals>
 						<configuration>
 							<executable>build</executable>
-							<workingDirectory>${basedir}/target/test-batch-assembly/${pom.artifactId}-${pom.version}</workingDirectory>
+							<workingDirectory>${basedir}/target/test-batch-assembly/${project.artifactId}-${project.version}</workingDirectory>
 						</configuration>
 					</execution>
 				</executions>
+			</plugin>
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-deploy-plugin</artifactId>
+				<configuration>
+					<skip>true</skip>
+				</configuration>
 			</plugin>
 		</plugins>
 	</build>

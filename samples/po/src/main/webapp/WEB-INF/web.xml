@@ -5,10 +5,10 @@
 	xmlns:web="http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
 	
-	id="jsonix-demos-po"
+	id="jsonix-demo-po"
 
 	version="2.5">
 	
-	<display-name>Jsonix Demos [po]</display-name>
+	<display-name>Jsonix Demo [po]</display-name>
 
 </web-app>
