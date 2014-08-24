@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-project</artifactId>
-		<version>2.0.11-SNAPHSHOT</version>
+		<version>2.0.11-SNAPSHOT</version>
 		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
@@ -20,11 +20,11 @@
 			<artifactId>wps-v_1_0_0-schema</artifactId>
 			<scope>test</scope>
 		</dependency>
-		<dependency>
+		<!--dependency>
 			<groupId>org.jvnet.jaxb2_commons</groupId>
 			<artifactId>jaxb2-basics-jaxb-xjc</artifactId>
 			<scope>runtime</scope>
-		</dependency>
+		</dependency-->
 		<dependency>
 			<groupId>net.disy.legato</groupId>
 			<artifactId>legato-testing</artifactId>
@@ -50,43 +50,6 @@
 			</testResource>
 		</testResources>
 		<plugins>
-			<plugin>
-				<groupId>com.mycila.maven-license-plugin</groupId>
-				<artifactId>maven-license-plugin</artifactId>
-				<executions>
-					<execution>
-						<id>license-remove-headers</id>
-						<phase>process-sources</phase>
-						<goals>
-							<goal>remove</goal>
-						</goals>
-						<configuration>
-							<basedir>${project.build.directory}/scripts</basedir>
-							<includes>
-								<include>**/*.js</include>
-							</includes>
-							<excludes>
-								<include>**/*.fragmentjs</include>
-							</excludes>
-						</configuration>
-					</execution>
-					<execution>
-						<id>license-format-headers</id>
-						<phase>prepare-package</phase>
-						<goals>
-							<goal>format</goal>
-						</goals>
-						<configuration>
-							<basedir>${project.build.outputDirectory}</basedir>
-							<includes>
-								<include>org/hisrc/jsonix/Jsonix-all.js</include>
-								<include>org/hisrc/jsonix/Jsonix-min.js</include>
-							</includes>
-							<useDefaultExcludes>false</useDefaultExcludes>
-						</configuration>
-					</execution>
-				</executions>
-			</plugin>			
 			<plugin>
 				<groupId>net.alchim31.maven</groupId>
 				<artifactId>yuicompressor-maven-plugin</artifactId>
@@ -196,8 +159,6 @@
 					</execution>
 				</executions>
 			</plugin>
-			
-			
 			<plugin>
 				<artifactId>maven-assembly-plugin</artifactId>
 				<inherited>true</inherited>
