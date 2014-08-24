@@ -1,42 +1,9 @@
-/*
- * Jsonix is a JavaScript library which allows you to convert between XML
- * and JavaScript object structures.
- *
- * Copyright (c) 2010 - 2014, Alexey Valikov, Highsource.org
- * All rights reserved.
- *
- * Redistribution and use in source and binary forms, with or without
- * modification, are permitted provided that the following conditions are met:
- *     * Redistributions of source code must retain the above copyright
- *       notice, this list of conditions and the following disclaimer.
- *     * Redistributions in binary form must reproduce the above copyright
- *       notice, this list of conditions and the following disclaimer in the
- *       documentation and/or other materials provided with the distribution.
- *     * Neither the name of the Alexey Valikov nor the
- *       names of contributors may be used to endorse or promote products
- *       derived from this software without specific prior written permission.
- *
- * THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS" AND
- * ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE IMPLIED
- * WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE ARE
- * DISCLAIMED. IN NO EVENT SHALL ALEXEY VALIKOV BE LIABLE FOR ANY
- * DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR CONSEQUENTIAL DAMAGES
- * (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF SUBSTITUTE GOODS OR SERVICES;
- * LOSS OF USE, DATA, OR PROFITS; OR BUSINESS INTERRUPTION) HOWEVER CAUSED AND
- * ON ANY THEORY OF LIABILITY, WHETHER IN CONTRACT, STRICT LIABILITY, OR TORT
- * (INCLUDING NEGLIGENCE OR OTHERWISE) ARISING IN ANY WAY OUT OF THE USE OF THIS
- * SOFTWARE, EVEN IF ADVISED OF THE POSSIBILITY OF SUCH DAMAGE.
- */
-
+var _jsonix_factory = function(_jsonix_xmldom, _jsonix_xmlhttprequest, _jsonix_fs)
+{
+	// Complete Jsonix script is included below 
 var Jsonix = {
 	singleFile : true
 };
-
-// Node.js
-if(typeof require === 'function'){
-	module.exports.Jsonix = Jsonix;
-}
-
 Jsonix.Util = {};
 
 Jsonix.Util.extend = function(destination, source) {
@@ -118,9 +85,9 @@ Jsonix.DOM = {
 	createDocument : function() {
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return new (require('xmldom').DOMImplementation)().createDocument();
+			return new (_jsonix_xmldom.DOMImplementation)().createDocument();
 		} else if (typeof document !== 'undefined' && Jsonix.Util.Type.exists(document.implementation) && Jsonix.Util.Type.isFunction(document.implementation.createDocument)) {
 			return document.implementation.createDocument('', '', null);
 		} else if (typeof ActiveXObject !== 'undefined') {
@@ -133,9 +100,9 @@ Jsonix.DOM = {
 		Jsonix.Util.Ensure.ensureExists(node);
 		// REWORK
 		// Node.js
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return (new (require('xmldom')).XMLSerializer()).serializeToString(node);
+			return (new (_jsonix_xmldom).XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(XMLSerializer)) {
 			return (new XMLSerializer()).serializeToString(node);
 		} else if (Jsonix.Util.Type.exists(node.xml)) {
@@ -146,9 +113,9 @@ Jsonix.DOM = {
 	},
 	parse : function(text) {
 		Jsonix.Util.Ensure.ensureExists(text);
-		if (typeof require === 'function')
+		if (typeof _jsonix_xmldom !== 'undefined')
 		{
-			return (new (require('xmldom')).DOMParser()).parseFromString(text, 'application/xml');
+			return (new (_jsonix_xmldom).DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof DOMParser != 'undefined') {
 			return (new DOMParser()).parseFromString(text, 'application/xml');
 		} else if (typeof ActiveXObject != 'undefined') {
@@ -204,9 +171,9 @@ Jsonix.Request = Jsonix
 				return new ActiveXObject('Microsoft.XMLHTTP');
 			}, function() {
 				// Node.js
-				if (typeof require === 'function')
+				if (typeof _jsonix_xmlhttprequest !== 'undefined')
 				{
-					var XMLHttpRequest = require("xmlhttprequest").XMLHttpRequest;
+					var XMLHttpRequest = _jsonix_xmlhttprequest.XMLHttpRequest;
 					return new XMLHttpRequest();
 				}
 				else
@@ -1253,7 +1220,7 @@ Jsonix.XML.Input = Jsonix.Class({
 			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
-		return attribute.nodeValue;
+		return attribute.value;
 	},
 	getElement : function() {
 		if (this.eventType === 1 || this.eventType === 2) {
@@ -1283,6 +1250,7 @@ Jsonix.XML.Input.CDATA = 12;
 Jsonix.XML.Input.NAMESPACE = 13;
 Jsonix.XML.Input.NOTATION_DECLARATION = 14;
 Jsonix.XML.Input.ENTITY_DECLARATION = 15;
+
 Jsonix.XML.Output = Jsonix.Class({
 	document : null,
 	node : null,
@@ -1466,17 +1434,26 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 	parse : function(text) {
 		throw new Error('Abstract method [parse].');
 	},
+	reprint : function(value, context, scope) {
+		if (Jsonix.Util.Type.isString(value)) {
+			return this.print(this.parse(value, context, scope), context, scope);
+		}
+		else
+		{
+			return this.print(value, context, scope);
+		}
+	},
 	unmarshal : function(context, input) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text);
+			return this.parse(text, context);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(context, value, output) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.print(value));
+			output.writeCharacters(this.reprint(value, context));
 		}
 	},
 	build: function(context, module)
@@ -1531,7 +1508,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.built = true;
 						}
 					},
-					print : function(value) {
+					print : function(value, context) {
 						if (!Jsonix.Util.Type.exists(value)) {
 							return null;
 						}
@@ -1542,11 +1519,11 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.print(value[index]);
+							result = result + this.typeInfo.reprint(value[index], context);
 						}
 						return result;
 					},
-					parse : function(text) {
+					parse : function(text, context) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var items = Jsonix.Util.StringUtils
 								.splitBySeparatorChars(text,
@@ -1555,7 +1532,7 @@ Jsonix.Schema.XSD.List = Jsonix
 						for ( var index = 0; index < items.length; index++) {
 							result.push(this.typeInfo
 									.parse(Jsonix.Util.StringUtils
-											.trim(items[index])));
+											.trim(items[index]), context));
 						}
 						return result;
 					},
@@ -2309,7 +2286,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							}
 							var hour = this.parseHour(text.substring(1, 3));
 							var minute = this.parseMinute(text.substring(4, 6));
-							return sign * (hour * 60 + minute);
+							return -1 * sign * (hour * 60 + minute);
 						}
 
 					},
@@ -2385,9 +2362,6 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						}
 					},
 					print : function(value) {
-						if (Jsonix.Util.Type.isString(value)) {
-							return value;
-						}
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {
@@ -2495,9 +2469,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 								return 'Z';
 							} else {
 								if (sign > 0) {
-									result = '+';
-								} else if (sign < 0) {
 									result = '-';
+								} else if (sign < 0) {
+									result = '+';
 								}
 								result = result + this.printHour(hour);
 								result = result + ':';
@@ -2589,26 +2563,77 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
 			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
-
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			return new Date(date.getTime() - (60000 * date.getTimezoneOffset()) + (calendar.timezone * 60000));
-		} else {
-			return date;
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
 		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
-		return this.printDateTime(new Jsonix.XML.Calendar({
-			year : value.getFullYear(),
-			month : value.getMonth() + 1,
-			day : value.getDate(),
-			hour : value.getHours(),
-			minute : value.getMinutes(),
-			second : value.getSeconds(),
-			fractionalSecond : (value.getMilliseconds() / 1000),
-			timezone: value.getTimezoneOffset()
-		}));
+		var timezoneOffset;
+		var localTimezoneOffset = value.getTimezoneOffset();
+		var correctedValue;
+		// If original time zone was unknown, print the given value without
+		// the timezone
+		if (value.originalTimezoneOffset === null)
+		{
+			return this.printDateTime(new Jsonix.XML.Calendar({
+				year : value.getFullYear(),
+				month : value.getMonth() + 1,
+				day : value.getDate(),
+				hour : value.getHours(),
+				minute : value.getMinutes(),
+				second : value.getSeconds(),
+				fractionalSecond : (value.getMilliseconds() / 1000)
+			}));
+		}
+		else
+		{
+			// If original timezone was known, correct and print the value with the timezone
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				timezoneOffset = value.originalTimezoneOffset;
+				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+			}
+			// If original timezone was not specified, do not correct and use the local time zone
+			else
+			{
+				timezoneOffset = localTimezoneOffset;
+				correctedValue = value;
+			}
+			return this.printDateTime(new Jsonix.XML.Calendar({
+				year : correctedValue.getFullYear(),
+				month : correctedValue.getMonth() + 1,
+				day : correctedValue.getDate(),
+				hour : correctedValue.getHours(),
+				minute : correctedValue.getMinutes(),
+				second : correctedValue.getSeconds(),
+				fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+				timezone: timezoneOffset
+			}));
+		}
 	},
 	isInstance : function(value) {
 		return Jsonix.Util.Type.isDate(value);
@@ -2623,23 +2648,42 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	typeName : Jsonix.Schema.XSD.qname('time'),
 	parse : function(value) {
 		var calendar = this.parseTime(value);
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			var date = new Date(70, 0, 1, calendar.hour, calendar.minute, calendar.second);
-			if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
-				date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
-			}
-
-			var time = date.getTime() - (calendar.timezone * 60000);
-			return new Date(time - (60000 * date.getTimezoneOffset()));
-
-		} else {
-			var result = new Date(70, 0, 1, calendar.hour, calendar.minute, calendar.second);
-			if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
-				result.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
-			}
-			return result;
+		var date = new Date();
+		date.setFullYear(1970);
+		date.setMonth(0);
+		date.setDate(1);
+		date.setHours(calendar.hour);
+		date.setMinutes(calendar.minute);
+		date.setSeconds(calendar.second);
+		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
+			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
+		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
@@ -2647,22 +2691,50 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (time <= -86400000 && time >= 86400000) {
 			throw new Error('Invalid time [' + value + '].');
 		}
-		if (time >= 0) {
+		// Original timezone was unknown, just use current time, no timezone
+		if (value.originalTimezoneOffset === null)
+		{
 			return this.printTime(new Jsonix.XML.Calendar({
 				hour : value.getHours(),
 				minute : value.getMinutes(),
 				second : value.getSeconds(),
 				fractionalSecond : (value.getMilliseconds() / 1000)
 			}));
-		} else {
-			var timezoneOffsetHours = Math.ceil(-time / 3600000);
-			return this.printTime(new Jsonix.XML.Calendar({
-				hour : (value.getUTCHours() + timezoneOffsetHours) % 24,
-				minute : value.getUTCMinutes(),
-				second : value.getUTCSeconds(),
-				fractionalSecond : (value.getUTCMilliseconds() / 1000),
-				timezone : timezoneOffsetHours * 60
-			}));
+		}
+		else
+		{
+			var correctedValue;
+			var timezoneOffset;
+			var localTimezoneOffset = value.getTimezoneOffset();
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				timezoneOffset = value.originalTimezoneOffset;
+				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+			}
+			else
+			{
+				timezoneOffset = localTimezoneOffset;
+				correctedValue = value;
+			}
+			var correctedTime = correctedValue.getTime();
+			if (correctedTime >= 0) {
+				return this.printTime(new Jsonix.XML.Calendar({
+					hour : correctedValue.getHours(),
+					minute : correctedValue.getMinutes(),
+					second : correctedValue.getSeconds(),
+					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+					timezone: timezoneOffset
+				}));
+			} else {
+				var timezoneOffsetHours = Math.ceil(-correctedTime / 3600000);
+				return this.printTime(new Jsonix.XML.Calendar({
+					hour : (correctedValue.getHours() + timezoneOffsetHours + timezoneOffset / 60 ) % 24,
+					minute : correctedValue.getMinutes(),
+					second : correctedValue.getSeconds(),
+					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
+					timezone : - timezoneOffsetHours * 60
+				}));
+			}
 		}
 	},
 	isInstance : function(value) {
@@ -2677,28 +2749,43 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	typeName : Jsonix.Schema.XSD.qname('date'),
 	parse : function(value) {
 		var calendar = this.parseDate(value);
-		//		
-		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone)) {
-			var date = new Date();
-			date.setFullYear(calendar.year);
-			date.setMonth(calendar.month - 1);
-			date.setDate(calendar.day);
-			date.setHours(0);
-			date.setMinutes(0);
-			date.setSeconds(0);
-			date.setMilliseconds(0);
-			return new Date(date.getTime() - (60000 * date.getTimezoneOffset()) + (calendar.timezone * 60000));
-		} else {
-			var result = new Date();
-			result.setFullYear(calendar.year);
-			result.setMonth(calendar.month - 1);
-			result.setDate(calendar.day);
-			result.setHours(0);
-			result.setMinutes(0);
-			result.setSeconds(0);
-			result.setMilliseconds(0);
-			return result;
+		var date = new Date();
+		date.setFullYear(calendar.year);
+		date.setMonth(calendar.month - 1);
+		date.setDate(calendar.day);
+		date.setHours(0);
+		date.setMinutes(0);
+		date.setSeconds(0);
+		date.setMilliseconds(0);
+		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
+			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
+		var timezoneOffset;
+		var unknownTimezone;
+		var localTimezoneOffset = date.getTimezoneOffset();
+		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
+		{
+			timezoneOffset = calendar.timezone;
+			unknownTimezone = false;
+		}
+		else
+		{
+			// Unknown timezone
+			timezoneOffset = localTimezoneOffset;
+			unknownTimezone = true;
+		}
+		//
+		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		if (unknownTimezone)
+		{
+			// null denotes "unknown timezone"
+			result.originalTimezoneOffset = null;
+		}
+		else
+		{
+			result.originalTimezoneOffset = timezoneOffset;
+		}
+		return result;
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureDate(value);
@@ -2707,31 +2794,61 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		localDate.setMinutes(0);
 		localDate.setSeconds(0);
 		localDate.setMilliseconds(0);
-
-		var localTimezoneOffset = value.getTime() - localDate.getTime();
-		if (localTimezoneOffset === 0) {
+		
+		// Original timezone is unknown
+		if (value.originalTimezoneOffset === null)
+		{
 			return this.printDate(new Jsonix.XML.Calendar({
 				year : value.getFullYear(),
 				month : value.getMonth() + 1,
 				day : value.getDate()
 			}));
-		} else {
-			var timezoneOffset = localTimezoneOffset + (60000 * value.getTimezoneOffset());
-			if (timezoneOffset <= 43200000) {
+		}
+		else
+		{
+			// If original timezone was known, correct and print the value with the timezone
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			{
+				var correctedValue = new Date(value.getTime() - (60000 * (value.originalTimezoneOffset - value.getTimezoneOffset())));
 				return this.printDate(new Jsonix.XML.Calendar({
-					year : value.getFullYear(),
-					month : value.getMonth() + 1,
-					day : value.getDate(),
-					timezone : Math.floor(timezoneOffset / (60000))
+					year : correctedValue.getFullYear(),
+					month : correctedValue.getMonth() + 1,
+					day : correctedValue.getDate(),
+					timezone : value.originalTimezoneOffset
 				}));
-			} else {
-				var nextDay = new Date(value.getTime() + 86400000);
-				return this.printDate(new Jsonix.XML.Calendar({
-					year : nextDay.getFullYear(),
-					month : nextDay.getMonth() + 1,
-					day : nextDay.getDate(),
-					timezone : (Math.floor(timezoneOffset / (60000)) - 1440)
-				}));
+			}
+			// If original timezone was not specified, do not correct and use the local time zone
+			else
+			{
+				// We assume that the difference between the date value and local midnight
+				// should be interpreted as a timezone offset.
+				// In case there's no difference, we assume default/unknown timezone
+				var localTimezoneOffset = value.getTime() - localDate.getTime();
+				if (localTimezoneOffset === 0) {
+					return this.printDate(new Jsonix.XML.Calendar({
+						year : value.getFullYear(),
+						month : value.getMonth() + 1,
+						day : value.getDate()
+					}));
+				} else {
+					var timezoneOffset = localTimezoneOffset + (60000 * value.getTimezoneOffset());
+					if (timezoneOffset <= 43200000) {
+						return this.printDate(new Jsonix.XML.Calendar({
+							year : value.getFullYear(),
+							month : value.getMonth() + 1,
+							day : value.getDate(),
+							timezone : Math.floor(timezoneOffset / 60000)
+						}));
+					} else {
+						var nextDay = new Date(value.getTime() + 86400000);
+						return this.printDate(new Jsonix.XML.Calendar({
+							year : nextDay.getFullYear(),
+							month : nextDay.getMonth() + 1,
+							day : nextDay.getDate(),
+							timezone : (Math.floor(timezoneOffset / 60000) - 1440)
+						}));
+					}
+				}
 			}
 		}
 	},
@@ -2831,6 +2948,7 @@ Jsonix.Model.ClassInfo = Jsonix
 		.Class(Jsonix.Model.TypeInfo, {
 			name : null,
 			baseTypeInfo : null,
+			instanceFactory : null,
 			properties : null,
 			structure : null,
 			defaultElementNamespaceURI : '',
@@ -2851,6 +2969,12 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 				if (Jsonix.Util.Type.exists(options.baseTypeInfo)) {
 					this.baseTypeInfo = options.baseTypeInfo;
+				}
+				if (Jsonix.Util.Type.exists(options.instanceFactory)) {
+					// TODO: should we support instanceFactory as functions?
+					// For the pure JSON configuration?
+					Jsonix.Util.Ensure.ensureFunction(options.instanceFactory);
+					this.instanceFactory = options.instanceFactory;
 				}
 				this.properties = [];
 				if (Jsonix.Util.Type.exists(options.propertyInfos)) {
@@ -2900,10 +3024,16 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			unmarshal : function(context, input) {
 				this.build(context);
-				var result = {
-					TYPE_NAME : this.name
-				};
-
+				var result;
+				
+				if (this.instanceFactory) {
+					result = new this.instanceFactory();
+				}
+				else
+				{
+					result = { TYPE_NAME : this.name }; 
+				}
+				
 				if (input.eventType !== 1) {
 					throw new Error("Parser must be on START_ELEMENT to read a class info.");
 				}
@@ -3012,7 +3142,12 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 			},
 			isInstance : function(value) {
-				return Jsonix.Util.Type.isObject(value)	&& Jsonix.Util.Type.isString(value.TYPE_NAME) && value.TYPE_NAME === this.name;
+				if (this.instanceFactory) {
+					return value instanceof this.instanceFactory;
+				}
+				else {
+					return Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type.isString(value.TYPE_NAME) && value.TYPE_NAME === this.name;
+				}
 			},
 
 			// Obsolete, left for backwards compatibility
@@ -3284,10 +3419,10 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				return this.parse(context, scope, value);
 			},
 			parse : function(context, scope, value) {
-				return this.typeInfo.parse(value);
+				return this.typeInfo.parse(value, context, scope);
 			},
 			print : function(context, scope, value) {
-				return this.typeInfo.print(value);
+				return this.typeInfo.reprint(value, context, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});
@@ -4776,14 +4911,17 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		}, options);
 	},
 	unmarshalFile : function(fileName, callback, options) {
+		if (typeof _jsonix_fs === 'undefined')
+		{
+			throw new Error("File unmarshalling is only available in environments which support file systems.");
+		}
 		Jsonix.Util.Ensure.ensureString(fileName);
 		Jsonix.Util.Ensure.ensureFunction(callback);
 		if (Jsonix.Util.Type.exists(options)) {
 			Jsonix.Util.Ensure.ensureObject(options);
 		}
 		that = this;
-
-		var fs = require('fs');
+		var fs =_jsonix_fs;
 		fs.readFile(fileName, options, function(err, data) {
 			if (err)
 			{
@@ -4831,3 +4969,29 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 	},
 	CLASS_NAME : 'Jsonix.Context.Unmarshaller'
 });
+	// Complete Jsonix script is included above
+	return { Jsonix: Jsonix };
+};
+
+// If the require function exists ...
+if (typeof require === 'function') {
+	// ... but the define function does not exists
+	if (typeof define !== 'function') {
+		// Assume we're in the Node.js environment
+		// In this case, load the define function via amdefine
+		var define = require('amdefine')(module);
+		// Use xmldom and xmlhttprequests as dependencies
+		define(["xmldom", "xmlhttprequest", "fs"], _jsonix_factory);
+	}
+	else {
+		// Otherwise assume we're in the browser/RequireJS environment
+		// Load the module without xmldom and xmlhttprequests dependencies
+		define([], _jsonix_factory);
+	}
+}
+// If the require function does not exists, we're not in Node.js and therefore in browser environment
+else
+{
+	// Just call the factory and set Jsonix as global.
+	var Jsonix = _jsonix_factory().Jsonix;
+}
