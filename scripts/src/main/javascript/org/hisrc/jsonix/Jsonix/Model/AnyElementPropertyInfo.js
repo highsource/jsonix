@@ -21,12 +21,12 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			this.mixed = true;
 		}
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var et = input.eventType;
 
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
-			return this.unmarshalElement(context, scope, input);
-		} else if (this.mixed && (et === 4 || et === 12 || et === 9)) {
+			return this.unmarshalElement(context, input, scope);
+		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
 			var value = input.getText();
 			if (this.collection) {
 				return [ value ];
@@ -46,7 +46,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 
 		}
 	},
-	unmarshalElement : function(context, scope, input) {
+	unmarshalElement : function(context, input, scope) {
 
 		var name = input.getName();
 		var value;
@@ -58,7 +58,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 			value = {
 				name : name,
-				value : adapter.unmarshal(context, input, typeInfo)
+				value : adapter.unmarshal(typeInfo, context, input, scope)
 			};
 		} else if (this.allowDom) {
 			value = input.getElement();
