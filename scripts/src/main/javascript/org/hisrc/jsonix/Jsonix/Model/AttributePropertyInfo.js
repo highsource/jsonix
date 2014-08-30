@@ -13,7 +13,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 			this.attributeName = new Jsonix.XML.QName(this.defaultAttributeNamespaceURI, this.name);
 		}
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var attributeCount = input.getAttributeCount();
 		var result = null;
 		for ( var index = 0; index < attributeCount; index++) {
@@ -21,7 +21,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 			if (this.attributeName.key === attributeNameKey) {
 				var attributeValue = input.getAttributeValue(index);
 				if (Jsonix.Util.Type.isString(attributeValue)) {
-					result = this.unmarshalValue(context, scope, input, attributeValue);
+					result = this.unmarshalValue(context, input, scope, attributeValue);
 				}
 			}
 		}
