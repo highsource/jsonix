@@ -43,7 +43,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.built = true;
 						}
 					},
-					print : function(value, context) {
+					print : function(value, context, scope) {
 						if (!Jsonix.Util.Type.exists(value)) {
 							return null;
 						}
@@ -54,11 +54,11 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.reprint(value[index], context);
+							result = result + this.typeInfo.reprint(value[index], context, scope);
 						}
 						return result;
 					},
-					parse : function(text, context) {
+					parse : function(text, context, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var items = Jsonix.Util.StringUtils
 								.splitBySeparatorChars(text,
@@ -71,5 +71,6 @@ Jsonix.Schema.XSD.List = Jsonix
 						}
 						return result;
 					},
+					// TODO isInstance?
 					CLASS_NAME : 'Jsonix.Schema.XSD.List'
 				});

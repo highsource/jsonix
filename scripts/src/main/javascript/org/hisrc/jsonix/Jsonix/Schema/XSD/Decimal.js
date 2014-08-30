@@ -1,18 +1,18 @@
 Jsonix.Schema.XSD.Decimal = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Decimal',
 	typeName : Jsonix.Schema.XSD.qname('decimal'),
-	print : function(value) {
+	print : function(value, context, scope) {
 		Jsonix.Util.Ensure.ensureNumber(value);
 		var text = String(value);
 		return text;
 	},
-	parse : function(text) {
+	parse : function(text, context, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var value = Number(text);
 		Jsonix.Util.Ensure.ensureNumber(value);
 		return value;
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isNumber(value);
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.Decimal'

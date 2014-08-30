@@ -1,7 +1,7 @@
 Jsonix.Schema.XSD.Number = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Number',
 	typeName : Jsonix.Schema.XSD.qname('number'),
-	print : function(value) {
+	print : function(value, context, scope) {
 		Jsonix.Util.Ensure.ensureNumberOrNaN(value);
 		if (Jsonix.Util.Type.isNaN(value)) {
 			return 'NaN';
@@ -14,7 +14,7 @@ Jsonix.Schema.XSD.Number = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			return text;
 		}
 	},
-	parse : function(text) {
+	parse : function(text, context, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text === '-INF') {
 			return -Infinity;
@@ -28,7 +28,7 @@ Jsonix.Schema.XSD.Number = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			return value;
 		}
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isNumberOrNaN(value);
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.Number'

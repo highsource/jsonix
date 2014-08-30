@@ -73,7 +73,7 @@ Jsonix.Schema.XSD.AnyType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		console.log(output);
 		throw new Error("Abstract method [marshal].");
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		throw new Error('Abstract method [isInstance].');
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnyType'

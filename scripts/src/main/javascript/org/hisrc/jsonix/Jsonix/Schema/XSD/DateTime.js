@@ -1,7 +1,7 @@
 Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'DateTime',
 	typeName : Jsonix.Schema.XSD.qname('dateTime'),
-	parse : function(value) {
+	parse : function(value, context, scope) {
 		var calendar = this.parseDateTime(value);
 		var date = new Date();
 		date.setFullYear(calendar.year);
@@ -40,7 +40,7 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		return result;
 	},
-	print : function(value) {
+	print : function(value, context, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var timezoneOffset;
 		var localTimezoneOffset = value.getTimezoneOffset();
@@ -85,7 +85,7 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			}));
 		}
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isDate(value);
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.DateTime'

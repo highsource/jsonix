@@ -1,18 +1,18 @@
 Jsonix.Schema.XSD.Integer = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Integer',
 	typeName : Jsonix.Schema.XSD.qname('integer'),
-	print : function(value) {
+	print : function(value, context, scope) {
 		Jsonix.Util.Ensure.ensureInteger(value);
 		var text = String(value);
 		return text;
 	},
-	parse : function(text) {
+	parse : function(text, context, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var value = Number(text);
 		Jsonix.Util.Ensure.ensureInteger(value);
 		return value;
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		return Jsonix.Util.NumberUtils.isInteger(value) && value >= this.MIN_VALUE && value <= this.MAX_VALUE;
 	},
 	MIN_VALUE : -9223372036854775808,

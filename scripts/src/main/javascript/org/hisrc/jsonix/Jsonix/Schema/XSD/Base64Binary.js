@@ -19,12 +19,12 @@ Jsonix.Schema.XSD.Base64Binary = Jsonix
 							this.charToByte[_char] = i;
 						}
 					},
-					print : function(value) {
+					print : function(value, context, scope) {
 						Jsonix.Util.Ensure.ensureArray(value);
 						return this.encode(value);
 					},
 
-					parse : function(text) {
+					parse : function(text, context, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						return this.decode(text);
 					},
@@ -112,7 +112,7 @@ Jsonix.Schema.XSD.Base64Binary = Jsonix
 						}
 						return uarray;
 					},
-					isInstance : function(value) {
+					isInstance : function(value, context, scope) {
 						return Jsonix.Util.Type.isArray(value);
 					},
 					CLASS_NAME : 'Jsonix.Schema.XSD.Base64Binary'

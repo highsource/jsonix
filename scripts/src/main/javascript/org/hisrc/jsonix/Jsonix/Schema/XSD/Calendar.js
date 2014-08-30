@@ -4,7 +4,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 				{
 					name : 'Calendar',
 					typeName : Jsonix.Schema.XSD.qname('calendar'),
-					parse : function(text) {
+					parse : function(text, context, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var negative = (text.charAt(0) === '-');
 						var sign = negative ? -1 : 1;
@@ -287,7 +287,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							return fractionalSecond;
 						}
 					},
-					print : function(value) {
+					print : function(value, context, scope) {
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {
@@ -458,7 +458,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 						}
 						return result;
 					},
-					isInstance : function(value) {
+					isInstance : function(value, context, scope) {
 						return Jsonix.Util.Type.isObject(value) && ((Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)) || (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)));
 					},

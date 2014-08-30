@@ -1,15 +1,15 @@
 Jsonix.Schema.XSD.AnyURI = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'AnyURI',
 	typeName : Jsonix.Schema.XSD.qname('anyURI'),
-	print : function(value) {
+	print : function(value, context, scope) {
 		Jsonix.Util.Ensure.ensureString(value);
 		return value;
 	},
-	parse : function(text) {
+	parse : function(text, context, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		return text;
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isString(value);
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnyURI'

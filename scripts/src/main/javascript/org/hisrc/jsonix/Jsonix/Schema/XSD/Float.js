@@ -1,7 +1,7 @@
 Jsonix.Schema.XSD.Float = Jsonix.Class(Jsonix.Schema.XSD.Number, {
 	name : 'Float',
 	typeName : Jsonix.Schema.XSD.qname('float'),
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isNaN(value) || value === -Infinity || value === Infinity || (Jsonix.Util.Type.isNumber(value) && value >= this.MIN_VALUE && value <= this.MAX_VALUE);
 	},
 	MIN_VALUE : -3.4028235e+38,
