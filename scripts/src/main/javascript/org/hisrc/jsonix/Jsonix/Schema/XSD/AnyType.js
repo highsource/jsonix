@@ -57,7 +57,7 @@ Jsonix.Schema.XSD.AnyType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 			value = {
 				name : name,
-				value : adapter.unmarshal(context, input, typeInfo, scope)
+				value : adapter.unmarshal( typeInfo, context, input, scope)
 			};
 		} else {
 			value = input.getElement();
