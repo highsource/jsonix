@@ -57,14 +57,14 @@ Jsonix.Schema.XSD.AnyType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 			value = {
 				name : name,
-				value : adapter.unmarshal( typeInfo, context, input, scope)
+				value : adapter.unmarshal(typeInfo, context, input, scope)
 			};
 		} else {
 			value = input.getElement();
 		}
 		return value;
 	},
-	marshal : function(context, value, output) {
+	marshal : function(value, context, output, scope) {
 		console.log("context");
 		console.log(context);
 		console.log("value");
