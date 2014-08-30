@@ -12,7 +12,7 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
 			},
-			unmarshalValue : function(context, input, scope, value) {
+			unmarshalValue : function(value, context, input, scope) {
 				return this.parse(context, scope, value);
 			},
 			parse : function(context, scope, value) {

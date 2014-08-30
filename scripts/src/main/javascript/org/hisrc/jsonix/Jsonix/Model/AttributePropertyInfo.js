@@ -21,7 +21,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 			if (this.attributeName.key === attributeNameKey) {
 				var attributeValue = input.getAttributeValue(index);
 				if (Jsonix.Util.Type.isString(attributeValue)) {
-					result = this.unmarshalValue(context, input, scope, attributeValue);
+					result = this.unmarshalValue(attributeValue, context, input, scope);
 				}
 			}
 		}
