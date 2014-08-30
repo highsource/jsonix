@@ -18,7 +18,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 			return this.print(value, context, scope);
 		}
 	},
-	unmarshal : function(context, input) {
+	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
 			return this.parse(text, context);
