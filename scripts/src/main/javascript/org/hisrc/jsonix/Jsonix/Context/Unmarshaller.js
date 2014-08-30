@@ -53,7 +53,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		return this.unmarshalElementNode(input);
 
 	},
-	unmarshalElementNode : function(input) {
+	unmarshalElementNode : function(input, scope) {
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
@@ -61,15 +61,14 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		var result = null;
 		var name = Jsonix.XML.QName.fromObject(input.getName());
 
-		var elementDeclaration = this.context.getElementInfo(name);
+		var elementDeclaration = this.context.getElementInfo(name, scope);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
 			throw new Error("Could not find element declaration for the element [" + name.key + "].");
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;
 		var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
-		// TODO scope???
-		var value = adapter.unmarshal(typeInfo, this.context, input);
+		var value = adapter.unmarshal(typeInfo, this.context, input, scope);
 		result = {
 			name : name,
 			value : value
