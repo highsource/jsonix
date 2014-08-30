@@ -180,17 +180,16 @@ Jsonix.Model.ClassInfo = Jsonix
 				var propertyValue = propertyInfo.unmarshalValue(value, context, input, this);
 				propertyInfo.setProperty(result, propertyValue);
 			},
-			marshal : function(context, value, output) {
+			marshal : function(value, context, output) {
 				// TODO This must be reworked
 				if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
-					this.baseTypeInfo.marshal(context, value, output);
+					this.baseTypeInfo.marshal(value, context, output);
 				}
 				for ( var index = 0; index < this.properties.length; index++) {
 					var propertyInfo = this.properties[index];
 					var propertyValue = value[propertyInfo.name];
 					if (Jsonix.Util.Type.exists(propertyValue)) {
-						propertyInfo.marshal(context, this, propertyValue,
-								output);
+						propertyInfo.marshal(propertyValue, context, output, this);
 					}
 				}
 			},
