@@ -29,7 +29,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeAttribute(this.attributeName, this.print(context, scope, value));
+			output.writeAttribute(this.attributeName, this.print(value, context, scope));
 		}
 
 	},

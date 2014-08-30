@@ -193,7 +193,7 @@ Jsonix.Model.ClassInfo = Jsonix
 					}
 				}
 			},
-			isInstance : function(value) {
+			isInstance : function(value, context, scope) {
 				if (this.instanceFactory) {
 					return value instanceof this.instanceFactory;
 				}

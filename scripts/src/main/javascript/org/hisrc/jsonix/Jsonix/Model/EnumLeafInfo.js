@@ -27,10 +27,6 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		if (!this.built) {
 			this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, module);
 			this.baseTypeInfo.build(context, module);
-			if (!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.print) && Jsonix.Util.Type.isFunction(this.baseTypeInfo.print)))
-			{
-				throw new Error('Base type of the enum info [' + this.name + '] must be a simple type implementing print and parse methods.');
-			}
 			var items = this.entries;
 			var entries = {};
 			var keys = [];
@@ -50,17 +46,17 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 						{
 							throw new Error('Enum value is provided as string but the base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the parse method.');
 						}
-						value = this.baseTypeInfo.parse(value);
+						value = this.baseTypeInfo.parse(value, context, this);
 					}
 					else
 					{
-						if (this.baseTypeInfo.isInstance(value))
+						if (this.baseTypeInfo.isInstance(value, context, this))
 						{
 							if (!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.print)))
 							{
 								throw new Error('The base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the print method, unable to produce the enum key as string.');
 							}
-							key = this.baseTypeInfo.print(value);
+							key = this.baseTypeInfo.print(value, context, this);
 						}
 						else
 						{
@@ -82,11 +78,11 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 							{
 								throw new Error('Enum value is provided as string but the base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the parse method.');
 							}
-							value = this.baseTypeInfo.parse(value);
+							value = this.baseTypeInfo.parse(value, context, this);
 						}
 						else
 						{
-							if (!this.baseTypeInfo.isInstance(value))
+							if (!this.baseTypeInfo.isInstance(value, context, this))
 							{
 								throw new Error('Enum value [' + value + '] is not an instance of the enum base type [' + this.baseTypeInfo.name + '].');
 							}
@@ -110,25 +106,25 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text, context);
+			return this.parse(text, context, scope);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.reprint(value, context));
+			output.writeCharacters(this.reprint(value, context, scope));
 		}
 	},
 	reprint : function(value, context, scope) {
-		if (Jsonix.Util.Type.isString(value) && !this.isInstance(value)) {
+		if (Jsonix.Util.Type.isString(value) && !this.isInstance(value, context, scope)) {
 			return this
 					.print(this.parse(value, context, scope), context, scope);
 		} else {
 			return this.print(value, context, scope);
 		}
 	},
-	print : function(value) {
+	print : function(value, context, scope) {
 		for (var index = 0; index < this.values.length; index++)
 		{
 			if (this.values[index] === value)
@@ -138,7 +134,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		}
 		throw new Error('Value [' + value + '] is invalid for the enum type [' + this.name + '].');
 	},
-	parse : function(text) {
+	parse : function(text, context, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (this.entries.hasOwnProperty(text))
 		{
@@ -149,7 +145,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			throw new Error('Value [' + text + '] is invalid for the enum type [' + this.name + '].');
 		}
 	},
-	isInstance : function(value) {
+	isInstance : function(value, context, scope) {
 		for (var index = 0; index < this.values.length; index++)
 		{
 			if (this.values[index] === value)

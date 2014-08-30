@@ -27,7 +27,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
 							var typeInfo = elementTypeInfo.typeInfo;
-							if (typeInfo.isInstance(value)) {
+							if (typeInfo.isInstance(value, context, scope)) {
 								var elementName = elementTypeInfo.elementName;
 								this.marshalElementTypeInfo(elementName, typeInfo, value, context, output, scope);
 								return;

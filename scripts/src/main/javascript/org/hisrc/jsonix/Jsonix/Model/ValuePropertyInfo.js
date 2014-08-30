@@ -15,7 +15,7 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
 		}
-		output.writeCharacters(this.print(context, scope, value));
+		output.writeCharacters(this.print(value, context, scope));
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);
