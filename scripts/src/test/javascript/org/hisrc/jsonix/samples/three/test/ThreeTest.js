@@ -808,9 +808,10 @@ function testThreeMarhshalIntegerEnumInfoObjectType() {
 	var serializedNode = Jsonix.DOM.serialize(node);
 	logger.debug(serializedNode);
 }
-function testThreeUnmarhshalAnyType() {
+function testThreeAnyType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
+	var marshaller = context.createMarshaller();
 //	var unmarshaller = context.createUnmarshaller();
 	var text = '<anyType a="b">' +
 	//
@@ -821,12 +822,13 @@ function testThreeUnmarhshalAnyType() {
 	'</anyType>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('anyType', result.name.localPart);
-	assertEquals(5, result.value.length);
-	assertEquals('b', result.value[0]['@a']);
-	assertEquals('foo', result.value[1]);
-	assertEquals('value', result.value[2].name.localPart);
-	assertEquals('test', result.value[2].value.value);
-	assertEquals('bar', result.value[3]);
-	assertEquals(1, result.value[4].nodeType);
-	assertEquals('dom', result.value[4].nodeName);
+	assertEquals('b', result.value.attributes.a);
+	assertEquals(4, result.value.content.length);
+	assertEquals('foo', result.value.content[0]);
+	assertEquals('value', result.value.content[1].name.localPart);
+	assertEquals('test', result.value.content[1].value.value);
+	assertEquals('bar', result.value.content[2]);
+	assertEquals(1, result.value.content[3].nodeType);
+	assertEquals('dom', result.value.content[3].nodeName);
+	assertEquals('<anyType a="b">foo<value>test</value>bar<dom/></anyType>',marshaller.marshalString(result));
 }
