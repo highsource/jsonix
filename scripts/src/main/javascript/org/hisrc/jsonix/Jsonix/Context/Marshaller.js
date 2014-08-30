@@ -40,7 +40,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 		var typeInfo = elementDeclaration.typeInfo;
 		var element = output.writeStartElement(value.name);
 		var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
-		adapter.marshal(this.context, value.value, output, typeInfo, scope);
+		adapter.marshal(typeInfo, value.value, this.context, output, scope);
 		output.writeEndElement();
 		return element;
 
