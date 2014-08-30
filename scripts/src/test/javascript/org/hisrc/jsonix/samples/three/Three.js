@@ -351,6 +351,34 @@ Three = {
 				typeInfo : 'String'
 			}
 		} ]
+	}, {
+		type: 'enumInfo',
+		localName : 'EnumInfoArray',
+		values : ['a', 'b', 'c']
+	}, {
+		type: 'enumInfo',
+		localName : 'EnumInfoObject',
+		values : {'a' : 'AA', 'b' : 'BB', 'c' : 'CC'}
+	}, {
+		type: 'enumInfo',
+		localName : 'StringEnumInfoArray',
+		baseTypeInfo : 'String',
+		values : ['a', 'b', 'c']
+	}, {
+		type: 'enumInfo',
+		localName : 'StringEnumInfoObject',
+		baseTypeInfo : 'String',
+		values : {'a' : 'AA', 'b' : 'BB', 'c' : 'CC'}
+	}, {
+		type: 'enumInfo',
+		localName : 'IntegerEnumInfoArray',
+		baseTypeInfo : 'Integer',
+		values : [1, '2', 3]
+	}, {
+		type: 'enumInfo',
+		localName : 'IntegerEnumInfoObject',
+		baseTypeInfo : 'Integer',
+		values : {'one' : 1, 'two' : '2', 'three' : 3}
 	} ],
 	elementInfos : [ {
 		elementName : 'value',
@@ -394,6 +422,24 @@ Three = {
 	}, {
 		elementName : 'elementMap',
 		typeInfo : 'Three.ElementMapType'
+	}, {
+		elementName : 'enumInfoArray',
+		typeInfo : 'Three.EnumInfoArray'
+	}, {
+		elementName : 'enumInfoObject',
+		typeInfo : 'Three.EnumInfoObject'
+	}, {
+		elementName : 'stringEnumInfoArray',
+		typeInfo : 'Three.StringEnumInfoArray'
+	}, {
+		elementName : 'stringEnumInfoObject',
+		typeInfo : 'Three.StringEnumInfoObject'
+	}, {
+		elementName : 'integerEnumInfoArray',
+		typeInfo : 'Three.IntegerEnumInfoArray'
+	}, {
+		elementName : 'integerEnumInfoObject',
+		typeInfo : 'Three.IntegerEnumInfoObject'
 	} ]
 };
 Four = {

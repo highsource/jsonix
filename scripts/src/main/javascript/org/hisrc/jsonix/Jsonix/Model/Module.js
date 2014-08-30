@@ -134,6 +134,50 @@ Jsonix.Model.Module = Jsonix
 				var classInfo = new Jsonix.Model.ClassInfo(options);
 				return classInfo;
 			},
+			createEnumLeafInfo : function(options) {
+				Jsonix.Util.Ensure.ensureObject(options);
+				Jsonix.Util.Ensure.ensureExists(options.values);
+				// Calculate both name as well as localName
+				// name is provided
+				if (Jsonix.Util.Type.isString(options.name)) {
+					// localName is not provided
+					if (!Jsonix.Util.Type.isString(options.localName)) {
+						// But module name is provided
+						if (Jsonix.Util.Type.isString(this.name)) {
+							// If name starts with module name, use second part
+							// as local name
+							if (options.name.indexOf(this.name + '.') === 0) {
+								options.localName = options.name
+										.substring(this.name.length + 1);
+							}
+							// Else use name as local name
+							else {
+								options.localName = options.name;
+							}
+						}
+						// Module name is not provided, use name as local name
+						else {
+							options.localName = options.name;
+						}
+					}
+				}
+				// name is not provided but local name is provided
+				else if (Jsonix.Util.Type.isString(options.localName)) {
+					// Module name is provided
+					if (Jsonix.Util.Type.isString(this.name)) {
+						options.name = this.name + '.' + options.localName;
+					}
+					// Module name is not provided
+					else {
+						options.name = options.localName;
+					}
+				} else {
+					throw new Error("Neither [name] nor [localName] was provided for the class info.");
+				}
+				// Now both name an local name are initialized
+				var enumLeafInfo = new Jsonix.Model.EnumLeafInfo(options);
+				return enumLeafInfo;
+			},
 			createList : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				Jsonix.Util.Ensure.ensureExists(mapping.typeInfo);
@@ -207,5 +251,6 @@ Jsonix.Model.Module = Jsonix
 		});
 Jsonix.Model.Module.prototype.typeInfoCreators = {
 	"classInfo" : Jsonix.Model.Module.prototype.createClassInfo,
+	"enumInfo" : Jsonix.Model.Module.prototype.createEnumLeafInfo,
 	"list" : Jsonix.Model.Module.prototype.createList
 };

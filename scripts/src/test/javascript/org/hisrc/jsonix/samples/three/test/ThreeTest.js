@@ -682,3 +682,129 @@ function testThreeMarhshalMapElementType() {
 	var serializedNode = Jsonix.DOM.serialize(node);
 	logger.debug(serializedNode);
 }
+function testThreeUnmarhshalEnumInfoArrayType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<enumInfoArray>a</<enumInfoArray>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('enumInfoArray', result.name.localPart);
+	assertEquals('a', result.value);
+}
+function testThreeUnmarhshalEnumInfoObjectType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<enumInfoObject>a</<enumInfoObject>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('enumInfoObject', result.name.localPart);
+	assertEquals('AA', result.value);
+}
+function testThreeUnmarhshalStringEnumInfoArrayType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<stringEnumInfoArray>a</<stringEnumInfoArray>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('stringEnumInfoArray', result.name.localPart);
+	assertEquals('a', result.value);
+}
+function testThreeUnmarhshalEnumInfoObjectType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<stringEnumInfoObject>a</<stringEnumInfoObject>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('stringEnumInfoObject', result.name.localPart);
+	assertEquals('AA', result.value);
+}
+function testThreeUnmarhshalIntegerEnumInfoArrayType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<integerEnumInfoArray>2</<integerEnumInfoArray>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('integerEnumInfoArray', result.name.localPart);
+	assertEquals(2, result.value);
+}
+function testThreeUnmarhshalIntegerEnumInfoObjectType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<integerEnumInfoObject>two</<integerEnumInfoObject>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('integerEnumInfoObject', result.name.localPart);
+	assertEquals(2, result.value);
+}
+function testThreeMarhshalEnumInfoArrayType() {
+	var context = new Jsonix.Context([ Three ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : 'enumInfoArray'
+		},
+		value : 'a'
+	};
+	var node = marshaller.marshalDocument(value);
+	var serializedNode = Jsonix.DOM.serialize(node);
+	logger.debug(serializedNode);
+}
+function testThreeMarhshalEnumInfoObjectType() {
+	var context = new Jsonix.Context([ Three ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : 'enumInfoObject'
+		},
+		value : 'AA'
+	};
+	var node = marshaller.marshalDocument(value);
+	var serializedNode = Jsonix.DOM.serialize(node);
+	logger.debug(serializedNode);
+}
+function testThreeMarhshalStringEnumInfoArrayType() {
+	var context = new Jsonix.Context([ Three ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : 'stringEnumInfoArray'
+		},
+		value : 'a'
+	};
+	var node = marshaller.marshalDocument(value);
+	var serializedNode = Jsonix.DOM.serialize(node);
+	logger.debug(serializedNode);
+}
+function testThreeMarhshalStringEnumInfoObjectType() {
+	var context = new Jsonix.Context([ Three ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : 'stringEnumInfoObject'
+		},
+		value : 'AA'
+	};
+	var node = marshaller.marshalDocument(value);
+	var serializedNode = Jsonix.DOM.serialize(node);
+	logger.debug(serializedNode);
+}
+function testThreeMarhshalIntegerEnumInfoArrayType() {
+	var context = new Jsonix.Context([ Three ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : 'integerEnumInfoArray'
+		},
+		value : 2
+	};
+	var node = marshaller.marshalDocument(value);
+	var serializedNode = Jsonix.DOM.serialize(node);
+	logger.debug(serializedNode);
+}
+function testThreeMarhshalIntegerEnumInfoObjectType() {
+	var context = new Jsonix.Context([ Three ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : 'integerEnumInfoObject'
+		},
+		value : 2
+	};
+	var node = marshaller.marshalDocument(value);
+	var serializedNode = Jsonix.DOM.serialize(node);
+	logger.debug(serializedNode);
+}
