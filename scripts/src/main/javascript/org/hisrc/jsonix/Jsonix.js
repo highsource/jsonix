@@ -94,6 +94,7 @@
 'Jsonix/Schema/XSD/IDREFS.js',
 'Jsonix/Model/Adapter.js',
 'Jsonix/Model/ClassInfo.js',
+'Jsonix/Model/EnumLeafInfo.js',
 'Jsonix/Model/ElementInfo.js',
 'Jsonix/Model/PropertyInfo.js',
 'Jsonix/Model/AnyAttributePropertyInfo.js',

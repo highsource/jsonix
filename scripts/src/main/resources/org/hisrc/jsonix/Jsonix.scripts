@@ -64,6 +64,7 @@
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREFS.js
 /org/hisrc/jsonix/Jsonix/Model/Adapter.js
 /org/hisrc/jsonix/Jsonix/Model/ClassInfo.js
+/org/hisrc/jsonix/Jsonix/Model/EnumLeafInfo.js
 /org/hisrc/jsonix/Jsonix/Model/ElementInfo.js
 /org/hisrc/jsonix/Jsonix/Model/PropertyInfo.js
 /org/hisrc/jsonix/Jsonix/Model/AnyAttributePropertyInfo.js
