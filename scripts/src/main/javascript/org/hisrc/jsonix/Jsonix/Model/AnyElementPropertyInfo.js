@@ -72,20 +72,20 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			return value;
 		}
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
 		}
 		if (!this.collection) {
-			this.marshalItem(context, value, output);
+			this.marshalItem(value, context, output, scope);
 		} else {
 			Jsonix.Util.Ensure.ensureArray(value);
 			for ( var index = 0; index < value.length; index++) {
-				this.marshalItem(context, value[index], output);
+				this.marshalItem(value[index], context, output, scope);
 			}
 		}
 	},
-	marshalItem : function(context, value, output, scope) {
+	marshalItem : function(value, context, output, scope) {
 		if (this.mixed && Jsonix.Util.Type.isString(value)) {
 			// Mixed
 			output.writeCharacters(value);
@@ -101,7 +101,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 				var typeInfo = elementDeclaration.typeInfo;
 				var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 				output.writeStartElement(name);
-				adapter.marshal(context, value.value, output, typeInfo, scope);
+				adapter.marshal(typeInfo, value, context, output, scope);
 				output.writeEndElement();
 			} else {
 				// TODO better exception
