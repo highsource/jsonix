@@ -27,7 +27,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 		}
 		return result;
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
 			output.writeAttribute(this.attributeName, this.print(context, scope, value));
 		}
