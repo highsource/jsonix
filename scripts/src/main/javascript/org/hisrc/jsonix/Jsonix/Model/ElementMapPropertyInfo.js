@@ -74,7 +74,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		}
 		return callback(result);
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 
 		if (!Jsonix.Util.Type.exists(value)) {
 			// Do nothing
@@ -85,13 +85,13 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 			output.writeStartElement(this.wrapperElementName);
 		}
 
-		this.marshalElement(context, value, output);
+		this.marshalElement(value, context, output, scope);
 
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			output.writeEndElement();
 		}
 	},
-	marshalElement : function(context, value, output) {
+	marshalElement : function(value, context, output, scope) {
 		if (!!value) {
 			for ( var attributeName in value) {
 				if (value.hasOwnProperty(attributeName)) {
@@ -101,7 +101,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 						singleEntry[this.key.name] = attributeName;
 						singleEntry[this.value.name] = attributeValue;
 						output.writeStartElement(this.elementName);
-						this.entryTypeInfo.marshal(context, singleEntry, output);
+						this.entryTypeInfo.marshal(singleEntry, context, output, scope);
 						output.writeEndElement();
 
 					} else {
@@ -110,7 +110,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 							collectionEntry[this.key.name] = attributeName;
 							collectionEntry[this.value.name] = attributeValue[index];
 							output.writeStartElement(this.elementName);
-							this.entryTypeInfo.marshal(context, collectionEntry, output);
+							this.entryTypeInfo.marshal(collectionEntry, context, output, scope);
 							output.writeEndElement();
 						}
 					}
