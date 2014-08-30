@@ -85,7 +85,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			}
 		}
 	},
-	marshalItem : function(context, value, output) {
+	marshalItem : function(context, value, output, scope) {
 		if (this.mixed && Jsonix.Util.Type.isString(value)) {
 			// Mixed
 			output.writeCharacters(value);
@@ -96,12 +96,12 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 		} else {
 			// Typed object
 			var name = Jsonix.XML.QName.fromObject(value.name);
-			if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name))) {
-				var elementDeclaration = context.getElementInfo(name);
+			if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
+				var elementDeclaration = context.getElementInfo(name, scope);
 				var typeInfo = elementDeclaration.typeInfo;
 				var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 				output.writeStartElement(name);
-				adapter.marshal(context, value.value, output, typeInfo);
+				adapter.marshal(context, value.value, output, typeInfo, scope);
 				output.writeEndElement();
 			} else {
 				// TODO better exception
