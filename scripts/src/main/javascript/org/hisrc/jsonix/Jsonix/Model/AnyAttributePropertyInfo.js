@@ -3,7 +3,7 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 		Jsonix.Util.Ensure.ensureObject(options);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var attributeCount = input.getAttributeCount();
 		if (attributeCount === 0) {
 			return null;
