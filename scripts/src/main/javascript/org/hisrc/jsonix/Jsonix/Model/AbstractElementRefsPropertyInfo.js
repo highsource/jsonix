@@ -104,7 +104,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			return value;
 		}
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 
 		if (Jsonix.Util.Type.exists(value)) {
 			if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
@@ -112,12 +112,12 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			}
 
 			if (!this.collection) {
-				this.marshalItem(context, scope, value, output);
+				this.marshalItem(value, context, output, scope);
 			} else {
 				Jsonix.Util.Ensure.ensureArray(value, 'Collection property requires an array value.');
 				for ( var index = 0; index < value.length; index++) {
 					var item = value[index];
-					this.marshalItem(context, scope, item, output);
+					this.marshalItem(item, context, output, scope);
 				}
 			}
 
@@ -127,7 +127,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 
 	},
-	marshalItem : function(context, scope, value, output) {
+	marshalItem : function(value, context, output, scope) {
 
 		if (Jsonix.Util.Type.isString(value)) {
 			if (!this.mixed) {
@@ -137,7 +137,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 				output.writeCharacters(value);
 			}
 		} else if (Jsonix.Util.Type.isObject(value)) {
-			this.marshalElement(context, scope, value, output);
+			this.marshalElement(value, context, output, scope);
 
 		} else {
 			if (this.mixed) {
@@ -148,15 +148,15 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 
 	},
-	marshalElement : function(context, scope, value, output) {
+	marshalElement : function(value, context, output, scope) {
 		var elementName = Jsonix.XML.QName.fromObject(value.name);
 		var typeInfo = this.getElementTypeInfo(context, elementName, scope);
-		return this.marshalElementTypeInfo(context, value, elementName, typeInfo, output);
+		return this.marshalElementTypeInfo(elementName, typeInfo, value, context, output, scope);
 	},
-	marshalElementTypeInfo : function(context, value, elementName, typeInfo, output) {
+	marshalElementTypeInfo : function(elementName, typeInfo, value, context, output, scope) {
 		output.writeStartElement(elementName);
 		if (Jsonix.Util.Type.exists(value.value)) {
-			typeInfo.marshal(context, value.value, output);
+			typeInfo.marshal(value.value, context, output, scope);
 		}
 		output.writeEndElement();
 
