@@ -1,9 +1,9 @@
 Jsonix.Model.Adapter = Jsonix.Class({
 	initialize : function() {
 	},
-	unmarshal: function(context, input, typeInfo)
+	unmarshal: function(typeInfo, context, input, scope)
 	{
-		return typeInfo.unmarshal(context, input);
+		return typeInfo.unmarshal(context, input, scope);
 	},
 	marshal: function(context, value, output, typeInfo)
 	{
