@@ -685,7 +685,7 @@ function testThreeMarhshalMapElementType() {
 function testThreeUnmarhshalEnumInfoArrayType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
-	var text = '<enumInfoArray>a</<enumInfoArray>';
+	var text = '<enumInfoArray>a</enumInfoArray>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('enumInfoArray', result.name.localPart);
 	assertEquals('a', result.value);
@@ -693,7 +693,7 @@ function testThreeUnmarhshalEnumInfoArrayType() {
 function testThreeUnmarhshalEnumInfoObjectType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
-	var text = '<enumInfoObject>a</<enumInfoObject>';
+	var text = '<enumInfoObject>a</enumInfoObject>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('enumInfoObject', result.name.localPart);
 	assertEquals('AA', result.value);
@@ -701,7 +701,7 @@ function testThreeUnmarhshalEnumInfoObjectType() {
 function testThreeUnmarhshalStringEnumInfoArrayType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
-	var text = '<stringEnumInfoArray>a</<stringEnumInfoArray>';
+	var text = '<stringEnumInfoArray>a</stringEnumInfoArray>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('stringEnumInfoArray', result.name.localPart);
 	assertEquals('a', result.value);
@@ -709,7 +709,7 @@ function testThreeUnmarhshalStringEnumInfoArrayType() {
 function testThreeUnmarhshalEnumInfoObjectType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
-	var text = '<stringEnumInfoObject>a</<stringEnumInfoObject>';
+	var text = '<stringEnumInfoObject>a</stringEnumInfoObject>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('stringEnumInfoObject', result.name.localPart);
 	assertEquals('AA', result.value);
@@ -717,7 +717,7 @@ function testThreeUnmarhshalEnumInfoObjectType() {
 function testThreeUnmarhshalIntegerEnumInfoArrayType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
-	var text = '<integerEnumInfoArray>2</<integerEnumInfoArray>';
+	var text = '<integerEnumInfoArray>2</integerEnumInfoArray>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('integerEnumInfoArray', result.name.localPart);
 	assertEquals(2, result.value);
@@ -725,7 +725,7 @@ function testThreeUnmarhshalIntegerEnumInfoArrayType() {
 function testThreeUnmarhshalIntegerEnumInfoObjectType() {
 	var context = new Jsonix.Context([ Three ]);
 	var unmarshaller = context.createUnmarshaller();
-	var text = '<integerEnumInfoObject>two</<integerEnumInfoObject>';
+	var text = '<integerEnumInfoObject>two</integerEnumInfoObject>';
 	var result = unmarshaller.unmarshalString(text);
 	assertEquals('integerEnumInfoObject', result.name.localPart);
 	assertEquals(2, result.value);
@@ -807,4 +807,26 @@ function testThreeMarhshalIntegerEnumInfoObjectType() {
 	var node = marshaller.marshalDocument(value);
 	var serializedNode = Jsonix.DOM.serialize(node);
 	logger.debug(serializedNode);
+}
+function testThreeUnmarhshalAnyType() {
+	var context = new Jsonix.Context([ Three ]);
+	var unmarshaller = context.createUnmarshaller();
+//	var unmarshaller = context.createUnmarshaller();
+	var text = '<anyType a="b">' +
+	//
+	'foo' +
+	'<value>test</value>' +
+	'bar' +
+	'<dom/>' +
+	'</anyType>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('anyType', result.name.localPart);
+	assertEquals(5, result.value.length);
+	assertEquals('b', result.value[0]['@a']);
+	assertEquals('foo', result.value[1]);
+	assertEquals('value', result.value[2].name.localPart);
+	assertEquals('test', result.value[2].value.value);
+	assertEquals('bar', result.value[3]);
+	assertEquals(1, result.value[4].nodeType);
+	assertEquals('dom', result.value[4].nodeName);
 }

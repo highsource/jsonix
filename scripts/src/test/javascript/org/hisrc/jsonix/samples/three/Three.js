@@ -440,6 +440,9 @@ Three = {
 	}, {
 		elementName : 'integerEnumInfoObject',
 		typeInfo : 'Three.IntegerEnumInfoObject'
+	}, {
+		elementName : 'anyType',
+		typeInfo : 'AnyType'
 	} ]
 };
 Four = {
