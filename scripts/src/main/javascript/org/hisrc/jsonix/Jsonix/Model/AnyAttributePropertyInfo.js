@@ -19,7 +19,7 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 			return result;
 		}
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.isObject(value)) {
 			// Nothing to do
 			return;
