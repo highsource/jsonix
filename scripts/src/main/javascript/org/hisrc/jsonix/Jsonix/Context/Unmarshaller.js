@@ -68,7 +68,8 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;
 		var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
-		var value = adapter.unmarshal(this.context, input, typeInfo);
+		// TODO scope???
+		var value = adapter.unmarshal(typeInfo, this.context, input);
 		result = {
 			name : name,
 			value : value
