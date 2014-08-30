@@ -167,7 +167,8 @@ Jsonix.Context = Jsonix
 			/**
 			 * Builtin type infos.
 			 */
-			builtinTypeInfos : [ Jsonix.Schema.XSD.AnyType.INSTANCE,
+			builtinTypeInfos : [
+			        Jsonix.Schema.XSD.AnyType.INSTANCE,
 					Jsonix.Schema.XSD.AnyURI.INSTANCE,
 					Jsonix.Schema.XSD.Base64Binary.INSTANCE,
 					Jsonix.Schema.XSD.Boolean.INSTANCE,
