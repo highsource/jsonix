@@ -13,12 +13,12 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 								.ensureArray(options.elementTypeInfos);
 						this.elementTypeInfos = options.elementTypeInfos;
 					},
-					unmarshalElement : function(context, input, callback) {
+					unmarshalElement : function(context, input, scope, callback) {
 						// TODO make sure it's the right event type
 						var elementNameKey = input.getNameKey();
 						var typeInfo = this.elementTypeInfosMap[elementNameKey];
 						if (Jsonix.Util.Type.exists(typeInfo)) {
-							return callback(typeInfo.unmarshal(context, input));
+							return callback(typeInfo.unmarshal(context, input, scope));
 						}
 						// TODO better exception
 						throw new Error("Element [" + elementNameKey + "] is not known in this context");
