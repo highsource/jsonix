@@ -9,7 +9,8 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 		throw new Error('Abstract method [parse].');
 	},
 	reprint : function(value, context, scope) {
-		if (Jsonix.Util.Type.isString(value)) {
+		// Only reprint when the value is a string but not an instance
+		if (Jsonix.Util.Type.isString(value) && !this.isInstance(value)) {
 			return this.print(this.parse(value, context, scope), context, scope);
 		}
 		else
