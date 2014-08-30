@@ -101,7 +101,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 				var typeInfo = elementDeclaration.typeInfo;
 				var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 				output.writeStartElement(name);
-				adapter.marshal(typeInfo, value, context, output, scope);
+				adapter.marshal(typeInfo, value.value, context, output, scope);
 				output.writeEndElement();
 			} else {
 				// TODO better exception
