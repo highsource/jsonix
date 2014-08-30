@@ -1,7 +1,9 @@
-Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
+Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	name : 'AnySimpleType',
 	typeName : Jsonix.Schema.XSD.qname('anySimpleType'),
-	simpleType : true,
+	initialize : function() {
+		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
+	},	
 	print : function(value, context, scope) {
 		throw new Error('Abstract method [print].');
 	},
