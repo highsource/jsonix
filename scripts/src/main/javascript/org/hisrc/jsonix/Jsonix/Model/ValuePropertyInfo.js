@@ -3,10 +3,10 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		Jsonix.Util.Ensure.ensureObject(options);
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ options ]);
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.unmarshalValue(context, scope, input, text);
+			return this.unmarshalValue(context, input, scope, text);
 		} else {
 			return null;
 		}
