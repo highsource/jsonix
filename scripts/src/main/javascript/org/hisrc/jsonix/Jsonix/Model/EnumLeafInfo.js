@@ -115,7 +115,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			return null;
 		}
 	},
-	marshal : function(context, value, output) {
+	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
 			output.writeCharacters(this.reprint(value, context));
 		}
