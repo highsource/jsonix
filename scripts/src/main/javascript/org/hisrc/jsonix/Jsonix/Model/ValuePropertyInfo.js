@@ -11,7 +11,7 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 			return null;
 		}
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
 		}
