@@ -25,10 +25,10 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		});
 
 	},
-	unmarshalWrapperElement : function(context, input) {
+	unmarshalWrapperElement : function(context, input, scope) {
 		var result = Jsonix.Model.AbstractElementsPropertyInfo.prototype.unmarshalWrapperElement.apply(this, arguments);
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var result = null;
 		var that = this;
 		var callback = function(value) {
@@ -60,14 +60,14 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		};
 
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
-			this.unmarshalWrapperElement(context, input, callback);
+			this.unmarshalWrapperElement(context, input, scope, callback);
 		} else {
-			this.unmarshalElement(context, input, callback);
+			this.unmarshalElement(context, input, scope, callback);
 		}
 		return result;
 	},
-	unmarshalElement : function(context, input, callback) {
-		var entry = this.entryTypeInfo.unmarshal(context, input);
+	unmarshalElement : function(context, input, scope, callback) {
+		var entry = this.entryTypeInfo.unmarshal(context, input, scope);
 		var result = {};
 		if (!!entry[this.key.name]) {
 			result[entry[this.key.name]] = entry[this.value.name];
