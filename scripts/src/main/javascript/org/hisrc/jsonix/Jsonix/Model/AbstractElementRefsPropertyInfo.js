@@ -19,14 +19,14 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			this.mixed = false;
 		}
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var et = input.eventType;
 
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
 			if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
-				return this.unmarshalWrapperElement(context, scope, input);
+				return this.unmarshalWrapperElement(context, input, scope);
 			} else {
-				return this.unmarshalElement(context, scope, input);
+				return this.unmarshalElement(context, input, scope);
 			}
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
 			var value = input.getText();
@@ -43,12 +43,12 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
 	},
-	unmarshalWrapperElement : function(context, scope, input) {
+	unmarshalWrapperElement : function(context, input, scope) {
 		var result = null;
 		var et = input.next();
 		while (et !== Jsonix.XML.Input.END_ELEMENT) {
 			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				var value = this.unmarshalElement(context, scope, input);
+				var value = this.unmarshalElement(context, input, scope);
 				if (this.collection) {
 					if (result === null) {
 						result = [];
@@ -91,12 +91,12 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 		return result;
 	},
-	unmarshalElement : function(context, scope, input) {
+	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
 		var typeInfo = this.getElementTypeInfo(context, scope, name);
 		var value = {
 			name : name,
-			value : typeInfo.unmarshal(context, input)
+			value : typeInfo.unmarshal(context, input, scope)
 		};
 		if (this.collection) {
 			return [ value ];
