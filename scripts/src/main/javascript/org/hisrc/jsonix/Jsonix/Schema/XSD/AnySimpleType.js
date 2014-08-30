@@ -26,7 +26,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Schema.XSD.AnyType, {
 			return null;
 		}
 	},
-	marshal : function(context, value, output) {
+	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
 			output.writeCharacters(this.reprint(value, context));
 		}
