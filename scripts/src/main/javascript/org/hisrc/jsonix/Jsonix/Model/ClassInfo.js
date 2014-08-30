@@ -172,13 +172,12 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			unmarshalProperty : function(context, input, propertyInfo, result) {
 				var propertyValue = propertyInfo
-						.unmarshal(context, this, input);
+						.unmarshal(context, input, this);
 				propertyInfo.setProperty(result, propertyValue);
 			},
 			unmarshalPropertyValue : function(context, input, propertyInfo,
 					result, value) {
-				var propertyValue = propertyInfo.unmarshalValue(context, this,
-						input, value);
+				var propertyValue = propertyInfo.unmarshalValue(context, input, this, value);
 				propertyInfo.setProperty(result, propertyValue);
 			},
 			marshal : function(context, value, output) {
