@@ -13,7 +13,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			this.wrapperElementName = null;
 		}
 	},
-	unmarshal : function(context, scope, input) {
+	unmarshal : function(context, input, scope) {
 		var result = null;
 		var that = this;
 		var callback = function(value) {
@@ -34,18 +34,18 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		};
 
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
-			this.unmarshalWrapperElement(context, input, callback);
+			this.unmarshalWrapperElement(context, input, scope, callback);
 		} else {
-			this.unmarshalElement(context, input, callback);
+			this.unmarshalElement(context, input, scope, callback);
 		}
 		return result;
 	},
-	unmarshalWrapperElement : function(context, input, callback) {
+	unmarshalWrapperElement : function(context, input, scope, callback) {
 		var et = input.next();
 		while (et !== Jsonix.XML.Input.END_ELEMENT) {
 			// New sub-element starts
 			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				this.unmarshalElement(context, input, callback);
+				this.unmarshalElement(context, input, scope, callback);
 			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 				// Skip whitespace
 			} else {
@@ -56,7 +56,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			et = input.next();
 		}
 	},
-	unmarshalElement : function(context, input, callback) {
+	unmarshalElement : function(context, input, scope, callback) {
 		throw new Error("Abstract method [unmarshalElement].");
 	},
 	marshal : function(context, scope, value, output) {
