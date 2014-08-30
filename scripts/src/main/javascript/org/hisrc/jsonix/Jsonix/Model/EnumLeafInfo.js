@@ -107,7 +107,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			this.built = true;
 		}
 	},
-	unmarshal : function(context, input) {
+	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
 			return this.parse(text, context);
