@@ -59,7 +59,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 	unmarshalElement : function(context, input, scope, callback) {
 		throw new Error("Abstract method [unmarshalElement].");
 	},
-	marshal : function(context, scope, value, output) {
+	marshal : function(value, context, output, scope) {
 
 		if (!Jsonix.Util.Type.exists(value)) {
 			// Do nothing
@@ -71,14 +71,14 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 
 		if (!this.collection) {
-			this.marshalElement(context, value, output);
+			this.marshalElement(value, context, output, scope);
 		} else {
 			Jsonix.Util.Ensure.ensureArray(value);
 			// TODO Exception if not array
 			for ( var index = 0; index < value.length; index++) {
 				var item = value[index];
 				// TODO Exception if item does not exist
-				this.marshalElement(context, item, output);
+				this.marshalElement(item, context, output, scope);
 			}
 		}
 
@@ -86,12 +86,12 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			output.writeEndElement();
 		}
 	},
-	marshalElement : function(context, value, output) {
+	marshalElement : function(value, context, output, scope) {
 		throw new Error("Abstract method [marshalElement].");
 	},
-	marshalElementTypeInfo : function(context, value, elementName, typeInfo, output) {
+	marshalElementTypeInfo : function(elementName, typeInfo,  value, context, output, scope) {
 		output.writeStartElement(elementName);
-		typeInfo.marshal(context, value, output);
+		typeInfo.marshal(value, context, output, scope);
 		output.writeEndElement();
 	},
 	buildStructure : function(context, structure) {
