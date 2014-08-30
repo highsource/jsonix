@@ -5,9 +5,9 @@ Jsonix.Model.Adapter = Jsonix.Class({
 	{
 		return typeInfo.unmarshal(context, input, scope);
 	},
-	marshal: function(context, value, output, typeInfo)
+	marshal: function(typeInfo, value, context, output, scope)
 	{
-		typeInfo.marshal(context, value, output);
+		typeInfo.marshal(value, context, output, scope);
 	},	
 	CLASS_NAME : "Jsonix.Model.Adapter"
 });
