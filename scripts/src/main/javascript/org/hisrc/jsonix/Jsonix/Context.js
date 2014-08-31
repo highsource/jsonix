@@ -203,7 +203,7 @@ Jsonix.Context = Jsonix
 					Jsonix.Schema.XSD.NormalizedString.INSTANCE,
 					Jsonix.Schema.XSD.Number.INSTANCE,
 					Jsonix.Schema.XSD.PositiveInteger.INSTANCE,
-					Jsonix.Schema.XSD.QName.INSTANCE,
+//					Jsonix.Schema.XSD.QName.INSTANCE,
 					Jsonix.Schema.XSD.Short.INSTANCE,
 					Jsonix.Schema.XSD.String.INSTANCE,
 					Jsonix.Schema.XSD.Strings.INSTANCE,
