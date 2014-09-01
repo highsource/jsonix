@@ -59,9 +59,12 @@ if(Jsonix.Util.Type.exists(a.responseXML)&&Jsonix.Util.Type.exists(a.responseXML
 }}g(b)
 },function(a){throw new Error("Could not retrieve XML from URL ["+e+"].")
 },f)
-},xlinkFixRequired:null,isXlinkFixRequired:function(){if(Jsonix.DOM.xlinkFixRequired===null){if(!!navigator&&!!navigator.userAgent&&(/Chrome/.test(navigator.userAgent)&&/Google Inc/.test(navigator.vendor))){var c=Jsonix.DOM.parse('<test xlink:href="urn:test" xmlns:xlink="http://www.w3.org/1999/xlink"/>');
-var d=Jsonix.DOM.serialize(c);
-Jsonix.DOM.xlinkFixRequired=(d.indexOf("xmlns:xlink")===-1)
+},xlinkFixRequired:null,isXlinkFixRequired:function(){if(Jsonix.DOM.xlinkFixRequired===null){if(!!navigator&&!!navigator.userAgent&&(/Chrome/.test(navigator.userAgent)&&/Google Inc/.test(navigator.vendor))){var f=Jsonix.DOM.createDocument();
+var d=f.createElement("test");
+d.setAttributeNS("http://www.w3.org/1999/xlink","xlink:href","urn:test");
+f.appendChild(d);
+var e=Jsonix.DOM.serialize(f);
+Jsonix.DOM.xlinkFixRequired=(e.indexOf("xmlns:xlink")===-1)
 }else{Jsonix.DOM.xlinkFixRequired=false
 }}return Jsonix.DOM.xlinkFixRequired
 }};

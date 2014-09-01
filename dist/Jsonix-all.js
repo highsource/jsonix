@@ -162,8 +162,11 @@ Jsonix.DOM = {
 		{
 			if (!!navigator && !!navigator.userAgent && (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)))
 			{
-				var testDocument = Jsonix.DOM.parse('<test xlink:href="urn:test" xmlns:xlink="http://www.w3.org/1999/xlink"/>');
-				var testString = Jsonix.DOM.serialize(testDocument);
+				var doc = Jsonix.DOM.createDocument();
+				var el = doc.createElement('test');
+				el.setAttributeNS('http://www.w3.org/1999/xlink', 'xlink:href', 'urn:test');
+				doc.appendChild(el);
+				var testString = Jsonix.DOM.serialize(doc);
 				Jsonix.DOM.xlinkFixRequired = (testString.indexOf('xmlns:xlink') === -1);
 			}
 			else
