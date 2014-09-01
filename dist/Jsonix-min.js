@@ -59,6 +59,11 @@ if(Jsonix.Util.Type.exists(a.responseXML)&&Jsonix.Util.Type.exists(a.responseXML
 }}g(b)
 },function(a){throw new Error("Could not retrieve XML from URL ["+e+"].")
 },f)
+},xlinkFixRequired:null,isXlinkFixRequired:function(){if(Jsonix.DOM.xlinkFixRequired===null){if(!!navigator&&!!navigator.userAgent&&(/Chrome/.test(navigator.userAgent)&&/Google Inc/.test(navigator.vendor))){var c=Jsonix.DOM.parse('<test xlink:href="urn:test" xmlns:xlink="http://www.w3.org/1999/xlink"/>');
+var d=Jsonix.DOM.serialize(c);
+Jsonix.DOM.xlinkFixRequired=(d.indexOf("xmlns:xlink")===-1)
+}else{Jsonix.DOM.xlinkFixRequired=false
+}}return Jsonix.DOM.xlinkFixRequired
 }};
 Jsonix.Request=Jsonix.Class({factories:[function(){return new XMLHttpRequest()
 },function(){return new ActiveXObject("Msxml2.XMLHTTP")
@@ -525,7 +530,8 @@ if(i===""){n.setAttribute(k,l)
 o.nodeValue=l;
 n.setAttributeNode(o)
 }else{throw new Error("The [setAttributeNS] method is not implemented")
-}}}},writeNode:function(c){var d;
+}}if(m==="xlink"&&Jsonix.DOM.isXlinkFixRequired()){n.setAttribute('"xmlns:xlink',i)
+}}},writeNode:function(c){var d;
 if(Jsonix.Util.Type.exists(this.document.importNode)){d=this.document.importNode(c,true)
 }else{d=c
 }this.peek().appendChild(d);

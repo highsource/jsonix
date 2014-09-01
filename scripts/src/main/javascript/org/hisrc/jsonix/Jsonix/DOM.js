@@ -71,5 +71,23 @@ Jsonix.DOM = {
 							throw new Error('Could not retrieve XML from URL [' + url	+ '].');
 
 						}, options);
+	},
+	xlinkFixRequired : null,
+	isXlinkFixRequired : function ()
+	{
+		if (Jsonix.DOM.xlinkFixRequired === null)
+		{
+			if (!!navigator && !!navigator.userAgent && (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)))
+			{
+				var testDocument = Jsonix.DOM.parse('<test xlink:href="urn:test" xmlns:xlink="http://www.w3.org/1999/xlink"/>');
+				var testString = Jsonix.DOM.serialize(testDocument);
+				Jsonix.DOM.xlinkFixRequired = (testString.indexOf('xmlns:xlink') === -1);
+			}
+			else
+			{
+				Jsonix.DOM.xlinkFixRequired = false;
+			}
+		}
+		return Jsonix.DOM.xlinkFixRequired;
 	}
 };

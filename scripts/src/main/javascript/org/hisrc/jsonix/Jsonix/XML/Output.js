@@ -107,6 +107,10 @@ Jsonix.XML.Output = Jsonix.Class({
 					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
+			if (prefix === 'xlink' && Jsonix.DOM.isXlinkFixRequired())
+			{
+				node.setAttribute('"xmlns:xlink', namespaceURI);
+			}
 		}
 	},
 	writeNode : function(node) {
@@ -142,5 +146,4 @@ Jsonix.XML.Output = Jsonix.Class({
 
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
-
 });

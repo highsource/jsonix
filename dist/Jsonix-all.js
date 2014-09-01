@@ -154,6 +154,24 @@ Jsonix.DOM = {
 							throw new Error('Could not retrieve XML from URL [' + url	+ '].');
 
 						}, options);
+	},
+	xlinkFixRequired : null,
+	isXlinkFixRequired : function ()
+	{
+		if (Jsonix.DOM.xlinkFixRequired === null)
+		{
+			if (!!navigator && !!navigator.userAgent && (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)))
+			{
+				var testDocument = Jsonix.DOM.parse('<test xlink:href="urn:test" xmlns:xlink="http://www.w3.org/1999/xlink"/>');
+				var testString = Jsonix.DOM.serialize(testDocument);
+				Jsonix.DOM.xlinkFixRequired = (testString.indexOf('xmlns:xlink') === -1);
+			}
+			else
+			{
+				Jsonix.DOM.xlinkFixRequired = false;
+			}
+		}
+		return Jsonix.DOM.xlinkFixRequired;
 	}
 };
 Jsonix.Request = Jsonix
@@ -1360,6 +1378,10 @@ Jsonix.XML.Output = Jsonix.Class({
 					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
+			if (prefix === 'xlink' && Jsonix.DOM.isXlinkFixRequired())
+			{
+				node.setAttribute('"xmlns:xlink', namespaceURI);
+			}
 		}
 	},
 	writeNode : function(node) {
@@ -1395,7 +1417,6 @@ Jsonix.XML.Output = Jsonix.Class({
 
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
-
 });
 Jsonix.Model.TypeInfo = Jsonix.Class({
 	name : null,
