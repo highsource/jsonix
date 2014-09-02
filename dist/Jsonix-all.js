@@ -1381,9 +1381,9 @@ Jsonix.XML.Output = Jsonix.Class({
 					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
-			if (prefix === 'xlink' && Jsonix.DOM.isXlinkFixRequired())
+			if (namespaceURI === 'http://www.w3.org/1999/xlink' && Jsonix.DOM.isXlinkFixRequired())
 			{
-				node.setAttribute('xmlns:xlink', namespaceURI);
+				node.setAttribute('xmlns:' + prefix, namespaceURI);
 			}
 		}
 	},
