@@ -109,7 +109,7 @@ Jsonix.XML.Output = Jsonix.Class({
 			}
 			if (namespaceURI === 'http://www.w3.org/1999/xlink' && Jsonix.DOM.isXlinkFixRequired())
 			{
-				node.setAttribute('xmlns:xlink', namespaceURI);
+				node.setAttribute('xmlns:' + prefix, namespaceURI);
 			}
 		}
 	},

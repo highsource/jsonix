@@ -533,7 +533,7 @@ if(i===""){n.setAttribute(k,l)
 o.nodeValue=l;
 n.setAttributeNode(o)
 }else{throw new Error("The [setAttributeNS] method is not implemented")
-}}if(i==="http://www.w3.org/1999/xlink"&&Jsonix.DOM.isXlinkFixRequired()){n.setAttribute("xmlns:xlink",i)
+}}if(i==="http://www.w3.org/1999/xlink"&&Jsonix.DOM.isXlinkFixRequired()){n.setAttribute("xmlns:"+m,i)
 }}},writeNode:function(c){var d;
 if(Jsonix.Util.Type.exists(this.document.importNode)){d=this.document.importNode(c,true)
 }else{d=c
