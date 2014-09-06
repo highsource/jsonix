@@ -5,16 +5,18 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 	initialize : function(options) {
 		Jsonix.Util.Ensure.ensureObject(options, 'Options argument must be an object.');
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
-		if (Jsonix.Util.Type.isObject(options.wrapperElementName)) {
-			Jsonix.Util.Ensure.ensureString(options.wrapperElementName.localPart, 'Wrapper element name must contain a string property [localPart].');
-			this.wrapperElementName = Jsonix.XML.QName.fromObject(options.wrapperElementName);
-		} else if (Jsonix.Util.Type.isString(options.wrapperElementName)) {
-			this.wrapperElementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, options.wrapperElementName);
+		var wen = options.wrapperElementName||options.wen||null;
+		if (Jsonix.Util.Type.isObject(wen)) {
+			Jsonix.Util.Ensure.ensureString(wen.localPart, 'Wrapper element name must contain a string property [localPart].');
+			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
+		} else if (Jsonix.Util.Type.isString(wen)) {
+			this.wrapperElementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, wen);
 		} else {
 			this.wrapperElementName = null;
 		}
-		if (Jsonix.Util.Type.isBoolean(options.mixed)) {
-			this.mixed = options.mixed;
+		var mx = options.mixed||options.mx;
+		if (Jsonix.Util.Type.isBoolean(mx)) {
+			this.mixed = mx;
 		} else {
 			this.mixed = false;
 		}
