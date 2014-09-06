@@ -4,14 +4,13 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 				{
 					elementTypeInfos : null,
 					elementTypeInfosMap : null,
-					initialize : function(options) {
-						Jsonix.Util.Ensure.ensureObject(options);
+					initialize : function(mapping) {
+						Jsonix.Util.Ensure.ensureObject(mapping);
 						Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize
-								.apply(this, [ options ]);
-						// TODO Ensure correct arguments
-						Jsonix.Util.Ensure
-								.ensureArray(options.elementTypeInfos);
-						this.elementTypeInfos = options.elementTypeInfos;
+								.apply(this, [ mapping ]);
+						var etis = mapping.elementTypeInfos||mapping.etis;
+						Jsonix.Util.Ensure.ensureArray(etis);
+						this.elementTypeInfos = etis;
 					},
 					unmarshalElement : function(context, input, scope, callback) {
 						// TODO make sure it's the right event type
@@ -37,25 +36,19 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 					},
 					doBuild : function(context, module) {
 						this.elementTypeInfosMap = {};
+						var etiti, etien;
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
-							elementTypeInfo.typeInfo = context.resolveTypeInfo(
-									elementTypeInfo.typeInfo, module);
 							Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
-							if (Jsonix.Util.Type
-									.isObject(elementTypeInfo.elementName)) {
-								Jsonix.Util.Ensure
-										.ensureString(
-												elementTypeInfo.elementName.localPart,
-												'Element name must contain a string property [localPart].');
-								elementTypeInfo.elementName = Jsonix.XML.QName
-										.fromObject(elementTypeInfo.elementName);
+							etiti = elementTypeInfo.typeInfo||elementTypeInfo.ti||'String';
+							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
+							etien = elementTypeInfo.elementName||elementTypeInfo.en;
+							if (Jsonix.Util.Type.isObject(etien)) {
+								Jsonix.Util.Ensure.ensureString(etien.localPart, 'Element name must contain a string property [localPart].');
+								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
 							} else {
-								Jsonix.Util.Ensure
-										.ensureString(elementTypeInfo.elementName);
-								elementTypeInfo.elementName = new Jsonix.XML.QName(
-										this.defaultElementNamespaceURI,
-										elementTypeInfo.elementName);
+								Jsonix.Util.Ensure.ensureString(etien);
+								elementTypeInfo.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, etien);
 							}
 							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
 						}
