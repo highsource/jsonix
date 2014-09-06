@@ -82,12 +82,15 @@ Jsonix.XML.Output = Jsonix.Class({
 	},
 	writeAttribute : function(name, value) {
 		Jsonix.Util.Ensure.ensureObject(name);
-		Jsonix.Util.Ensure.ensureString(name.localPart);
+		var localPart = name.localPart||name.lp;
+		Jsonix.Util.Ensure.ensureString(localPart);
 		Jsonix.Util.Ensure.ensureString(value);
 
-		var namespaceURI = Jsonix.Util.Type.isString(name.namespaceURI) ? name.namespaceURI : '';
-		var localPart = name.localPart;
-		var prefix = name.prefix || this.getPrefix(namespaceURI);
+		var ns = name.namespaceURI||name.ns;
+		var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
+
+		var p = name.prefix || name.p;
+		var prefix = Jsonix.Util.Type.isString(p) ? p : this.getPrefix(namespaceURI);
 
 		var qualifiedName = (!prefix ? localPart : prefix + ':' + localPart);
 

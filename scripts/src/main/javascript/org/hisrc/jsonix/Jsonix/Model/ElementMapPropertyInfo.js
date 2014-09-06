@@ -14,7 +14,6 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		// TODO Ensure correct argument
 		var en = mapping.elementName||mapping.en;
 		if (Jsonix.Util.Type.isObject(en)) {
-			Jsonix.Util.Ensure.ensureString(en.localPart, 'Element name must contain a string property [localPart].');
 			this.elementName = Jsonix.XML.QName.fromObject(en);
 		} else if (Jsonix.Util.Type.isString(en)) {
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);

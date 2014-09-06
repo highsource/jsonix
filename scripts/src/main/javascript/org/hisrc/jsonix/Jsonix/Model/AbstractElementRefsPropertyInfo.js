@@ -7,7 +7,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		var wen = mapping.wrapperElementName||mapping.wen||null;
 		var mx = mapping.mixed||mapping.mx;
 		if (Jsonix.Util.Type.isObject(wen)) {
-			Jsonix.Util.Ensure.ensureString(wen.localPart, 'Wrapper element name must contain a string property [localPart].');
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
 		} else if (Jsonix.Util.Type.isString(wen)) {
 			this.wrapperElementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, wen);

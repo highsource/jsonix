@@ -5,7 +5,6 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 		var an = mapping.attributeName||mapping.an;
 		if (Jsonix.Util.Type.isObject(an)) {
-			Jsonix.Util.Ensure.ensureString(an.localPart, 'Attribute name must contain a string property [localPart].');
 			this.attributeName = Jsonix.XML.QName.fromObject(an);
 		} else if (Jsonix.Util.Type.isString(an)) {
 			this.attributeName = new Jsonix.XML.QName(this.defaultAttributeNamespaceURI, an);

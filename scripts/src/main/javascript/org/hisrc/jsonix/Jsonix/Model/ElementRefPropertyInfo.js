@@ -27,7 +27,6 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix
 					},
 					getPropertyElementTypeInfo : function(elementName) {
 						Jsonix.Util.Ensure.ensureObject(elementName);
-						Jsonix.Util.Ensure.ensureString(elementName.localPart);
 						var name = Jsonix.XML.QName.fromObject(elementName);
 
 						if (name.key === this.elementName.key) {

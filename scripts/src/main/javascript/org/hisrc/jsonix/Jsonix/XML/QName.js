@@ -80,13 +80,15 @@ Jsonix.XML.QName.fromString = function(qNameAsString) {
 };
 Jsonix.XML.QName.fromObject = function(object) {
 	Jsonix.Util.Ensure.ensureObject(object);
-	if (Jsonix.Util.Type.isString(object.CLASS_NAME) && object.CLASS_NAME === 'Jsonix.XML.QName') {
+	if (object instanceof Jsonix.XML.QName || (Jsonix.Util.Type.isString(object.CLASS_NAME) && object.CLASS_NAME === 'Jsonix.XML.QName')) {
 		return object;
 	}
-	Jsonix.Util.Ensure.ensureString(object.localPart);
-	var namespaceURI = Jsonix.Util.Type.isString(object.namespaceURI) ? object.namespaceURI : '';
-	var localPart = object.localPart;
-	var prefix = Jsonix.Util.Type.isString(object.prefix) ? object.prefix : '';
+	var localPart = object.localPart||object.lp;
+	Jsonix.Util.Ensure.ensureString(localPart);
+	var ns = object.namespaceURI||object.ns;
+	var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
+	var p = object.prefix||object.p;
+	var prefix = Jsonix.Util.Type.isString(p) ? p : '';
 	return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
 };
 Jsonix.XML.QName.key = function(namespaceURI, localPart) {

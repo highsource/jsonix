@@ -27,7 +27,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 
 		Jsonix.Util.Ensure.ensureObject(value);
 		Jsonix.Util.Ensure.ensureObject(value.name);
-		Jsonix.Util.Ensure.ensureString(value.name.localPart);
+		Jsonix.Util.Ensure.ensureString(value.name.localPart||value.name.lp);
 		Jsonix.Util.Ensure.ensureExists(value.value);
 
 		var name = Jsonix.XML.QName.fromObject(value.name);

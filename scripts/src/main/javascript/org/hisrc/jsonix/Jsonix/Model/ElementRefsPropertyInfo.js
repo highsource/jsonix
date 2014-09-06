@@ -15,7 +15,6 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 					},
 					getPropertyElementTypeInfo : function(elementName) {
 						Jsonix.Util.Ensure.ensureObject(elementName);
-						Jsonix.Util.Ensure.ensureString(elementName.localPart);
 						var name = Jsonix.XML.QName.fromObject(elementName);
 
 						var typeInfo = this.elementTypeInfosMap[name.key];
@@ -38,9 +37,7 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
 							etien = elementTypeInfo.elementName || elementTypeInfo.en;
 							if (Jsonix.Util.Type.isObject(etien)) {
-								Jsonix.Util.Ensure.ensureString(etien.localPart, 'Element name must contain a string property [localPart].');
-								elementTypeInfo.elementName = Jsonix.XML.QName
-										.fromObject(etien);
+								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
 							} else {
 								Jsonix.Util.Ensure
 										.ensureString(etien);
