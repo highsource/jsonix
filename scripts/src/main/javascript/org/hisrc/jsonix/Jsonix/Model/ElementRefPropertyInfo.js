@@ -16,7 +16,7 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix
 							Jsonix.Util.Ensure.ensureString(ti);
 							this.typeInfo = ti;
 						}
-						var en = mapping.elementName;
+						var en = mapping.elementName||mapping.en||undefined;
 						if (Jsonix.Util.Type.isObject(en)) {
 							this.elementName = Jsonix.XML.QName.fromObject(en);
 						} else if (Jsonix.Util.Type.isString(en)) {
@@ -28,6 +28,9 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix
 					getPropertyElementTypeInfo : function(elementName) {
 						Jsonix.Util.Ensure.ensureObject(elementName);
 						var name = Jsonix.XML.QName.fromObject(elementName);
+						logger.info('>1>' + name.key);
+						logger.info('>2>' + this.elementName.key);
+						logger.info('>3>' + this.wrapperElementName);
 
 						if (name.key === this.elementName.key) {
 							return this;
