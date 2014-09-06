@@ -5,39 +5,39 @@ Jsonix.Model.Module = Jsonix
 			elementInfos : null,
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
-			initialize : function(options) {
+			initialize : function(mapping) {
 				this.typeInfos = [];
 				this.elementInfos = [];
-				if (typeof options !== 'undefined') {
-					Jsonix.Util.Ensure.ensureObject(options);
-					if (Jsonix.Util.Type.isString(options.name)) {
-						this.name = options.name;
+				if (typeof mapping !== 'undefined') {
+					Jsonix.Util.Ensure.ensureObject(mapping);
+					var n = mapping.name||mapping.n;
+					if (Jsonix.Util.Type.isString(n)) {
+						this.name = n;
 					}
-					if (Jsonix.Util.Type
-							.isString(options.defaultElementNamespaceURI)) {
-						this.defaultElementNamespaceURI = options.defaultElementNamespaceURI;
+					var dens = mapping.defaultElementNamespaceURI||mapping.dens;
+					if (Jsonix.Util.Type.isString(dens)) {
+						this.defaultElementNamespaceURI = dens;
 					}
-					if (Jsonix.Util.Type
-							.isString(options.defaultAttributeNamespaceURI)) {
-						this.defaultAttributeNamespaceURI = options.defaultAttributeNamespaceURI;
+					var dans = mapping.defaultAttributeNamespaceURI||mapping.dans;
+					if (Jsonix.Util.Type.isString(dans)) {
+						this.defaultAttributeNamespaceURI = dans;
 					}
 					// Initialize type infos
-					if (Jsonix.Util.Type.isArray(options.typeInfos)) {
-						this.initializeTypeInfos(options.typeInfos);
-					}
+					var tis = mapping.typeInfos||mapping.tis||[];
+					this.initializeTypeInfos(tis);
+
 					// Backwards compatibility: class infos can also be defined
 					// as properties of the schema, for instance Schema.MyType
-					for ( var typeInfoName in options) {
-						if (options.hasOwnProperty(typeInfoName)) {
-							if (options[typeInfoName] instanceof Jsonix.Model.ClassInfo) {
-								this.typeInfos.push(options[typeInfoName]);
+					for ( var typeInfoName in mapping) {
+						if (mapping.hasOwnProperty(typeInfoName)) {
+							if (mapping[typeInfoName] instanceof Jsonix.Model.ClassInfo) {
+								this.typeInfos.push(mapping[typeInfoName]);
 							}
 						}
 					}
+					var eis = mapping.elementInfos||mapping.eis||[];
 					// Initialize element infos
-					if (Jsonix.Util.Type.isArray(options.elementInfos)) {
-						this.initializeElementInfos(options.elementInfos);
-					}
+					this.initializeElementInfos(eis);
 				}
 			},
 			initializeTypeInfos : function(typeInfoMappings) {
@@ -67,9 +67,7 @@ Jsonix.Model.Module = Jsonix
 				}
 				// Else create it via generic mapping configuration
 				else {
-					// Ensure property info type is provided
-					Jsonix.Util.Ensure.ensureString(mapping.type);
-					var type = mapping.type;
+					var type = mapping.type||mapping.t||'classInfo';
 					// Locate the creator function
 					if (Jsonix.Util.Type
 							.isFunction(this.typeInfoCreators[type])) {
@@ -82,137 +80,109 @@ Jsonix.Model.Module = Jsonix
 				}
 				return typeInfo;
 			},
-			createClassInfo : function(options) {
-				Jsonix.Util.Ensure.ensureObject(options);
-				if (!Jsonix.Util.Type
-						.isString(options.defaultElementNamespaceURI)) {
-					options.defaultElementNamespaceURI = this.defaultElementNamespaceURI;
-				}
-				if (!Jsonix.Util.Type
-						.isString(options.defaultAttributeNamespaceURI)) {
-					options.defaultAttributeNamespaceURI = this.defaultAttributeNamespaceURI;
-				}
-
+			initializeNames : function(mapping) {
+				var ln = mapping.localName||mapping.ln;
+				mapping.localName = ln;
+				var n = mapping.name||mapping.n
+				mapping.name = n;
 				// Calculate both name as well as localName
 				// name is provided
-				if (Jsonix.Util.Type.isString(options.name)) {
+				if (Jsonix.Util.Type.isString(mapping.name)) {
 					// localName is not provided
-					if (!Jsonix.Util.Type.isString(options.localName)) {
+					if (!Jsonix.Util.Type.isString(mapping.localName)) {
 						// But module name is provided
 						if (Jsonix.Util.Type.isString(this.name)) {
 							// If name starts with module name, use second part
 							// as local name
-							if (options.name.indexOf(this.name + '.') === 0) {
-								options.localName = options.name
+							if (mapping.name.indexOf(this.name + '.') === 0) {
+								mapping.localName = mapping.name
 										.substring(this.name.length + 1);
 							}
 							// Else use name as local name
 							else {
-								options.localName = options.name;
+								mapping.localName = mapping.name;
 							}
 						}
 						// Module name is not provided, use name as local name
 						else {
-							options.localName = options.name;
+							mapping.localName = mapping.name;
 						}
 					}
 				}
 				// name is not provided but local name is provided
-				else if (Jsonix.Util.Type.isString(options.localName)) {
+				else if (Jsonix.Util.Type.isString(mapping.localName)) {
 					// Module name is provided
 					if (Jsonix.Util.Type.isString(this.name)) {
-						options.name = this.name + '.' + options.localName;
+						mapping.name = this.name + '.' + mapping.localName;
 					}
 					// Module name is not provided
 					else {
-						options.name = options.localName;
+						mapping.name = mapping.localName;
 					}
 				} else {
-					throw new Error("Neither [name] nor [localName] was provided for the class info.");
+					throw new Error("Neither [name/n] nor [localName/ln] was provided for the class info.");
 				}
+			},
+			createClassInfo : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens;
+				mapping.defaultElementNamespaceURI = dens;
+				if (!Jsonix.Util.Type.isString(dens)) {
+					mapping.defaultElementNamespaceURI = this.defaultElementNamespaceURI;
+				}
+				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans;
+				mapping.defaultAttributeNamespaceURI = dans;
+				if (!Jsonix.Util.Type.isString(dans)) {
+					mapping.defaultAttributeNamespaceURI = this.defaultAttributeNamespaceURI;
+				}
+				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var classInfo = new Jsonix.Model.ClassInfo(options);
+				var classInfo = new Jsonix.Model.ClassInfo(mapping);
 				return classInfo;
 			},
-			createEnumLeafInfo : function(options) {
-				Jsonix.Util.Ensure.ensureObject(options);
-				Jsonix.Util.Ensure.ensureExists(options.values);
-				// Calculate both name as well as localName
-				// name is provided
-				if (Jsonix.Util.Type.isString(options.name)) {
-					// localName is not provided
-					if (!Jsonix.Util.Type.isString(options.localName)) {
-						// But module name is provided
-						if (Jsonix.Util.Type.isString(this.name)) {
-							// If name starts with module name, use second part
-							// as local name
-							if (options.name.indexOf(this.name + '.') === 0) {
-								options.localName = options.name
-										.substring(this.name.length + 1);
-							}
-							// Else use name as local name
-							else {
-								options.localName = options.name;
-							}
-						}
-						// Module name is not provided, use name as local name
-						else {
-							options.localName = options.name;
-						}
-					}
-				}
-				// name is not provided but local name is provided
-				else if (Jsonix.Util.Type.isString(options.localName)) {
-					// Module name is provided
-					if (Jsonix.Util.Type.isString(this.name)) {
-						options.name = this.name + '.' + options.localName;
-					}
-					// Module name is not provided
-					else {
-						options.name = options.localName;
-					}
-				} else {
-					throw new Error("Neither [name] nor [localName] was provided for the class info.");
-				}
+			createEnumLeafInfo : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var enumLeafInfo = new Jsonix.Model.EnumLeafInfo(options);
+				var enumLeafInfo = new Jsonix.Model.EnumLeafInfo(mapping);
 				return enumLeafInfo;
 			},
 			createList : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
-				Jsonix.Util.Ensure.ensureExists(mapping.typeInfo);
-				var typeInfo = mapping.typeInfo;
-				var typeName = mapping.typeName || null;
-				var separator = mapping.separator || ' ';
-				return new Jsonix.Schema.XSD.List(typeInfo, typeName, separator);
+				var ti = mapping.typeInfo||mapping.ti||'String';
+				var tn = mapping.typeName||mapping.tn||null;
+				var s = mapping.separator||mapping.s||' ';
+				Jsonix.Util.Ensure.ensureExists(ti);
+				return new Jsonix.Schema.XSD.List(ti, tn, s);
 			},
-			createElementInfo : function(options) {
-				Jsonix.Util.Ensure.ensureObject(options);
-				Jsonix.Util.Ensure.ensureExists(options.elementName);
-				Jsonix.Util.Ensure.ensureExists(options.typeInfo);
-				if (Jsonix.Util.Type.isObject(options.elementName)) {
-					options.elementName = Jsonix.XML.QName
-							.fromObject(options.elementName);
-				} else if (Jsonix.Util.Type.isString(options.elementName)) {
-					options.elementName = new Jsonix.XML.QName(
-							this.defaultElementNamespaceURI,
-							options.elementName);
+			createElementInfo : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				var en = mapping.elementName||mapping.en;
+				Jsonix.Util.Ensure.ensureExists(en);
+				
+				var ti = mapping.typeInfo||mapping.ti
+				Jsonix.Util.Ensure.ensureExists(ti);
+				
+				mapping.typeInfo = ti;
+				if (Jsonix.Util.Type.isObject(en)) {
+					mapping.elementName = Jsonix.XML.QName.fromObject(en);
+				} else if (Jsonix.Util.Type.isString(en)) {
+					mapping.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
 				} else {
-					throw new Error('Element info [' + options + '] must provide an element name.');
+					throw new Error('Element info [' + mapping + '] must provide an element name.');
 				}
-				if (Jsonix.Util.Type.exists(options.substitutionHead)) {
-					if (Jsonix.Util.Type.isObject(options.substitutionHead)) {
-						options.substitutionHead = Jsonix.XML.QName
-								.fromObject(options.substitutionHead);
+				
+				var sh = mapping.substitutionHead||mapping.sh||null;
+				if (Jsonix.Util.Type.exists(sh)) {
+					if (Jsonix.Util.Type.isObject(sh)) {
+						mapping.substitutionHead = Jsonix.XML.QName.fromObject(sh);
 					} else {
-						Jsonix.Util.Ensure
-								.ensureString(options.substitutionHead);
-						options.substitutionHead = new Jsonix.XML.QName(
-								this.defaultElementNamespaceURI,
-								options.substitutionHead);
+						Jsonix.Util.Ensure.ensureString(sh);
+						mapping.substitutionHead = new Jsonix.XML.QName(this.defaultElementNamespaceURI, sh);
 					}
 				}
-				var elementInfo = new Jsonix.Model.ElementInfo(options);
+				
+				var elementInfo = new Jsonix.Model.ElementInfo(mapping);
 				return elementInfo;
 			},
 			registerTypeInfos : function(context) {
@@ -251,6 +221,9 @@ Jsonix.Model.Module = Jsonix
 		});
 Jsonix.Model.Module.prototype.typeInfoCreators = {
 	"classInfo" : Jsonix.Model.Module.prototype.createClassInfo,
+	"c" : Jsonix.Model.Module.prototype.createClassInfo,
 	"enumInfo" : Jsonix.Model.Module.prototype.createEnumLeafInfo,
-	"list" : Jsonix.Model.Module.prototype.createList
+	"enum" : Jsonix.Model.Module.prototype.createEnumLeafInfo,
+	"list" : Jsonix.Model.Module.prototype.createList,
+	"l" : Jsonix.Model.Module.prototype.createList
 };
