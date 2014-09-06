@@ -1,7 +1,7 @@
 Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo, {
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options);
-		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ options ]);
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
