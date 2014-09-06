@@ -1,11 +1,11 @@
 Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
-	mixed : false,
-	// TODO
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options, 'Options argument must be an object.');
-		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
-		var wen = options.wrapperElementName||options.wen||null;
+	mixed : true,
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping, 'Mapping must be an object.');
+		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		var wen = mapping.wrapperElementName||mapping.wen||null;
+		var mx = mapping.mixed||mapping.mx;
 		if (Jsonix.Util.Type.isObject(wen)) {
 			Jsonix.Util.Ensure.ensureString(wen.localPart, 'Wrapper element name must contain a string property [localPart].');
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
@@ -14,11 +14,10 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		} else {
 			this.wrapperElementName = null;
 		}
-		var mx = options.mixed||options.mx;
 		if (Jsonix.Util.Type.isBoolean(mx)) {
 			this.mixed = mx;
 		} else {
-			this.mixed = false;
+			this.mixed = true;
 		}
 	},
 	unmarshal : function(context, input, scope) {
