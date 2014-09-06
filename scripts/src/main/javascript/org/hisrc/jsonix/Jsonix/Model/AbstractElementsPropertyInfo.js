@@ -1,9 +1,9 @@
 Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options);
-		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
-		var wen = options.wrapperElementName||options.wen||null;
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		var wen = mapping.wrapperElementName||mapping.wen||null;
 		if (Jsonix.Util.Type.isObject(wen)) {
 			Jsonix.Util.Ensure.ensureString(wen.localPart, 'Wrapper element name must contain a string property [localPart].');
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
