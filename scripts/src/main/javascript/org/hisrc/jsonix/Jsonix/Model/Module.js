@@ -150,7 +150,7 @@ Jsonix.Model.Module = Jsonix
 				var en = mapping.elementName||mapping.en||undefined;
 				Jsonix.Util.Ensure.ensureExists(en);
 				
-				var ti = mapping.typeInfo||mapping.ti||undefined;
+				var ti = mapping.typeInfo||mapping.ti||'String';
 				Jsonix.Util.Ensure.ensureExists(ti);
 				
 				mapping.typeInfo = ti;
