@@ -139,7 +139,7 @@ Jsonix.Model.Module = Jsonix
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				var ti = mapping.typeInfo||mapping.ti||'String';
 				var tn = mapping.typeName||mapping.tn||null;
-				var s = mapping.separator||mapping.s||' ';
+				var s = mapping.separator||mapping.sep||' ';
 				Jsonix.Util.Ensure.ensureExists(ti);
 				return new Jsonix.Schema.XSD.List(ti, tn, s);
 			},
