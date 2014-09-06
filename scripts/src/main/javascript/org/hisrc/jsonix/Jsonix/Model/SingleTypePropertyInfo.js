@@ -1,13 +1,12 @@
 Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 		{
 			typeInfo : 'String',
-			initialize : function(options) {
-				Jsonix.Util.Ensure.ensureObject(options);
+			initialize : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
 				Jsonix.Model.PropertyInfo.prototype.initialize.apply(this,
-						[ options ]);
-				if (Jsonix.Util.Type.exists(options.typeInfo)) {
-					this.typeInfo = options.typeInfo;
-				}
+						[ mapping ]);
+				var ti = mapping.typeInfo || mapping.ti || 'String';
+				this.typeInfo = ti;
 			},
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
