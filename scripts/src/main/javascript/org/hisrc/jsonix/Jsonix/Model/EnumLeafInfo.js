@@ -5,22 +5,21 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	keys : null,
 	values : null,
 	built : false,
-	initialize : function(options) {
+	initialize : function(mapping) {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
-		Jsonix.Util.Ensure.ensureObject(options);
+		Jsonix.Util.Ensure.ensureObject(mapping);
 		
-		Jsonix.Util.Ensure.ensureString(options.name||options.n);
-		this.name = options.name||options.n;
+		var n = mapping.name||mapping.n;
+		Jsonix.Util.Ensure.ensureString(n);
+		this.name = n;
 		
-		if (Jsonix.Util.Type.exists(options.baseTypeInfo||options.bti)) {
-			this.baseTypeInfo = options.baseTypeInfo||options.bti;
-		}
+		var bti = mapping.baseTypeInfo||mapping.bti||'String';
+		this.baseTypeInfo = bti;
 		
-		Jsonix.Util.Ensure.ensureExists(options.values||options.vs);
-		var vs = options.values||options.vs;
+		var vs = mapping.values||mapping.vs;
+		Jsonix.Util.Ensure.ensureExists(vs);
 		if (!(Jsonix.Util.Type.isObject(vs) || Jsonix.Util.Type.isArray(vs))) {
-			throw new Error(
-			'Enum values must be either an array or an object.');
+			throw new Error('Enum values must be either an array or an object.');
 		}
 		else
 		{
