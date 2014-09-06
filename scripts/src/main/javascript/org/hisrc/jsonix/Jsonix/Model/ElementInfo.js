@@ -7,16 +7,18 @@ Jsonix.Model.ElementInfo = Jsonix.Class({
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		// TODO elementName may be string
-		Jsonix.Util.Ensure.ensureObject(mapping.elementName);
-		this.elementName = mapping.elementName;
-		Jsonix.Util.Ensure.ensureExists(mapping.typeInfo);
-		this.typeInfo = mapping.typeInfo;
-		if (Jsonix.Util.Type.exists(mapping.substitutionHead)) {
-			this.substitutionHead = mapping.substitutionHead;
-		}
-		if (Jsonix.Util.Type.exists(mapping.scope)) {
-			this.scope = mapping.scope;
-		}
+		var en = mapping.elementName||mapping.en;
+		Jsonix.Util.Ensure.ensureObject(en);
+		this.elementName = en;
+		
+		var ti = mapping.typeInfo||mapping.ti||'String';
+		Jsonix.Util.Ensure.ensureExists(ti);
+		this.typeInfo = ti;
+		
+		var sh = mapping.substitutionHead||mapping.sh||null;
+		this.substitutionHead = sh;
+		var sc = mapping.scope||mapping.sc||null;
+		this.scope = sc;
 	},
 	build : function(context, module) {
 		// If element info is not yet built
