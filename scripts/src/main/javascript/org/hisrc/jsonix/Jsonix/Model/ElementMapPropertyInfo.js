@@ -3,25 +3,28 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 	key : null,
 	value : null,
 	entryTypeInfo : null,
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options);
-		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ options ]);
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 		// TODO Ensure correct argument
-		Jsonix.Util.Ensure.ensureObject(options.key);
-		Jsonix.Util.Ensure.ensureObject(options.value);
+		var k = mapping.key||mapping.k;
+		Jsonix.Util.Ensure.ensureObject(k);
+		var v = mapping.value||mapping.v;
+		Jsonix.Util.Ensure.ensureObject(v);
 		// TODO Ensure correct argument
-		if (Jsonix.Util.Type.isObject(options.elementName)) {
-			Jsonix.Util.Ensure.ensureString(options.elementName.localPart, 'Element name must contain a string property [localPart].');
-			this.elementName = Jsonix.XML.QName.fromObject(options.elementName);
-		} else if (Jsonix.Util.Type.isString(options.elementName)) {
-			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, options.elementName);
+		var en = mapping.elementName||mapping.en;
+		if (Jsonix.Util.Type.isObject(en)) {
+			Jsonix.Util.Ensure.ensureString(en.localPart, 'Element name must contain a string property [localPart].');
+			this.elementName = Jsonix.XML.QName.fromObject(en);
+		} else if (Jsonix.Util.Type.isString(en)) {
+			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
 		} else {
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 		}
 		this.entryTypeInfo = new Jsonix.Model.ClassInfo({
 			name : "",
 			localName: "",
-			propertyInfos : [ options.key, options.value ]
+			propertyInfos : [ k, v ]
 		});
 
 	},

@@ -4,14 +4,14 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 				{
 					elementTypeInfos : null,
 					elementTypeInfosMap : null,
-					initialize : function(options) {
-						Jsonix.Util.Ensure.ensureObject(options);
+					initialize : function(mapping) {
+						Jsonix.Util.Ensure.ensureObject(mapping);
 						Jsonix.Model.AbstractElementRefsPropertyInfo.prototype.initialize
-								.apply(this, [ options ]);
+								.apply(this, [ mapping ]);
 						// TODO Ensure correct arguments
-						Jsonix.Util.Ensure
-								.ensureArray(options.elementTypeInfos);
-						this.elementTypeInfos = options.elementTypeInfos;
+						var etis = mapping.elementTypeInfos||mapping.etis;
+						Jsonix.Util.Ensure.ensureArray(etis);
+						this.elementTypeInfos = etis;
 					},
 					getPropertyElementTypeInfo : function(elementName) {
 						Jsonix.Util.Ensure.ensureObject(elementName);
@@ -30,25 +30,23 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 					},
 					doBuild : function(context, module) {
 						this.elementTypeInfosMap = {};
+						var etiti, etien;
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
-							elementTypeInfo.typeInfo = context.resolveTypeInfo(
-									elementTypeInfo.typeInfo, module);
 							Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
-							if (Jsonix.Util.Type
-									.isObject(elementTypeInfo.elementName)) {
-								Jsonix.Util.Ensure
-										.ensureString(
-												elementTypeInfo.elementName.localPart,
-												'Element name must contain a string property [localPart].');
+							etiti = elementTypeInfo.typeInfo || elementTypeInfo.ti || 'String';
+							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
+							etien = elementTypeInfo.elementName || elementTypeInfo.en;
+							if (Jsonix.Util.Type.isObject(etien)) {
+								Jsonix.Util.Ensure.ensureString(etien.localPart, 'Element name must contain a string property [localPart].');
 								elementTypeInfo.elementName = Jsonix.XML.QName
-										.fromObject(elementTypeInfo.elementName);
+										.fromObject(etien);
 							} else {
 								Jsonix.Util.Ensure
-										.ensureString(elementTypeInfo.elementName);
+										.ensureString(etien);
 								elementTypeInfo.elementName = new Jsonix.XML.QName(
 										this.defaultElementNamespaceURI,
-										elementTypeInfo.elementName);
+										etien);
 							}
 							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
 						}
@@ -56,8 +54,7 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 					buildStructureElements : function(context, structure) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
-							this.buildStructureElementTypeInfos(context,
-									structure, elementTypeInfo);
+							this.buildStructureElementTypeInfos(context, structure, elementTypeInfo);
 						}
 					},
 					CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'

@@ -2,31 +2,24 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 		Jsonix.Model.AbstractElementsPropertyInfo, {
 			typeInfo : 'String',
 			elementName : null,
-			initialize : function(options) {
-				Jsonix.Util.Ensure.ensureObject(options);
+			initialize : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
 				Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize
-						.apply(this, [ options ]);
-				// TODO Ensure correct argument
-				if (Jsonix.Util.Type.exists(options.typeInfo)) {
-					if (Jsonix.Util.Type.isObject(options.typeInfo)) {
-						Jsonix.Util.Ensure.ensureObject(options.typeInfo);
-						this.typeInfo = options.typeInfo;
-					} else {
-						Jsonix.Util.Ensure.ensureString(options.typeInfo);
-						this.typeInfo = options.typeInfo;
-					}
-				}
-				// TODO Ensure correct argument
-				if (Jsonix.Util.Type.isObject(options.elementName)) {
-					this.elementName = Jsonix.XML.QName
-							.fromObject(options.elementName);
-				} else if (Jsonix.Util.Type.isString(options.elementName)) {
-					this.elementName = new Jsonix.XML.QName(
-							this.defaultElementNamespaceURI,
-							options.elementName);
+						.apply(this, [ mapping ]);
+				var ti = mapping.typeInfo||mapping.ti||'String';
+				if (Jsonix.Util.Type.isObject(ti)) {
+					this.typeInfo = ti;
 				} else {
-					this.elementName = new Jsonix.XML.QName(
-							this.defaultElementNamespaceURI, this.name);
+					Jsonix.Util.Ensure.ensureString(ti);
+					this.typeInfo = ti;
+				}
+				var en = mapping.elementName||mapping.en;
+				if (Jsonix.Util.Type.isObject(en)) {
+					this.elementName = Jsonix.XML.QName.fromObject(en);
+				} else if (Jsonix.Util.Type.isString(en)) {
+					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
+				} else {
+					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 				}
 			},
 			unmarshalElement : function(context, input, scope, callback) {
