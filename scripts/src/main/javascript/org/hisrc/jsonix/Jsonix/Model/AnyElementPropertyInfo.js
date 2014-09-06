@@ -5,18 +5,21 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	initialize : function(options) {
 		Jsonix.Util.Ensure.ensureObject(options);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
-		if (Jsonix.Util.Type.isBoolean(options.allowDom)) {
-			this.allowDom = options.allowDom;
+		var dom = options.allowDom || options.dom;
+		if (Jsonix.Util.Type.isBoolean(dom)) {
+			this.allowDom = dom;
 		} else {
 			this.allowDom = true;
 		}
-		if (Jsonix.Util.Type.isBoolean(options.allowTypedObject)) {
-			this.allowTypedObject = options.allowTypedObject;
+		var typed = options.allowTypedObject || options.typed;
+		if (Jsonix.Util.Type.isBoolean(typed)) {
+			this.allowTypedObject = typed;
 		} else {
 			this.allowTypedObject = true;
 		}
-		if (Jsonix.Util.Type.isBoolean(options.mixed)) {
-			this.mixed = options.mixed;
+		var mx = options.mixed || options.mx;
+		if (Jsonix.Util.Type.isBoolean(mx)) {
+			this.mixed = mx;
 		} else {
 			this.mixed = true;
 		}
