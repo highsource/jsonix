@@ -5,22 +5,22 @@ Jsonix.Model.PropertyInfo = Jsonix
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
-			initialize : function(options) {
-				Jsonix.Util.Ensure.ensureObject(options);
-				Jsonix.Util.Ensure.ensureString(options.name);
-				this.name = options.name;
-				if (Jsonix.Util.Type
-						.isString(options.defaultElementNamespaceURI)) {
-					this.defaultElementNamespaceURI = options.defaultElementNamespaceURI;
+			initialize : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				var n = mapping.name||mapping.n;
+				Jsonix.Util.Ensure.ensureString(n);
+				this.name = n;
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens;
+				if (Jsonix.Util.Type.isString(dens)) {
+					this.defaultElementNamespaceURI = dens;
 				}
-				if (Jsonix.Util.Type
-						.isString(options.defaultAttributeNamespaceURI)) {
-					this.defaultAttributeNamespaceURI = options.defaultAttributeNamespaceURI;
+				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans;
+				if (Jsonix.Util.Type.isString(dans)) {
+					this.defaultAttributeNamespaceURI = dans;
 				}
-				if (Jsonix.Util.Type.isBoolean(options.collection)) {
-					this.collection = options.collection;
-				} else {
-					this.collection = false;
+				var col = mapping.collection||mapping.col;
+				if (Jsonix.Util.Type.isBoolean(col)) {
+					this.collection = col;
 				}
 			},
 			build : function(context, module) {
