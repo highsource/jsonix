@@ -2,22 +2,22 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	allowDom : true,
 	allowTypedObject : true,
 	mixed : true,
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options);
-		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
-		var dom = options.allowDom || options.dom;
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		var dom = mapping.allowDom || mapping.dom;
+		var typed = mapping.allowTypedObject || mapping.typed;
+		var mx = mapping.mixed || mapping.mx;
 		if (Jsonix.Util.Type.isBoolean(dom)) {
 			this.allowDom = dom;
 		} else {
 			this.allowDom = true;
 		}
-		var typed = options.allowTypedObject || options.typed;
 		if (Jsonix.Util.Type.isBoolean(typed)) {
 			this.allowTypedObject = typed;
 		} else {
 			this.allowTypedObject = true;
 		}
-		var mx = options.mixed || options.mx;
 		if (Jsonix.Util.Type.isBoolean(mx)) {
 			this.mixed = mx;
 		} else {

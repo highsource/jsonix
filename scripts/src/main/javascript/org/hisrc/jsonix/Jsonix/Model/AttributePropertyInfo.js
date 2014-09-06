@@ -1,14 +1,14 @@
 Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo, {
 	attributeName : null,
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options);
-		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ options ]);
-		// TODO Ensure correct argument
-		if (Jsonix.Util.Type.isObject(options.attributeName)) {
-			Jsonix.Util.Ensure.ensureString(options.attributeName.localPart, 'Attribute name must contain a string property [localPart].');
-			this.attributeName = Jsonix.XML.QName.fromObject(options.attributeName);
-		} else if (Jsonix.Util.Type.isString(options.attributeName)) {
-			this.attributeName = new Jsonix.XML.QName(this.defaultAttributeNamespaceURI, options.attributeName);
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		var an = mapping.attributeName||mapping.an;
+		if (Jsonix.Util.Type.isObject(an)) {
+			Jsonix.Util.Ensure.ensureString(an.localPart, 'Attribute name must contain a string property [localPart].');
+			this.attributeName = Jsonix.XML.QName.fromObject(an);
+		} else if (Jsonix.Util.Type.isString(an)) {
+			this.attributeName = new Jsonix.XML.QName(this.defaultAttributeNamespaceURI, an);
 		} else {
 			this.attributeName = new Jsonix.XML.QName(this.defaultAttributeNamespaceURI, this.name);
 		}

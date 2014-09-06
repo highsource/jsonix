@@ -1,7 +1,7 @@
 Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
-	initialize : function(options) {
-		Jsonix.Util.Ensure.ensureObject(options);
-		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ options ]);
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 	},
 	unmarshal : function(context, input, scope) {
 		var attributeCount = input.getAttributeCount();
