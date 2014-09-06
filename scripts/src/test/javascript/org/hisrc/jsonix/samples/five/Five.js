@@ -17,25 +17,25 @@ Five = {
 		ln : 'AttributeType',
 		ps : [ {
 			t : 'a',
-			n : 'attribute',
+			n : 'attribute'
 		} ]
 	}, {
 		ln : 'ElementType',
 		ps : [ {
 			t : 'e',
-			n : 'element',
+			n : 'element'
 		}, {
 			n : 'elements',
 			en : 'element',
-			wen : 'elements',
+			wen : 'elements'
 		}, {
 			n : 'item',
-			col : true,
+			col : true
 		}, {
 			n : 'items',
 			en : 'item',
 			wen : 'items',
-			col : true,
+			col : true
 		} ]
 	}, {
 		ln : 'ElementsType',
@@ -88,15 +88,15 @@ Five = {
 		ln : 'ElementRefType',
 		ps : [ {
 			t : 'er',
-			n : 'element',
+			n : 'element'
 		}, {
 			t : 'er',
-			n : 'element1',
+			n : 'element1'
 		}, {
 			t : 'er',
 			n : 'elements',
 			en : 'element',
-			wen : 'elements',
+			wen : 'elements'
 		}, {
 			t : 'er',
 			n : 'elements1',
@@ -106,13 +106,13 @@ Five = {
 		}, {
 			t : 'er',
 			n : 'item',
-			col : true,
+			col : true
 		}, {
 			t : 'er',
 			n : 'items',
 			en : 'item',
 			wen : 'items',
-			col : true,
+			col : true
 		}, {
 			t : 'er',
 			n : 'mixes',
@@ -214,36 +214,36 @@ Five = {
 		}, {
 			n : 'dates',
 			ti : {
-				t : 'list',
+				t : 'l',
 				ti : 'Date'
 
 			}
 		}, {
 			n : 'doubles',
 			ti : {
-				t : 'list',
+				t : 'l',
 				ti : 'Double'
 			}
 		}, {
 			n : 'integers',
 			ti : {
-				t : 'list',
+				t : 'l',
 				ti : 'Integer'
 			}
 		}, {
 			n : 'strings',
 			ti : {
-				t : 'list'
+				t : 'l'
 			}
 		}, {
 			n : 'doublesList',
 			ti : {
-				t : 'list',
+				t : 'l',
 				ti : {
-					t : 'list',
+					t : 'l',
 					ti : 'Double'
 				},
-				s : ', '
+				sep : ', '
 			}
 		} ]
 	}, {
@@ -300,11 +300,11 @@ Five = {
 			}
 		} ]
 	}, {
-		t : 'enumInfo',
+		t : 'enum',
 		ln : 'EnumInfoArray',
 		vs : [ 'a', 'b', 'c' ]
 	}, {
-		t : 'enumInfo',
+		t : 'enum',
 		ln : 'EnumInfoObject',
 		vs : {
 			'a' : 'AA',
@@ -312,11 +312,11 @@ Five = {
 			'c' : 'CC'
 		}
 	}, {
-		t : 'enumInfo',
+		t : 'enum',
 		ln : 'StringEnumInfoArray',
 		vs : [ 'a', 'b', 'c' ]
 	}, {
-		t : 'enumInfo',
+		t : 'enum',
 		ln : 'StringEnumInfoObject',
 		vs : {
 			'a' : 'AA',
@@ -324,12 +324,12 @@ Five = {
 			'c' : 'CC'
 		}
 	}, {
-		t : 'enumInfo',
+		t : 'enum',
 		ln : 'IntegerEnumInfoArray',
 		bti : 'Integer',
 		vs : [ 1, '2', 3 ]
 	}, {
-		t : 'enumInfo',
+		t : 'enum',
 		ln : 'IntegerEnumInfoObject',
 		bti : 'Integer',
 		vs : {
