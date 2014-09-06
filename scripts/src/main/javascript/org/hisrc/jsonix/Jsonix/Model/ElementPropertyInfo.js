@@ -13,7 +13,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 					Jsonix.Util.Ensure.ensureString(ti);
 					this.typeInfo = ti;
 				}
-				var en = mapping.elementName||mapping.en;
+				var en = mapping.elementName||mapping.en||undefined;
 				if (Jsonix.Util.Type.isObject(en)) {
 					this.elementName = Jsonix.XML.QName.fromObject(en);
 				} else if (Jsonix.Util.Type.isString(en)) {

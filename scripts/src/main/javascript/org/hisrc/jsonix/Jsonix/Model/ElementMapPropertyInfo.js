@@ -7,12 +7,12 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 		// TODO Ensure correct argument
-		var k = mapping.key||mapping.k;
+		var k = mapping.key||mapping.k||undefined;
 		Jsonix.Util.Ensure.ensureObject(k);
-		var v = mapping.value||mapping.v;
+		var v = mapping.value||mapping.v||undefined;
 		Jsonix.Util.Ensure.ensureObject(v);
 		// TODO Ensure correct argument
-		var en = mapping.elementName||mapping.en;
+		var en = mapping.elementName||mapping.en||undefined;
 		if (Jsonix.Util.Type.isObject(en)) {
 			this.elementName = Jsonix.XML.QName.fromObject(en);
 		} else if (Jsonix.Util.Type.isString(en)) {
@@ -21,8 +21,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 		}
 		this.entryTypeInfo = new Jsonix.Model.ClassInfo({
-			name : "",
-			localName: "",
+			name: 'Map<' + k.name + ',' + v.name + '>',
 			propertyInfos : [ k, v ]
 		});
 

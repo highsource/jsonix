@@ -8,7 +8,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureObject(mapping);
 						Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize
 								.apply(this, [ mapping ]);
-						var etis = mapping.elementTypeInfos||mapping.etis;
+						var etis = mapping.elementTypeInfos||mapping.etis||undefined;
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
@@ -42,7 +42,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 							Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
 							etiti = elementTypeInfo.typeInfo||elementTypeInfo.ti||'String';
 							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
-							etien = elementTypeInfo.elementName||elementTypeInfo.en;
+							etien = elementTypeInfo.elementName||elementTypeInfo.en||undefined;
 							if (Jsonix.Util.Type.isObject(etien)) {
 								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
 							} else {

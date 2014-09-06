@@ -3,7 +3,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var an = mapping.attributeName||mapping.an;
+		var an = mapping.attributeName||mapping.an||undefined;
 		if (Jsonix.Util.Type.isObject(an)) {
 			this.attributeName = Jsonix.XML.QName.fromObject(an);
 		} else if (Jsonix.Util.Type.isString(an)) {

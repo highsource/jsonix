@@ -9,14 +9,14 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		
-		var n = mapping.name||mapping.n;
+		var n = mapping.name||mapping.n||undefined;
 		Jsonix.Util.Ensure.ensureString(n);
 		this.name = n;
 		
 		var bti = mapping.baseTypeInfo||mapping.bti||'String';
 		this.baseTypeInfo = bti;
 		
-		var vs = mapping.values||mapping.vs;
+		var vs = mapping.values||mapping.vs||undefined;
 		Jsonix.Util.Ensure.ensureExists(vs);
 		if (!(Jsonix.Util.Type.isObject(vs) || Jsonix.Util.Type.isArray(vs))) {
 			throw new Error('Enum values must be either an array or an object.');

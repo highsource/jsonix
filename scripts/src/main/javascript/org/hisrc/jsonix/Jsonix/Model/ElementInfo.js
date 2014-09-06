@@ -6,17 +6,24 @@ Jsonix.Model.ElementInfo = Jsonix.Class({
 	built : false,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
-		// TODO elementName may be string
-		var en = mapping.elementName||mapping.en;
-		Jsonix.Util.Ensure.ensureObject(en);
-		this.elementName = en;
+		
+		var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+		this.defaultElementNamespaceURI = dens;
+		
+		var en = mapping.elementName || mapping.en||undefined;
+		if (Jsonix.Util.Type.isObject(en)) {
+			this.elementName = Jsonix.XML.QName.fromObject(en);
+		} else {
+			Jsonix.Util.Ensure.ensureString(en);
+			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
+		}
 		
 		var ti = mapping.typeInfo||mapping.ti||'String';
-		Jsonix.Util.Ensure.ensureExists(ti);
 		this.typeInfo = ti;
 		
 		var sh = mapping.substitutionHead||mapping.sh||null;
 		this.substitutionHead = sh;
+		
 		var sc = mapping.scope||mapping.sc||null;
 		this.scope = sc;
 	},

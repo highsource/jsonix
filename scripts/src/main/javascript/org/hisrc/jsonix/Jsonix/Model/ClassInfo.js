@@ -11,7 +11,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			initialize : function(mapping) {
 				Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 				Jsonix.Util.Ensure.ensureObject(mapping);
-				var n = mapping.name||mapping.n;
+				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
 				
@@ -24,7 +24,7 @@ Jsonix.Model.ClassInfo = Jsonix
 				var bti = mapping.baseTypeInfo||mapping.bti||null;
 				this.baseTypeInfo = bti;
 				
-				var inF = mapping.instanceFactory||mapping.inF;
+				var inF = mapping.instanceFactory||mapping.inF||undefined;
 				if (Jsonix.Util.Type.exists(inF)) {
 					// TODO: should we support instanceFactory as functions?
 					// For the pure JSON configuration?

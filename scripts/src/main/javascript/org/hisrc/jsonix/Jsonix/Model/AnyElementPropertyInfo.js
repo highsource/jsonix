@@ -5,24 +5,12 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var dom = mapping.allowDom || mapping.dom;
-		var typed = mapping.allowTypedObject || mapping.typed;
-		var mx = mapping.mixed || mapping.mx;
-		if (Jsonix.Util.Type.isBoolean(dom)) {
-			this.allowDom = dom;
-		} else {
-			this.allowDom = true;
-		}
-		if (Jsonix.Util.Type.isBoolean(typed)) {
-			this.allowTypedObject = typed;
-		} else {
-			this.allowTypedObject = true;
-		}
-		if (Jsonix.Util.Type.isBoolean(mx)) {
-			this.mixed = mx;
-		} else {
-			this.mixed = true;
-		}
+		var dom = mapping.allowDom || mapping.dom || true;
+		var typed = mapping.allowTypedObject || mapping.typed || true;
+		var mx = mapping.mixed || mapping.mx || true;
+		this.allowDom = dom;
+		this.allowTypedObject = typed;
+		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
 		var et = input.eventType;

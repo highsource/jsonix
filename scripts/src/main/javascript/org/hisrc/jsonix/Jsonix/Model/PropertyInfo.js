@@ -7,21 +7,15 @@ Jsonix.Model.PropertyInfo = Jsonix
 			built : false,
 			initialize : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
-				var n = mapping.name||mapping.n;
+				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens;
-				if (Jsonix.Util.Type.isString(dens)) {
-					this.defaultElementNamespaceURI = dens;
-				}
-				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans;
-				if (Jsonix.Util.Type.isString(dans)) {
-					this.defaultAttributeNamespaceURI = dans;
-				}
-				var col = mapping.collection||mapping.col;
-				if (Jsonix.Util.Type.isBoolean(col)) {
-					this.collection = col;
-				}
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+				this.defaultElementNamespaceURI = dens;
+				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
+				this.defaultAttributeNamespaceURI = dans;
+				var col = mapping.collection||mapping.col||false;
+				this.collection = col;
 			},
 			build : function(context, module) {
 				if (!this.built) {

@@ -10,18 +10,12 @@ Jsonix.Model.Module = Jsonix
 				this.elementInfos = [];
 				if (typeof mapping !== 'undefined') {
 					Jsonix.Util.Ensure.ensureObject(mapping);
-					var n = mapping.name||mapping.n;
-					if (Jsonix.Util.Type.isString(n)) {
-						this.name = n;
-					}
-					var dens = mapping.defaultElementNamespaceURI||mapping.dens;
-					if (Jsonix.Util.Type.isString(dens)) {
-						this.defaultElementNamespaceURI = dens;
-					}
-					var dans = mapping.defaultAttributeNamespaceURI||mapping.dans;
-					if (Jsonix.Util.Type.isString(dans)) {
-						this.defaultAttributeNamespaceURI = dans;
-					}
+					var n = mapping.name||mapping.n||null;
+					this.name = n;
+					var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+					this.defaultElementNamespaceURI = dens;
+					var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
+					this.defaultAttributeNamespaceURI = dans;
 					// Initialize type infos
 					var tis = mapping.typeInfos||mapping.tis||[];
 					this.initializeTypeInfos(tis);
@@ -81,9 +75,9 @@ Jsonix.Model.Module = Jsonix
 				return typeInfo;
 			},
 			initializeNames : function(mapping) {
-				var ln = mapping.localName||mapping.ln;
+				var ln = mapping.localName||mapping.ln||null;
 				mapping.localName = ln;
-				var n = mapping.name||mapping.n
+				var n = mapping.name||mapping.n||null;
 				mapping.name = n;
 				// Calculate both name as well as localName
 				// name is provided
@@ -125,16 +119,10 @@ Jsonix.Model.Module = Jsonix
 			},
 			createClassInfo : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens;
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
 				mapping.defaultElementNamespaceURI = dens;
-				if (!Jsonix.Util.Type.isString(dens)) {
-					mapping.defaultElementNamespaceURI = this.defaultElementNamespaceURI;
-				}
-				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans;
+				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||this.defaultAttributeNamespaceURI;
 				mapping.defaultAttributeNamespaceURI = dans;
-				if (!Jsonix.Util.Type.isString(dans)) {
-					mapping.defaultAttributeNamespaceURI = this.defaultAttributeNamespaceURI;
-				}
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
 				var classInfo = new Jsonix.Model.ClassInfo(mapping);
@@ -157,10 +145,12 @@ Jsonix.Model.Module = Jsonix
 			},
 			createElementInfo : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
-				var en = mapping.elementName||mapping.en;
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+				mapping.defaultElementNamespaceURI = dens;
+				var en = mapping.elementName||mapping.en||undefined;
 				Jsonix.Util.Ensure.ensureExists(en);
 				
-				var ti = mapping.typeInfo||mapping.ti
+				var ti = mapping.typeInfo||mapping.ti||undefined;
 				Jsonix.Util.Ensure.ensureExists(ti);
 				
 				mapping.typeInfo = ti;

@@ -4,8 +4,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping, 'Mapping must be an object.');
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var wen = mapping.wrapperElementName||mapping.wen||null;
-		var mx = mapping.mixed||mapping.mx;
+		var wen = mapping.wrapperElementName||mapping.wen||undefined;
+		var mx = mapping.mixed||mapping.mx||true;
 		if (Jsonix.Util.Type.isObject(wen)) {
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
 		} else if (Jsonix.Util.Type.isString(wen)) {
@@ -13,11 +13,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		} else {
 			this.wrapperElementName = null;
 		}
-		if (Jsonix.Util.Type.isBoolean(mx)) {
-			this.mixed = mx;
-		} else {
-			this.mixed = true;
-		}
+		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
 		var et = input.eventType;

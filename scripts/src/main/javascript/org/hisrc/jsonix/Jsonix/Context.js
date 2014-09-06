@@ -74,7 +74,7 @@ Jsonix.Context = Jsonix
 			},
 			registerTypeInfo : function(typeInfo) {
 				Jsonix.Util.Ensure.ensureObject(typeInfo);
-				var n = typeInfo.name||typeInfo.n;
+				var n = typeInfo.name||typeInfo.n||null;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.typeInfos[n] = typeInfo;
 			},

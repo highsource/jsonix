@@ -3,7 +3,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var wen = mapping.wrapperElementName||mapping.wen||null;
+		var wen = mapping.wrapperElementName||mapping.wen||undefined;
 		if (Jsonix.Util.Type.isObject(wen)) {
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
 		} else if (Jsonix.Util.Type.isString(wen)) {
