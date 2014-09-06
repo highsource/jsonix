@@ -8,34 +8,35 @@ Jsonix.Model.ClassInfo = Jsonix
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
-			initialize : function(options) {
+			initialize : function(mapping) {
 				Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
-				Jsonix.Util.Ensure.ensureObject(options);
-				Jsonix.Util.Ensure.ensureString(options.name);
-				this.name = options.name;
-				if (Jsonix.Util.Type
-						.isString(options.defaultElementNamespaceURI)) {
-					this.defaultElementNamespaceURI = options.defaultElementNamespaceURI;
-				}
-				if (Jsonix.Util.Type
-						.isString(options.defaultAttributeNamespaceURI)) {
-					this.defaultAttributeNamespaceURI = options.defaultAttributeNamespaceURI;
-				}
-				if (Jsonix.Util.Type.exists(options.baseTypeInfo)) {
-					this.baseTypeInfo = options.baseTypeInfo;
-				}
-				if (Jsonix.Util.Type.exists(options.instanceFactory)) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				var n = mapping.name||mapping.n;
+				Jsonix.Util.Ensure.ensureString(n);
+				this.name = n;
+				
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+				this.defaultElementNamespaceURI = dens;
+
+				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
+				this.defaultAttributeNamespaceURI = dans;
+				
+				var bti = mapping.baseTypeInfo||mapping.bti||null;
+				this.baseTypeInfo = bti;
+				
+				var inF = mapping.instanceFactory||mapping.inF;
+				if (Jsonix.Util.Type.exists(inF)) {
 					// TODO: should we support instanceFactory as functions?
 					// For the pure JSON configuration?
-					Jsonix.Util.Ensure.ensureFunction(options.instanceFactory);
-					this.instanceFactory = options.instanceFactory;
+					Jsonix.Util.Ensure.ensureFunction(inF);
+					this.instanceFactory = inF;
 				}
+				
 				this.properties = [];
-				if (Jsonix.Util.Type.exists(options.propertyInfos)) {
-					Jsonix.Util.Ensure.ensureArray(options.propertyInfos);
-					for ( var index = 0; index < options.propertyInfos.length; index++) {
-						this.p(options.propertyInfos[index]);
-					}
+				var ps = mapping.propertyInfos||mapping.ps||[];
+				Jsonix.Util.Ensure.ensureArray(ps);
+				for ( var index = 0; index < ps.length; index++) {
+					this.p(ps[index]);
 				}
 			},
 			// Obsolete
@@ -43,8 +44,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			build : function(context, module) {
 				if (!this.built) {
-					this.baseTypeInfo = context
-						.resolveTypeInfo(this.baseTypeInfo, module);
+					this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, module);
 					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
 						this.baseTypeInfo.build(context, module);
 					}
@@ -220,9 +220,7 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 				// Else create it via generic mapping configuration
 				else {
-					// Ensure property info type is provided
-					Jsonix.Util.Ensure.ensureString(property.type);
-					var type = property.type;
+					var type = property.type||property.t||'element';
 					// Locate the creator function
 					if (Jsonix.Util.Type
 							.isFunction(this.propertyInfoCreators[type])) {
@@ -234,65 +232,65 @@ Jsonix.Model.ClassInfo = Jsonix
 					}
 				}
 			},
-			aa : function(options) {
-				this.addDefaultNamespaces(options);
+			aa : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new Jsonix.Model.AnyAttributePropertyInfo(
-								options));
+								mapping));
 			},
-			ae : function(options) {
-				this.addDefaultNamespaces(options);
+			ae : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new Jsonix.Model.AnyElementPropertyInfo(
-								options));
+								mapping));
 			},
-			a : function(options) {
-				this.addDefaultNamespaces(options);
+			a : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new Jsonix.Model.AttributePropertyInfo(
-						options));
+						mapping));
 			},
-			em : function(options) {
-				this.addDefaultNamespaces(options);
+			em : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new Jsonix.Model.ElementMapPropertyInfo(
-								options));
+								mapping));
 			},
-			e : function(options) {
-				this.addDefaultNamespaces(options);
+			e : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new Jsonix.Model.ElementPropertyInfo(
-						options));
+						mapping));
 			},
-			es : function(options) {
-				this.addDefaultNamespaces(options);
+			es : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new Jsonix.Model.ElementsPropertyInfo(
-						options));
+						mapping));
 			},
-			er : function(options) {
-				this.addDefaultNamespaces(options);
+			er : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new Jsonix.Model.ElementRefPropertyInfo(
-								options));
+								mapping));
 			},
-			ers : function(options) {
-				this.addDefaultNamespaces(options);
+			ers : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new Jsonix.Model.ElementRefsPropertyInfo(
-								options));
+								mapping));
 			},
-			v : function(options) {
-				this.addDefaultNamespaces(options);
+			v : function(mapping) {
+				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new Jsonix.Model.ValuePropertyInfo(
-						options));
+						mapping));
 			},
-			addDefaultNamespaces : function(options) {
-				if (Jsonix.Util.Type.isObject(options)) {
+			addDefaultNamespaces : function(mapping) {
+				if (Jsonix.Util.Type.isObject(mapping)) {
 					if (!Jsonix.Util.Type
-							.isString(options.defaultElementNamespaceURI)) {
-						options.defaultElementNamespaceURI = this.defaultElementNamespaceURI;
+							.isString(mapping.defaultElementNamespaceURI)) {
+						mapping.defaultElementNamespaceURI = this.defaultElementNamespaceURI;
 					}
 					if (!Jsonix.Util.Type
-							.isString(options.defaultAttributeNamespaceURI)) {
-						options.defaultAttributeNamespaceURI = this.defaultAttributeNamespaceURI;
+							.isString(mapping.defaultAttributeNamespaceURI)) {
+						mapping.defaultAttributeNamespaceURI = this.defaultAttributeNamespaceURI;
 					}
 				}
 			},
@@ -303,13 +301,22 @@ Jsonix.Model.ClassInfo = Jsonix
 			CLASS_NAME : 'Jsonix.Model.ClassInfo'
 		});
 Jsonix.Model.ClassInfo.prototype.propertyInfoCreators = {
+	"aa" : Jsonix.Model.ClassInfo.prototype.aa,
 	"anyAttribute" : Jsonix.Model.ClassInfo.prototype.aa,
+	"ae" : Jsonix.Model.ClassInfo.prototype.ae,
 	"anyElement" : Jsonix.Model.ClassInfo.prototype.ae,
+	"a" : Jsonix.Model.ClassInfo.prototype.a,
 	"attribute" : Jsonix.Model.ClassInfo.prototype.a,
+	"em" : Jsonix.Model.ClassInfo.prototype.em,
 	"elementMap" : Jsonix.Model.ClassInfo.prototype.em,
+	"e" : Jsonix.Model.ClassInfo.prototype.e,
 	"element" : Jsonix.Model.ClassInfo.prototype.e,
+	"es" : Jsonix.Model.ClassInfo.prototype.es,
 	"elements" : Jsonix.Model.ClassInfo.prototype.es,
+	"er" : Jsonix.Model.ClassInfo.prototype.er,
 	"elementRef" : Jsonix.Model.ClassInfo.prototype.er,
+	"ers" : Jsonix.Model.ClassInfo.prototype.ers,
 	"elementRefs" : Jsonix.Model.ClassInfo.prototype.ers,
+	"v" : Jsonix.Model.ClassInfo.prototype.v,
 	"value" : Jsonix.Model.ClassInfo.prototype.v
 };
