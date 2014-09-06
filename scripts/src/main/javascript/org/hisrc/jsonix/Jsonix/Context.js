@@ -74,8 +74,9 @@ Jsonix.Context = Jsonix
 			},
 			registerTypeInfo : function(typeInfo) {
 				Jsonix.Util.Ensure.ensureObject(typeInfo);
-				Jsonix.Util.Ensure.ensureString(typeInfo.name);
-				this.typeInfos[typeInfo.name] = typeInfo;
+				var n = typeInfo.name||typeInfo.n;
+				Jsonix.Util.Ensure.ensureString(n);
+				this.typeInfos[n] = typeInfo;
 			},
 			resolveTypeInfo : function(mapping, module) {
 				if (!Jsonix.Util.Type.exists(mapping)) {
