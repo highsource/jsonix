@@ -22,7 +22,7 @@ function testSixUnmarshalString() {
 }
 function testFive() {
 	var context = new Jsonix.Context([ Five ]);
-	var FiveValueType = context.resolveTypeInfo('Five.ValueType', Five)
+	var FiveValueType = context.resolveTypeInfo('.ValueType', Five);
 	assertEquals(1, FiveValueType.properties.length);
 	logger.debug(FiveValueType.properties[0].CLASS_NAME);
 }

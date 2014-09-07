@@ -178,7 +178,7 @@ Jsonix.Model.Module = Jsonix
 			registerTypeInfos : function(context) {
 				for ( var index = 0; index < this.typeInfos.length; index++) {
 					var typeInfo = this.typeInfos[index];
-					context.registerTypeInfo(typeInfo);
+					context.registerTypeInfo(typeInfo, this);
 				}
 			},
 			buildTypeInfos : function(context) {
@@ -190,7 +190,7 @@ Jsonix.Model.Module = Jsonix
 			registerElementInfos : function(context) {
 				for ( var index = 0; index < this.elementInfos.length; index++) {
 					var elementInfo = this.elementInfos[index];
-					context.registerElementInfo(elementInfo);
+					context.registerElementInfo(elementInfo, this);
 				}
 			},
 			buildElementInfos : function(context) {

@@ -44,7 +44,7 @@ Five = {
 			n : 'ab',
 			etis : [ {
 				en : 'a',
-				ti : 'Five.ValueType'
+				ti : '.ValueType'
 			}, {
 				en : 'b',
 				ti : 'Integer'
@@ -55,7 +55,7 @@ Five = {
 			wen : 'abs',
 			etis : [ {
 				en : 'a',
-				ti : 'Five.ValueType'
+				ti : '.ValueType'
 			}, {
 				en : 'b',
 				ti : 'Integer'
@@ -69,7 +69,7 @@ Five = {
 				ti : 'Integer'
 			}, {
 				en : 'd',
-				ti : 'Five.ValueType'
+				ti : '.ValueType'
 			} ]
 		}, {
 			t : 'es',
@@ -81,7 +81,7 @@ Five = {
 				ti : 'Integer'
 			}, {
 				en : 'd',
-				ti : 'Five.ValueType'
+				ti : '.ValueType'
 			} ]
 		} ]
 	}, {
@@ -119,12 +119,12 @@ Five = {
 			en : 'mix',
 			wen : 'mixes',
 			col : true,
-			ti : 'Five.ValueType'
+			ti : '.ValueType'
 		}, {
 			t : 'er',
 			n : 'mix',
 			col : true,
-			ti : 'Five.ValueType'
+			ti : '.ValueType'
 		} ]
 	}, {
 		ln : 'ElementRefsType',
@@ -177,7 +177,7 @@ Five = {
 			col : true,
 			etis : [ {
 				en : 'mix',
-				ti : 'Five.ValueType'
+				ti : '.ValueType'
 			} ]
 		}, {
 			t : 'ers',
@@ -185,7 +185,7 @@ Five = {
 			col : true,
 			etis : [ {
 				en : 'mix',
-				ti : 'Five.ValueType'
+				ti : '.ValueType'
 			} ]
 		} ]
 	}, {
@@ -340,62 +340,62 @@ Five = {
 	} ],
 	eis : [ {
 		en : 'value',
-		ti : 'Five.ValueType'
+		ti : '.ValueType'
 	}, {
 		en : 'anyAttribute',
-		ti : 'Five.AnyAttributeType'
+		ti : '.AnyAttributeType'
 	}, {
 		en : 'attribute',
-		ti : 'Five.AttributeType'
+		ti : '.AttributeType'
 	}, {
 		en : 'element',
-		ti : 'Five.ElementType'
+		ti : '.ElementType'
 	}, {
 		en : 'elements',
-		ti : 'Five.ElementsType'
+		ti : '.ElementsType'
 	}, {
 		en : 'elementRef',
-		ti : 'Five.ElementRefType'
+		ti : '.ElementRefType'
 	}, {
 		en : 'elementRefs',
-		ti : 'Five.ElementRefsType'
+		ti : '.ElementRefsType'
 	}, {
 		en : 'anyElement',
-		ti : 'Five.AnyElementType'
+		ti : '.AnyElementType'
 	}, {
 		en : 'simpleTypes',
-		ti : 'Five.SimpleTypesType'
+		ti : '.SimpleTypesType'
 	}, {
 		en : 'element',
-		sc : 'Five.ElementRefType'
+		sc : '.ElementRefType'
 	}, {
 		en : 'item',
-		sc : 'Five.ElementRefType'
+		sc : '.ElementRefType'
 	}, {
 		en : 'mix',
-		ti : 'Five.ValueType',
-		sc : 'Five.ElementRefType'
+		ti : '.ValueType',
+		sc : '.ElementRefType'
 	}, {
 		en : 'elementMap',
-		ti : 'Five.ElementMapType'
+		ti : '.ElementMapType'
 	}, {
 		en : 'enumInfoArray',
-		ti : 'Five.EnumInfoArray'
+		ti : '.EnumInfoArray'
 	}, {
 		en : 'enumInfoObject',
-		ti : 'Five.EnumInfoObject'
+		ti : '.EnumInfoObject'
 	}, {
 		en : 'stringEnumInfoArray',
-		ti : 'Five.StringEnumInfoArray'
+		ti : '.StringEnumInfoArray'
 	}, {
 		en : 'stringEnumInfoObject',
-		ti : 'Five.StringEnumInfoObject'
+		ti : '.StringEnumInfoObject'
 	}, {
 		en : 'integerEnumInfoArray',
-		ti : 'Five.IntegerEnumInfoArray'
+		ti : '.IntegerEnumInfoArray'
 	}, {
 		en : 'integerEnumInfoObject',
-		ti : 'Five.IntegerEnumInfoObject'
+		ti : '.IntegerEnumInfoObject'
 	}, {
 		en : 'anyType',
 		ti : 'AnyType'

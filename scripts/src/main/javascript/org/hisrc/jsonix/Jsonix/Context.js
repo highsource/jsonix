@@ -84,21 +84,32 @@ Jsonix.Context = Jsonix
 				} else if (mapping instanceof Jsonix.Model.TypeInfo) {
 					return mapping;
 				} else if (Jsonix.Util.Type.isString(mapping)) {
-					if (!this.typeInfos[mapping]) {
-						throw new Error('Type info [' + mapping + '] is not known in this context.');
+					var typeInfoName;
+					// If mapping starts with '.' consider it to be a local type name in this module
+					if (mapping.length > 0 && mapping.charAt(0) === '.')
+					{
+						var n = module.name || module.n || undefined;
+						Jsonix.Util.Ensure.ensureObject(module, 'Type info mapping can only be resolved if module is provided.');
+						Jsonix.Util.Ensure.ensureString(n, 'Type info mapping can only be resolved if module name is provided.');
+						typeInfoName = n + mapping;
+					}
+					else
+					{
+						typeInfoName = mapping
+					}
+					if (!this.typeInfos[typeInfoName]) {
+						throw new Error('Type info [' + typeInfoName + '] is not known in this context.');
 					} else {
-						return this.typeInfos[mapping];
+						return this.typeInfos[typeInfoName];
 					}
 				} else {
-					Jsonix.Util.Ensure
-							.ensureObject(module,
-									'Type info mapping can only be resolved if module is provided.');
+					Jsonix.Util.Ensure.ensureObject(module, 'Type info mapping can only be resolved if module is provided.');
 					var typeInfo = module.createTypeInfo(mapping);
 					typeInfo.build(this, module);
 					return typeInfo;
 				}
 			},
-			registerElementInfo : function(elementInfo) {
+			registerElementInfo : function(elementInfo, module) {
 				Jsonix.Util.Ensure.ensureObject(elementInfo);
 				this.elementInfos.push(elementInfo);
 
@@ -116,7 +127,7 @@ Jsonix.Context = Jsonix
 
 				var scopeKey;
 				if (Jsonix.Util.Type.exists(elementInfo.scope)) {
-					scopeKey = this.resolveTypeInfo(elementInfo.scope).name;
+					scopeKey = this.resolveTypeInfo(elementInfo.scope, module).name;
 				} else {
 					scopeKey = '##global';
 				}
