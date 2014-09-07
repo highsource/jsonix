@@ -82,25 +82,32 @@ Jsonix.Model.Module = Jsonix
 				// Calculate both name as well as localName
 				// name is provided
 				if (Jsonix.Util.Type.isString(mapping.name)) {
-					// localName is not provided
-					if (!Jsonix.Util.Type.isString(mapping.localName)) {
-						// But module name is provided
-						if (Jsonix.Util.Type.isString(this.name)) {
-							// If name starts with module name, use second part
-							// as local name
-							if (mapping.name.indexOf(this.name + '.') === 0) {
-								mapping.localName = mapping.name
-										.substring(this.name.length + 1);
-							}
-							// Else use name as local name
-							else {
-								mapping.localName = mapping.name;
-							}
-						}
-						// Module name is not provided, use name as local name
-						else {
-							mapping.localName = mapping.name;
-						}
+					// Nothing to do - only name matters
+					
+					// Obsolete code below
+//					// localName is not provided
+//					if (!Jsonix.Util.Type.isString(mapping.localName)) {
+//						// But module name is provided
+//						if (Jsonix.Util.Type.isString(this.name)) {
+//							// If name starts with module name, use second part
+//							// as local name
+//							if (mapping.name.indexOf(this.name + '.') === 0) {
+//								mapping.localName = mapping.name
+//										.substring(this.name.length + 1);
+//							}
+//							// Else use name as local name
+//							else {
+//								mapping.localName = mapping.name;
+//							}
+//						}
+//						// Module name is not provided, use name as local name
+//						else {
+//							mapping.localName = mapping.name;
+//						}
+//					}
+					if (mapping.name.length > 0 && mapping.name.charAt(0) === '.' && Jsonix.Util.Type.isString(this.name))
+					{
+						mapping.name = this.name + mapping.name;
 					}
 				}
 				// name is not provided but local name is provided

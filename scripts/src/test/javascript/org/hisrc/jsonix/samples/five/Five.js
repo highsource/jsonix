@@ -8,7 +8,7 @@ Five = {
 			n : 'value'
 		} ]
 	}, {
-		ln : 'AnyAttributeType',
+		n : '.AnyAttributeType',
 		ps : [ {
 			t : 'aa',
 			n : 'attributes'
