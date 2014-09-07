@@ -95,7 +95,7 @@ Jsonix.Context = Jsonix
 					}
 					else
 					{
-						typeInfoName = mapping
+						typeInfoName = mapping;
 					}
 					if (!this.typeInfos[typeInfoName]) {
 						throw new Error('Type info [' + typeInfoName + '] is not known in this context.');
