@@ -38,8 +38,7 @@ Jsonix.Schema.XSD.List = Jsonix
 					},
 					build : function(context, module) {
 						if (!this.built) {
-							this.typeInfo = context.resolveTypeInfo(
-									this.typeInfo, module);
+							this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
 							this.built = true;
 						}
 					},
