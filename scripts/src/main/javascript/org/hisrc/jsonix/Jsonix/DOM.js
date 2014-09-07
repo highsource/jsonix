@@ -77,7 +77,11 @@ Jsonix.DOM = {
 	{
 		if (Jsonix.DOM.xlinkFixRequired === null)
 		{
-			if (!!navigator && !!navigator.userAgent && (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)))
+			if (typeof navigator === 'undefined')
+			{
+				Jsonix.DOM.xlinkFixRequired = false;
+			}
+			else if (!!navigator.userAgent && (/Chrome/.test(navigator.userAgent) && /Google Inc/.test(navigator.vendor)))
 			{
 				var doc = Jsonix.DOM.createDocument();
 				var el = doc.createElement('test');
