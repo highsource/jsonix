@@ -3125,25 +3125,32 @@ Jsonix.Model.Module = Jsonix
 				// Calculate both name as well as localName
 				// name is provided
 				if (Jsonix.Util.Type.isString(mapping.name)) {
-					// localName is not provided
-					if (!Jsonix.Util.Type.isString(mapping.localName)) {
-						// But module name is provided
-						if (Jsonix.Util.Type.isString(this.name)) {
-							// If name starts with module name, use second part
-							// as local name
-							if (mapping.name.indexOf(this.name + '.') === 0) {
-								mapping.localName = mapping.name
-										.substring(this.name.length + 1);
-							}
-							// Else use name as local name
-							else {
-								mapping.localName = mapping.name;
-							}
-						}
-						// Module name is not provided, use name as local name
-						else {
-							mapping.localName = mapping.name;
-						}
+					// Nothing to do - only name matters
+					
+					// Obsolete code below
+//					// localName is not provided
+//					if (!Jsonix.Util.Type.isString(mapping.localName)) {
+//						// But module name is provided
+//						if (Jsonix.Util.Type.isString(this.name)) {
+//							// If name starts with module name, use second part
+//							// as local name
+//							if (mapping.name.indexOf(this.name + '.') === 0) {
+//								mapping.localName = mapping.name
+//										.substring(this.name.length + 1);
+//							}
+//							// Else use name as local name
+//							else {
+//								mapping.localName = mapping.name;
+//							}
+//						}
+//						// Module name is not provided, use name as local name
+//						else {
+//							mapping.localName = mapping.name;
+//						}
+//					}
+					if (mapping.name.length > 0 && mapping.name.charAt(0) === '.' && Jsonix.Util.Type.isString(this.name))
+					{
+						mapping.name = this.name + mapping.name;
 					}
 				}
 				// name is not provided but local name is provided
@@ -5156,11 +5163,21 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 if (typeof require === 'function') {
 	// ... but the define function does not exists
 	if (typeof define !== 'function') {
-		// Assume we're in the Node.js environment
-		// In this case, load the define function via amdefine
+		// Load the define function via amdefine
 		var define = require('amdefine')(module);
-		// Use xmldom and xmlhttprequests as dependencies
-		define(["xmldom", "xmlhttprequest", "fs"], _jsonix_factory);
+		// If we're not in browser
+		if (typeof window === 'undefined')
+		{
+			// Require xmldom, xmlhttprequest and fs
+			define(["xmldom", "xmlhttprequest", "fs"], _jsonix_factory);
+		}
+		else
+		{
+			// We're probably in browser, maybe browserify
+			// Do not require xmldom, xmlhttprequest as they'r provided by the browser
+			// Do not require fs since file system is not available anyway
+			define([], _jsonix_factory);
+		}
 	}
 	else {
 		// Otherwise assume we're in the browser/RequireJS environment

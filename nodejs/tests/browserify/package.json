@@ -1,0 +1,20 @@
+{
+	"name": "jsonix-tests-browserify",
+	"description": "Jsonix Tests Browserify.",
+	"version": "2.0.13",
+	"engines": [
+		"node >= 0.8.0"
+	],
+	"main": "main.js",
+	"dependencies": {
+		"jsonix": "~2.0.13"
+	},
+	"devDependencies" : {
+		"nodeunit" : "~0.8.6",
+		"node-static" : "~0.7.3"
+	},
+	"scripts": {
+		"preinstall" : 
+			"java -jar node_modules/jsonix/lib/jsonix-schema-compiler-full.jar -d . purchaseorder.xsd -b bindings.xjb"
+	}
+}
