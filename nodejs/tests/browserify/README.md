@@ -7,9 +7,10 @@ Usage:
 * Run `browserify main.js -o bundle.js` - generates the `bundle.js` file.
 * Open `index.html` - includes the `bundle.js` script to unmarshal the `po.xml` file and set values in HTML elements.
 
-*Note for the Chrom users.*
+*Note for the Chrome users.*
 
-This example accesses a local xml file. This does not work in Chrome, you have to start Chrome with a special option:
+This example, when run locally, accesses a local xml file.
+This does not work in Chrome, you have to start Chrome with a special option:
 
 ````
 chrome --allow-file-access-from-files
