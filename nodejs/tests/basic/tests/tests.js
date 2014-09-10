@@ -24,5 +24,6 @@ module.exports =
 		"One" : require('./one'),
 		"Two" : require('./two'),
 		"PO" : require('./po'),
+		"XMLNS" : require('./xmlns'),
 	}
 };
