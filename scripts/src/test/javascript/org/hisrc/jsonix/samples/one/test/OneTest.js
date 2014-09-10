@@ -59,7 +59,9 @@ function testOneMarhshalAnyAttributeType() {
 			attributes : {
 				a : 'a',
 				'{urn:b}b' : 'b',
-				'{urn:c}c:c' : 'c'
+				'{urn:b}b1' : 'b1',
+				'{urn:c}c:c' : 'c',
+				'{urn:c}c1' : 'c1'
 			}
 		}
 	};
