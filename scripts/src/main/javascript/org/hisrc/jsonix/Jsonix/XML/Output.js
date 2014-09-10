@@ -46,7 +46,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		var ns = name.namespaceURI || name.ns || null;
 		var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
 
-		var p = name.prefix || name.p || null;
+		var p = name.prefix || name.p;
 		var prefix = Jsonix.Util.Type.isString(p) ? p : this.getPrefix(namespaceURI);
 
 		var qualifiedName = (!prefix ? localPart : prefix + ':' + localPart);
