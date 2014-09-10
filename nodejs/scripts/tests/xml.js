@@ -1,7 +1,36 @@
 var Jsonix = require('../jsonix').Jsonix;
 module.exports =
 {
-	"QName": function(test) {
+	"XMLDOM" : 
+	{
+		"Without prefix" : function(test)
+		{
+			var xmldom = require('xmldom');
+			var di = new (xmldom.DOMImplementation)();
+			var doc = di.createDocument();
+			var element = doc.createElementNS('urn:test', 'test');
+			element.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns', 'urn:test');
+			doc.appendChild(element);
+			var xs = new (xmldom.XMLSerializer)();
+			var docAsString = xs.serializeToString(doc);
+			test.equal('<test xmlns="urn:test"/>', docAsString);
+			test.done();
+		},
+		"With Prefix" : function(test)
+		{
+			var xmldom = require('xmldom');
+			var di = new (xmldom.DOMImplementation)();
+			var doc = di.createDocument();
+			var element = doc.createElementNS('urn:test', 't:test');
+			element.setAttributeNS('http://www.w3.org/2000/xmlns/', 'xmlns:t', 'urn:test');
+			doc.appendChild(element);
+			var xs = new (xmldom.XMLSerializer)();
+			var docAsString = xs.serializeToString(doc);
+			test.equal('<t:test xmlns:t="urn:test"/>', docAsString);
+			test.done();
+		}
+	},
+	"QName" : function(test) {
 		test.equal("test", (new Jsonix.XML.QName("test")).toString());
 		test.equal("{urn:test}test", (new Jsonix.XML.QName("urn:test", "test")).toString());
 		test.equal("{urn:test}test", (new Jsonix.XML.QName("urn:test", "test")).key);
@@ -21,6 +50,17 @@ module.exports =
 		test.notEqual(null, doc.documentElement);
 		var serializedDocument = Jsonix.DOM.serialize(doc);
 		console.log(serializedDocument);
+		test.done();
+	},
+	"OutputNS": function(test) {
+		var output = new Jsonix.XML.Output();
+		var doc = output.writeStartDocument();
+		output.writeStartElement({ns:'urn:test', lp: 'test', p:''});
+		output.writeEndElement();
+		output.writeEndDocument();
+		var docAsString = Jsonix.DOM.serialize(doc);
+		console.log("OutputNS:");
+		console.log(docAsString);
 		test.done();
 	},
 	"Input":
