@@ -17,13 +17,14 @@ Jsonix.Context = Jsonix
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
 
+
 				// Initialize properties
 				if (Jsonix.Util.Type.exists(properties)) {
-					if (Jsonix.Util.Ensure.ensureObject(properties)) {
-						if (Jsonix.Util.Type
-								.isObject(properties.namespacePrefixes)) {
-							this.properties.namespacePrefixes = properties.namespacePrefixes;
-						}
+					Jsonix.Util.Ensure.ensureObject(properties);
+					if (Jsonix.Util.Type
+							.isObject(properties.namespacePrefixes)) {
+						this.properties.namespacePrefixes = 
+							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
 					}
 				}
 				// Initialize modules
