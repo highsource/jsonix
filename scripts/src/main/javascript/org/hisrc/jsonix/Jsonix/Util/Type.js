@@ -153,5 +153,17 @@ Jsonix.Util.Type = {
 			}
 		}
 		return true;
+	},
+	cloneObject : function (source, target)
+	{
+		target = target || {};
+		for (var p in source)
+		{
+			if (source.hasOwnProperty(p))
+			{
+				target[p] = source[p];
+			}
+		}
+		return target;
 	}
 };
