@@ -18,9 +18,7 @@ Jsonix.Schema.XSD.QName = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 	},
 	isInstance : function(value, context, scope) {
-		return (value instanceof Jsonix.XML.QName)
-				|| (Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type
-						.isString(value.localPart || value.lp));
+		return (value instanceof Jsonix.XML.QName) || (Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type.isString(value.localPart || value.lp));
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.QName'
 });
