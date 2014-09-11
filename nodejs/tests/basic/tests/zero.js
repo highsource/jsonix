@@ -65,7 +65,8 @@ module.exports =
 		"extended-0.xml" : function(test) {roundtrip(test, "extended-0.xml", ZeroData["extended-0.xml"])},
 		"extendedExtended-0.xml" : function(test) {roundtrip(test, "extendedExtended-0.xml", ZeroData["extendedExtended-0.xml"])},
 		"string-0.xml" : function(test) {roundtrip(test, "string-0.xml", ZeroData["string-0.xml"])},
-		"value-0.xml" : function(test) {roundtrip(test, "value-0.xml", ZeroData["value-0.xml"])}
+		"value-0.xml" : function(test) {roundtrip(test, "value-0.xml", ZeroData["value-0.xml"])},
+		"simpleTypes-0.xml" : function(test) {roundtrip(test, "simpleTypes-0.xml", ZeroData["simpleTypes-0.xml"])}
 	},
 	"Forwards" : {
 		"attribute-1.xml" : function(test) {forward(test, "attribute-1.xml", ZeroData["attribute-1.xml"])}

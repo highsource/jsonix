@@ -308,7 +308,7 @@ var org_hisrc_jsonix_tests_zero = {
           type: 'element',
           name: 'qName',
           elementName: 'QName',
-          typeInfo: 'String'
+          typeInfo: 'QName'
         }, {
           type: 'element',
           name: 'string',

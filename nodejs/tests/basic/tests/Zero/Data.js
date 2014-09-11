@@ -193,6 +193,13 @@ var org_hisrc_jsonix_tests_zero_data = {
 			integers : [ '1', '2' ],
 			TYPE_NAME : 'org_hisrc_jsonix_tests_zero.AttributeType'
 		}
+	},
+	'simpleTypes-0.xml' : {
+		name : new Jsonix.XML.QName('simpleTypes'),
+		value : {
+			qName : new Jsonix.XML.QName('urn:a', 'aq', 'a'),
+			TYPE_NAME : 'org_hisrc_jsonix_tests_zero.SimpleTypesType'
+		}
 	}
 };
 if (typeof require === 'function') {
