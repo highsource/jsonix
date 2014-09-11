@@ -17,24 +17,26 @@ Jsonix.Schema.XSD.QName = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	parse : function(value, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(value);
 		value = Jsonix.Util.StringUtils.trim(value);
-		if (!input) {
+		var prefix;
+		var localPart;
+		var colonPosition = value.indexOf(':');
+		if (colonPosition === -1) {
+			prefix = '';
+			localPart = value;
+		} else if (colonPosition > 0 && colonPosition < (value.length - 1)) {
+			prefix = value.substring(0, colonPosition);
+			localPart = value.substring(colonPosition + 1);
+		} else {
+			throw new Error('Invalid QName [' + value + '].');
+		}
+		var namespaceContext = input || context || null;
+		if (!namespaceContext)
+		{
 			return value;
 		}
 		else
 		{
-			var prefix;
-			var localPart;
-			var colonPosition = value.indexOf(':');
-			if (colonPosition === -1) {
-				prefix = '';
-				localPart = value;
-			} else if (colonPosition > 0 && colonPosition < (value.length - 1)) {
-				prefix = value.substring(0, colonPosition);
-				localPart = value.substring(colonPosition + 1);
-			} else {
-				throw new Error('Invalid QName [' + value + '].');
-			}
-			var namespaceURI = input.getNamespaceURI(prefix);
+			var namespaceURI = namespaceContext.getNamespaceURI(prefix);
 			if (Jsonix.Util.Type.isString(namespaceURI))
 			{
 				return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
@@ -44,7 +46,6 @@ Jsonix.Schema.XSD.QName = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 				throw new Error('Prefix [' + prefix + '] of the QName [' + value + '] is not bound in this context.');
 			}
 		}
-
 	},
 	isInstance : function(value, context, scope) {
 		return (value instanceof Jsonix.XML.QName) || (Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type.isString(value.localPart || value.lp));
