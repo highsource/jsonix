@@ -2,9 +2,10 @@ Jsonix.XML.Output = Jsonix.Class({
 	document : null,
 	node : null,
 	nodes : null,
-	xmldom : null,
-	namespacePrefixes : null,
+	nsp : null,
+	pns : null,
 	namespacePrefixIndex : 0,
+	xmldom : null,
 	initialize : function(options) {
 		// REWORK
 		if (typeof ActiveXObject !== 'undefined') {
@@ -13,18 +14,23 @@ Jsonix.XML.Output = Jsonix.Class({
 			this.xmldom = null;
 		}
 		this.nodes = [];
-		this.namespacePrefixes = {
+		var rootNspItem =
+		{
 			'' : ''
 		};
+		rootNspItem[Jsonix.XML.XMLNS_NS] = Jsonix.XML.XMLNS_P;
 		if (Jsonix.Util.Type.isObject(options)) {
 			if (Jsonix.Util.Type.isObject(options.namespacePrefixes)) {
-				for ( var name in options.namespacePrefixes) {
-					if (options.namespacePrefixes.hasOwnProperty(name)) {
-						this.namespacePrefixes[name] = options.namespacePrefixes[name];
-					}
-				}
+				Jsonix.Util.Type.cloneObject(options.namespacePrefixes, rootNspItem);
 			}
 		}
+		this.nsp = [rootNspItem];
+		var rootPnsItem =
+		{
+			'' : ''
+		};
+		rootPnsItem[Jsonix.XML.XMLNS_P] = Jsonix.XML.XMLNS_NS;
+		this.pns = [rootPnsItem];
 	},
 	destroy : function() {
 		this.xmldom = null;
@@ -47,7 +53,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
 
 		var p = name.prefix || name.p;
-		var prefix = Jsonix.Util.Type.isString(p) ? p : this.getPrefix(namespaceURI);
+		var prefix = this.getPrefix(namespaceURI, p);
 
 		var qualifiedName = (!prefix ? localPart : prefix + ':' + localPart);
 
@@ -62,7 +68,9 @@ Jsonix.XML.Output = Jsonix.Class({
 			throw new Error("Could not create an element node.");
 		}
 		this.peek().appendChild(element);
-		return this.push(element);
+		this.push(element);
+		this.declareNamespace(namespaceURI, prefix);
+		return element;
 	},
 	writeEndElement : function() {
 		return this.pop();
@@ -89,7 +97,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		var ns = name.namespaceURI || name.ns || null;
 		var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
 		var p = name.prefix || name.p || null;
-		var prefix = Jsonix.Util.Type.isString(p) ? p : this.getPrefix(namespaceURI);
+		var prefix = this.getPrefix(namespaceURI, p);
 
 		var qualifiedName = (!prefix ? localPart : prefix + ':' + localPart);
 
@@ -105,15 +113,20 @@ Jsonix.XML.Output = Jsonix.Class({
 					var attribute = this.document.createNode(2, qualifiedName, namespaceURI);
 					attribute.nodeValue = value;
 					node.setAttributeNode(attribute);
-				} else {
+				}
+				else if (namespaceURI === Jsonix.XML.XMLNS_NS)
+				{
+					// XMLNS namespace may be processed unqualified
+					node.setAttribute(qualifiedName, value);
+				}
+				else
+				{
 					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
-			if (namespaceURI === 'http://www.w3.org/1999/xlink' && Jsonix.DOM.isXlinkFixRequired())
-			{
-				node.setAttribute('xmlns:' + prefix, namespaceURI);
-			}
+			this.declareNamespace(namespaceURI, prefix);
 		}
+		
 	},
 	writeNode : function(node) {
 		var importedNode;
@@ -127,25 +140,117 @@ Jsonix.XML.Output = Jsonix.Class({
 	},
 	push : function(node) {
 		this.nodes.push(node);
+		this.pushNS();
 		return node;
 	},
 	peek : function() {
 		return this.nodes[this.nodes.length - 1];
 	},
 	pop : function() {
+		this.popNS();
 		var result = this.nodes.pop();
 		return result;
 	},
-	getPrefix : function(namespaceURI) {
-		var p = this.namespacePrefixes[namespaceURI];
-		if (Jsonix.Util.Type.exists(p)) {
-			return p;
-		} else {
-			p = 'p' + (this.namespacePrefixIndex++);
-			this.namespacePrefixes[namespaceURI] = p;
-			return p;
+	pushNS : function ()
+	{
+		var nindex = this.nsp.length - 1;
+		var pindex = this.pns.length - 1;
+		var parentNspItem = this.nsp[nindex];
+		var parentPnsItem = this.pns[pindex];
+		var nspItem = Jsonix.Util.Type.isObject(parentNspItem) ? nindex : parentNspItem;
+		var pnsItem = Jsonix.Util.Type.isObject(parentPnsItem) ? pindex : parentPnsItem;
+		this.nsp.push(nspItem);
+		this.pns.push(pnsItem);
+	},
+	popNS : function ()
+	{
+		this.nsp.pop();
+		this.pns.pop();
+	},
+	declareNamespace : function (ns, p)
+	{
+		var index = this.pns.length - 1;
+		var pnsItem = this.pns[index];
+		var reference;
+		if (Jsonix.Util.Type.isNumber(pnsItem))
+		{
+			// Resolve the reference
+			reference = true;
+			pnsItem = this.pns[pnsItem];
 		}
-
+		else
+		{
+			reference = false;
+		}
+		// If this prefix is mapped to a different namespace and must be redeclared
+		if (pnsItem[p] !== ns)
+		{
+			if (p === '')
+			{
+				this.writeAttribute({ns : Jsonix.XML.XMLNS_NS, lp : Jsonix.XML.XMLNS_P}, ns);
+			}
+			else
+			{
+				this.writeAttribute({ns : Jsonix.XML.XMLNS_NS, lp : p, p : Jsonix.XML.XMLNS_P}, ns);
+			}
+			if (reference)
+			{
+				// If this was a reference, clone it and replace the reference
+				pnsItem = Jsonix.Util.Type.cloneObject(pnsItem, {});
+				this.pns[index] = pnsItem;
+			}
+			pnsItem[p] = ns;
+		}
+	},
+	getPrefix : function (ns, p)
+	{
+		var index = this.nsp.length - 1;
+		var nspItem = this.nsp[index];
+		var reference;
+		if (Jsonix.Util.Type.isNumber(nspItem))
+		{
+			// This is a reference, the item is the index of the parent item
+			reference = true;
+			nspItem = this.nsp[nspItem];
+		}
+		else
+		{
+			reference = false;
+		}
+		if (Jsonix.Util.Type.isString(p))
+		{
+			var oldp = nspItem[ns];
+			// If prefix is already declared and equals the proposed prefix 
+			if (p === oldp)
+			{
+				// Nothing to do
+			}
+			else
+			{
+				// If this was a reference, we have to clone it now
+				if (reference)
+				{
+					nspItem = Jsonix.Util.Type.cloneObject(nspItem, {});
+					this.nsp[index] = nspItem;
+				}
+				nspItem[ns] = p;
+			}
+		}
+		else
+		{
+			p = nspItem[ns];
+			if (!Jsonix.Util.Type.exists(p)) {
+				p = 'p' + (this.namespacePrefixIndex++);
+				// If this was a reference, we have to clone it now
+				if (reference)
+				{
+					nspItem = Jsonix.Util.Type.cloneObject(nspItem, {});
+					this.nsp[index] = nspItem;
+				}
+				nspItem[ns] = p;
+			}
+		}
+		return p;
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });
