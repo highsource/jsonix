@@ -370,7 +370,7 @@ Jsonix.XML.Input = Jsonix.Class({
 	popNS : function () {
 		this.pns.pop();
 	},
-	getNamespace : function (p) {
+	getNamespaceURI : function (p) {
 		var pindex = this.pns.length - 1;
 		var pnsItem = this.pns[pindex];
 		pnsItem = Jsonix.Util.Type.isObject(pnsItem) ? pnsItem : this.pns[pnsItem];

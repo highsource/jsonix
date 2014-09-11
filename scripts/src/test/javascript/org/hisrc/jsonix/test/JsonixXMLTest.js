@@ -107,7 +107,7 @@ function testXMLInputNamespaces() {
 			.parse('<a xmlns="urn:a" xmlns:a="urn:a" b:b="b" xmlns:b="urn:b"></a>');
 	var input = new Jsonix.XML.Input(doc);
 	input.nextTag();
-	assertEquals('urn:a', input.getNamespace(''));
-	assertEquals('urn:a', input.getNamespace('a'));
-	assertEquals('urn:b', input.getNamespace('b'));
+	assertEquals('urn:a', input.getNamespaceURI(''));
+	assertEquals('urn:a', input.getNamespaceURI('a'));
+	assertEquals('urn:b', input.getNamespaceURI('b'));
 }
