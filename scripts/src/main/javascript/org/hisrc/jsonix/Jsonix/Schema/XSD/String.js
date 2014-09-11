@@ -1,11 +1,11 @@
 Jsonix.Schema.XSD.String = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'String',
 	typeName : Jsonix.Schema.XSD.qname('string'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureString(value);
 		return value;
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		return text;
 	},

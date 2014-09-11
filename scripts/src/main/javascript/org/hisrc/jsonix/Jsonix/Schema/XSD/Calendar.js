@@ -4,7 +4,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 				{
 					name : 'Calendar',
 					typeName : Jsonix.Schema.XSD.qname('calendar'),
-					parse : function(text, context, scope) {
+					parse : function(text, context, input, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var negative = (text.charAt(0) === '-');
 						var sign = negative ? -1 : 1;
@@ -287,7 +287,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							return fractionalSecond;
 						}
 					},
-					print : function(value, context, scope) {
+					print : function(value, context, output, scope) {
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {

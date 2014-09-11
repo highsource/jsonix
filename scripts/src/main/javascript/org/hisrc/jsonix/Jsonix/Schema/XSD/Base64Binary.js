@@ -19,12 +19,12 @@ Jsonix.Schema.XSD.Base64Binary = Jsonix
 							this.charToByte[_char] = i;
 						}
 					},
-					print : function(value, context, scope) {
+					print : function(value, context, output, scope) {
 						Jsonix.Util.Ensure.ensureArray(value);
 						return this.encode(value);
 					},
 
-					parse : function(text, context, scope) {
+					parse : function(text, context, input, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						return this.decode(text);
 					},

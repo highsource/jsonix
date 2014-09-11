@@ -1,7 +1,7 @@
 Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Date',
 	typeName : Jsonix.Schema.XSD.qname('date'),
-	parse : function(value, context, scope) {
+	parse : function(value, context, input, scope) {
 		var calendar = this.parseDate(value);
 		var date = new Date();
 		date.setFullYear(calendar.year);
@@ -41,7 +41,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		return result;
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var localDate = new Date(value.getTime());
 		localDate.setHours(0);

@@ -1,11 +1,11 @@
 Jsonix.Schema.XSD.Boolean = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Boolean',
 	typeName : Jsonix.Schema.XSD.qname('boolean'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureBoolean(value);
 		return value ? 'true' : 'false';
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text === 'true' || text === '1') {
 			return true;

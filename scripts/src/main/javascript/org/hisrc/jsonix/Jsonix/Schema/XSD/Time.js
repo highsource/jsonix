@@ -1,7 +1,7 @@
 Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Time',
 	typeName : Jsonix.Schema.XSD.qname('time'),
-	parse : function(value, context, scope) {
+	parse : function(value, context, input, scope) {
 		var calendar = this.parseTime(value);
 		var date = new Date();
 		date.setFullYear(1970);
@@ -40,7 +40,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		return result;
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var time = value.getTime();
 		if (time <= -86400000 && time >= 86400000) {

@@ -1,12 +1,12 @@
 Jsonix.Schema.XSD.Integer = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Integer',
 	typeName : Jsonix.Schema.XSD.qname('integer'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureInteger(value);
 		var text = String(value);
 		return text;
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var value = Number(text);
 		Jsonix.Util.Ensure.ensureInteger(value);

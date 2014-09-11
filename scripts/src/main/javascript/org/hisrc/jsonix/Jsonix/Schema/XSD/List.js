@@ -42,7 +42,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.built = true;
 						}
 					},
-					print : function(value, context, scope) {
+					print : function(value, context, output, scope) {
 						if (!Jsonix.Util.Type.exists(value)) {
 							return null;
 						}
@@ -53,11 +53,11 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.reprint(value[index], context, scope);
+							result = result + this.typeInfo.reprint(value[index], context, output, scope);
 						}
 						return result;
 					},
-					parse : function(text, context, scope) {
+					parse : function(text, context, input, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var items = Jsonix.Util.StringUtils
 								.splitBySeparatorChars(text,
@@ -65,8 +65,7 @@ Jsonix.Schema.XSD.List = Jsonix
 						var result = [];
 						for ( var index = 0; index < items.length; index++) {
 							result.push(this.typeInfo
-									.parse(Jsonix.Util.StringUtils
-											.trim(items[index]), context));
+									.parse(Jsonix.Util.StringUtils.trim(items[index]), context, input, scope));
 						}
 						return result;
 					},

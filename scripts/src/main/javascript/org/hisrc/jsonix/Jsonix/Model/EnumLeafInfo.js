@@ -49,7 +49,8 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 						{
 							throw new Error('Enum value is provided as string but the base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the parse method.');
 						}
-						value = this.baseTypeInfo.parse(value, context, this);
+						// Using null as input since input is not available
+						value = this.baseTypeInfo.parse(value, context, null, this);
 					}
 					else
 					{
@@ -59,7 +60,8 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 							{
 								throw new Error('The base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the print method, unable to produce the enum key as string.');
 							}
-							key = this.baseTypeInfo.print(value, context, this);
+							// Using null as output since output is not available at this moment
+							key = this.baseTypeInfo.print(value, context, null, this);
 						}
 						else
 						{
@@ -81,7 +83,8 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 							{
 								throw new Error('Enum value is provided as string but the base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the parse method.');
 							}
-							value = this.baseTypeInfo.parse(value, context, this);
+							// Using null as input since input is not available
+							value = this.baseTypeInfo.parse(value, context, null, this);
 						}
 						else
 						{
@@ -109,25 +112,25 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text, context, scope);
+			return this.parse(text, context, input, scope);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.reprint(value, context, scope));
+			output.writeCharacters(this.reprint(value, context, output, scope));
 		}
 	},
-	reprint : function(value, context, scope) {
+	reprint : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.isString(value) && !this.isInstance(value, context, scope)) {
-			return this
-					.print(this.parse(value, context, scope), context, scope);
+			// Using null as input since input is not available
+			return this.print(this.parse(value, context, null, scope), context, output, scope);
 		} else {
-			return this.print(value, context, scope);
+			return this.print(value, context, output, scope);
 		}
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		for (var index = 0; index < this.values.length; index++)
 		{
 			if (this.values[index] === value)
@@ -137,7 +140,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		}
 		throw new Error('Value [' + value + '] is invalid for the enum type [' + this.name + '].');
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (this.entries.hasOwnProperty(text))
 		{

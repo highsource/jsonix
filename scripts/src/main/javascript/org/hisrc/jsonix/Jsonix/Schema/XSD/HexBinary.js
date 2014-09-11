@@ -20,12 +20,12 @@ Jsonix.Schema.XSD.HexBinary = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			charTableUpperCase[i >> 4] + charTableUpperCase[i & 0xF];
 		}
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureArray(value);
 		return this.encode(value);
 	},
 
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		return this.decode(text);
 	},

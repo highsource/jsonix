@@ -12,13 +12,13 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
 			},
 			unmarshalValue : function(value, context, input, scope) {
-				return this.parse(value, context, scope);
+				return this.parse(value, context, input, scope);
 			},
-			parse : function(value, context, scope) {
-				return this.typeInfo.parse(value, context, scope);
+			parse : function(value, context, input, scope) {
+				return this.typeInfo.parse(value, context, input, scope);
 			},
-			print : function(value, context, scope) {
-				return this.typeInfo.reprint(value, context, scope);
+			print : function(value, context, output, scope) {
+				return this.typeInfo.reprint(value, context, output, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});
