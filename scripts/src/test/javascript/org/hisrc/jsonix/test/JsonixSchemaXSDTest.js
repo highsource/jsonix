@@ -416,20 +416,23 @@ function testSchemaXSDHexBinary() {
 	assertEquals('0FB8', Jsonix.Schema.XSD.HexBinary.INSTANCE.print(d2));
 }
 function testSchemaXSDQNamePrint() {
+	var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
 	var output = new Jsonix.XML.Output();
 	var doc = output.writeStartDocument();
 	output.writeStartElement({p: 't', lp : 'test', ns : 'urn:test'});
 	var qn1 = {lp : 'a'};
 	assertEquals('a', Jsonix.Schema.XSD.QName.INSTANCE.print(qn1));
-	assertEquals('a', Jsonix.Schema.XSD.QName.INSTANCE.print(qn1, null, output, null));
+	assertEquals('a', Jsonix.Schema.XSD.QName.INSTANCE.print(qn1, context, output, null));
 	var qn2 = {lp : 'b', ns: 'urn:b'};
 	assertEquals('b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn2));
-	assertEquals('p0:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn2, null, output, null));
+	assertEquals('p0:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn2, context, output, null));
 	var qn3 = {lp : 'b1', ns: 'urn:b'};
-	assertEquals('p0:b1', Jsonix.Schema.XSD.QName.INSTANCE.print(qn3, null, output, null));
+	assertEquals('p0:b1', Jsonix.Schema.XSD.QName.INSTANCE.print(qn3, context, output, null));
 	var qn4 = {lp : 'b', ns: 'urn:b', p: 'pb'};
 	assertEquals('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4));
-	assertEquals('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4, null, output, null));
+	assertEquals('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4, context, output, null));
+	
+	assertEquals('c:c', Jsonix.Schema.XSD.QName.INSTANCE.reprint('c:c', context, output, null));
 	output.writeEndElement();
 	output.writeEndDocument();
 	var serializedDocument = Jsonix.DOM.serialize(doc);
