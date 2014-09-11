@@ -177,6 +177,10 @@ Jsonix.Context = Jsonix
 			createUnmarshaller : function() {
 				return new Jsonix.Context.Unmarshaller(this);
 			},
+			getNamespaceURI : function(prefix) {
+				Jsonix.Util.Ensure.ensureString(prefix);
+				return this.properties.namespacePrefixes[prefix];
+			},
 			/**
 			 * Builtin type infos.
 			 */
