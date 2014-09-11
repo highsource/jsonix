@@ -444,5 +444,44 @@ module.exports =
 	"IDREFS": function(test) {
 		test.equal(2, Jsonix.Schema.XSD.IDREFS.INSTANCE.parse('a b').length);
 		test.done();
+	},
+	"QName": {
+		"Parse" : function(test) {
+			var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
+			var output = new Jsonix.XML.Output();
+			var doc = output.writeStartDocument();
+			output.writeStartElement({p: 't', lp : 'test', ns : 'urn:test'});
+			var qn1 = {lp : 'a'};
+			test.equal('a', Jsonix.Schema.XSD.QName.INSTANCE.print(qn1));
+			test.equal('a', Jsonix.Schema.XSD.QName.INSTANCE.print(qn1, context, output, null));
+			var qn2 = {lp : 'b', ns: 'urn:b'};
+			test.equal('b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn2));
+			test.equal('p0:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn2, context, output, null));
+			var qn3 = {lp : 'b1', ns: 'urn:b'};
+			test.equal('p0:b1', Jsonix.Schema.XSD.QName.INSTANCE.print(qn3, context, output, null));
+			var qn4 = {lp : 'b', ns: 'urn:b', p: 'pb'};
+			test.equal('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4));
+			test.equal('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4, context, output, null));
+
+			test.equal('c:c', Jsonix.Schema.XSD.QName.INSTANCE.reprint('c:c', context, output, null));
+			output.writeEndElement();
+			output.writeEndDocument();
+			var serializedDocument = Jsonix.DOM.serialize(doc);
+			test.ok(serializedDocument.indexOf('xmlns:p0="urn:b"') !== -1);
+			test.ok(serializedDocument.indexOf('xmlns:pb="urn:b"') !== -1);
+			test.ok(serializedDocument.indexOf('xmlns:c="urn:c"') !== -1);
+			//test.equal('<t:test xmlns:t="urn:test" xmlns:p0="urn:b" xmlns:pb="urn:b"/>', serializedDocument)
+			test.done();
+		},
+		"Print": function(test) {
+			var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
+			var doc = Jsonix.DOM.parse('<a xmlns="urn:a" xmlns:a="urn:a" b:b="b" xmlns:b="urn:b"></a>');
+			var input = new Jsonix.XML.Input(doc);
+			input.nextTag();
+			test.equal('a:a', Jsonix.Schema.XSD.QName.INSTANCE.parse('a:a'));
+			test.equal('urn:a', input.getNamespaceURI('a'));
+			test.equal('{urn:a}a', Jsonix.Schema.XSD.QName.INSTANCE.parse('a:a', context, input, null).key);
+			test.done();
+		}
 	}
 };

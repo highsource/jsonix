@@ -78,7 +78,11 @@ Jsonix.Class = function() {
 	return Class;
 };
 
-Jsonix.XML = {};
+Jsonix.XML = {
+		XMLNS_NS : 'http://www.w3.org/2000/xmlns/',
+		XMLNS_P : 'xmlns'
+		
+};
 
 
 Jsonix.DOM = {
@@ -475,6 +479,18 @@ Jsonix.Util.Type = {
 			}
 		}
 		return true;
+	},
+	cloneObject : function (source, target)
+	{
+		target = target || {};
+		for (var p in source)
+		{
+			if (source.hasOwnProperty(p))
+			{
+				target[p] = source[p];
+			}
+		}
+		return target;
 	}
 };
 Jsonix.Util.NumberUtils = {
@@ -949,9 +965,16 @@ Jsonix.XML.Input = Jsonix.Class({
 	node : null,
 	attributes : null,
 	eventType : null,
+	pns : null,
 	initialize : function(node) {
 		Jsonix.Util.Ensure.ensureExists(node);
 		this.root = node;
+		var rootPnsItem =
+		{
+			'' : ''
+		};
+		rootPnsItem[Jsonix.XML.XMLNS_P] = Jsonix.XML.XMLNS_NS;
+		this.pns = [rootPnsItem];
 	},
 	hasNext : function() {
 		// No current node, we've not started yet
@@ -1011,6 +1034,7 @@ Jsonix.XML.Input = Jsonix.Class({
 		if (nodeType === 1) {
 			// START_ELEMENT
 			this.eventType = 1;
+			this.pushNS(node);
 			return this.eventType;
 		} else if (nodeType === 2) {
 			// ATTRIBUTE
@@ -1086,6 +1110,7 @@ Jsonix.XML.Input = Jsonix.Class({
 				this.attributes = null;
 				// END_ELEMENT
 				this.eventType = 2;
+				this.popNS();
 				return this.eventType;
 			}
 		}
@@ -1256,6 +1281,63 @@ Jsonix.XML.Input = Jsonix.Class({
 			throw new Error("Parser must be on START_ELEMENT or END_ELEMENT to return current element.");
 		}
 	},
+	pushNS : function (node) {
+		var pindex = this.pns.length - 1;
+		var parentPnsItem = this.pns[pindex];
+		var pnsItem = Jsonix.Util.Type.isObject(parentPnsItem) ? pindex : parentPnsItem;
+		this.pns.push(pnsItem);
+		pindex++;
+		var reference = true;
+		if (node.attributes)
+		{
+			var attributes = node.attributes;
+			var alength = attributes.length;
+			if (alength > 0)
+			{
+				// If given node has attributes
+				for (var aindex = 0; aindex < alength; aindex++)
+				{
+					var attribute = attributes[aindex];
+					var attributeName = attribute.nodeName;
+					var p = null;
+					var ns = null;
+					var isNS = false;
+					if (attributeName === 'xmlns')
+					{
+						p = '';
+						ns = attribute.value;
+						isNS = true;
+					}
+					else if (attributeName.substring(0, 6) === 'xmlns:')
+					{
+						p = attributeName.substring(6);
+						ns = attribute.value;
+						isNS = true;
+					}
+					// Attribute is a namespace declaration
+					if (isNS)
+					{
+						if (reference)
+						{
+							pnsItem = Jsonix.Util.Type.cloneObject(this.pns[pnsItem], {});
+							this.pns[pindex] = pnsItem;
+							reference = false;
+						}
+						pnsItem[p] = ns;
+					}
+				}
+			}
+		}		
+	},
+	popNS : function () {
+		this.pns.pop();
+	},
+	getNamespaceURI : function (p) {
+		var pindex = this.pns.length - 1;
+		var pnsItem = this.pns[pindex];
+		pnsItem = Jsonix.Util.Type.isObject(pnsItem) ? pnsItem : this.pns[pnsItem];
+		return pnsItem[p];
+	},
 	CLASS_NAME : "Jsonix.XML.Input"
 
 });
@@ -1280,9 +1362,10 @@ Jsonix.XML.Output = Jsonix.Class({
 	document : null,
 	node : null,
 	nodes : null,
-	xmldom : null,
-	namespacePrefixes : null,
+	nsp : null,
+	pns : null,
 	namespacePrefixIndex : 0,
+	xmldom : null,
 	initialize : function(options) {
 		// REWORK
 		if (typeof ActiveXObject !== 'undefined') {
@@ -1291,18 +1374,23 @@ Jsonix.XML.Output = Jsonix.Class({
 			this.xmldom = null;
 		}
 		this.nodes = [];
-		this.namespacePrefixes = {
+		var rootNspItem =
+		{
 			'' : ''
 		};
+		rootNspItem[Jsonix.XML.XMLNS_NS] = Jsonix.XML.XMLNS_P;
 		if (Jsonix.Util.Type.isObject(options)) {
 			if (Jsonix.Util.Type.isObject(options.namespacePrefixes)) {
-				for ( var name in options.namespacePrefixes) {
-					if (options.namespacePrefixes.hasOwnProperty(name)) {
-						this.namespacePrefixes[name] = options.namespacePrefixes[name];
-					}
-				}
+				Jsonix.Util.Type.cloneObject(options.namespacePrefixes, rootNspItem);
 			}
 		}
+		this.nsp = [rootNspItem];
+		var rootPnsItem =
+		{
+			'' : ''
+		};
+		rootPnsItem[Jsonix.XML.XMLNS_P] = Jsonix.XML.XMLNS_NS;
+		this.pns = [rootPnsItem];
 	},
 	destroy : function() {
 		this.xmldom = null;
@@ -1324,8 +1412,8 @@ Jsonix.XML.Output = Jsonix.Class({
 		var ns = name.namespaceURI || name.ns || null;
 		var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
 
-		var p = name.prefix || name.p || null;
-		var prefix = Jsonix.Util.Type.isString(p) ? p : this.getPrefix(namespaceURI);
+		var p = name.prefix || name.p;
+		var prefix = this.getPrefix(namespaceURI, p);
 
 		var qualifiedName = (!prefix ? localPart : prefix + ':' + localPart);
 
@@ -1340,7 +1428,9 @@ Jsonix.XML.Output = Jsonix.Class({
 			throw new Error("Could not create an element node.");
 		}
 		this.peek().appendChild(element);
-		return this.push(element);
+		this.push(element);
+		this.declareNamespace(namespaceURI, prefix);
+		return element;
 	},
 	writeEndElement : function() {
 		return this.pop();
@@ -1367,7 +1457,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		var ns = name.namespaceURI || name.ns || null;
 		var namespaceURI = Jsonix.Util.Type.isString(ns) ? ns : '';
 		var p = name.prefix || name.p || null;
-		var prefix = Jsonix.Util.Type.isString(p) ? p : this.getPrefix(namespaceURI);
+		var prefix = this.getPrefix(namespaceURI, p);
 
 		var qualifiedName = (!prefix ? localPart : prefix + ':' + localPart);
 
@@ -1383,15 +1473,20 @@ Jsonix.XML.Output = Jsonix.Class({
 					var attribute = this.document.createNode(2, qualifiedName, namespaceURI);
 					attribute.nodeValue = value;
 					node.setAttributeNode(attribute);
-				} else {
+				}
+				else if (namespaceURI === Jsonix.XML.XMLNS_NS)
+				{
+					// XMLNS namespace may be processed unqualified
+					node.setAttribute(qualifiedName, value);
+				}
+				else
+				{
 					throw new Error("The [setAttributeNS] method is not implemented");
 				}
 			}
-			if (namespaceURI === 'http://www.w3.org/1999/xlink' && Jsonix.DOM.isXlinkFixRequired())
-			{
-				node.setAttribute('xmlns:' + prefix, namespaceURI);
-			}
+			this.declareNamespace(namespaceURI, prefix);
 		}
+		
 	},
 	writeNode : function(node) {
 		var importedNode;
@@ -1405,25 +1500,117 @@ Jsonix.XML.Output = Jsonix.Class({
 	},
 	push : function(node) {
 		this.nodes.push(node);
+		this.pushNS();
 		return node;
 	},
 	peek : function() {
 		return this.nodes[this.nodes.length - 1];
 	},
 	pop : function() {
+		this.popNS();
 		var result = this.nodes.pop();
 		return result;
 	},
-	getPrefix : function(namespaceURI) {
-		var p = this.namespacePrefixes[namespaceURI];
-		if (Jsonix.Util.Type.exists(p)) {
-			return p;
-		} else {
-			p = 'p' + (this.namespacePrefixIndex++);
-			this.namespacePrefixes[namespaceURI] = p;
-			return p;
+	pushNS : function ()
+	{
+		var nindex = this.nsp.length - 1;
+		var pindex = this.pns.length - 1;
+		var parentNspItem = this.nsp[nindex];
+		var parentPnsItem = this.pns[pindex];
+		var nspItem = Jsonix.Util.Type.isObject(parentNspItem) ? nindex : parentNspItem;
+		var pnsItem = Jsonix.Util.Type.isObject(parentPnsItem) ? pindex : parentPnsItem;
+		this.nsp.push(nspItem);
+		this.pns.push(pnsItem);
+	},
+	popNS : function ()
+	{
+		this.nsp.pop();
+		this.pns.pop();
+	},
+	declareNamespace : function (ns, p)
+	{
+		var index = this.pns.length - 1;
+		var pnsItem = this.pns[index];
+		var reference;
+		if (Jsonix.Util.Type.isNumber(pnsItem))
+		{
+			// Resolve the reference
+			reference = true;
+			pnsItem = this.pns[pnsItem];
 		}
-
+		else
+		{
+			reference = false;
+		}
+		// If this prefix is mapped to a different namespace and must be redeclared
+		if (pnsItem[p] !== ns)
+		{
+			if (p === '')
+			{
+				this.writeAttribute({ns : Jsonix.XML.XMLNS_NS, lp : Jsonix.XML.XMLNS_P}, ns);
+			}
+			else
+			{
+				this.writeAttribute({ns : Jsonix.XML.XMLNS_NS, lp : p, p : Jsonix.XML.XMLNS_P}, ns);
+			}
+			if (reference)
+			{
+				// If this was a reference, clone it and replace the reference
+				pnsItem = Jsonix.Util.Type.cloneObject(pnsItem, {});
+				this.pns[index] = pnsItem;
+			}
+			pnsItem[p] = ns;
+		}
+	},
+	getPrefix : function (ns, p)
+	{
+		var index = this.nsp.length - 1;
+		var nspItem = this.nsp[index];
+		var reference;
+		if (Jsonix.Util.Type.isNumber(nspItem))
+		{
+			// This is a reference, the item is the index of the parent item
+			reference = true;
+			nspItem = this.nsp[nspItem];
+		}
+		else
+		{
+			reference = false;
+		}
+		if (Jsonix.Util.Type.isString(p))
+		{
+			var oldp = nspItem[ns];
+			// If prefix is already declared and equals the proposed prefix 
+			if (p === oldp)
+			{
+				// Nothing to do
+			}
+			else
+			{
+				// If this was a reference, we have to clone it now
+				if (reference)
+				{
+					nspItem = Jsonix.Util.Type.cloneObject(nspItem, {});
+					this.nsp[index] = nspItem;
+				}
+				nspItem[ns] = p;
+			}
+		}
+		else
+		{
+			p = nspItem[ns];
+			if (!Jsonix.Util.Type.exists(p)) {
+				p = 'p' + (this.namespacePrefixIndex++);
+				// If this was a reference, we have to clone it now
+				if (reference)
+				{
+					nspItem = Jsonix.Util.Type.cloneObject(nspItem, {});
+					this.nsp[index] = nspItem;
+				}
+				nspItem[ns] = p;
+			}
+		}
+		return p;
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });
@@ -1826,7 +2013,8 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 						{
 							throw new Error('Enum value is provided as string but the base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the parse method.');
 						}
-						value = this.baseTypeInfo.parse(value, context, this);
+						// Using null as input since input is not available
+						value = this.baseTypeInfo.parse(value, context, null, this);
 					}
 					else
 					{
@@ -1836,7 +2024,8 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 							{
 								throw new Error('The base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the print method, unable to produce the enum key as string.');
 							}
-							key = this.baseTypeInfo.print(value, context, this);
+							// Using null as output since output is not available at this moment
+							key = this.baseTypeInfo.print(value, context, null, this);
 						}
 						else
 						{
@@ -1858,7 +2047,8 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 							{
 								throw new Error('Enum value is provided as string but the base type ['+this.baseTypeInfo.name+'] of the enum info [' + this.name + '] does not implement the parse method.');
 							}
-							value = this.baseTypeInfo.parse(value, context, this);
+							// Using null as input since input is not available
+							value = this.baseTypeInfo.parse(value, context, null, this);
 						}
 						else
 						{
@@ -1886,25 +2076,25 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text, context, scope);
+			return this.parse(text, context, input, scope);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.reprint(value, context, scope));
+			output.writeCharacters(this.reprint(value, context, output, scope));
 		}
 	},
-	reprint : function(value, context, scope) {
+	reprint : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.isString(value) && !this.isInstance(value, context, scope)) {
-			return this
-					.print(this.parse(value, context, scope), context, scope);
+			// Using null as input since input is not available
+			return this.print(this.parse(value, context, null, scope), context, output, scope);
 		} else {
-			return this.print(value, context, scope);
+			return this.print(value, context, output, scope);
 		}
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		for (var index = 0; index < this.values.length; index++)
 		{
 			if (this.values[index] === value)
@@ -1914,7 +2104,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		}
 		throw new Error('Value [' + value + '] is invalid for the enum type [' + this.name + '].');
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (this.entries.hasOwnProperty(text))
 		{
@@ -2094,13 +2284,13 @@ Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
 			},
 			unmarshalValue : function(value, context, input, scope) {
-				return this.parse(value, context, scope);
+				return this.parse(value, context, input, scope);
 			},
-			parse : function(value, context, scope) {
-				return this.typeInfo.parse(value, context, scope);
+			parse : function(value, context, input, scope) {
+				return this.typeInfo.parse(value, context, input, scope);
 			},
-			print : function(value, context, scope) {
-				return this.typeInfo.reprint(value, context, scope);
+			print : function(value, context, output, scope) {
+				return this.typeInfo.reprint(value, context, output, scope);
 			},
 			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
 		});
@@ -2135,7 +2325,7 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeAttribute(this.attributeName, this.print(value, context, scope));
+			output.writeAttribute(this.attributeName, this.print(value, context, output, scope));
 		}
 
 	},
@@ -2173,7 +2363,7 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
 		}
-		output.writeCharacters(this.print(value, context, scope));
+		output.writeCharacters(this.print(value, context, output, scope));
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);
@@ -3300,33 +3490,34 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	initialize : function() {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 	},	
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		throw new Error('Abstract method [print].');
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		throw new Error('Abstract method [parse].');
 	},
-	reprint : function(value, context, scope) {
+	reprint : function(value, context, output, scope) {
 		// Only reprint when the value is a string but not an instance
 		if (Jsonix.Util.Type.isString(value) && !this.isInstance(value, context, scope)) {
-			return this.print(this.parse(value, context, scope), context, scope);
+			// Using null as input as input is not available
+			return this.print(this.parse(value, context, null, scope), context, output, scope);
 		}
 		else
 		{
-			return this.print(value, context, scope);
+			return this.print(value, context, output, scope);
 		}
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
 		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text, context, scope);
+			return this.parse(text, context, input, scope);
 		} else {
 			return null;
 		}
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
-			output.writeCharacters(this.reprint(value, context, scope));
+			output.writeCharacters(this.reprint(value, context, output, scope));
 		}
 	},
 	build: function(context, module)
@@ -3380,7 +3571,7 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.built = true;
 						}
 					},
-					print : function(value, context, scope) {
+					print : function(value, context, output, scope) {
 						if (!Jsonix.Util.Type.exists(value)) {
 							return null;
 						}
@@ -3391,11 +3582,11 @@ Jsonix.Schema.XSD.List = Jsonix
 							if (index > 0) {
 								result = result + this.separator;
 							}
-							result = result + this.typeInfo.reprint(value[index], context, scope);
+							result = result + this.typeInfo.reprint(value[index], context, output, scope);
 						}
 						return result;
 					},
-					parse : function(text, context, scope) {
+					parse : function(text, context, input, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var items = Jsonix.Util.StringUtils
 								.splitBySeparatorChars(text,
@@ -3403,8 +3594,7 @@ Jsonix.Schema.XSD.List = Jsonix
 						var result = [];
 						for ( var index = 0; index < items.length; index++) {
 							result.push(this.typeInfo
-									.parse(Jsonix.Util.StringUtils
-											.trim(items[index]), context));
+									.parse(Jsonix.Util.StringUtils.trim(items[index]), context, input, scope));
 						}
 						return result;
 					},
@@ -3415,11 +3605,11 @@ Jsonix.Schema.XSD.List = Jsonix
 Jsonix.Schema.XSD.String = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'String',
 	typeName : Jsonix.Schema.XSD.qname('string'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureString(value);
 		return value;
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		return text;
 	},
@@ -3499,11 +3689,11 @@ Jsonix.Schema.XSD.NMTokens.INSTANCE = new Jsonix.Schema.XSD.NMTokens();
 Jsonix.Schema.XSD.Boolean = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Boolean',
 	typeName : Jsonix.Schema.XSD.qname('boolean'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureBoolean(value);
 		return value ? 'true' : 'false';
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text === 'true' || text === '1') {
 			return true;
@@ -3541,12 +3731,12 @@ Jsonix.Schema.XSD.Base64Binary = Jsonix
 							this.charToByte[_char] = i;
 						}
 					},
-					print : function(value, context, scope) {
+					print : function(value, context, output, scope) {
 						Jsonix.Util.Ensure.ensureArray(value);
 						return this.encode(value);
 					},
 
-					parse : function(text, context, scope) {
+					parse : function(text, context, input, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						return this.decode(text);
 					},
@@ -3664,12 +3854,12 @@ Jsonix.Schema.XSD.HexBinary = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			charTableUpperCase[i >> 4] + charTableUpperCase[i & 0xF];
 		}
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureArray(value);
 		return this.encode(value);
 	},
 
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		return this.decode(text);
 	},
@@ -3704,7 +3894,7 @@ Jsonix.Schema.XSD.HexBinary.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
 Jsonix.Schema.XSD.Number = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Number',
 	typeName : Jsonix.Schema.XSD.qname('number'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureNumberOrNaN(value);
 		if (Jsonix.Util.Type.isNaN(value)) {
 			return 'NaN';
@@ -3717,7 +3907,7 @@ Jsonix.Schema.XSD.Number = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			return text;
 		}
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text === '-INF') {
 			return -Infinity;
@@ -3753,12 +3943,12 @@ Jsonix.Schema.XSD.Float.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema
 Jsonix.Schema.XSD.Decimal = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Decimal',
 	typeName : Jsonix.Schema.XSD.qname('decimal'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureNumber(value);
 		var text = String(value);
 		return text;
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var value = Number(text);
 		Jsonix.Util.Ensure.ensureNumber(value);
@@ -3774,12 +3964,12 @@ Jsonix.Schema.XSD.Decimal.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Sche
 Jsonix.Schema.XSD.Integer = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'Integer',
 	typeName : Jsonix.Schema.XSD.qname('integer'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureInteger(value);
 		var text = String(value);
 		return text;
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var value = Number(text);
 		Jsonix.Util.Ensure.ensureInteger(value);
@@ -3922,11 +4112,11 @@ Jsonix.Schema.XSD.Double.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schem
 Jsonix.Schema.XSD.AnyURI = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'AnyURI',
 	typeName : Jsonix.Schema.XSD.qname('anyURI'),
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureString(value);
 		return value;
 	},
-	parse : function(text, context, scope) {
+	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		return text;
 	},
@@ -3940,6 +4130,55 @@ Jsonix.Schema.XSD.AnyURI.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schem
 Jsonix.Schema.XSD.QName = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'QName',
 	typeName : Jsonix.Schema.XSD.qname('QName'),
+	print : function(value, context, output, scope) {
+		var qName = Jsonix.XML.QName.fromObject(value);
+		var prefix;
+		var localPart = qName.localPart;
+		if (output) {
+			// If QName does not provide the prefix, let it be generated
+			prefix = output.getPrefix(qName.namespaceURI, qName.prefix||null);
+			output.declareNamespace(qName.namespaceURI, prefix);
+		} else {
+			prefix = qName.prefix;
+		}
+		return !prefix ? localPart : (prefix + ':' + localPart);
+	},
+	parse : function(value, context, input, scope) {
+		Jsonix.Util.Ensure.ensureString(value);
+		value = Jsonix.Util.StringUtils.trim(value);
+		var prefix;
+		var localPart;
+		var colonPosition = value.indexOf(':');
+		if (colonPosition === -1) {
+			prefix = '';
+			localPart = value;
+		} else if (colonPosition > 0 && colonPosition < (value.length - 1)) {
+			prefix = value.substring(0, colonPosition);
+			localPart = value.substring(colonPosition + 1);
+		} else {
+			throw new Error('Invalid QName [' + value + '].');
+		}
+		var namespaceContext = input || context || null;
+		if (!namespaceContext)
+		{
+			return value;
+		}
+		else
+		{
+			var namespaceURI = namespaceContext.getNamespaceURI(prefix);
+			if (Jsonix.Util.Type.isString(namespaceURI))
+			{
+				return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
+			}
+			else
+			{
+				throw new Error('Prefix [' + prefix + '] of the QName [' + value + '] is not bound in this context.');
+			}
+		}
+	},
+	isInstance : function(value, context, scope) {
+		return (value instanceof Jsonix.XML.QName) || (Jsonix.Util.Type.isObject(value) && Jsonix.Util.Type.isString(value.localPart || value.lp));
+	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.QName'
 });
 Jsonix.Schema.XSD.QName.INSTANCE = new Jsonix.Schema.XSD.QName();
@@ -3951,7 +4190,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 				{
 					name : 'Calendar',
 					typeName : Jsonix.Schema.XSD.qname('calendar'),
-					parse : function(text, context, scope) {
+					parse : function(text, context, input, scope) {
 						Jsonix.Util.Ensure.ensureString(text);
 						var negative = (text.charAt(0) === '-');
 						var sign = negative ? -1 : 1;
@@ -4234,7 +4473,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix
 							return fractionalSecond;
 						}
 					},
-					print : function(value, context, scope) {
+					print : function(value, context, output, scope) {
 						Jsonix.Util.Ensure.ensureObject(value);
 						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
 								.isInteger(value.second)) {
@@ -4424,7 +4663,7 @@ Jsonix.Schema.XSD.Duration.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
 Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'DateTime',
 	typeName : Jsonix.Schema.XSD.qname('dateTime'),
-	parse : function(value, context, scope) {
+	parse : function(value, context, input, scope) {
 		var calendar = this.parseDateTime(value);
 		var date = new Date();
 		date.setFullYear(calendar.year);
@@ -4463,7 +4702,7 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		return result;
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var timezoneOffset;
 		var localTimezoneOffset = value.getTimezoneOffset();
@@ -4519,7 +4758,7 @@ Jsonix.Schema.XSD.DateTime.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Sch
 Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Time',
 	typeName : Jsonix.Schema.XSD.qname('time'),
-	parse : function(value, context, scope) {
+	parse : function(value, context, input, scope) {
 		var calendar = this.parseTime(value);
 		var date = new Date();
 		date.setFullYear(1970);
@@ -4558,7 +4797,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		return result;
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var time = value.getTime();
 		if (time <= -86400000 && time >= 86400000) {
@@ -4620,7 +4859,7 @@ Jsonix.Schema.XSD.Time.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.
 Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Date',
 	typeName : Jsonix.Schema.XSD.qname('date'),
-	parse : function(value, context, scope) {
+	parse : function(value, context, input, scope) {
 		var calendar = this.parseDate(value);
 		var date = new Date();
 		date.setFullYear(calendar.year);
@@ -4660,7 +4899,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		return result;
 	},
-	print : function(value, context, scope) {
+	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
 		var localDate = new Date(value.getTime());
 		localDate.setHours(0);
@@ -4816,13 +5055,14 @@ Jsonix.Context = Jsonix
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
 
+
 				// Initialize properties
 				if (Jsonix.Util.Type.exists(properties)) {
-					if (Jsonix.Util.Ensure.ensureObject(properties)) {
-						if (Jsonix.Util.Type
-								.isObject(properties.namespacePrefixes)) {
-							this.properties.namespacePrefixes = properties.namespacePrefixes;
-						}
+					Jsonix.Util.Ensure.ensureObject(properties);
+					if (Jsonix.Util.Type
+							.isObject(properties.namespacePrefixes)) {
+						this.properties.namespacePrefixes = 
+							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
 					}
 				}
 				// Initialize modules
@@ -4974,6 +5214,10 @@ Jsonix.Context = Jsonix
 			},
 			createUnmarshaller : function() {
 				return new Jsonix.Context.Unmarshaller(this);
+			},
+			getNamespaceURI : function(prefix) {
+				Jsonix.Util.Ensure.ensureString(prefix);
+				return this.properties.namespacePrefixes[prefix];
 			},
 			/**
 			 * Builtin type infos.
