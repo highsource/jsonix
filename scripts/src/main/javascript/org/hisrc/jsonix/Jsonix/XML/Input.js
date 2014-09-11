@@ -3,9 +3,16 @@ Jsonix.XML.Input = Jsonix.Class({
 	node : null,
 	attributes : null,
 	eventType : null,
+	pns : null,
 	initialize : function(node) {
 		Jsonix.Util.Ensure.ensureExists(node);
 		this.root = node;
+		var rootPnsItem =
+		{
+			'' : ''
+		};
+		rootPnsItem[Jsonix.XML.XMLNS_P] = Jsonix.XML.XMLNS_NS;
+		this.pns = [rootPnsItem];
 	},
 	hasNext : function() {
 		// No current node, we've not started yet
@@ -65,6 +72,7 @@ Jsonix.XML.Input = Jsonix.Class({
 		if (nodeType === 1) {
 			// START_ELEMENT
 			this.eventType = 1;
+			this.pushNS(node);
 			return this.eventType;
 		} else if (nodeType === 2) {
 			// ATTRIBUTE
@@ -140,6 +148,7 @@ Jsonix.XML.Input = Jsonix.Class({
 				this.attributes = null;
 				// END_ELEMENT
 				this.eventType = 2;
+				this.popNS();
 				return this.eventType;
 			}
 		}
@@ -309,6 +318,63 @@ Jsonix.XML.Input = Jsonix.Class({
 		} else {
 			throw new Error("Parser must be on START_ELEMENT or END_ELEMENT to return current element.");
 		}
+	},
+	pushNS : function (node) {
+		var pindex = this.pns.length - 1;
+		var parentPnsItem = this.pns[pindex];
+		var pnsItem = Jsonix.Util.Type.isObject(parentPnsItem) ? pindex : parentPnsItem;
+		this.pns.push(pnsItem);
+		pindex++;
+		var reference = true;
+		if (node.attributes)
+		{
+			var attributes = node.attributes;
+			var alength = attributes.length;
+			if (alength > 0)
+			{
+				// If given node has attributes
+				for (var aindex = 0; aindex < alength; aindex++)
+				{
+					var attribute = attributes[aindex];
+					var attributeName = attribute.nodeName;
+					var p = null;
+					var ns = null;
+					var isNS = false;
+					if (attributeName === 'xmlns')
+					{
+						p = '';
+						ns = attribute.value;
+						isNS = true;
+					}
+					else if (attributeName.substring(0, 6) === 'xmlns:')
+					{
+						p = attributeName.substring(6);
+						ns = attribute.value;
+						isNS = true;
+					}
+					// Attribute is a namespace declaration
+					if (isNS)
+					{
+						if (reference)
+						{
+							pnsItem = Jsonix.Util.Type.cloneObject(this.pns[pnsItem], {});
+							this.pns[pindex] = pnsItem;
+							reference = false;
+						}
+						pnsItem[p] = ns;
+					}
+				}
+			}
+		}		
+	},
+	popNS : function () {
+		this.pns.pop();
+	},
+	getNamespace : function (p) {
+		var pindex = this.pns.length - 1;
+		var pnsItem = this.pns[pindex];
+		pnsItem = Jsonix.Util.Type.isObject(pnsItem) ? pnsItem : this.pns[pnsItem];
+		return pnsItem[p];
 	},
 	CLASS_NAME : "Jsonix.XML.Input"
 

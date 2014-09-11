@@ -101,3 +101,13 @@ function testXMLInputNextTag() {
 		assertEquals('h0 h h1', input.getElementText());
 	}
 }
+
+function testXMLInputNamespaces() {
+	var doc = Jsonix.DOM
+			.parse('<a xmlns="urn:a" xmlns:a="urn:a" b:b="b" xmlns:b="urn:b"></a>');
+	var input = new Jsonix.XML.Input(doc);
+	input.nextTag();
+	assertEquals('urn:a', input.getNamespace(''));
+	assertEquals('urn:a', input.getNamespace('a'));
+	assertEquals('urn:b', input.getNamespace('b'));
+}
