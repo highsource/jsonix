@@ -8,7 +8,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureObject(mapping);
 						Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize
 								.apply(this, [ mapping ]);
-						var etis = mapping.elementTypeInfos||mapping.etis||undefined;
+						var etis = mapping.elementTypeInfos||mapping.etis||[];
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
