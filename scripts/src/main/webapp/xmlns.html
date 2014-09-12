@@ -1,0 +1,16 @@
+<html>
+	<head>
+		<script type="text/javascript" src="../javascript/org/hisrc/jsonix/Jsonix.js"></script> 
+	</head>
+	<body>
+		<script>
+			var output = new Jsonix.XML.Output();
+			var doc = output.writeStartDocument();
+			output.writeStartElement({ns:'urn:test', lp: 'test', p: ''});
+			output.writeEndElement();
+			output.writeEndDocument();
+			var docAsString = Jsonix.DOM.serialize(doc);
+			console.log(docAsString);
+		</script>
+	</body>
+</html>
