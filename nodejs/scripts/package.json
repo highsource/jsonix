@@ -10,6 +10,10 @@
 		"url" : "http://github.com/highsource/jsonix/issues",
 		"email" : "jsonix-users@lists.sourceforge.net"
 	},
+	"repository": {
+		"type": "git",
+		"url": "git://github.com/highsource/jsonix.git"
+	},
 	"licenses" : [ {
 		"type" : "BSD-3-Clause",
 		"url" : "http://github.com/highsource/jsonix/raw/master/LICENSE"
