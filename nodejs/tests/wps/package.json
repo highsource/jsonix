@@ -1,13 +1,13 @@
 {
 	"name": "jsonix-tests-wps",
 	"description": "Jsonix Tests WPS.",
-	"version": "2.0.13",
+	"version": "2.1.0",
 	"engines": [
 		"node >= 0.8.0"
 	],
 	"main": "jsonix-tests-wps.js",
 	"dependencies": {
-		"jsonix": "~2.0.13"
+		"jsonix": "~2.1.0"
 	},
 	"devDependencies" : {
 		"nodeunit" : "~0.8.6",
