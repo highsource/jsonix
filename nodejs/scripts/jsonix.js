@@ -1360,6 +1360,7 @@ Jsonix.XML.Input.ENTITY_DECLARATION = 15;
 
 Jsonix.XML.Output = Jsonix.Class({
 	document : null,
+	documentElement : null,
 	node : null,
 	nodes : null,
 	nsp : null,
@@ -1430,6 +1431,11 @@ Jsonix.XML.Output = Jsonix.Class({
 		this.peek().appendChild(element);
 		this.push(element);
 		this.declareNamespace(namespaceURI, prefix);
+		if (this.documentElement === null)
+		{
+			this.documentElement = element;
+			this.declareNamespaces();
+		}
 		return element;
 	},
 	writeEndElement : function() {
@@ -1526,6 +1532,21 @@ Jsonix.XML.Output = Jsonix.Class({
 	{
 		this.nsp.pop();
 		this.pns.pop();
+	},
+	declareNamespaces : function ()
+	{
+		var index = this.nsp.length - 1;
+		var nspItem = this.nsp[index];
+		nspItem = Jsonix.Util.Type.isNumber(nspItem) ? this.nsp[nspItem] : nspItem;
+		var ns, p;
+		for (ns in nspItem)
+		{
+			if (nspItem.hasOwnProperty(ns))
+			{
+				p = nspItem[ns];
+				this.declareNamespace(ns, p);
+			}
+		}
 	},
 	declareNamespace : function (ns, p)
 	{

@@ -88,10 +88,10 @@
 	</mailingLists>
 	<properties> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-		<jsonix-schema-compiler.version>2.2.0</jsonix-schema-compiler.version>
-		<jaxb2-basics.version>0.8.1</jaxb2-basics.version>
-		<jaxb-ri.version>2.1.13</jaxb-ri.version>
-		<maven-jaxb2-plugin.version>0.9.0</maven-jaxb2-plugin.version>
+		<jsonix-schema-compiler.version>2.2.1-SNAPSHOT</jsonix-schema-compiler.version>
+		<jaxb2-basics.version>0.8.4</jaxb2-basics.version>
+		<jaxb-ri.version>2.2.7</jaxb-ri.version>
+		<maven-jaxb2-plugin.version>0.9.1</maven-jaxb2-plugin.version>
 	</properties> 
 	<dependencies>
 		<dependency>

@@ -1,13 +1,13 @@
 {
 	"name": "jsonix-tests-po",
 	"description": "Jsonix Tests PO.",
-	"version": "2.1.0",
+	"version": "2.1.1",
 	"engines": [
 		"node >= 0.8.0"
 	],
 	"main": "jsonix-tests-po.js",
 	"dependencies": {
-		"jsonix": "~2.1.0"
+		"jsonix": "~2.1.1"
 	},
 	"devDependencies" : {
 		"nodeunit" : "~0.8.6",

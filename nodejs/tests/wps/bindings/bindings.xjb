@@ -25,6 +25,9 @@
 		<jsonix:packageMapping
 			packageName="net.opengis.wps.v_1_0_0"
 			spaceName="WPS_V_1_0_0"/>
+		<jsonix:packageMapping
+			packageName="org.w3._1999.xlink"
+			spaceName="XLink_V_1_0"/>
 	</jaxb:bindings>
 
 	<jaxb:bindings schemaLocation="../schemas/ogc/ows/1.1.0/owsAll.xsd" 

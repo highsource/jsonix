@@ -1,9 +1,10 @@
 var Jsonix = require('jsonix').Jsonix;
 var OWS_V_1_1_0 = require('../mappings/OWS_V_1_1_0').OWS_V_1_1_0;
 var WPS_V_1_0_0 = require('../mappings/WPS_V_1_0_0').WPS_V_1_0_0;
+var XLink_V_1_0 = require('../mappings/XLink_V_1_0').XLink_V_1_0;
 
 function roundtrip(test, resource) {
-	var context = new Jsonix.Context([ OWS_V_1_1_0, WPS_V_1_0_0 ]);
+	var context = new Jsonix.Context([ OWS_V_1_1_0, WPS_V_1_0_0, XLink_V_1_0 ]);
 	var unmarshallerOne = context.createUnmarshaller();
 	var unmarshallerTwo = context.createUnmarshaller();
 	var marshallerOne = context.createMarshaller();
@@ -26,7 +27,7 @@ module.exports = {
 	"UnmarshalFile": function(test) {
 
 		// Create Jsonix context
-		var context = new Jsonix.Context([ OWS_V_1_1_0, WPS_V_1_0_0 ]);
+		var context = new Jsonix.Context([ OWS_V_1_1_0, WPS_V_1_0_0, XLink_V_1_0 ]);
 		
 		// Create unmarshaller
 		var unmarshaller = context.createUnmarshaller();
