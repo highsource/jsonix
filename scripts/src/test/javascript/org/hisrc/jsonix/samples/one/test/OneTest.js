@@ -687,7 +687,7 @@ function testOneUnmarhshalUnexpectedElementType() {
 	var marshaller = context.createMarshaller();
 	var text = '<element>' +
 	//
-	'<unexpected>1</unexpected>' +
+	'<unexpected>1<two/>3<four>5</four>6</unexpected>' +
 	// 
 	'<element>earth</element>' +
 	//

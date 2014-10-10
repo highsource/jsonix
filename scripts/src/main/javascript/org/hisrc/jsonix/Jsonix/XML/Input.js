@@ -207,23 +207,12 @@ Jsonix.XML.Input = Jsonix.Class({
 		if (this.eventType !== Jsonix.XML.Input.START_ELEMENT) {
 			throw new Error("Parser must be on START_ELEMENT to skip element.");
 		}
-		// We have one open tag at the start
 		var numberOfOpenTags = 1;
-		// Skip to the next tag
-		var et = this.nextTag();
-		// If we have an END_ELEMENT and there was exactly one open tag, we're done
-		while (et !== Jsonix.XML.Input.END_ELEMENT || numberOfOpenTags !== 1)
-		{
-			if (et === Jsonix.XML.Input.START_ELEMENT)
-			{
-				numberOfOpenTags++;
-			}
-			else
-			{
-				numberOfOpenTags--;
-			}
+		var et;
+		do {
 			et = this.nextTag();
-		}
+		    numberOfOpenTags += (et === Jsonix.XML.Input.START_ELEMENT) ? 1 : -1;
+		  } while (numberOfOpenTags > 0);
 		return et;
 	},	
 	getElementText : function() {
