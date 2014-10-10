@@ -1826,9 +1826,7 @@ Jsonix.Model.ClassInfo = Jsonix
 								this.unmarshalProperty(context, input,
 										anyPropertyInfo, result);
 							} else {
-								// TODO report a validation error that element
-								// is not expected
-//								throw new Error('Unexpected element [' + elementNameKey + '].');
+								// TODO optionally report a validation error that the element is not expected
 								et = input.skipElement();
 							}
 						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
