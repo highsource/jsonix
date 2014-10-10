@@ -680,3 +680,20 @@ function testOneMarhshalMapElementType() {
 	var serializedNode = Jsonix.DOM.serialize(node);
 	logger.debug(serializedNode);
 }
+
+function testOneUnmarhshalUnexpectedElement() {
+	var context = new Jsonix.Context([ One ]);
+	var unmarshaller = context.createUnmarshaller();
+	var marshaller = context.createMarshaller();
+	var text = '<element>' +
+	//
+	'<unexpected>1</unexpected>' +
+	// 
+	'<element>earth</element>' +
+	//
+	'</element>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('element', result.name.localPart);
+	assertEquals('earth', result.value.element);
+	logger.debug(marshaller.marshalString(result));
+}

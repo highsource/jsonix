@@ -143,7 +143,8 @@ Jsonix.Model.ClassInfo = Jsonix
 							} else {
 								// TODO report a validation error that element
 								// is not expected
-								throw new Error('Unexpected element [' + elementNameKey + '].');
+//								throw new Error('Unexpected element [' + elementNameKey + '].');
+								et = input.skipElement();
 							}
 						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
 							// Characters and structure has a mixed property

@@ -202,8 +202,30 @@ Jsonix.XML.Input = Jsonix.Class({
 			throw new Error('Expected start or end tag.');
 		}
 		return et;
-
 	},
+	skipElement : function() {
+		if (this.eventType !== Jsonix.XML.Input.START_ELEMENT) {
+			throw new Error("Parser must be on START_ELEMENT to skip element.");
+		}
+		// We have one open tag at the start
+		var numberOfOpenTags = 1;
+		// Skip to the next tag
+		var et = this.nextTag();
+		// If we have an END_ELEMENT and there was exactly one open tag, we're done
+		while (et !== Jsonix.XML.Input.END_ELEMENT || numberOfOpenTags !== 1)
+		{
+			if (et === Jsonix.XML.Input.START_ELEMENT)
+			{
+				numberOfOpenTags++;
+			}
+			else
+			{
+				numberOfOpenTags--;
+			}
+			et = this.nextTag();
+		}
+		return et;
+	},	
 	getElementText : function() {
 		if (this.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
