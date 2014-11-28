@@ -9,17 +9,14 @@ var Mapping = {
 		}, {
 			name : 'items',
 			collection : true,
-			wrapperElementName : 'items',
-			elementName : 'uri',
-			typeInfo : '.UriItem'
+			typeInfo : '.Item'
 		}, {
 			name : 'info'
 		} ]
 	}, {
-		localName : 'UriItem',
+		localName : 'Item',
 		propertyInfos : [ {
-			name : 'uri',
-			type : 'value'
+			name : 'uri'
 		} ]
 	} ],
 	elementInfos : [ {

@@ -3,6 +3,8 @@
 	<uri>http://localhost:3000/users/505723c5750c1fa2177682ed/items</uri>
 	<items>
 		<uri>http://localhost:3000/items/1</uri>
+	</items>
+	<items>
 		<uri>http://localhost:3000/items/2</uri>
 	</items>
 	<info>blah.</info>
