@@ -1,0 +1,19 @@
+{
+	"name": "jsonix-demos-user",
+	"description": "Jsonix Demos User.",
+	"version": "2.1.0",
+	"engines": [
+		"node >= 0.8.0"
+	],
+	"main": "jsonix-demo-user.js",
+	"dependencies": {
+		"jsonix": "~2.1.0"
+	},
+	"devDependencies" : {
+		"nodeunit" : "~0.8.6",
+		"node-static" : "~0.7.3"
+	},
+	"scripts": {
+		"test": "nodeunit tests/tests.js" 
+	}
+}
