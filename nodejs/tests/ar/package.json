@@ -1,0 +1,20 @@
+{
+	"name": "jsonix-tests-ar",
+	"description": "Jsonix Tests AR.",
+	"version": "2.1.1",
+	"engines": [
+		"node >= 0.8.0"
+	],
+	"main": "jsonix-tests-ar.js",
+	"dependencies": {
+		"jsonix": "~2.1.1"
+	},
+	"devDependencies" : {
+		"nodeunit" : "~0.8.6",
+		"node-static" : "~0.7.3"
+	},
+	"scripts": {
+		"preinstall" : "java -jar node_modules/jsonix/lib/jsonix-schema-compiler-full.jar ar.xsd -p AR",
+		"test": "nodeunit tests/tests.js" 
+	}
+}

@@ -1,0 +1,21 @@
+<!-- Schema from http://stackoverflow.com/questions/26137303/xml-to-json-conversion-issue -->
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema"
+     xmlns="urn:test"
+     targetNamespace="urn:test"
+     elementFormDefault="qualified"
+     attributeFormDefault="unqualified">
+    <xs:element name="AccumulateResponse" type="AccumulateResponse"/>
+    <xs:complexType name="AccumulateResponse">
+        <xs:sequence>
+            <xs:element name="TestCase" minOccurs="0" maxOccurs="unbounded">
+                <xs:complexType>
+                    <xs:sequence>
+                        <xs:element name="TransactionId" type="xs:string"/>
+                        <xs:element name="TransactionType" type="xs:string"/>
+                        <xs:element name="Status" type="xs:string"/>
+                    </xs:sequence>
+                </xs:complexType>
+            </xs:element>
+        </xs:sequence>
+    </xs:complexType>
+</xs:schema>

@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<AccumulateResponse xmlns="urn:test">
+  <TestCase>
+    <Transactionid>1234</Transactionid>
+    <TransactionType>5678</TransactionType>
+    <Status>Status01</Status>
+  </TestCase>
+  <TestCase>
+    <Transactionid>true</Transactionid>
+    <TransactionType>false</TransactionType>
+    <Status>Status02</Status>
+  </TestCase>
+</AccumulateResponse>
