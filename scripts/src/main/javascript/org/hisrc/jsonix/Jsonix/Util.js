@@ -25,7 +25,7 @@ Jsonix.Util.extend = function(destination, source) {
 
 		// REWORK
 		// Node.js
-		var sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event == "function" && source instanceof window.Event;
+		sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event === "function" && source instanceof window.Event;
 
 		if (!sourceIsEvt && source.hasOwnProperty && source.hasOwnProperty('toString')) {
 			destination.toString = source.toString;
