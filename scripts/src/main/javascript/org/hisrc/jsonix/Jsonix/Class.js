@@ -6,7 +6,7 @@ Jsonix.Class = function() {
 	var empty = function() {
 	};
 	var parent, initialize, Type;
-	for ( var i = 0, len = arguments.length; i < len; ++i) {
+	for (var i = 0, len = arguments.length; i < len; ++i) {
 		Type = arguments[i];
 		if (typeof Type == "function") {
 			// make the class passed as the first argument the superclass
