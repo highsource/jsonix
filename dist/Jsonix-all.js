@@ -1,3 +1,4 @@
+/*global window */
 var _jsonix_factory = function(_jsonix_xmldom, _jsonix_xmlhttprequest, _jsonix_fs)
 {
 	// Complete Jsonix script is included below 
@@ -7,11 +8,12 @@ var Jsonix = {
 Jsonix.Util = {};
 
 Jsonix.Util.extend = function(destination, source) {
+	var property, value, sourceIsEvt;
 	destination = destination || {};
 	if (source) {
 		/*jslint forin: true */
-		for ( var property in source) {
-			var value = source[property];
+		for (property in source) {
+			value = source[property];
 			if (value !== undefined) {
 				destination[property] = value;
 			}
@@ -31,7 +33,7 @@ Jsonix.Util.extend = function(destination, source) {
 
 		// REWORK
 		// Node.js
-		var sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event == "function" && source instanceof window.Event;
+		sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event === "function" && source instanceof window.Event;
 
 		if (!sourceIsEvt && source.hasOwnProperty && source.hasOwnProperty('toString')) {
 			destination.toString = source.toString;
@@ -43,11 +45,11 @@ Jsonix.Class = function() {
 	var Class = function() {
 		this.initialize.apply(this, arguments);
 	};
-	var extended = {};
+        var extended = {};
 	var empty = function() {
 	};
 	var parent, initialize, Type;
-	for ( var i = 0, len = arguments.length; i < len; ++i) {
+	for (var i = 0, len = arguments.length; i < len; ++i) {
 		Type = arguments[i];
 		if (typeof Type == "function") {
 			// make the class passed as the first argument the superclass
@@ -1164,8 +1166,19 @@ Jsonix.XML.Input = Jsonix.Class({
 			throw new Error('Expected start or end tag.');
 		}
 		return et;
-
 	},
+	skipElement : function() {
+		if (this.eventType !== Jsonix.XML.Input.START_ELEMENT) {
+			throw new Error("Parser must be on START_ELEMENT to skip element.");
+		}
+		var numberOfOpenTags = 1;
+		var et;
+		do {
+			et = this.nextTag();
+		    numberOfOpenTags += (et === Jsonix.XML.Input.START_ELEMENT) ? 1 : -1;
+		  } while (numberOfOpenTags > 0);
+		return et;
+	},	
 	getElementText : function() {
 		if (this.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
@@ -1360,6 +1373,7 @@ Jsonix.XML.Input.ENTITY_DECLARATION = 15;
 
 Jsonix.XML.Output = Jsonix.Class({
 	document : null,
+	documentElement : null,
 	node : null,
 	nodes : null,
 	nsp : null,
@@ -1430,6 +1444,11 @@ Jsonix.XML.Output = Jsonix.Class({
 		this.peek().appendChild(element);
 		this.push(element);
 		this.declareNamespace(namespaceURI, prefix);
+		if (this.documentElement === null)
+		{
+			this.documentElement = element;
+			this.declareNamespaces();
+		}
 		return element;
 	},
 	writeEndElement : function() {
@@ -1526,6 +1545,21 @@ Jsonix.XML.Output = Jsonix.Class({
 	{
 		this.nsp.pop();
 		this.pns.pop();
+	},
+	declareNamespaces : function ()
+	{
+		var index = this.nsp.length - 1;
+		var nspItem = this.nsp[index];
+		nspItem = Jsonix.Util.Type.isNumber(nspItem) ? this.nsp[nspItem] : nspItem;
+		var ns, p;
+		for (ns in nspItem)
+		{
+			if (nspItem.hasOwnProperty(ns))
+			{
+				p = nspItem[ns];
+				this.declareNamespace(ns, p);
+			}
+		}
 	},
 	declareNamespace : function (ns, p)
 	{
@@ -1783,9 +1817,8 @@ Jsonix.Model.ClassInfo = Jsonix
 								this.unmarshalProperty(context, input,
 										anyPropertyInfo, result);
 							} else {
-								// TODO report a validation error that element
-								// is not expected
-								throw new Error('Unexpected element [' + elementNameKey + '].');
+								// TODO optionally report a validation error that the element is not expected
+								et = input.skipElement();
 							}
 						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
 							// Characters and structure has a mixed property

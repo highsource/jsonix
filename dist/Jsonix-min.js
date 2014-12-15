@@ -1,12 +1,14 @@
+/*global window */
 var _jsonix_factory = function(_jsonix_xmldom, _jsonix_xmlhttprequest, _jsonix_fs)
 {
 	// Complete Jsonix script is included below 
 var Jsonix={singleFile:true};
 Jsonix.Util={};
-Jsonix.Util.extend=function(g,h){g=g||{};
-if(h){for(var i in h){var j=h[i];
+Jsonix.Util.extend=function(g,h){var i,j,f;
+g=g||{};
+if(h){for(i in h){j=h[i];
 if(j!==undefined){g[i]=j
-}}var f=typeof window!=="undefined"&&window!==null&&typeof window.Event=="function"&&h instanceof window.Event;
+}}f=typeof window!=="undefined"&&window!==null&&typeof window.Event==="function"&&h instanceof window.Event;
 if(!f&&h.hasOwnProperty&&h.hasOwnProperty("toString")){g.toString=h.toString
 }}return g
 };
@@ -432,6 +434,13 @@ if(Jsonix.Util.Type.isString(b.nodeName)){return Jsonix.XML.QName.key(b.namespac
 while(b===7||b===4||b===12||b===6||b===3||b===5){b=this.next()
 }if(b!==1&&b!==2){throw new Error("Expected start or end tag.")
 }return b
+},skipElement:function(){if(this.eventType!==Jsonix.XML.Input.START_ELEMENT){throw new Error("Parser must be on START_ELEMENT to skip element.")
+}var d=1;
+var c;
+do{c=this.nextTag();
+d+=(c===Jsonix.XML.Input.START_ELEMENT)?1:-1
+}while(d>0);
+return c
 },getElementText:function(){if(this.eventType!=1){throw new Error("Parser must be on START_ELEMENT to read next text.")
 }var c=this.next();
 var d="";
@@ -529,7 +538,7 @@ Jsonix.XML.Input.CDATA=12;
 Jsonix.XML.Input.NAMESPACE=13;
 Jsonix.XML.Input.NOTATION_DECLARATION=14;
 Jsonix.XML.Input.ENTITY_DECLARATION=15;
-Jsonix.XML.Output=Jsonix.Class({document:null,node:null,nodes:null,nsp:null,pns:null,namespacePrefixIndex:0,xmldom:null,initialize:function(e){if(typeof ActiveXObject!=="undefined"){this.xmldom=new ActiveXObject("Microsoft.XMLDOM")
+Jsonix.XML.Output=Jsonix.Class({document:null,documentElement:null,node:null,nodes:null,nsp:null,pns:null,namespacePrefixIndex:0,xmldom:null,initialize:function(e){if(typeof ActiveXObject!=="undefined"){this.xmldom=new ActiveXObject("Microsoft.XMLDOM")
 }else{this.xmldom=null
 }this.nodes=[];
 var f={"":""};
@@ -559,7 +568,9 @@ if(Jsonix.Util.Type.isFunction(this.document.createElementNS)){o=this.document.c
 }}this.peek().appendChild(o);
 this.push(o);
 this.declareNamespace(i,m);
-return o
+if(this.documentElement===null){this.documentElement=o;
+this.declareNamespaces()
+}return o
 },writeEndElement:function(){return this.pop()
 },writeCharacters:function(c){var d;
 if(Jsonix.Util.Type.isFunction(this.document.createTextNode)){d=this.document.createTextNode(c)
@@ -607,7 +618,13 @@ this.nsp.push(l);
 this.pns.push(i)
 },popNS:function(){this.nsp.pop();
 this.pns.pop()
-},declareNamespace:function(j,i){var f=this.pns.length-1;
+},declareNamespaces:function(){var f=this.nsp.length-1;
+var h=this.nsp[f];
+h=Jsonix.Util.Type.isNumber(h)?this.nsp[h]:h;
+var e,g;
+for(e in h){if(h.hasOwnProperty(e)){g=h[e];
+this.declareNamespace(e,g)
+}}},declareNamespace:function(j,i){var f=this.pns.length-1;
 var h=this.pns[f];
 var g;
 if(Jsonix.Util.Type.isNumber(h)){g=true;
@@ -697,7 +714,7 @@ if(Jsonix.Util.Type.exists(this.structure.elements[q])){var r=this.structure.ele
 this.unmarshalProperty(B,w,r,p)
 }else{if(Jsonix.Util.Type.exists(this.structure.any)){var s=this.structure.any;
 this.unmarshalProperty(B,w,s,p)
-}else{throw new Error("Unexpected element ["+q+"].")
+}else{v=w.skipElement()
 }}}else{if((v===Jsonix.XML.Input.CHARACTERS||v===Jsonix.XML.Input.CDATA||v===Jsonix.XML.Input.ENTITY_REFERENCE)&&Jsonix.Util.Type.exists(this.structure.mixed)){var x=this.structure.mixed;
 this.unmarshalProperty(B,w,x,p)
 }else{if(v===Jsonix.XML.Input.SPACE||v===Jsonix.XML.Input.COMMENT||v===Jsonix.XML.Input.PROCESSING_INSTRUCTION){}else{throw new Error("Illegal state: unexpected event type ["+v+"].")
