@@ -31,6 +31,7 @@
 							<addCompileSourceRoot>false</addCompileSourceRoot>
 							<args>
 								<arg>-Xjsonix</arg>
+								<arg>-Xjsonix-compact</arg>
 							</args>
 							<plugins>
 								<plugin>

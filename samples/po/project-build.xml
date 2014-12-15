@@ -24,7 +24,7 @@
 		</taskdef>
 		<mkdir dir="${basedir}/target/generated-sources/xjc"/>
 		<xjc destdir="${basedir}/target/generated-sources/xjc" extension="true">
-			<arg line="-Xjsonix"/>
+			<arg line="-Xjsonix -Xjsonix-compact"/>
 			<binding dir="${basedir}/src/main/resources">
 			 	<include name="**/*.xjb"/>
 			</binding>
