@@ -447,7 +447,7 @@ module.exports =
 	},
 	"QName": {
 		"Parse" : function(test) {
-			var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
+			var context = new Jsonix.Context([], {namespacePrefixes : {'urn:c' : 'c'}});
 			var output = new Jsonix.XML.Output();
 			var doc = output.writeStartDocument();
 			output.writeStartElement({p: 't', lp : 'test', ns : 'urn:test'});
@@ -464,6 +464,7 @@ module.exports =
 			test.equal('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4, context, output, null));
 
 			test.equal('c:c', Jsonix.Schema.XSD.QName.INSTANCE.reprint('c:c', context, output, null));
+			test.equal('c:c', Jsonix.Schema.XSD.QName.INSTANCE.LIST.reprint(['c:c'], context, output, null));
 			output.writeEndElement();
 			output.writeEndDocument();
 			var serializedDocument = Jsonix.DOM.serialize(doc);
@@ -474,14 +475,16 @@ module.exports =
 			test.done();
 		},
 		"Print": function(test) {
-			var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
+			var context = new Jsonix.Context([], {namespacePrefixes : {'urn:c' : 'c'}});
 			var doc = Jsonix.DOM.parse('<a xmlns="urn:a" xmlns:a="urn:a" b:b="b" xmlns:b="urn:b"></a>');
 			var input = new Jsonix.XML.Input(doc);
+			var output = new Jsonix.XML.Output();
 			input.nextTag();
 			test.equal('a:a', Jsonix.Schema.XSD.QName.INSTANCE.parse('a:a'));
 			test.equal('urn:a', input.getNamespaceURI('a'));
 			test.equal('{urn:a}a', Jsonix.Schema.XSD.QName.INSTANCE.parse('a:a', context, input, null).key);
 			test.done();
+
 		}
 	}
 };

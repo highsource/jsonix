@@ -1,4 +1,3 @@
-/*global window */
 var _jsonix_factory = function(_jsonix_xmldom, _jsonix_xmlhttprequest, _jsonix_fs)
 {
 	// Complete Jsonix script is included below 
@@ -8,12 +7,11 @@ var Jsonix = {
 Jsonix.Util = {};
 
 Jsonix.Util.extend = function(destination, source) {
-	var property, value, sourceIsEvt;
 	destination = destination || {};
 	if (source) {
 		/*jslint forin: true */
-		for (property in source) {
-			value = source[property];
+		for ( var property in source) {
+			var value = source[property];
 			if (value !== undefined) {
 				destination[property] = value;
 			}
@@ -45,7 +43,7 @@ Jsonix.Class = function() {
 	var Class = function() {
 		this.initialize.apply(this, arguments);
 	};
-        var extended = {};
+	var extended = {};
 	var empty = function() {
 	};
 	var parent, initialize, Type;
@@ -1645,6 +1643,12 @@ Jsonix.XML.Output = Jsonix.Class({
 			}
 		}
 		return p;
+	},
+	getNamespaceURI : function (p) {
+		var pindex = this.pns.length - 1;
+		var pnsItem = this.pns[pindex];
+		pnsItem = Jsonix.Util.Type.isObject(pnsItem) ? pnsItem : this.pns[pnsItem];
+		return pnsItem[p];
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });
@@ -5083,7 +5087,8 @@ Jsonix.Context = Jsonix
 				this.typeInfos = {};
 				this.registerBuiltinTypeInfos();
 				this.properties = {
-					namespacePrefixes : {}
+					namespacePrefixes : {},
+					prefixNamespaces : {}
 				};
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
@@ -5096,6 +5101,15 @@ Jsonix.Context = Jsonix
 							.isObject(properties.namespacePrefixes)) {
 						this.properties.namespacePrefixes = 
 							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
+					}
+				}
+				// Initialize prefix/namespace mapping
+				for (var ns in this.properties.namespacePrefixes)
+				{
+					if (this.properties.namespacePrefixes.hasOwnProperty(ns))
+					{
+						p = this.properties.namespacePrefixes[ns];
+						this.properties.prefixNamespaces[p] = ns;
 					}
 				}
 				// Initialize modules
@@ -5250,7 +5264,7 @@ Jsonix.Context = Jsonix
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);
-				return this.properties.namespacePrefixes[prefix];
+				return this.properties.prefixNamespaces[prefix];
 			},
 			/**
 			 * Builtin type infos.

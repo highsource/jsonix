@@ -416,7 +416,7 @@ function testSchemaXSDHexBinary() {
 	assertEquals('0FB8', Jsonix.Schema.XSD.HexBinary.INSTANCE.print(d2));
 }
 function testSchemaXSDQNamePrint() {
-	var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
+	var context = new Jsonix.Context([], {namespacePrefixes : {'urn:c' : 'c'}});
 	var output = new Jsonix.XML.Output();
 	var doc = output.writeStartDocument();
 	output.writeStartElement({p: 't', lp : 'test', ns : 'urn:test'});
@@ -433,13 +433,14 @@ function testSchemaXSDQNamePrint() {
 	assertEquals('pb:b', Jsonix.Schema.XSD.QName.INSTANCE.print(qn4, context, output, null));
 	
 	assertEquals('c:c', Jsonix.Schema.XSD.QName.INSTANCE.reprint('c:c', context, output, null));
+	assertEquals('c:c', Jsonix.Schema.XSD.QName.INSTANCE.LIST.reprint(['c:c'], context, output, null));
 	output.writeEndElement();
 	output.writeEndDocument();
 	var serializedDocument = Jsonix.DOM.serialize(doc);
 	logger.debug(serializedDocument);
 }
 function testSchemaXSDQNameParse() {
-	var context = new Jsonix.Context([], {namespacePrefixes : {'c' : 'urn:c'}});
+	var context = new Jsonix.Context([], {namespacePrefixes : {'urn:c' : 'c'}});
 	var doc = Jsonix.DOM.parse('<a xmlns="urn:a" xmlns:a="urn:a" b:b="b" xmlns:b="urn:b"></a>');
 	var input = new Jsonix.XML.Input(doc);
 	input.nextTag();

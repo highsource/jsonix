@@ -12,7 +12,8 @@ Jsonix.Context = Jsonix
 				this.typeInfos = {};
 				this.registerBuiltinTypeInfos();
 				this.properties = {
-					namespacePrefixes : {}
+					namespacePrefixes : {},
+					prefixNamespaces : {}
 				};
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
@@ -25,6 +26,15 @@ Jsonix.Context = Jsonix
 							.isObject(properties.namespacePrefixes)) {
 						this.properties.namespacePrefixes = 
 							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
+					}
+				}
+				// Initialize prefix/namespace mapping
+				for (var ns in this.properties.namespacePrefixes)
+				{
+					if (this.properties.namespacePrefixes.hasOwnProperty(ns))
+					{
+						p = this.properties.namespacePrefixes[ns];
+						this.properties.prefixNamespaces[p] = ns;
 					}
 				}
 				// Initialize modules
@@ -179,7 +189,7 @@ Jsonix.Context = Jsonix
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);
-				return this.properties.namespacePrefixes[prefix];
+				return this.properties.prefixNamespaces[prefix];
 			},
 			/**
 			 * Builtin type infos.

@@ -273,5 +273,11 @@ Jsonix.XML.Output = Jsonix.Class({
 		}
 		return p;
 	},
+	getNamespaceURI : function (p) {
+		var pindex = this.pns.length - 1;
+		var pnsItem = this.pns[pindex];
+		pnsItem = Jsonix.Util.Type.isObject(pnsItem) ? pnsItem : this.pns[pnsItem];
+		return pnsItem[p];
+	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });

@@ -31,7 +31,7 @@ Jsonix.Util.extend = function(destination, source) {
 
 		// REWORK
 		// Node.js
-		var sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event == "function" && source instanceof window.Event;
+		sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event === "function" && source instanceof window.Event;
 
 		if (!sourceIsEvt && source.hasOwnProperty && source.hasOwnProperty('toString')) {
 			destination.toString = source.toString;
@@ -47,7 +47,7 @@ Jsonix.Class = function() {
 	var empty = function() {
 	};
 	var parent, initialize, Type;
-	for ( var i = 0, len = arguments.length; i < len; ++i) {
+	for (var i = 0, len = arguments.length; i < len; ++i) {
 		Type = arguments[i];
 		if (typeof Type == "function") {
 			// make the class passed as the first argument the superclass
@@ -1169,23 +1169,12 @@ Jsonix.XML.Input = Jsonix.Class({
 		if (this.eventType !== Jsonix.XML.Input.START_ELEMENT) {
 			throw new Error("Parser must be on START_ELEMENT to skip element.");
 		}
-		// We have one open tag at the start
 		var numberOfOpenTags = 1;
-		// Skip to the next tag
-		var et = this.nextTag();
-		// If we have an END_ELEMENT and there was exactly one open tag, we're done
-		while (et !== Jsonix.XML.Input.END_ELEMENT || numberOfOpenTags !== 1)
-		{
-			if (et === Jsonix.XML.Input.START_ELEMENT)
-			{
-				numberOfOpenTags++;
-			}
-			else
-			{
-				numberOfOpenTags--;
-			}
+		var et;
+		do {
 			et = this.nextTag();
-		}
+		    numberOfOpenTags += (et === Jsonix.XML.Input.START_ELEMENT) ? 1 : -1;
+		  } while (numberOfOpenTags > 0);
 		return et;
 	},	
 	getElementText : function() {
@@ -1654,6 +1643,12 @@ Jsonix.XML.Output = Jsonix.Class({
 			}
 		}
 		return p;
+	},
+	getNamespaceURI : function (p) {
+		var pindex = this.pns.length - 1;
+		var pnsItem = this.pns[pindex];
+		pnsItem = Jsonix.Util.Type.isObject(pnsItem) ? pnsItem : this.pns[pnsItem];
+		return pnsItem[p];
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });
@@ -5092,7 +5087,8 @@ Jsonix.Context = Jsonix
 				this.typeInfos = {};
 				this.registerBuiltinTypeInfos();
 				this.properties = {
-					namespacePrefixes : {}
+					namespacePrefixes : {},
+					prefixNamespaces : {}
 				};
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
@@ -5105,6 +5101,15 @@ Jsonix.Context = Jsonix
 							.isObject(properties.namespacePrefixes)) {
 						this.properties.namespacePrefixes = 
 							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
+					}
+				}
+				// Initialize prefix/namespace mapping
+				for (var ns in this.properties.namespacePrefixes)
+				{
+					if (this.properties.namespacePrefixes.hasOwnProperty(ns))
+					{
+						p = this.properties.namespacePrefixes[ns];
+						this.properties.prefixNamespaces[p] = ns;
 					}
 				}
 				// Initialize modules
@@ -5259,7 +5264,7 @@ Jsonix.Context = Jsonix
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);
-				return this.properties.namespacePrefixes[prefix];
+				return this.properties.prefixNamespaces[prefix];
 			},
 			/**
 			 * Builtin type infos.
