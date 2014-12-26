@@ -7,7 +7,6 @@
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-nodejs</artifactId>
 		<version>2.1.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -64,7 +63,7 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>${npm.executable}</executable>
+							<executable>npm</executable>
 							<arguments>
 								<argument>install</argument>
 							</arguments>
@@ -77,9 +76,23 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>${npm.executable}</executable>
+							<executable>npm</executable>
 							<arguments>
 								<argument>test</argument>
+							</arguments>
+						</configuration>
+					</execution>
+					<execution>
+						<id>publish</id>
+						<phase>deploy</phase>
+						<goals>
+							<goal>exec</goal>
+						</goals>
+						<configuration>
+							<executable>npm</executable>
+							<arguments>
+								<argument>publish</argument>
+								<argument>.</argument>
 							</arguments>
 						</configuration>
 					</execution>

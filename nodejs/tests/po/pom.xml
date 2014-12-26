@@ -7,14 +7,7 @@
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-nodejs-tests</artifactId>
 		<version>2.1.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jsonix-schema-compiler-full</artifactId>
-		</dependency>
-	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -24,42 +17,14 @@
 					<execution>
 						<id>initialize</id>
 						<phase>initialize</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>${npm.executable}</executable>
-							<arguments>
-								<argument>install</argument>
-								<argument>../../scripts</argument>
-							</arguments>
-						</configuration>
 					</execution>
 					<execution>
 						<id>compile</id>
 						<phase>compile</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>${npm.executable}</executable>
-							<arguments>
-								<argument>install</argument>
-							</arguments>
-						</configuration>
 					</execution>
 					<execution>
 						<id>test</id>
 						<phase>test</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>${npm.executable}</executable>
-							<arguments>
-								<argument>test</argument>
-							</arguments>
-						</configuration>
 					</execution>
 				</executions>
 			</plugin>

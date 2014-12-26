@@ -1,17 +1,16 @@
 {
 	"name": "jsonix-tests-basic",
 	"description": "Jsonix Tests Basic.",
-	"version": "2.1.1",
 	"engines": [
 		"node >= 0.8.0"
 	],
 	"main": "jsonix-tests-basic.js",
 	"dependencies": {
-		"jsonix": "~2.1.1"
+		"jsonix": "2.x.x"
 	},
 	"devDependencies" : {
-		"nodeunit" : "~0.8.6",
-		"node-static" : "~0.7.3"
+		"nodeunit" : "0.x.x",
+		"node-static" : "0.x.x"
 	},
 	"scripts": {
 		"test": "nodeunit tests/tests.js" 

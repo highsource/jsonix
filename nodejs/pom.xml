@@ -7,34 +7,9 @@
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-project</artifactId>
 		<version>2.1.1-SNAPSHOT</version>
-		<relativePath>../pom.xml</relativePath>
 	</parent>
 	<modules>
 		<module>scripts</module>
 		<module>tests</module>
 	</modules>
-	<profiles>
-		<profile>
-			<id>Windows</id>
-			<activation>
-				<os>
-					<family>windows</family>
-				</os>
-			</activation>
-			<properties>
-				<npm.executable>mnpm.bat</npm.executable>
-			</properties>
-		</profile>
-		<profile>
-			<id>unix</id>
-			<activation>
-				<os>
-					<family>!windows</family>
-				</os>
-			</activation>
-			<properties>
-				<npm.executable>mnpm.sh</npm.executable>
-			</properties>
-		</profile>
-	</profiles>
 </project>

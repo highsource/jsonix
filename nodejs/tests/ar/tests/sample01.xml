@@ -1,12 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
 <AccumulateResponse xmlns="urn:test">
   <TestCase>
-    <Transactionid>1234</Transactionid>
+    <TransactionId>1234</TransactionId>
     <TransactionType>5678</TransactionType>
     <Status>Status01</Status>
   </TestCase>
   <TestCase>
-    <Transactionid>true</Transactionid>
+    <TransactionId>true</TransactionId>
     <TransactionType>false</TransactionType>
     <Status>Status02</Status>
   </TestCase>

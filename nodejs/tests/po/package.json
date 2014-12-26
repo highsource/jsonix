@@ -1,20 +1,19 @@
 {
 	"name": "jsonix-tests-po",
 	"description": "Jsonix Tests PO.",
-	"version": "2.1.1",
 	"engines": [
 		"node >= 0.8.0"
 	],
 	"main": "jsonix-tests-po.js",
 	"dependencies": {
-		"jsonix": "~2.1.1"
+		"jsonix": "2.x.x",
+		"jsonix-schema-compiler": "2.x.x"
 	},
 	"devDependencies" : {
-		"nodeunit" : "~0.8.6",
-		"node-static" : "~0.7.3"
+		"nodeunit" : "~0.x.x"
 	},
 	"scripts": {
-		"preinstall" : "java -jar node_modules/jsonix/lib/jsonix-schema-compiler-full.jar -d mappings purchaseorder.xsd -b bindings.xjb",
+		"postinstall" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar -compact -logLevel TRACE -d mappings purchaseorder.xsd -b bindings.xjb",
 		"test": "nodeunit tests/tests.js" 
 	}
 }

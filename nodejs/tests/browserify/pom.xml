@@ -1,19 +1,13 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
 	<modelVersion>4.0.0</modelVersion>
-	<artifactId>jsonix-nodejs-test-wps</artifactId>
+	<artifactId>jsonix-nodejs-test-browserify</artifactId>
 	<packaging>pom</packaging>
-	<name>Jsonix Node.js Test [WPS]</name>
+	<name>Jsonix Node.js Test [Browserify]</name>
 	<parent>
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-nodejs-tests</artifactId>
 		<version>2.1.1-SNAPSHOT</version>
 	</parent>
-	<dependencies>
-		<dependency>
-			<groupId>${project.groupId}</groupId>
-			<artifactId>jsonix-schema-compiler-full</artifactId>
-		</dependency>
-	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -23,43 +17,30 @@
 					<execution>
 						<id>initialize</id>
 						<phase>initialize</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>npm</executable>
-							<arguments>
-								<argument>install</argument>
-								<argument>../../scripts</argument>
-							</arguments>
-						</configuration>
 					</execution>
 					<execution>
 						<id>compile</id>
+						<phase>compile</phase>
+					</execution>
+					<execution>
+						<id>browserify</id>
 						<phase>compile</phase>
 						<goals>
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>npm</executable>
+							<executable>browserify</executable>
 							<arguments>
-								<argument>install</argument>
+								<argument>main.js</argument>
+								<argument>-o</argument>
+								<argument>bundle.js</argument>
 							</arguments>
 						</configuration>
 					</execution>
-					<execution>
+					<!--execution>
 						<id>test</id>
 						<phase>test</phase>
-						<goals>
-							<goal>exec</goal>
-						</goals>
-						<configuration>
-							<executable>npm</executable>
-							<arguments>
-								<argument>test</argument>
-							</arguments>
-						</configuration>
-					</execution>
+					</execution-->
 				</executions>
 			</plugin>
 		</plugins>
