@@ -5,7 +5,8 @@
 	<packaging>pom</packaging>
 	<version>2.1.1-SNAPSHOT</version>
 	<name>Jsonix</name>
-	<url>http://static.highsource.org/jsonix/</url>
+	<description>Jsonix is a JavaScript library which allows you to convert between XML and JSON structures based on mappings.</description>
+	<url>https://github.com/highsource/jsonix</url>
 	<parent>
 		<groupId>org.sonatype.oss</groupId>
 		<artifactId>oss-parent</artifactId>
@@ -43,37 +44,15 @@
 		<developerConnection>scm:git:git@github.com:highsource/jsonix.git</developerConnection>
 		<url>https://github.com/highsource/jsonix</url>
 	</scm>
-	<organization>
-		<name>Highsource</name>
-		<url>http://confluence.highsource.org</url>
-	</organization>
 	<modules>
 		<module>scripts</module>
 		<module>nodejs</module>
-		<!--module>compiler</module-->
-		<!--module>formats</module-->
-		<!--module>full</module-->
-		<!--module>tests</module>
-		<module>demos</module>
-		<module>samples</module-->
 	</modules>
 	<profiles>
 		<profile>
-			<id>tests</id>
+			<id>all</id>
 			<modules>
-				<module>tests</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>samples</id>
-			<modules>
-				<module>samples</module>
-			</modules>
-		</profile>
-		<profile>
-			<id>demos</id>
-			<modules>
-				<module>demos</module>
+				<module>dist</module>
 			</modules>
 		</profile>
 	</profiles>
@@ -88,10 +67,7 @@
 	</mailingLists>
 	<properties> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-		<jsonix-schema-compiler.version>2.2.1-SNAPSHOT</jsonix-schema-compiler.version>
-		<jaxb2-basics.version>0.8.4</jaxb2-basics.version>
-		<jaxb-ri.version>2.2.7</jaxb-ri.version>
-		<maven-jaxb2-plugin.version>0.9.1</maven-jaxb2-plugin.version>
+		<jsonix-schema-compiler.version>2.3.1</jsonix-schema-compiler.version>
 	</properties> 
 	<dependencies>
 		<dependency>
@@ -108,73 +84,21 @@
 				<artifactId>jsonix-schema-compiler-full</artifactId>
 				<version>${jsonix-schema-compiler.version}</version>
 			</dependency>
-			<!-- Jsonix -->
 			<dependency>
 				<groupId>org.hisrc.jsonix</groupId>
-				<artifactId>jsonix</artifactId>
-				<version>${project.version}</version>
+				<artifactId>jsonix-schema-compiler</artifactId>
+				<version>${jsonix-schema-compiler.version}</version>
 			</dependency>
+			<!-- Jsonix -->
 			<dependency>
 				<groupId>org.hisrc.jsonix</groupId>
 				<artifactId>jsonix-scripts</artifactId>
 				<version>${project.version}</version>
 			</dependency>
 			<dependency>
-				<groupId>org.hisrc.jsonix</groupId>
-				<artifactId>jsonix-schema-compiler</artifactId>
-				<version>${jsonix-schema-compiler.version}</version>
-			</dependency>
-			<dependency>
 				<groupId>junit</groupId>
 				<artifactId>junit</artifactId>
 				<version>4.11</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-xjc</artifactId>
-				<version>${jaxb-ri.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>com.sun.xml.bind</groupId>
-				<artifactId>jaxb-impl</artifactId>
-				<version>${jaxb-ri.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jvnet.jaxb2_commons</groupId>
-				<artifactId>jaxb2-basics-jaxb-xjc</artifactId>
-				<version>2.1.13.MR3</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.servlet</groupId>
-				<artifactId>servlet-api</artifactId>
-				<version>2.5</version>
-			</dependency>
-			<dependency>
-				<groupId>javax.servlet.jsp</groupId>
-				<artifactId>jsp-api</artifactId>
-				<version>2.1</version>
-			</dependency>
-			<!-- JAXB2 Basics -->
-			<dependency>
-				<groupId>org.jvnet.jaxb2_commons</groupId>
-				<artifactId>jaxb2-basics-ant</artifactId>
-				<version>${jaxb2-basics.version}</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jvnet.jaxb2_commons</groupId>
-				<artifactId>jaxb2-basics</artifactId>
-				<version>${jaxb2-basics.version}</version>
-			</dependency>
-			<!-- OGC Schemas -->
-			<dependency>
-				<groupId>org.jvnet.ogc</groupId>
-				<artifactId>ows-v_1_1_0-schema</artifactId>
-				<version>1.0.3</version>
-			</dependency>
-			<dependency>
-				<groupId>org.jvnet.ogc</groupId>
-				<artifactId>wps-v_1_0_0-schema</artifactId>
-				<version>1.0.3</version>
 			</dependency>
 			<!-- Legato Testing -->
 			<dependency>
@@ -182,29 +106,11 @@
 				<artifactId>legato-testing</artifactId>
 				<version>1.1.1</version>
 			</dependency>
-			<!--dependency>
-				<groupId>org.jvnet.jaxb2.maven2</groupId>
-				<artifactId>maven-jaxb2-plugin-testing</artifactId>
-				<version>${maven-jaxb2-plugin.version}</version>
-			</dependency-->
 			<dependency>
 				<groupId>net.disy.legato</groupId>
 				<artifactId>legato-tools</artifactId>
 				<version>1.1.1</version>
 			</dependency>
-			<!-- Prototype -->
-			<!--dependency>
-				<groupId>org.wicketstuff</groupId>
-				<artifactId>prototype</artifactId>
-				<version>1.4.13</version>
-			</dependency-->
-			<!-- Hifaces20 -->
-			<!--dependency>
-				<groupId>org.hisrc.hifaces20</groupId>
-				<artifactId>hifaces20-testing</artifactId>
-				<version>0.1.3</version>
-				<scope>test</scope>
-			</dependency-->
 		</dependencies>
 	</dependencyManagement>
 	<build>
@@ -212,33 +118,26 @@
 		<pluginManagement>
 			<plugins>
 				<plugin>
-					<groupId>org.jvnet.jaxb2.maven2</groupId>
-					<artifactId>maven-jaxb2-plugin</artifactId>
-					<version>${maven-jaxb2-plugin.version}</version>
-				</plugin>
-				<plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-dependency-plugin</artifactId>
-					<version>2.1</version>
+					<version>2.9</version>
 				</plugin>
 				<plugin>
-					<artifactId>maven-assembly-plugin</artifactId>
 					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-assembly-plugin</artifactId>
 					<version>2.2.1</version>
 				</plugin>
-				<plugin>
-				 	<inherited>true</inherited>
+				<!--plugin>
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-compiler-plugin</artifactId>
 					<configuration>
 						<source>1.6</source>
 						<target>1.6</target>
 					</configuration>
-				</plugin>
+				</plugin-->
 				<plugin>
 					<artifactId>maven-antrun-plugin</artifactId>
 					<version>1.6</version>
-					<inherited>true</inherited>
 					<dependencies>
 						<dependency>
 							<groupId>sun.jdk</groupId>
@@ -278,12 +177,12 @@
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>exec-maven-plugin</artifactId>
-					<version>1.2.1</version>
+					<version>1.3.2</version>
 				</plugin>
 				<plugin>
 					<groupId>org.codehaus.mojo</groupId>
 					<artifactId>build-helper-maven-plugin</artifactId>
-					<version>1.5</version>
+					<version>1.9.1</version>
 				</plugin>
 				<plugin>
 					<groupId>org.eclipse.m2e</groupId>
@@ -372,6 +271,11 @@
 					<groupId>org.apache.maven.plugins</groupId>
 					<artifactId>maven-invoker-plugin</artifactId>
 					<version>1.9</version>
+				</plugin>
+				<plugin>
+					<groupId>org.apache.maven.plugins</groupId>
+					<artifactId>maven-clean-plugin</artifactId>
+					<version>2.6.1</version>
 				</plugin>
 			</plugins>
 		</pluginManagement>
