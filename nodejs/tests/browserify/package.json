@@ -13,6 +13,6 @@
 		"nodeunit" : "~0.x.x"
 	},
 	"scripts": {
-		"postinstall" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar purchaseorder.xsd -b bindings.xjb"
+		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar purchaseorder.xsd -b bindings.xjb"
 	}
 }

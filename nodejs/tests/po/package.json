@@ -13,7 +13,7 @@
 		"nodeunit" : "~0.x.x"
 	},
 	"scripts": {
-		"postinstall" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar -compact -logLevel TRACE -d mappings purchaseorder.xsd -b bindings.xjb",
+		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar -compact -logLevel TRACE -d mappings purchaseorder.xsd -b bindings.xjb",
 		"test": "nodeunit tests/tests.js" 
 	}
 }

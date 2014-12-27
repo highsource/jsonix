@@ -14,7 +14,7 @@
 		"nodeunit" : "0.x.x"
 	},
 	"scripts": {
-		"postinstall" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar ar.xsd -p AR -logLevel TRACE",
+		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar ar.xsd -p AR -logLevel TRACE",
 		"test": "nodeunit tests/tests.js"
 	}
 }

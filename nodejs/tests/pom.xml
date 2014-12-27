@@ -61,7 +61,7 @@
 					</execution>
 					<execution>
 						<id>compile</id>
-						<!--phase>compile</phase-->
+						<!--phase>install</phase-->
 						<phase>none</phase>
 						<goals>
 							<goal>exec</goal>
