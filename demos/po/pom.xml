@@ -70,10 +70,10 @@
 						<id>move-generated-sources</id>
 						<phase>process-sources</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<copy file="${project.build.directory}/generated-sources/xjc/PO.js" tofile="${basedir}/src/main/webapp/js/PO.js" />
 								<delete dir="${project.build.directory}/generated-sources" />
-							</tasks>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>

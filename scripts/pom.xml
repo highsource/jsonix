@@ -6,7 +6,7 @@
 	<parent>
 		<groupId>org.hisrc.jsonix</groupId>
 		<artifactId>jsonix-project</artifactId>
-		<version>2.1.1-SNAPSHOT</version>
+		<version>2.1.1</version>
 	</parent>
 	<dependencies>
 		<dependency>
@@ -108,20 +108,20 @@
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<tasks>
+							<target>
 								<taskdef name="jslint" classname="com.googlecode.jslint4java.ant.JSLintTask" classpathref="maven.plugin.classpath" />
 								<jslint encoding="UTF-8">
 									<formatter type="plain" />
 									<fileset dir="${basedir}/src/main/javascript" includes="**/*.js" />
 								</jslint>
-							</tasks>
+							</target>
 						</configuration>
 					</execution>
 					<execution>
 						<id>copy-scripts</id>
 						<phase>generate-sources</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<mkdir dir="${project.build.directory}/scripts" />
 								<copy todir="${project.build.directory}/scripts">
 									<fileset dir="${basedir}/src/main/javascript">
@@ -135,7 +135,7 @@
 										<include name="**/*.fragmentjs" />
 									</fileset>
 								</copy>
-							</tasks>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>

@@ -120,23 +120,23 @@
 							<goal>run</goal>
 						</goals>
 						<configuration>
-							<tasks>
+							<target>
 								<taskdef name="jslint" classname="com.googlecode.jslint4java.ant.JSLintTask" classpathref="maven.plugin.classpath" />
 								<jslint encoding="UTF-8">
 									<formatter type="plain" />
 									<fileset dir="${basedir}/src/main/javascript" includes="**/*.js" />
 								</jslint>
-							</tasks>
+							</target>
 						</configuration>
 					</execution>
 					<execution>
 						<phase>process-sources</phase>
 						<configuration>
-							<tasks>
+							<target>
 								<delete>
 									<fileset dir="${basedir}/target/generated-sources/xjc/net/opengis/gml" includes="**/*.java"/>
 								</delete>
-							</tasks>
+							</target>
 						</configuration>
 						<goals>
 							<goal>run</goal>
