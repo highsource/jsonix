@@ -29,5 +29,6 @@ module.exports =
 		"Two" : require('./two'),
 		"PO" : require('./po'),
 		"XMLNS" : require('./xmlns'),
+		"GH48" : require('./gh48')
 	}
 };
