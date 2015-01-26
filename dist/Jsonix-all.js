@@ -5354,7 +5354,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 //		Jsonix.Util.Ensure.ensureObject(value.name);
 		Jsonix.Util.Ensure.ensureExists(value.value);
 
-		var name = Jsonix.XML.QName.fromObjectOrString(value.name);
+		var name = Jsonix.XML.QName.fromObjectOrString(value.name, this.context);
 
 		var elementDeclaration = this.context.getElementInfo(name, scope);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
