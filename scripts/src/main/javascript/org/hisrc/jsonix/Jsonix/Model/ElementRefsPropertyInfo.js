@@ -13,9 +13,8 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
-					getPropertyElementTypeInfo : function(elementName) {
-						Jsonix.Util.Ensure.ensureObject(elementName);
-						var name = Jsonix.XML.QName.fromObject(elementName);
+					getPropertyElementTypeInfo : function(elementName, context) {
+						var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
 
 						var typeInfo = this.elementTypeInfosMap[name.key];
 						if (Jsonix.Util.Type.exists(typeInfo)) {
@@ -36,15 +35,7 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 							etiti = elementTypeInfo.typeInfo || elementTypeInfo.ti || 'String';
 							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
 							etien = elementTypeInfo.elementName || elementTypeInfo.en||undefined;
-							if (Jsonix.Util.Type.isObject(etien)) {
-								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
-							} else {
-								Jsonix.Util.Ensure
-										.ensureString(etien);
-								elementTypeInfo.elementName = new Jsonix.XML.QName(
-										this.defaultElementNamespaceURI,
-										etien);
-							}
+							elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
 							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
 						}
 					},

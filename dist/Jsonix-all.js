@@ -791,7 +791,7 @@ Jsonix.XML.QName = Jsonix.Class({
 	},
 	CLASS_NAME : "Jsonix.XML.QName"
 });
-Jsonix.XML.QName.fromString = function(qNameAsString) {
+Jsonix.XML.QName.fromString = function(qNameAsString, namespaceContext, defaultNamespaceURI) {
 	var leftBracket = qNameAsString.indexOf('{');
 	var rightBracket = qNameAsString.lastIndexOf('}');
 	var namespaceURI;
@@ -800,7 +800,7 @@ Jsonix.XML.QName.fromString = function(qNameAsString) {
 		namespaceURI = qNameAsString.substring(1, rightBracket);
 		prefixedName = qNameAsString.substring(rightBracket + 1);
 	} else {
-		namespaceURI = '';
+		namespaceURI = null;
 		prefixedName = qNameAsString;
 	}
 	var colonPosition = prefixedName.indexOf(':');
@@ -812,6 +812,17 @@ Jsonix.XML.QName.fromString = function(qNameAsString) {
 	} else {
 		prefix = '';
 		localPart = prefixedName;
+	}
+	// If namespace URI was not set and we have a namespace context, try to find the namespace URI via this context
+	if (namespaceURI === null && namespaceContext)
+	{
+		namespaceURI = namespaceContext.getNamespaceURI(prefix);
+	}
+	// If we don't have a namespace URI, assume '' by default
+	// TODO document the assumption
+	if (Jsonix.Util.Type.isString(namespaceURI))
+	{
+		namespaceURI = defaultNamespaceURI || '';
 	}
 	return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
 };
@@ -825,6 +836,16 @@ Jsonix.XML.QName.fromObject = function(object) {
 	var namespaceURI = object.namespaceURI||object.ns||'';
 	var prefix = object.prefix||object.p||'';
 	return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
+};
+Jsonix.XML.QName.fromObjectOrString = function(value, namespaceContext, defaultNamespaceURI) {
+	if (Jsonix.Util.Type.isString(value))
+	{
+		return Jsonix.XML.QName.fromString(value, namespaceContext, defaultNamespaceURI);
+	}
+	else
+	{
+		return Jsonix.XML.QName.fromObject(value);
+	}
 };
 Jsonix.XML.QName.key = function(namespaceURI, localPart) {
 	Jsonix.Util.Ensure.ensureString(localPart);
@@ -2619,12 +2640,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 							etiti = elementTypeInfo.typeInfo||elementTypeInfo.ti||'String';
 							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
 							etien = elementTypeInfo.elementName||elementTypeInfo.en||undefined;
-							if (Jsonix.Util.Type.isObject(etien)) {
-								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
-							} else {
-								Jsonix.Util.Ensure.ensureString(etien);
-								elementTypeInfo.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, etien);
-							}
+							elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
 							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
 						}
 					},
@@ -2886,7 +2902,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 	},
 	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
-		var typeInfo = this.getElementTypeInfo(context, name, scope);
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
 		var value = {
 			name : name,
 			value : typeInfo.unmarshal(context, input, scope)
@@ -2942,8 +2958,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 	},
 	marshalElement : function(value, context, output, scope) {
-		var elementName = Jsonix.XML.QName.fromObject(value.name);
-		var typeInfo = this.getElementTypeInfo(context, elementName, scope);
+		var elementName = Jsonix.XML.QName.fromObjectOrString(value.name, context);
+		var typeInfo = this.getElementTypeInfo(elementName, context, scope);
 		return this.marshalElementTypeInfo(elementName, typeInfo, value, context, output, scope);
 	},
 	marshalElementTypeInfo : function(elementName, typeInfo, value, context, output, scope) {
@@ -2954,8 +2970,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		output.writeEndElement();
 
 	},
-	getElementTypeInfo : function(context, elementName, scope) {
-		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName);
+	getElementTypeInfo : function(elementName, context, scope) {
+		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
 			return propertyElementTypeInfo.typeInfo;
 		} else {
@@ -2968,7 +2984,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 
 	},
-	getPropertyElementTypeInfo : function(elementName) {
+	getPropertyElementTypeInfo : function(elementName, context) {
 		throw new Error("Abstract method [getPropertyElementTypeInfo].");
 	},
 	buildStructure : function(context, structure) {
@@ -3052,9 +3068,8 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix
 							this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 						}
 					},
-					getPropertyElementTypeInfo : function(elementName) {
-						Jsonix.Util.Ensure.ensureObject(elementName);
-						var name = Jsonix.XML.QName.fromObject(elementName);
+					getPropertyElementTypeInfo : function(elementName, context) {
+						var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
 
 						if (name.key === this.elementName.key) {
 							return this;
@@ -3086,9 +3101,8 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
-					getPropertyElementTypeInfo : function(elementName) {
-						Jsonix.Util.Ensure.ensureObject(elementName);
-						var name = Jsonix.XML.QName.fromObject(elementName);
+					getPropertyElementTypeInfo : function(elementName, context) {
+						var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
 
 						var typeInfo = this.elementTypeInfosMap[name.key];
 						if (Jsonix.Util.Type.exists(typeInfo)) {
@@ -3109,15 +3123,7 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix
 							etiti = elementTypeInfo.typeInfo || elementTypeInfo.ti || 'String';
 							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
 							etien = elementTypeInfo.elementName || elementTypeInfo.en||undefined;
-							if (Jsonix.Util.Type.isObject(etien)) {
-								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
-							} else {
-								Jsonix.Util.Ensure
-										.ensureString(etien);
-								elementTypeInfo.elementName = new Jsonix.XML.QName(
-										this.defaultElementNamespaceURI,
-										etien);
-							}
+							elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
 							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
 						}
 					},
@@ -3218,7 +3224,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 
 		} else {
 			// Typed object
-			var name = Jsonix.XML.QName.fromObject(value.name);
+			var name = Jsonix.XML.QName.fromObjectOrString(value.name, context);
 			if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
 				var elementDeclaration = context.getElementInfo(name, scope);
 				var typeInfo = elementDeclaration.typeInfo;
@@ -5345,10 +5351,10 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 	marshalElementNode : function(value, output, scope) {
 
 		Jsonix.Util.Ensure.ensureObject(value);
-		Jsonix.Util.Ensure.ensureObject(value.name);
+//		Jsonix.Util.Ensure.ensureObject(value.name);
 		Jsonix.Util.Ensure.ensureExists(value.value);
 
-		var name = Jsonix.XML.QName.fromObject(value.name);
+		var name = Jsonix.XML.QName.fromObjectOrString(value.name);
 
 		var elementDeclaration = this.context.getElementInfo(name, scope);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
@@ -5356,7 +5362,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;
-		var element = output.writeStartElement(value.name);
+		var element = output.writeStartElement(name);
 		var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 		adapter.marshal(typeInfo, value.value, this.context, output, scope);
 		output.writeEndElement();
@@ -5426,6 +5432,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		}
 
 		var result = null;
+		// It's OK to use fromObject here because input gives objects, guaranteed
 		var name = Jsonix.XML.QName.fromObject(input.getName());
 
 		var elementDeclaration = this.context.getElementInfo(name, scope);

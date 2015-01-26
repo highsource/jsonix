@@ -43,12 +43,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 							etiti = elementTypeInfo.typeInfo||elementTypeInfo.ti||'String';
 							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
 							etien = elementTypeInfo.elementName||elementTypeInfo.en||undefined;
-							if (Jsonix.Util.Type.isObject(etien)) {
-								elementTypeInfo.elementName = Jsonix.XML.QName.fromObject(etien);
-							} else {
-								Jsonix.Util.Ensure.ensureString(etien);
-								elementTypeInfo.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, etien);
-							}
+							elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
 							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
 						}
 					},

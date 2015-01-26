@@ -54,7 +54,7 @@ Jsonix.XML.QName = Jsonix.Class({
 	},
 	CLASS_NAME : "Jsonix.XML.QName"
 });
-Jsonix.XML.QName.fromString = function(qNameAsString) {
+Jsonix.XML.QName.fromString = function(qNameAsString, namespaceContext, defaultNamespaceURI) {
 	var leftBracket = qNameAsString.indexOf('{');
 	var rightBracket = qNameAsString.lastIndexOf('}');
 	var namespaceURI;
@@ -63,7 +63,7 @@ Jsonix.XML.QName.fromString = function(qNameAsString) {
 		namespaceURI = qNameAsString.substring(1, rightBracket);
 		prefixedName = qNameAsString.substring(rightBracket + 1);
 	} else {
-		namespaceURI = '';
+		namespaceURI = null;
 		prefixedName = qNameAsString;
 	}
 	var colonPosition = prefixedName.indexOf(':');
@@ -75,6 +75,17 @@ Jsonix.XML.QName.fromString = function(qNameAsString) {
 	} else {
 		prefix = '';
 		localPart = prefixedName;
+	}
+	// If namespace URI was not set and we have a namespace context, try to find the namespace URI via this context
+	if (namespaceURI === null && namespaceContext)
+	{
+		namespaceURI = namespaceContext.getNamespaceURI(prefix);
+	}
+	// If we don't have a namespace URI, assume '' by default
+	// TODO document the assumption
+	if (Jsonix.Util.Type.isString(namespaceURI))
+	{
+		namespaceURI = defaultNamespaceURI || '';
 	}
 	return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
 };
@@ -88,6 +99,16 @@ Jsonix.XML.QName.fromObject = function(object) {
 	var namespaceURI = object.namespaceURI||object.ns||'';
 	var prefix = object.prefix||object.p||'';
 	return new Jsonix.XML.QName(namespaceURI, localPart, prefix);
+};
+Jsonix.XML.QName.fromObjectOrString = function(value, namespaceContext, defaultNamespaceURI) {
+	if (Jsonix.Util.Type.isString(value))
+	{
+		return Jsonix.XML.QName.fromString(value, namespaceContext, defaultNamespaceURI);
+	}
+	else
+	{
+		return Jsonix.XML.QName.fromObject(value);
+	}
 };
 Jsonix.XML.QName.key = function(namespaceURI, localPart) {
 	Jsonix.Util.Ensure.ensureString(localPart);

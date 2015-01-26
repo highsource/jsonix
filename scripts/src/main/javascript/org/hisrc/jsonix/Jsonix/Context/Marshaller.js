@@ -26,10 +26,10 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 	marshalElementNode : function(value, output, scope) {
 
 		Jsonix.Util.Ensure.ensureObject(value);
-		Jsonix.Util.Ensure.ensureObject(value.name);
+//		Jsonix.Util.Ensure.ensureObject(value.name);
 		Jsonix.Util.Ensure.ensureExists(value.value);
 
-		var name = Jsonix.XML.QName.fromObject(value.name);
+		var name = Jsonix.XML.QName.fromObjectOrString(value.name);
 
 		var elementDeclaration = this.context.getElementInfo(name, scope);
 		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
@@ -37,7 +37,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 		}
 		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
 		var typeInfo = elementDeclaration.typeInfo;
-		var element = output.writeStartElement(value.name);
+		var element = output.writeStartElement(name);
 		var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 		adapter.marshal(typeInfo, value.value, this.context, output, scope);
 		output.writeEndElement();

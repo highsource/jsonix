@@ -89,7 +89,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 	},
 	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
-		var typeInfo = this.getElementTypeInfo(context, name, scope);
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
 		var value = {
 			name : name,
 			value : typeInfo.unmarshal(context, input, scope)
@@ -145,8 +145,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 	},
 	marshalElement : function(value, context, output, scope) {
-		var elementName = Jsonix.XML.QName.fromObject(value.name);
-		var typeInfo = this.getElementTypeInfo(context, elementName, scope);
+		var elementName = Jsonix.XML.QName.fromObjectOrString(value.name, context);
+		var typeInfo = this.getElementTypeInfo(elementName, context, scope);
 		return this.marshalElementTypeInfo(elementName, typeInfo, value, context, output, scope);
 	},
 	marshalElementTypeInfo : function(elementName, typeInfo, value, context, output, scope) {
@@ -157,8 +157,8 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		output.writeEndElement();
 
 	},
-	getElementTypeInfo : function(context, elementName, scope) {
-		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName);
+	getElementTypeInfo : function(elementName, context, scope) {
+		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
 			return propertyElementTypeInfo.typeInfo;
 		} else {
@@ -171,7 +171,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 
 	},
-	getPropertyElementTypeInfo : function(elementName) {
+	getPropertyElementTypeInfo : function(elementName, context) {
 		throw new Error("Abstract method [getPropertyElementTypeInfo].");
 	},
 	buildStructure : function(context, structure) {

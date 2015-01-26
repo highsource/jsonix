@@ -86,7 +86,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 
 		} else {
 			// Typed object
-			var name = Jsonix.XML.QName.fromObject(value.name);
+			var name = Jsonix.XML.QName.fromObjectOrString(value.name, context);
 			if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
 				var elementDeclaration = context.getElementInfo(name, scope);
 				var typeInfo = elementDeclaration.typeInfo;

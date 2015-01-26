@@ -25,9 +25,8 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix
 							this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 						}
 					},
-					getPropertyElementTypeInfo : function(elementName) {
-						Jsonix.Util.Ensure.ensureObject(elementName);
-						var name = Jsonix.XML.QName.fromObject(elementName);
+					getPropertyElementTypeInfo : function(elementName, context) {
+						var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
 
 						if (name.key === this.elementName.key) {
 							return this;

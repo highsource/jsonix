@@ -267,9 +267,7 @@ module.exports =
 			},
 			value : {
 				element : {
-					name : {
-						localPart : 'string'
-					},
+					name : 'string',
 					value : 'tiger'
 				}
 			}
@@ -462,9 +460,7 @@ module.exports =
 					},
 					value : 'one'
 				}, {
-					name : {
-						localPart : 'value'
-					},
+					name : 'value',
 					value : {
 						value : 'two'
 					}
@@ -684,9 +680,7 @@ module.exports =
 		var context = new Jsonix.Context([ One, Two ]);
 		var marshaller = context.createMarshaller();
 		var value = {
-			name : {
-				localPart : "string"
-			},
+			name : 'string',
 			value : 'text'
 		};
 		var node = marshaller.marshalDocument(value);

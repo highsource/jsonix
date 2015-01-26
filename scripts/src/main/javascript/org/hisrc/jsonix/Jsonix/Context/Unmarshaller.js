@@ -59,6 +59,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		}
 
 		var result = null;
+		// It's OK to use fromObject here because input gives objects, guaranteed
 		var name = Jsonix.XML.QName.fromObject(input.getName());
 
 		var elementDeclaration = this.context.getElementInfo(name, scope);
