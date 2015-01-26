@@ -820,7 +820,7 @@ Jsonix.XML.QName.fromString = function(qNameAsString, namespaceContext, defaultN
 	}
 	// If we don't have a namespace URI, assume '' by default
 	// TODO document the assumption
-	if (Jsonix.Util.Type.isString(namespaceURI))
+	if (!Jsonix.Util.Type.isString(namespaceURI))
 	{
 		namespaceURI = defaultNamespaceURI || '';
 	}
