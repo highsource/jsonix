@@ -1881,8 +1881,7 @@ Jsonix.Model.ClassInfo = Jsonix
 				propertyInfo.setProperty(result, propertyValue);
 			},
 			marshal : function(value, context, output, scope) {
-				// If given value is an instance of this class, just process the properties
-				if (Jsonix.Util.Type.isObject(value))
+				if (this.isMarshallable(value, context, scope))
 				{
 					// TODO This must be reworked
 					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
@@ -1915,6 +1914,10 @@ Jsonix.Model.ClassInfo = Jsonix
 						throw new Error("The passed value [" + value + "] is not an object and there is no single suitable property to marshal it.");
 					}
 				}
+			},
+			// Checks if the value is marshallable
+			isMarshallable : function(value, context, scope) {
+				return this.isInstance(value, context, scope) || (Jsonix.Util.Type.isObject(value) && !Jsonix.Util.Type.isArray(value));
 			},
 			isInstance : function(value, context, scope) {
 				if (this.instanceFactory) {

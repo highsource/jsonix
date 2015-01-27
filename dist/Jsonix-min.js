@@ -735,7 +735,7 @@ this.unmarshalProperty(B,w,t,p)
 h.setProperty(g,f)
 },unmarshalPropertyValue:function(k,l,i,h,j){var g=i.unmarshalValue(j,k,l,this);
 i.setProperty(h,g)
-},marshal:function(l,q,p,k){if(Jsonix.Util.Type.isObject(l)){if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.marshal(l,q,p)
+},marshal:function(l,q,p,k){if(this.isMarshallable(l,q,k)){if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.marshal(l,q,p)
 }for(var n=0;
 n<this.properties.length;
 n++){var m=this.properties[n];
@@ -746,7 +746,8 @@ j.marshal(l,q,p,this)
 }else{if(this.properties.length===1){var r=this.properties[0];
 r.marshal(l,q,p,this)
 }else{throw new Error("The passed value ["+l+"] is not an object and there is no single suitable property to marshal it.")
-}}}},isInstance:function(f,e,d){if(this.instanceFactory){return f instanceof this.instanceFactory
+}}}},isMarshallable:function(f,e,d){return this.isInstance(f,e,d)||(Jsonix.Util.Type.isObject(f)&&!Jsonix.Util.Type.isArray(f))
+},isInstance:function(f,e,d){if(this.instanceFactory){return f instanceof this.instanceFactory
 }else{return Jsonix.Util.Type.isObject(f)&&Jsonix.Util.Type.isString(f.TYPE_NAME)&&f.TYPE_NAME===this.name
 }},b:function(b){Jsonix.Util.Ensure.ensureObject(b);
 this.baseTypeInfo=b;
