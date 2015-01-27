@@ -179,16 +179,39 @@ Jsonix.Model.ClassInfo = Jsonix
 				var propertyValue = propertyInfo.unmarshalValue(value, context, input, this);
 				propertyInfo.setProperty(result, propertyValue);
 			},
-			marshal : function(value, context, output) {
-				// TODO This must be reworked
-				if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
-					this.baseTypeInfo.marshal(value, context, output);
+			marshal : function(value, context, output, scope) {
+				// If given value is an instance of this class, just process the properties
+				if (Jsonix.Util.Type.isObject(value))
+				{
+					// TODO This must be reworked
+					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
+						this.baseTypeInfo.marshal(value, context, output);
+					}
+					for ( var index = 0; index < this.properties.length; index++) {
+						var propertyInfo = this.properties[index];
+						var propertyValue = value[propertyInfo.name];
+						if (Jsonix.Util.Type.exists(propertyValue)) {
+							propertyInfo.marshal(propertyValue, context, output, this);
+						}
+					}
 				}
-				for ( var index = 0; index < this.properties.length; index++) {
-					var propertyInfo = this.properties[index];
-					var propertyValue = value[propertyInfo.name];
-					if (Jsonix.Util.Type.exists(propertyValue)) {
-						propertyInfo.marshal(propertyValue, context, output, this);
+				else
+				{
+					// Otherwise if there is just one property, use this property to marshal
+					if (this.structure.value)
+					{
+						var valuePropertyInfo = this.structure.value;
+						valuePropertyInfo.marshal(value, context, output, this);
+					}
+					else if (this.properties.length === 1)
+					{
+						var singlePropertyInfo = this.properties[0];
+						singlePropertyInfo.marshal(value, context, output, this);
+					}
+					else
+					{
+						// TODO throw an error
+						throw new Error("The passed value [" + value + "] is not an object and there is no single suitable property to marshal it.");
 					}
 				}
 			},

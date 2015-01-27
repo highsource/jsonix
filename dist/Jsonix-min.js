@@ -294,7 +294,7 @@ p=k.substring(q+1)
 }else{o="";
 p=k
 }if(s===null&&r){s=r.getNamespaceURI(o)
-}if(Jsonix.Util.Type.isString(s)){s=m||""
+}if(!Jsonix.Util.Type.isString(s)){s=m||""
 }return new Jsonix.XML.QName(s,p,o)
 };
 Jsonix.XML.QName.fromObject=function(h){Jsonix.Util.Ensure.ensureObject(h);
@@ -735,13 +735,18 @@ this.unmarshalProperty(B,w,t,p)
 h.setProperty(g,f)
 },unmarshalPropertyValue:function(k,l,i,h,j){var g=i.unmarshalValue(j,k,l,this);
 i.setProperty(h,g)
-},marshal:function(i,k,g){if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.marshal(i,k,g)
-}for(var l=0;
-l<this.properties.length;
-l++){var j=this.properties[l];
-var h=i[j.name];
-if(Jsonix.Util.Type.exists(h)){j.marshal(h,k,g,this)
-}}},isInstance:function(f,e,d){if(this.instanceFactory){return f instanceof this.instanceFactory
+},marshal:function(l,q,p,k){if(Jsonix.Util.Type.isObject(l)){if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.marshal(l,q,p)
+}for(var n=0;
+n<this.properties.length;
+n++){var m=this.properties[n];
+var o=l[m.name];
+if(Jsonix.Util.Type.exists(o)){m.marshal(o,q,p,this)
+}}}else{if(this.structure.value){var j=this.structure.value;
+j.marshal(l,q,p,this)
+}else{if(this.properties.length===1){var r=this.properties[0];
+r.marshal(l,q,p,this)
+}else{throw new Error("The passed value ["+l+"] is not an object and there is no single suitable property to marshal it.")
+}}}},isInstance:function(f,e,d){if(this.instanceFactory){return f instanceof this.instanceFactory
 }else{return Jsonix.Util.Type.isObject(f)&&Jsonix.Util.Type.isString(f.TYPE_NAME)&&f.TYPE_NAME===this.name
 }},b:function(b){Jsonix.Util.Ensure.ensureObject(b);
 this.baseTypeInfo=b;
@@ -2122,7 +2127,7 @@ e.writeEndDocument();
 return f
 },marshalElementNode:function(k,p,m){Jsonix.Util.Ensure.ensureObject(k);
 Jsonix.Util.Ensure.ensureExists(k.value);
-var o=Jsonix.XML.QName.fromObjectOrString(k.name);
+var o=Jsonix.XML.QName.fromObjectOrString(k.name,this.context);
 var i=this.context.getElementInfo(o,m);
 if(!Jsonix.Util.Type.exists(i)){throw new Error("Could not find element declaration for the element ["+o.key+"].")
 }Jsonix.Util.Ensure.ensureObject(i.typeInfo);
