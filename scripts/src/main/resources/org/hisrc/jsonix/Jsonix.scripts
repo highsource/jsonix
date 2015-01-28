@@ -81,5 +81,7 @@
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREF.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREFS.js
 /org/hisrc/jsonix/Jsonix/Context.js
+/org/hisrc/jsonix/Jsonix/Context/MappingStyle.js
+/org/hisrc/jsonix/Jsonix/Context/MappingStyle/Standard.js
 /org/hisrc/jsonix/Jsonix/Context/Marshaller.js
 /org/hisrc/jsonix/Jsonix/Context/Unmarshaller.js

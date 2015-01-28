@@ -5,9 +5,15 @@ Jsonix.Model.Module = Jsonix
 			elementInfos : null,
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
+			mappingStyle : null,
 			initialize : function(mapping) {
 				this.typeInfos = [];
 				this.elementInfos = [];
+				// TODO initialize the mapping style
+				if (!this.mappingStyle)
+				{
+					this.mappingStyle = Jsonix.Context.MappingStyle.STYLES.standard;
+				}
 				if (typeof mapping !== 'undefined') {
 					Jsonix.Util.Ensure.ensureObject(mapping);
 					var n = mapping.name||mapping.n||null;
@@ -132,14 +138,14 @@ Jsonix.Model.Module = Jsonix
 				mapping.defaultAttributeNamespaceURI = dans;
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var classInfo = new Jsonix.Model.ClassInfo(mapping);
+				var classInfo = new this.mappingStyle.classInfo(mapping);
 				return classInfo;
 			},
 			createEnumLeafInfo : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var enumLeafInfo = new Jsonix.Model.EnumLeafInfo(mapping);
+				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping);
 				return enumLeafInfo;
 			},
 			createList : function(mapping) {
@@ -179,7 +185,7 @@ Jsonix.Model.Module = Jsonix
 					}
 				}
 				
-				var elementInfo = new Jsonix.Model.ElementInfo(mapping);
+				var elementInfo = new this.mappingStyle.elementInfo(mapping);
 				return elementInfo;
 			},
 			registerTypeInfos : function(context) {

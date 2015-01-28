@@ -110,6 +110,8 @@
 'Jsonix/Schema/XSD/IDREF.js',
 'Jsonix/Schema/XSD/IDREFS.js',
 'Jsonix/Context.js',
+'Jsonix/Context/MappingStyle.js',
+'Jsonix/Context/MappingStyle/Standard.js',
 'Jsonix/Context/Marshaller.js',
 'Jsonix/Context/Unmarshaller.js'
       ]; // etc.

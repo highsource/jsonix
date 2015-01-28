@@ -6,6 +6,7 @@ Jsonix.Context = Jsonix
 			properties : null,
 			substitutionMembersMap : null,
 			scopedElementInfosMap : null,
+			mappingStyle : null,
 			initialize : function(mappings, properties) {
 				this.modules = [];
 				this.elementInfos = [];
@@ -27,6 +28,12 @@ Jsonix.Context = Jsonix
 						this.properties.namespacePrefixes = 
 							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
 					}
+				}
+				// Initialize the mapping style
+				// TODO
+				if (!this.mappingStyle)
+				{
+					this.mappingStyle = Jsonix.Context.MappingStyle.STYLES.standard;
 				}
 				// Initialize prefix/namespace mapping
 				for (var ns in this.properties.namespacePrefixes)
@@ -52,10 +59,10 @@ Jsonix.Context = Jsonix
 			},
 			createModule : function(mapping) {
 				var module;
-				if (mapping instanceof Jsonix.Model.Module) {
+				if (mapping instanceof this.mappingStyle.module) {
 					module = mapping;
 				} else {
-					module = new Jsonix.Model.Module(mapping);
+					module = new this.mappingStyle.module(mapping);
 				}
 				return module;
 			},
