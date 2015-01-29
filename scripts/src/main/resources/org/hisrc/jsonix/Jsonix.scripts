@@ -15,6 +15,7 @@
 /org/hisrc/jsonix/Jsonix/XML/Output.js
 /org/hisrc/jsonix/Jsonix/Mapping.js
 /org/hisrc/jsonix/Jsonix/Mapping/Style.js
+/org/hisrc/jsonix/Jsonix/Mapping/Styled.js
 /org/hisrc/jsonix/Jsonix/Model/TypeInfo.js
 /org/hisrc/jsonix/Jsonix/Model/Adapter.js
 /org/hisrc/jsonix/Jsonix/Model/ClassInfo.js

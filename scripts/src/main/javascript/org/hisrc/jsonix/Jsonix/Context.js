@@ -1,47 +1,40 @@
 Jsonix.Context = Jsonix
-		.Class({
+		.Class(Jsonix.Mapping.Styled, {
 			modules : [],
 			typeInfos : null,
 			elementInfos : null,
-			properties : null,
+			options : null,
 			substitutionMembersMap : null,
 			scopedElementInfosMap : null,
-			mappingStyle : null,
-			initialize : function(mappings, properties) {
+			initialize : function(mappings, options) {
+				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				this.modules = [];
 				this.elementInfos = [];
 				this.typeInfos = {};
 				this.registerBuiltinTypeInfos();
-				this.properties = {
-					namespacePrefixes : {},
-					prefixNamespaces : {}
-				};
+				this.namespacePrefixes = {};
+				this.prefixNamespaces = {};
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
 
 
-				// Initialize properties
-				if (Jsonix.Util.Type.exists(properties)) {
-					Jsonix.Util.Ensure.ensureObject(properties);
+				// Initialize options
+				if (Jsonix.Util.Type.exists(options)) {
+					Jsonix.Util.Ensure.ensureObject(options);
 					if (Jsonix.Util.Type
-							.isObject(properties.namespacePrefixes)) {
-						this.properties.namespacePrefixes = 
-							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
+							.isObject(options.namespacePrefixes)) {
+						this.namespacePrefixes = 
+							Jsonix.Util.Type.cloneObject(options.namespacePrefixes, {});
 					}
 				}
-				// Initialize the mapping style
-				// TODO
-				if (!this.mappingStyle)
-				{
-					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-				}
+				
 				// Initialize prefix/namespace mapping
-				for (var ns in this.properties.namespacePrefixes)
+				for (var ns in this.namespacePrefixes)
 				{
-					if (this.properties.namespacePrefixes.hasOwnProperty(ns))
+					if (this.namespacePrefixes.hasOwnProperty(ns))
 					{
-						p = this.properties.namespacePrefixes[ns];
-						this.properties.prefixNamespaces[p] = ns;
+						p = this.namespacePrefixes[ns];
+						this.prefixNamespaces[p] = ns;
 					}
 				}
 				// Initialize modules
@@ -62,7 +55,10 @@ Jsonix.Context = Jsonix
 				if (mapping instanceof this.mappingStyle.module) {
 					module = mapping;
 				} else {
-					module = new this.mappingStyle.module(mapping);
+					module = new this.mappingStyle.module(mapping, 
+					{
+						mappingStyle : this.mappingStyle
+					});
 				}
 				return module;
 			},
@@ -196,7 +192,7 @@ Jsonix.Context = Jsonix
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);
-				return this.properties.prefixNamespaces[prefix];
+				return this.prefixNamespaces[prefix];
 			},
 			/**
 			 * Builtin type infos.

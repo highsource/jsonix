@@ -11,7 +11,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 	},
 	marshalDocument : function(value) {
 		var output = new Jsonix.XML.Output({
-			namespacePrefixes : this.context.properties.namespacePrefixes
+			namespacePrefixes : this.context.namespacePrefixes
 		});
 
 		var doc = output.writeStartDocument();

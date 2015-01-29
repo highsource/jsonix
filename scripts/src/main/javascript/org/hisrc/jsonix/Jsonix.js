@@ -45,6 +45,7 @@
 'Jsonix/XML/Output.js',
 'Jsonix/Mapping.js',
 'Jsonix/Mapping/Style.js',
+'Jsonix/Mapping/Styled.js',
 'Jsonix/Model/TypeInfo.js',
 'Jsonix/Model/Adapter.js',
 'Jsonix/Model/ClassInfo.js',

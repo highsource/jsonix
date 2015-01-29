@@ -1,19 +1,14 @@
 Jsonix.Model.Module = Jsonix
-		.Class({
+		.Class(Jsonix.Mapping.Styled, {
 			name : null,
 			typeInfos : null,
 			elementInfos : null,
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
-			mappingStyle : null,
-			initialize : function(mapping) {
+			initialize : function(mapping, options) {
+				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				this.typeInfos = [];
 				this.elementInfos = [];
-				// TODO initialize the mapping style
-				if (!this.mappingStyle)
-				{
-					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-				}
 				if (typeof mapping !== 'undefined') {
 					Jsonix.Util.Ensure.ensureObject(mapping);
 					var n = mapping.name||mapping.n||null;
@@ -138,14 +133,20 @@ Jsonix.Model.Module = Jsonix
 				mapping.defaultAttributeNamespaceURI = dans;
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var classInfo = new this.mappingStyle.classInfo(mapping);
+				var classInfo = new this.mappingStyle.classInfo(mapping,
+				{
+					mappingStyle : this.mappingStyle
+				});
 				return classInfo;
 			},
 			createEnumLeafInfo : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping);
+				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping,
+				{
+					mappingStyle : this.mappingStyle
+				});
 				return enumLeafInfo;
 			},
 			createList : function(mapping) {
@@ -185,7 +186,10 @@ Jsonix.Model.Module = Jsonix
 					}
 				}
 				
-				var elementInfo = new this.mappingStyle.elementInfo(mapping);
+				var elementInfo = new this.mappingStyle.elementInfo(mapping,
+				{
+					mappingStyle : this.mappingStyle
+				});
 				return elementInfo;
 			},
 			registerTypeInfos : function(context) {

@@ -1673,6 +1673,27 @@ Jsonix.XML.Output = Jsonix.Class({
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });
+Jsonix.Mapping = {};
+Jsonix.Mapping.Style = Jsonix.Class({
+	module : null,
+	elementInfo : null,
+	classInfo : null,
+	enumLeafInfo : null,
+	anyAttributePropertyInfo : null,
+	anyElementPropertyInfo : null,
+	attributePropertyInfo : null,
+	elementMapPropertyInfo : null,
+	elementPropertyInfo : null,
+	elementsPropertyInfo : null,
+	elementRefPropertyInfo : null,
+	elementRefsPropertyInfo : null,
+	valuePropertyInfo : null,
+	initialize : function() {
+	},
+	CLASS_NAME : 'Jsonix.Mapping.Style'
+});
+
+Jsonix.Mapping.Style.STYLES = {};
 Jsonix.Model.TypeInfo = Jsonix.Class({
 	name : null,
 	initialize : function() {
@@ -1709,9 +1730,17 @@ Jsonix.Model.ClassInfo = Jsonix
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
+			mappingStyle : null,
 			initialize : function(mapping) {
 				Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 				Jsonix.Util.Ensure.ensureObject(mapping);
+
+				// TODO initialize the mapping style
+				if (!this.mappingStyle)
+				{
+					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
+				}
+				
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
@@ -1961,51 +1990,51 @@ Jsonix.Model.ClassInfo = Jsonix
 			aa : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
-						.addProperty(new Jsonix.Model.AnyAttributePropertyInfo(
+						.addProperty(new this.mappingStyle.anyAttributePropertyInfo(
 								mapping));
 			},
 			ae : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
-						.addProperty(new Jsonix.Model.AnyElementPropertyInfo(
+						.addProperty(new this.mappingStyle.anyElementPropertyInfo(
 								mapping));
 			},
 			a : function(mapping) {
 				this.addDefaultNamespaces(mapping);
-				return this.addProperty(new Jsonix.Model.AttributePropertyInfo(
+				return this.addProperty(new this.mappingStyle.attributePropertyInfo(
 						mapping));
 			},
 			em : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
-						.addProperty(new Jsonix.Model.ElementMapPropertyInfo(
+						.addProperty(new this.mappingStyle.elementMapPropertyInfo(
 								mapping));
 			},
 			e : function(mapping) {
 				this.addDefaultNamespaces(mapping);
-				return this.addProperty(new Jsonix.Model.ElementPropertyInfo(
+				return this.addProperty(new this.mappingStyle.elementPropertyInfo(
 						mapping));
 			},
 			es : function(mapping) {
 				this.addDefaultNamespaces(mapping);
-				return this.addProperty(new Jsonix.Model.ElementsPropertyInfo(
+				return this.addProperty(new this.mappingStyle.elementsPropertyInfo(
 						mapping));
 			},
 			er : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
-						.addProperty(new Jsonix.Model.ElementRefPropertyInfo(
+						.addProperty(new this.mappingStyle.elementRefPropertyInfo(
 								mapping));
 			},
 			ers : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
-						.addProperty(new Jsonix.Model.ElementRefsPropertyInfo(
+						.addProperty(new this.mappingStyle.elementRefsPropertyInfo(
 								mapping));
 			},
 			v : function(mapping) {
 				this.addDefaultNamespaces(mapping);
-				return this.addProperty(new Jsonix.Model.ValuePropertyInfo(
+				return this.addProperty(new this.mappingStyle.valuePropertyInfo(
 						mapping));
 			},
 			addDefaultNamespaces : function(mapping) {
@@ -2684,9 +2713,15 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 	key : null,
 	value : null,
 	entryTypeInfo : null,
+	mappingStyle : null,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		// TODO initialize the mapping style
+		if (!this.mappingStyle)
+		{
+			this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
+		}
 		// TODO Ensure correct argument
 		var k = mapping.key||mapping.k||undefined;
 		Jsonix.Util.Ensure.ensureObject(k);
@@ -2701,7 +2736,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		} else {
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 		}
-		this.entryTypeInfo = new Jsonix.Model.ClassInfo({
+		this.entryTypeInfo = new this.mappingStyle.classInfo({
 			name: 'Map<' + k.name + ',' + v.name + '>',
 			propertyInfos : [ k, v ]
 		});
@@ -3307,9 +3342,15 @@ Jsonix.Model.Module = Jsonix
 			elementInfos : null,
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
+			mappingStyle : null,
 			initialize : function(mapping) {
 				this.typeInfos = [];
 				this.elementInfos = [];
+				// TODO initialize the mapping style
+				if (!this.mappingStyle)
+				{
+					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
+				}
 				if (typeof mapping !== 'undefined') {
 					Jsonix.Util.Ensure.ensureObject(mapping);
 					var n = mapping.name||mapping.n||null;
@@ -3434,14 +3475,14 @@ Jsonix.Model.Module = Jsonix
 				mapping.defaultAttributeNamespaceURI = dans;
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var classInfo = new Jsonix.Model.ClassInfo(mapping);
+				var classInfo = new this.mappingStyle.classInfo(mapping);
 				return classInfo;
 			},
 			createEnumLeafInfo : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var enumLeafInfo = new Jsonix.Model.EnumLeafInfo(mapping);
+				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping);
 				return enumLeafInfo;
 			},
 			createList : function(mapping) {
@@ -3481,7 +3522,7 @@ Jsonix.Model.Module = Jsonix
 					}
 				}
 				
-				var elementInfo = new Jsonix.Model.ElementInfo(mapping);
+				var elementInfo = new this.mappingStyle.elementInfo(mapping);
 				return elementInfo;
 			},
 			registerTypeInfos : function(context) {
@@ -3526,6 +3567,27 @@ Jsonix.Model.Module.prototype.typeInfoCreators = {
 	"list" : Jsonix.Model.Module.prototype.createList,
 	"l" : Jsonix.Model.Module.prototype.createList
 };
+Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
+	module : Jsonix.Model.Module,
+	elementInfo : Jsonix.Model.ElementInfo,
+	classInfo : Jsonix.Model.ClassInfo,
+	enumLeafInfo : Jsonix.Model.EnumLeafInfo,
+	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo,
+	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo,
+	attributePropertyInfo : Jsonix.Model.AttributePropertyInfo,
+	elementMapPropertyInfo : Jsonix.Model.ElementMapPropertyInfo,
+	elementPropertyInfo : Jsonix.Model.ElementPropertyInfo,
+	elementsPropertyInfo : Jsonix.Model.ElementsPropertyInfo,
+	elementRefPropertyInfo : Jsonix.Model.ElementRefPropertyInfo,
+	elementRefsPropertyInfo : Jsonix.Model.ElementRefsPropertyInfo,
+	valuePropertyInfo : Jsonix.Model.ValuePropertyInfo,
+	initialize : function() {
+		Jsonix.Mapping.Style.prototype.initialize.apply(this);
+	},
+	CLASS_NAME : 'Jsonix.MappingS.tyle.Standard'
+});
+Jsonix.Mapping.Style.STYLES.standard = new Jsonix.Mapping.Style.Standard();
+
 Jsonix.Schema.XSD = {};
 Jsonix.Schema.XSD.NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema';
 Jsonix.Schema.XSD.PREFIX = 'xsd';
@@ -5113,6 +5175,7 @@ Jsonix.Context = Jsonix
 			properties : null,
 			substitutionMembersMap : null,
 			scopedElementInfosMap : null,
+			mappingStyle : null,
 			initialize : function(mappings, properties) {
 				this.modules = [];
 				this.elementInfos = [];
@@ -5134,6 +5197,12 @@ Jsonix.Context = Jsonix
 						this.properties.namespacePrefixes = 
 							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
 					}
+				}
+				// Initialize the mapping style
+				// TODO
+				if (!this.mappingStyle)
+				{
+					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
 				}
 				// Initialize prefix/namespace mapping
 				for (var ns in this.properties.namespacePrefixes)
@@ -5159,10 +5228,10 @@ Jsonix.Context = Jsonix
 			},
 			createModule : function(mapping) {
 				var module;
-				if (mapping instanceof Jsonix.Model.Module) {
+				if (mapping instanceof this.mappingStyle.module) {
 					module = mapping;
 				} else {
-					module = new Jsonix.Model.Module(mapping);
+					module = new this.mappingStyle.module(mapping);
 				}
 				return module;
 			},

@@ -1,5 +1,5 @@
 Jsonix.Model.ClassInfo = Jsonix
-		.Class(Jsonix.Model.TypeInfo, {
+		.Class(Jsonix.Model.TypeInfo, Jsonix.Mapping.Styled, {
 			name : null,
 			baseTypeInfo : null,
 			instanceFactory : null,
@@ -8,17 +8,10 @@ Jsonix.Model.ClassInfo = Jsonix
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
-			mappingStyle : null,
-			initialize : function(mapping) {
+			initialize : function(mapping, options) {
 				Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
+				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				Jsonix.Util.Ensure.ensureObject(mapping);
-
-				// TODO initialize the mapping style
-				if (!this.mappingStyle)
-				{
-					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-				}
-				
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
@@ -269,51 +262,69 @@ Jsonix.Model.ClassInfo = Jsonix
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.anyAttributePropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			ae : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.anyElementPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			a : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.attributePropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			em : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.elementMapPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			e : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.elementPropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			es : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.elementsPropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			er : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.elementRefPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			ers : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.elementRefsPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			v : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.valuePropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			addDefaultNamespaces : function(mapping) {
 				if (Jsonix.Util.Type.isObject(mapping)) {
