@@ -13,6 +13,8 @@
 /org/hisrc/jsonix/Jsonix/XML/Calendar.js
 /org/hisrc/jsonix/Jsonix/XML/Input.js
 /org/hisrc/jsonix/Jsonix/XML/Output.js
+/org/hisrc/jsonix/Jsonix/Mapping.js
+/org/hisrc/jsonix/Jsonix/Mapping/Style.js
 /org/hisrc/jsonix/Jsonix/Model/TypeInfo.js
 /org/hisrc/jsonix/Jsonix/Model/Adapter.js
 /org/hisrc/jsonix/Jsonix/Model/ClassInfo.js
@@ -32,6 +34,7 @@
 /org/hisrc/jsonix/Jsonix/Model/ElementRefsPropertyInfo.js
 /org/hisrc/jsonix/Jsonix/Model/AnyElementPropertyInfo.js
 /org/hisrc/jsonix/Jsonix/Model/Module.js
+/org/hisrc/jsonix/Jsonix/Mapping/Style/Standard.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/AnyType.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/AnySimpleType.js
@@ -81,7 +84,5 @@
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREF.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREFS.js
 /org/hisrc/jsonix/Jsonix/Context.js
-/org/hisrc/jsonix/Jsonix/Context/MappingStyle.js
-/org/hisrc/jsonix/Jsonix/Context/MappingStyle/Standard.js
 /org/hisrc/jsonix/Jsonix/Context/Marshaller.js
 /org/hisrc/jsonix/Jsonix/Context/Unmarshaller.js

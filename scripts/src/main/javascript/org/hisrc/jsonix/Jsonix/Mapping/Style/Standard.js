@@ -1,4 +1,4 @@
-Jsonix.Context.MappingStyle.Standard = Jsonix.Class(Jsonix.Context.MappingStyle, {
+Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
 	module : Jsonix.Model.Module,
 	elementInfo : Jsonix.Model.ElementInfo,
 	classInfo : Jsonix.Model.ClassInfo,
@@ -13,8 +13,8 @@ Jsonix.Context.MappingStyle.Standard = Jsonix.Class(Jsonix.Context.MappingStyle,
 	elementRefsPropertyInfo : Jsonix.Model.ElementRefsPropertyInfo,
 	valuePropertyInfo : Jsonix.Model.ValuePropertyInfo,
 	initialize : function() {
-		Jsonix.Context.MappingStyle.prototype.initialize.apply(this);
+		Jsonix.Mapping.Style.prototype.initialize.apply(this);
 	},
-	CLASS_NAME : 'Jsonix.Context.MappingStyle.Standard'
+	CLASS_NAME : 'Jsonix.MappingS.tyle.Standard'
 });
-Jsonix.Context.MappingStyle.STYLES.standard = new Jsonix.Context.MappingStyle.Standard();
+Jsonix.Mapping.Style.STYLES.standard = new Jsonix.Mapping.Style.Standard();

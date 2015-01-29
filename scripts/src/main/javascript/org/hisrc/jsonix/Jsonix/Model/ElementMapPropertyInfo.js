@@ -10,7 +10,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		// TODO initialize the mapping style
 		if (!this.mappingStyle)
 		{
-			this.mappingStyle = Jsonix.Context.MappingStyle.STYLES.standard;
+			this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
 		}
 		// TODO Ensure correct argument
 		var k = mapping.key||mapping.k||undefined;

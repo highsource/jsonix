@@ -33,7 +33,7 @@ Jsonix.Context = Jsonix
 				// TODO
 				if (!this.mappingStyle)
 				{
-					this.mappingStyle = Jsonix.Context.MappingStyle.STYLES.standard;
+					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
 				}
 				// Initialize prefix/namespace mapping
 				for (var ns in this.properties.namespacePrefixes)

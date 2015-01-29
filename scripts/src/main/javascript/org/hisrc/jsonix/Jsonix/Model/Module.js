@@ -12,7 +12,7 @@ Jsonix.Model.Module = Jsonix
 				// TODO initialize the mapping style
 				if (!this.mappingStyle)
 				{
-					this.mappingStyle = Jsonix.Context.MappingStyle.STYLES.standard;
+					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
 				}
 				if (typeof mapping !== 'undefined') {
 					Jsonix.Util.Ensure.ensureObject(mapping);

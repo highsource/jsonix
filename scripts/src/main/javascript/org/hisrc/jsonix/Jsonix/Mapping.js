@@ -1,0 +1,1 @@
+Jsonix.Mapping = {};

@@ -1,4 +1,4 @@
-Jsonix.Context.MappingStyle = Jsonix.Class({
+Jsonix.Mapping.Style = Jsonix.Class({
 	module : null,
 	elementInfo : null,
 	classInfo : null,
@@ -14,7 +14,7 @@ Jsonix.Context.MappingStyle = Jsonix.Class({
 	valuePropertyInfo : null,
 	initialize : function() {
 	},
-	CLASS_NAME : 'Jsonix.Context.MappingStyle'
+	CLASS_NAME : 'Jsonix.Mapping.Style'
 });
 
-Jsonix.Context.MappingStyle.STYLES = {};
+Jsonix.Mapping.Style.STYLES = {};

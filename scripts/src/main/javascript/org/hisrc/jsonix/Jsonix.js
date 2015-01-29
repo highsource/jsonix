@@ -43,6 +43,8 @@
 'Jsonix/XML/Calendar.js',
 'Jsonix/XML/Input.js',
 'Jsonix/XML/Output.js',
+'Jsonix/Mapping.js',
+'Jsonix/Mapping/Style.js',
 'Jsonix/Model/TypeInfo.js',
 'Jsonix/Model/Adapter.js',
 'Jsonix/Model/ClassInfo.js',
@@ -61,6 +63,7 @@
 'Jsonix/Model/ElementRefPropertyInfo.js',
 'Jsonix/Model/ElementRefsPropertyInfo.js',
 'Jsonix/Model/AnyElementPropertyInfo.js',
+'Jsonix/Mapping/Style/Standard.js',
 'Jsonix/Schema/XSD.js',
 'Jsonix/Schema/XSD/AnyType.js',
 'Jsonix/Schema/XSD/AnySimpleType.js',
@@ -110,8 +113,6 @@
 'Jsonix/Schema/XSD/IDREF.js',
 'Jsonix/Schema/XSD/IDREFS.js',
 'Jsonix/Context.js',
-'Jsonix/Context/MappingStyle.js',
-'Jsonix/Context/MappingStyle/Standard.js',
 'Jsonix/Context/Marshaller.js',
 'Jsonix/Context/Unmarshaller.js'
       ]; // etc.
