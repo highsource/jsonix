@@ -88,7 +88,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 	marshalElement : function(value, context, output, scope) {
 		throw new Error("Abstract method [marshalElement].");
 	},
-	marshalElementTypeInfo : function(elementName, typeInfo,  value, context, output, scope) {
+	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {
 		output.writeStartElement(elementName);
 		typeInfo.marshal(value, context, output, scope);
 		output.writeEndElement();

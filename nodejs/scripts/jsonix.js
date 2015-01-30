@@ -778,6 +778,11 @@ Jsonix.XML.QName = Jsonix.Class({
 	toString : function() {
 		return this.string;
 	},
+	// foo:bar
+	toCanonicalString: function(namespaceContext) {
+		var canonicalPrefix = namespaceContext ? namespaceContext.getPrefix(this.namespaceURI, this.prefix) : this.prefix;
+		return this.prefix + (this.prefix === '' ? '' : ':') + this.localPart;
+	},
 	clone : function() {
 		return new Jsonix.XML.QName(this.namespaceURI, this.localPart, this.prefix);
 	},
@@ -1694,6 +1699,27 @@ Jsonix.Mapping.Style = Jsonix.Class({
 });
 
 Jsonix.Mapping.Style.STYLES = {};
+Jsonix.Mapping.Styled = Jsonix.Class({
+	mappingStyle : null,
+	initialize : function(options) {
+		if (Jsonix.Util.Type.exists(options)) {
+			Jsonix.Util.Ensure.ensureObject(options);
+			if (Jsonix.Util.Type.isString(options.mappingStyle)) {
+				var mappingStyle = Jsonix.Mapping.Style.STYLES[options.mappingStyle];
+				if (!mappingStyle) {
+					throw new Error("Mapping style [" + options.mappingStyle + "] is not known.");
+				}
+				this.mappingStyle = mappingStyle;
+			} else if (Jsonix.Util.Type.isObject(options.mappingStyle)) {
+				this.mappingStyle = options.mappingStyle;
+			}
+		}
+		if (!this.mappingStyle) {
+			this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
+		}
+	},
+	CLASS_NAME : 'Jsonix.Mapping.Styled'
+});
 Jsonix.Model.TypeInfo = Jsonix.Class({
 	name : null,
 	initialize : function() {
@@ -1721,7 +1747,7 @@ Jsonix.Model.Adapter.getAdapter = function (elementInfo)
 	return Jsonix.Util.Type.exists(elementInfo.adapter) ? elementInfo.adapter : Jsonix.Model.Adapter.INSTANCE;
 };
 Jsonix.Model.ClassInfo = Jsonix
-		.Class(Jsonix.Model.TypeInfo, {
+		.Class(Jsonix.Model.TypeInfo, Jsonix.Mapping.Styled, {
 			name : null,
 			baseTypeInfo : null,
 			instanceFactory : null,
@@ -1730,17 +1756,10 @@ Jsonix.Model.ClassInfo = Jsonix
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
-			mappingStyle : null,
-			initialize : function(mapping) {
+			initialize : function(mapping, options) {
 				Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
+				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				Jsonix.Util.Ensure.ensureObject(mapping);
-
-				// TODO initialize the mapping style
-				if (!this.mappingStyle)
-				{
-					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-				}
-				
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
@@ -1991,51 +2010,69 @@ Jsonix.Model.ClassInfo = Jsonix
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.anyAttributePropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			ae : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.anyElementPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			a : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.attributePropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			em : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.elementMapPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			e : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.elementPropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			es : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.elementsPropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			er : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.elementRefPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			ers : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this
 						.addProperty(new this.mappingStyle.elementRefsPropertyInfo(
-								mapping));
+								mapping, {
+									mappingStyle : this.mappingStyle
+								}));
 			},
 			v : function(mapping) {
 				this.addDefaultNamespaces(mapping);
 				return this.addProperty(new this.mappingStyle.valuePropertyInfo(
-						mapping));
+						mapping, {
+							mappingStyle : this.mappingStyle
+						}));
 			},
 			addDefaultNamespaces : function(mapping) {
 				if (Jsonix.Util.Type.isObject(mapping)) {
@@ -2585,7 +2622,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 	marshalElement : function(value, context, output, scope) {
 		throw new Error("Abstract method [marshalElement].");
 	},
-	marshalElementTypeInfo : function(elementName, typeInfo,  value, context, output, scope) {
+	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {
 		output.writeStartElement(elementName);
 		typeInfo.marshal(value, context, output, scope);
 		output.writeEndElement();
@@ -2639,7 +2676,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 				return callback(this.typeInfo.unmarshal(context, input, scope));
 			},
 			marshalElement : function(value, context, output, scope) {
-				this.marshalElementTypeInfo(this.elementName, this.typeInfo, value, context, output, scope);
+				this.marshalElementTypeInfo(this.elementName, value, this.typeInfo, context, output, scope);
 			},
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
@@ -2680,7 +2717,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 							var typeInfo = elementTypeInfo.typeInfo;
 							if (typeInfo.isInstance(value, context, scope)) {
 								var elementName = elementTypeInfo.elementName;
-								this.marshalElementTypeInfo(elementName, typeInfo, value, context, output, scope);
+								this.marshalElementTypeInfo(elementName, value, typeInfo, context, output, scope);
 								return;
 							}
 						}
@@ -2713,15 +2750,9 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 	key : null,
 	value : null,
 	entryTypeInfo : null,
-	mappingStyle : null,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		// TODO initialize the mapping style
-		if (!this.mappingStyle)
-		{
-			this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-		}
 		// TODO Ensure correct argument
 		var k = mapping.key||mapping.k||undefined;
 		Jsonix.Util.Ensure.ensureObject(k);
@@ -2736,7 +2767,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		} else {
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 		}
-		this.entryTypeInfo = new this.mappingStyle.classInfo({
+		this.entryTypeInfo = new Jsonix.Model.ClassInfo({
 			name: 'Map<' + k.name + ',' + v.name + '>',
 			propertyInfos : [ k, v ]
 		});
@@ -2962,17 +2993,21 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		return result;
 	},
 	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		var value = {
-			name : name,
-			value : typeInfo.unmarshal(context, input, scope)
-		};
+		var elementName = input.getName();
+		var typeInfo = this.getElementTypeInfo(elementName, context, scope);
+		var elementValue = typeInfo.unmarshal(context, input, scope);
+		var value = this.createValue(elementName, elementValue, context, input, scope); 
 		if (this.collection) {
 			return [ value ];
 		} else {
 			return value;
 		}
+	},
+	createValue : function (elementName, elementValue, context, input, scope) {
+		return {
+			name : elementName,
+			value : elementValue
+		};
 	},
 	marshal : function(value, context, output, scope) {
 
@@ -3020,13 +3055,14 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 	},
 	marshalElement : function(value, context, output, scope) {
 		var elementName = Jsonix.XML.QName.fromObjectOrString(value.name, context);
+		var elementValue = Jsonix.Util.Type.exists(value.value) ? value.value : null;
 		var typeInfo = this.getElementTypeInfo(elementName, context, scope);
-		return this.marshalElementTypeInfo(elementName, typeInfo, value, context, output, scope);
+		return this.marshalElementTypeInfo(elementName, elementValue, typeInfo, context, output, scope);
 	},
-	marshalElementTypeInfo : function(elementName, typeInfo, value, context, output, scope) {
+	marshalElementTypeInfo : function(elementName, elementValue, typeInfo, context, output, scope) {
 		output.writeStartElement(elementName);
-		if (Jsonix.Util.Type.exists(value.value)) {
-			typeInfo.marshal(value.value, context, output, scope);
+		if (Jsonix.Util.Type.exists(elementValue)) {
+			typeInfo.marshal(elementValue, context, output, scope);
 		}
 		output.writeEndElement();
 
@@ -3099,103 +3135,108 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 		}
 	},
-	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo'
+	CLASS_NAME : 'Jsonix.Model.AbstractElementRefsPropertyInfo'
 });
 
-Jsonix.Model.ElementRefPropertyInfo = Jsonix
-		.Class(
-				Jsonix.Model.AbstractElementRefsPropertyInfo,
-				{
-					typeInfo : 'String',
-					elementName : null,
-					initialize : function(mapping) {
-						Jsonix.Util.Ensure.ensureObject(mapping);
-						Jsonix.Model.AbstractElementRefsPropertyInfo.prototype.initialize
-								.apply(this, [ mapping ]);
-						// TODO Ensure correct argument
-						var ti = mapping.typeInfo||mapping.ti||'String';
-						if (Jsonix.Util.Type.isObject(ti)) {
-							this.typeInfo = ti;
-						} else {
-							Jsonix.Util.Ensure.ensureString(ti);
-							this.typeInfo = ti;
-						}
-						var en = mapping.elementName||mapping.en||undefined;
-						if (Jsonix.Util.Type.isObject(en)) {
-							this.elementName = Jsonix.XML.QName.fromObject(en);
-						} else if (Jsonix.Util.Type.isString(en)) {
-							this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
-						} else {
-							this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
-						}
-					},
-					getPropertyElementTypeInfo : function(elementName, context) {
-						var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
+Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
+	createValue : function (elementName, elementValue, context, input, scope) {
+		var propertyName = elementName.toCanonicalString(context);
+		var value = {};
+		value[propertyName] = elementValue;
+		return value;
+	}		
+});
+Jsonix.Model.ElementRefPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementRefsPropertyInfo, {
+	typeInfo : 'String',
+	elementName : null,
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.AbstractElementRefsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		// TODO Ensure correct argument
+		var ti = mapping.typeInfo || mapping.ti || 'String';
+		if (Jsonix.Util.Type.isObject(ti)) {
+			this.typeInfo = ti;
+		} else {
+			Jsonix.Util.Ensure.ensureString(ti);
+			this.typeInfo = ti;
+		}
+		var en = mapping.elementName || mapping.en || undefined;
+		if (Jsonix.Util.Type.isObject(en)) {
+			this.elementName = Jsonix.XML.QName.fromObject(en);
+		} else if (Jsonix.Util.Type.isString(en)) {
+			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
+		} else {
+			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
+		}
+	},
+	getPropertyElementTypeInfo : function(elementName, context) {
+		var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
 
-						if (name.key === this.elementName.key) {
-							return this;
-						} else {
-							return null;
-						}
-					},
-					doBuild : function(context, module) {
-						this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
-					},
-					buildStructureElements : function(context, structure) {
-						this.buildStructureElementTypeInfos(context, structure,	this);
-					},
-					CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo'
-				});
+		if (name.key === this.elementName.key) {
+			return this;
+		} else {
+			return null;
+		}
+	},
+	doBuild : function(context, module) {
+		this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
+	},
+	buildStructureElements : function(context, structure) {
+		this.buildStructureElementTypeInfos(context, structure, this);
+	},
+	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo'
+});
+Jsonix.Model.ElementRefPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo.Simplified'
+});
+Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementRefsPropertyInfo, {
+	elementTypeInfos : null,
+	elementTypeInfosMap : null,
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.AbstractElementRefsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		// TODO Ensure correct arguments
+		var etis = mapping.elementTypeInfos || mapping.etis || [];
+		Jsonix.Util.Ensure.ensureArray(etis);
+		this.elementTypeInfos = etis;
+	},
+	getPropertyElementTypeInfo : function(elementName, context) {
+		var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
 
-Jsonix.Model.ElementRefsPropertyInfo = Jsonix
-		.Class(
-				Jsonix.Model.AbstractElementRefsPropertyInfo,
-				{
-					elementTypeInfos : null,
-					elementTypeInfosMap : null,
-					initialize : function(mapping) {
-						Jsonix.Util.Ensure.ensureObject(mapping);
-						Jsonix.Model.AbstractElementRefsPropertyInfo.prototype.initialize
-								.apply(this, [ mapping ]);
-						// TODO Ensure correct arguments
-						var etis = mapping.elementTypeInfos||mapping.etis||[];
-						Jsonix.Util.Ensure.ensureArray(etis);
-						this.elementTypeInfos = etis;
-					},
-					getPropertyElementTypeInfo : function(elementName, context) {
-						var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
-
-						var typeInfo = this.elementTypeInfosMap[name.key];
-						if (Jsonix.Util.Type.exists(typeInfo)) {
-							return {
-								elementName : name,
-								typeInfo : typeInfo
-							};
-						} else {
-							return null;
-						}
-					},
-					doBuild : function(context, module) {
-						this.elementTypeInfosMap = {};
-						var etiti, etien;
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
-							etiti = elementTypeInfo.typeInfo || elementTypeInfo.ti || 'String';
-							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
-							etien = elementTypeInfo.elementName || elementTypeInfo.en||undefined;
-							elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
-							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
-						}
-					},
-					buildStructureElements : function(context, structure) {
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							this.buildStructureElementTypeInfos(context, structure, elementTypeInfo);
-						}
-					},
-					CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'
-				});
+		var typeInfo = this.elementTypeInfosMap[name.key];
+		if (Jsonix.Util.Type.exists(typeInfo)) {
+			return {
+				elementName : name,
+				typeInfo : typeInfo
+			};
+		} else {
+			return null;
+		}
+	},
+	doBuild : function(context, module) {
+		this.elementTypeInfosMap = {};
+		var etiti, etien;
+		for (var index = 0; index < this.elementTypeInfos.length; index++) {
+			var elementTypeInfo = this.elementTypeInfos[index];
+			Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
+			etiti = elementTypeInfo.typeInfo || elementTypeInfo.ti || 'String';
+			elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
+			etien = elementTypeInfo.elementName || elementTypeInfo.en || undefined;
+			elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
+			this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
+		}
+	},
+	buildStructureElements : function(context, structure) {
+		for (var index = 0; index < this.elementTypeInfos.length; index++) {
+			var elementTypeInfo = this.elementTypeInfos[index];
+			this.buildStructureElementTypeInfos(context, structure, elementTypeInfo);
+		}
+	},
+	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'
+});
+Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo.Simplified'
+});
 
 Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	allowDom : true,
@@ -3336,21 +3377,16 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 });
 
 Jsonix.Model.Module = Jsonix
-		.Class({
+		.Class(Jsonix.Mapping.Styled, {
 			name : null,
 			typeInfos : null,
 			elementInfos : null,
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
-			mappingStyle : null,
-			initialize : function(mapping) {
+			initialize : function(mapping, options) {
+				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				this.typeInfos = [];
 				this.elementInfos = [];
-				// TODO initialize the mapping style
-				if (!this.mappingStyle)
-				{
-					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-				}
 				if (typeof mapping !== 'undefined') {
 					Jsonix.Util.Ensure.ensureObject(mapping);
 					var n = mapping.name||mapping.n||null;
@@ -3367,7 +3403,7 @@ Jsonix.Model.Module = Jsonix
 					// as properties of the schema, for instance Schema.MyType
 					for ( var typeInfoName in mapping) {
 						if (mapping.hasOwnProperty(typeInfoName)) {
-							if (mapping[typeInfoName] instanceof Jsonix.Model.ClassInfo) {
+							if (mapping[typeInfoName] instanceof this.mappingStyle.classInfo) {
 								this.typeInfos.push(mapping[typeInfoName]);
 							}
 						}
@@ -3475,14 +3511,20 @@ Jsonix.Model.Module = Jsonix
 				mapping.defaultAttributeNamespaceURI = dans;
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var classInfo = new this.mappingStyle.classInfo(mapping);
+				var classInfo = new this.mappingStyle.classInfo(mapping,
+				{
+					mappingStyle : this.mappingStyle
+				});
 				return classInfo;
 			},
 			createEnumLeafInfo : function(mapping) {
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				this.initializeNames(mapping);
 				// Now both name an local name are initialized
-				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping);
+				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping,
+				{
+					mappingStyle : this.mappingStyle
+				});
 				return enumLeafInfo;
 			},
 			createList : function(mapping) {
@@ -3522,7 +3564,10 @@ Jsonix.Model.Module = Jsonix
 					}
 				}
 				
-				var elementInfo = new this.mappingStyle.elementInfo(mapping);
+				var elementInfo = new this.mappingStyle.elementInfo(mapping,
+				{
+					mappingStyle : this.mappingStyle
+				});
 				return elementInfo;
 			},
 			registerTypeInfos : function(context) {
@@ -3584,9 +3629,30 @@ Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
 	initialize : function() {
 		Jsonix.Mapping.Style.prototype.initialize.apply(this);
 	},
-	CLASS_NAME : 'Jsonix.MappingS.tyle.Standard'
+	CLASS_NAME : 'Jsonix.Mapping.Style.Standard'
 });
 Jsonix.Mapping.Style.STYLES.standard = new Jsonix.Mapping.Style.Standard();
+
+Jsonix.Mapping.Style.Simplified = Jsonix.Class(Jsonix.Mapping.Style, {
+	module : Jsonix.Model.Module,
+	elementInfo : Jsonix.Model.ElementInfo,
+	classInfo : Jsonix.Model.ClassInfo,
+	enumLeafInfo : Jsonix.Model.EnumLeafInfo,
+	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo,
+	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo,
+	attributePropertyInfo : Jsonix.Model.AttributePropertyInfo,
+	elementMapPropertyInfo : Jsonix.Model.ElementMapPropertyInfo,
+	elementPropertyInfo : Jsonix.Model.ElementPropertyInfo,
+	elementsPropertyInfo : Jsonix.Model.ElementsPropertyInfo,
+	elementRefPropertyInfo : Jsonix.Model.ElementRefPropertyInfo.Simplified,
+	elementRefsPropertyInfo : Jsonix.Model.ElementRefsPropertyInfo.Simplified,
+	valuePropertyInfo : Jsonix.Model.ValuePropertyInfo,
+	initialize : function() {
+		Jsonix.Mapping.Style.prototype.initialize.apply(this);
+	},
+	CLASS_NAME : 'Jsonix.Mapping.Style.Simplified'
+});
+Jsonix.Mapping.Style.STYLES.simplified = new Jsonix.Mapping.Style.Simplified();
 
 Jsonix.Schema.XSD = {};
 Jsonix.Schema.XSD.NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema';
@@ -5168,49 +5234,42 @@ Jsonix.Schema.XSD.IDREFS = Jsonix.Class(Jsonix.Schema.XSD.List, {
 });
 Jsonix.Schema.XSD.IDREFS.INSTANCE = new Jsonix.Schema.XSD.IDREFS();
 Jsonix.Context = Jsonix
-		.Class({
+		.Class(Jsonix.Mapping.Styled, {
 			modules : [],
 			typeInfos : null,
 			elementInfos : null,
-			properties : null,
+			options : null,
 			substitutionMembersMap : null,
 			scopedElementInfosMap : null,
-			mappingStyle : null,
-			initialize : function(mappings, properties) {
+			initialize : function(mappings, options) {
+				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				this.modules = [];
 				this.elementInfos = [];
 				this.typeInfos = {};
 				this.registerBuiltinTypeInfos();
-				this.properties = {
-					namespacePrefixes : {},
-					prefixNamespaces : {}
-				};
+				this.namespacePrefixes = {};
+				this.prefixNamespaces = {};
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
 
 
-				// Initialize properties
-				if (Jsonix.Util.Type.exists(properties)) {
-					Jsonix.Util.Ensure.ensureObject(properties);
+				// Initialize options
+				if (Jsonix.Util.Type.exists(options)) {
+					Jsonix.Util.Ensure.ensureObject(options);
 					if (Jsonix.Util.Type
-							.isObject(properties.namespacePrefixes)) {
-						this.properties.namespacePrefixes = 
-							Jsonix.Util.Type.cloneObject(properties.namespacePrefixes, {});
+							.isObject(options.namespacePrefixes)) {
+						this.namespacePrefixes = 
+							Jsonix.Util.Type.cloneObject(options.namespacePrefixes, {});
 					}
 				}
-				// Initialize the mapping style
-				// TODO
-				if (!this.mappingStyle)
-				{
-					this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-				}
+				
 				// Initialize prefix/namespace mapping
-				for (var ns in this.properties.namespacePrefixes)
+				for (var ns in this.namespacePrefixes)
 				{
-					if (this.properties.namespacePrefixes.hasOwnProperty(ns))
+					if (this.namespacePrefixes.hasOwnProperty(ns))
 					{
-						p = this.properties.namespacePrefixes[ns];
-						this.properties.prefixNamespaces[p] = ns;
+						p = this.namespacePrefixes[ns];
+						this.prefixNamespaces[p] = ns;
 					}
 				}
 				// Initialize modules
@@ -5231,7 +5290,10 @@ Jsonix.Context = Jsonix
 				if (mapping instanceof this.mappingStyle.module) {
 					module = mapping;
 				} else {
-					module = new this.mappingStyle.module(mapping);
+					module = new this.mappingStyle.module(mapping, 
+					{
+						mappingStyle : this.mappingStyle
+					});
 				}
 				return module;
 			},
@@ -5365,7 +5427,19 @@ Jsonix.Context = Jsonix
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);
-				return this.properties.prefixNamespaces[prefix];
+				return this.prefixNamespaces[prefix];
+			},
+			getPrefix : function(namespaceURI, defaultPrefix) {
+				Jsonix.Util.Ensure.ensureString(namespaceURI);
+				var prefix = this.namespacePrefixes[namespaceURI];
+				if (Jsonix.Util.Type.isString(prefix))
+				{
+					return prefix;
+				}
+				else
+				{
+					return defaultPrefix;
+				}
 			},
 			/**
 			 * Builtin type infos.
@@ -5431,7 +5505,7 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 	},
 	marshalDocument : function(value) {
 		var output = new Jsonix.XML.Output({
-			namespacePrefixes : this.context.properties.namespacePrefixes
+			namespacePrefixes : this.context.namespacePrefixes
 		});
 
 		var doc = output.writeStartDocument();
