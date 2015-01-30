@@ -146,7 +146,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 	},
 	marshalElement : function(value, context, output, scope) {
-		var elementValue = this.convertFromElementValue(value, context, output, scope)
+		var elementValue = this.convertFromElementValue(value, context, output, scope);
 		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
 		return this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
 	},
