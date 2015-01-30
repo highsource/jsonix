@@ -2,6 +2,9 @@ Jsonix.Util.Type = {
 	exists : function(value) {
 		return (typeof value !== 'undefined' && value !== null);
 	},
+	isUndefined : function(value) {
+		return typeof value === 'undefined';
+	},
 	isString : function(value) {
 		return typeof value === 'string';
 	},
