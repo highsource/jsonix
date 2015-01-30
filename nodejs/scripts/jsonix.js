@@ -328,6 +328,9 @@ Jsonix.Util.Type = {
 	exists : function(value) {
 		return (typeof value !== 'undefined' && value !== null);
 	},
+	isUndefined : function(value) {
+		return typeof value === 'undefined';
+	},
 	isString : function(value) {
 		return typeof value === 'string';
 	},
@@ -2993,21 +2996,18 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		return result;
 	},
 	unmarshalElement : function(context, input, scope) {
-		var elementName = input.getName();
-		var typeInfo = this.getElementTypeInfo(elementName, context, scope);
-		var elementValue = typeInfo.unmarshal(context, input, scope);
-		var value = this.createValue(elementName, elementValue, context, input, scope); 
+		var name = input.getName();
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
+		var value = typeInfo.unmarshal(context, input, scope);
+		var elementValue = this.convertToElementValue({name : name, value: value}, context, input, scope); 
 		if (this.collection) {
-			return [ value ];
+			return [ elementValue ];
 		} else {
-			return value;
+			return elementValue;
 		}
 	},
-	createValue : function (elementName, elementValue, context, input, scope) {
-		return {
-			name : elementName,
-			value : elementValue
-		};
+	convertToElementValue : function (elementValue, context, input, scope) {
+		return elementValue;
 	},
 	marshal : function(value, context, output, scope) {
 
@@ -3054,15 +3054,36 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 	},
 	marshalElement : function(value, context, output, scope) {
-		var elementName = Jsonix.XML.QName.fromObjectOrString(value.name, context);
-		var elementValue = Jsonix.Util.Type.exists(value.value) ? value.value : null;
-		var typeInfo = this.getElementTypeInfo(elementName, context, scope);
-		return this.marshalElementTypeInfo(elementName, elementValue, typeInfo, context, output, scope);
+		var elementValue = this.convertFromElementValue(value, context, output, scope);
+		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
+		return this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
 	},
-	marshalElementTypeInfo : function(elementName, elementValue, typeInfo, context, output, scope) {
-		output.writeStartElement(elementName);
-		if (Jsonix.Util.Type.exists(elementValue)) {
-			typeInfo.marshal(elementValue, context, output, scope);
+	convertFromElementValue: function(elementValue, context, output, scope) {
+		var name;
+		var value;
+		if (Jsonix.Util.Type.exists(elementValue.name) && !Jsonix.Util.Type.isUndefined(elementValue.value)) {
+			name = Jsonix.XML.QName.fromObjectOrString(elementValue.name, context);
+			value = Jsonix.Util.Type.exists(elementValue.value) ? elementValue.value : null;
+			return {name : name, value : value};
+		}
+		else
+		{
+			for (var propertyName in elementValue)
+			{
+				if (elementValue.hasOwnProperty(propertyName))
+				{
+					name = Jsonix.XML.QName.fromObjectOrString(propertyName, context);
+					value = elementValue[propertyName];
+					return {name : name, value : value};
+				}
+			}
+		}
+		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
+	},
+	marshalElementTypeInfo : function(name, value, typeInfo, context, output, scope) {
+		output.writeStartElement(name);
+		if (Jsonix.Util.Type.exists(value)) {
+			typeInfo.marshal(value, context, output, scope);
 		}
 		output.writeEndElement();
 
@@ -3139,10 +3160,10 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 });
 
 Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
-	createValue : function (elementName, elementValue, context, input, scope) {
-		var propertyName = elementName.toCanonicalString(context);
+	convertToElementValue : function (elementValue, context, input, scope) {
+		var propertyName = elementValue.name.toCanonicalString(context);
 		var value = {};
-		value[propertyName] = elementValue;
+		value[propertyName] = elementValue.value;
 		return value;
 	}		
 });
