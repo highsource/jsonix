@@ -65,6 +65,7 @@
 'Jsonix/Model/ElementRefsPropertyInfo.js',
 'Jsonix/Model/AnyElementPropertyInfo.js',
 'Jsonix/Mapping/Style/Standard.js',
+'Jsonix/Mapping/Style/Simplified.js',
 'Jsonix/Schema/XSD.js',
 'Jsonix/Schema/XSD/AnyType.js',
 'Jsonix/Schema/XSD/AnySimpleType.js',

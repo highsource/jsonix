@@ -36,6 +36,7 @@
 /org/hisrc/jsonix/Jsonix/Model/AnyElementPropertyInfo.js
 /org/hisrc/jsonix/Jsonix/Model/Module.js
 /org/hisrc/jsonix/Jsonix/Mapping/Style/Standard.js
+/org/hisrc/jsonix/Jsonix/Mapping/Style/Simplified.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/AnyType.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/AnySimpleType.js

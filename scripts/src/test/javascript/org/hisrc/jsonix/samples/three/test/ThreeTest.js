@@ -456,6 +456,78 @@ function testThreeUnmarshalElementRefsType() {
 	assertEquals('twelve', result.value.mix[2]);
 }
 
+function testThreeUnmarshalElementRefsSimplifiedType() {
+	var context = new Jsonix.Context([ Three ], { mappingStyle : 'simplified' });
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<elementRefs>' +
+	//
+	'<element>one</element>' +
+	//
+	'<element1>one.1</element1>' +
+	//
+	'<elements>' +
+	//
+	'<element>two</element>' +
+	//
+	'</elements>' +
+	//
+	'<elements1>' +
+	//
+	'<element1>2.1</element1>' +
+	//
+	'</elements1>' +
+	//
+	'<item>three</item>' +
+	//
+	'<item>four</item>' +
+	//
+	'<items>' +
+	//
+	'<item>five</item>' +
+	//
+	'<item>six</item>' +
+	//
+	'</items>' +
+	//
+	'<mixes>' +
+	//
+	'<mix>seven</mix>' +
+	//
+	'eight' +
+	//
+	'<mix>nine</mix>' +
+	//
+	'</mixes>' +
+	//
+	'ten' +
+	//
+	'<mix>eleven</mix>' +
+	//
+	'twelve' +
+	//
+	'</elementRefs>';
+	var result = unmarshaller.unmarshalString(text);
+	assertEquals('elementRefs', result.name.localPart);
+	assertEquals('one', result.value.element.element);
+	assertEquals('one.1', result.value.element1.element1);
+	assertEquals('two', result.value.elements.element);
+	assertEquals(2.1, result.value.elements1.element1);
+	assertEquals(2, result.value.item.length);
+	assertEquals('three', result.value.item[0].item);
+	assertEquals('four', result.value.item[1].item);
+	assertEquals(2, result.value.items.length);
+	assertEquals('five', result.value.items[0].item);
+	assertEquals('six', result.value.items[1].item);
+	assertEquals(3, result.value.mixes.length);
+	assertEquals('seven', result.value.mixes[0].mix.value);
+	assertEquals('eight', result.value.mixes[1]);
+	assertEquals('nine', result.value.mixes[2].mix.value);
+	assertEquals(3, result.value.mix.length);
+	assertEquals('ten', result.value.mix[0]);
+	assertEquals('eleven', result.value.mix[1].mix.value);
+	assertEquals('twelve', result.value.mix[2]);
+}
+
 function testThreeMarhshalAnyElementType() {
 	var context = new Jsonix.Context([ Three, Four ]);
 	var marshaller = context.createMarshaller();

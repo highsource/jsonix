@@ -41,6 +41,11 @@ Jsonix.XML.QName = Jsonix.Class({
 	toString : function() {
 		return this.string;
 	},
+	// foo:bar
+	toCanonicalString: function(namespaceContext) {
+		var canonicalPrefix = namespaceContext ? namespaceContext.getPrefix(this.namespaceURI, this.prefix) : this.prefix;
+		return this.prefix + (this.prefix === '' ? '' : ':') + this.localPart;
+	},
 	clone : function() {
 		return new Jsonix.XML.QName(this.namespaceURI, this.localPart, this.prefix);
 	},

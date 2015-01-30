@@ -3,15 +3,9 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 	key : null,
 	value : null,
 	entryTypeInfo : null,
-	mappingStyle : null,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		// TODO initialize the mapping style
-		if (!this.mappingStyle)
-		{
-			this.mappingStyle = Jsonix.Mapping.Style.STYLES.standard;
-		}
 		// TODO Ensure correct argument
 		var k = mapping.key||mapping.k||undefined;
 		Jsonix.Util.Ensure.ensureObject(k);
@@ -26,7 +20,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		} else {
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 		}
-		this.entryTypeInfo = new this.mappingStyle.classInfo({
+		this.entryTypeInfo = new Jsonix.Model.ClassInfo({
 			name: 'Map<' + k.name + ',' + v.name + '>',
 			propertyInfos : [ k, v ]
 		});

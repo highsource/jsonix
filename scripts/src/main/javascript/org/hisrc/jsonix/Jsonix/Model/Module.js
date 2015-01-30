@@ -25,7 +25,7 @@ Jsonix.Model.Module = Jsonix
 					// as properties of the schema, for instance Schema.MyType
 					for ( var typeInfoName in mapping) {
 						if (mapping.hasOwnProperty(typeInfoName)) {
-							if (mapping[typeInfoName] instanceof Jsonix.Model.ClassInfo) {
+							if (mapping[typeInfoName] instanceof this.mappingStyle.classInfo) {
 								this.typeInfos.push(mapping[typeInfoName]);
 							}
 						}

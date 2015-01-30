@@ -15,6 +15,6 @@ Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
 	initialize : function() {
 		Jsonix.Mapping.Style.prototype.initialize.apply(this);
 	},
-	CLASS_NAME : 'Jsonix.MappingS.tyle.Standard'
+	CLASS_NAME : 'Jsonix.Mapping.Style.Standard'
 });
 Jsonix.Mapping.Style.STYLES.standard = new Jsonix.Mapping.Style.Standard();

@@ -194,6 +194,18 @@ Jsonix.Context = Jsonix
 				Jsonix.Util.Ensure.ensureString(prefix);
 				return this.prefixNamespaces[prefix];
 			},
+			getPrefix : function(namespaceURI, defaultPrefix) {
+				Jsonix.Util.Ensure.ensureString(namespaceURI);
+				var prefix = this.namespacePrefixes[namespaceURI];
+				if (Jsonix.Util.Type.isString(prefix))
+				{
+					return prefix;
+				}
+				else
+				{
+					return defaultPrefix;
+				}
+			},
 			/**
 			 * Builtin type infos.
 			 */

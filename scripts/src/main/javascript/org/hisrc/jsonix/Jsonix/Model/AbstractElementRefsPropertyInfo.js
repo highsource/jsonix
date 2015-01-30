@@ -90,15 +90,19 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
 		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		var value = {
-			name : name,
-			value : typeInfo.unmarshal(context, input, scope)
-		};
+		var value = this.createElementValue(name, typeInfo.unmarshal(context, input, scope), context, input, scope); 
 		if (this.collection) {
 			return [ value ];
 		} else {
 			return value;
 		}
+	},
+	createElementValue : function (name, value, context, input, scope) {
+		var value = {
+			name : name,
+			value : value
+		};
+		return value;
 	},
 	marshal : function(value, context, output, scope) {
 
@@ -225,5 +229,14 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 		}
 	},
-	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo'
+	CLASS_NAME : 'Jsonix.Model.AbstractElementRefsPropertyInfo'
+});
+
+Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
+	createElementValue : function (name, value, context, input, scope) {
+		var key = name.toCanonicalString(context);
+		var elementValue = {};
+		elementValue[key] = value;
+		return elementValue;
+	}		
 });
