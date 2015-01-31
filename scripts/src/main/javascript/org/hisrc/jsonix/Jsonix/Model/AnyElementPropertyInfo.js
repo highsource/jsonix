@@ -46,10 +46,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			// TODO optimize
 			var elementDeclaration = context.getElementInfo(name, scope);
 			var typeInfo = elementDeclaration.typeInfo;
-			var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 			value = {
 				name : name,
-				value : adapter.unmarshal(typeInfo, context, input, scope)
+				value : typeInfo.unmarshal(context, input, scope)
 			};
 		} else if (this.allowDom) {
 			value = input.getElement();
@@ -90,9 +89,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
 				var elementDeclaration = context.getElementInfo(name, scope);
 				var typeInfo = elementDeclaration.typeInfo;
-				var adapter = Jsonix.Model.Adapter.getAdapter(elementDeclaration);
 				output.writeStartElement(name);
-				adapter.marshal(typeInfo, value.value, context, output, scope);
+				typeInfo.marshal(value.value, context, output, scope);
 				output.writeEndElement();
 			} else {
 				// TODO better exception
