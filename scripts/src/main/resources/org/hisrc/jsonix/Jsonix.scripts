@@ -16,6 +16,8 @@
 /org/hisrc/jsonix/Jsonix/Mapping.js
 /org/hisrc/jsonix/Jsonix/Mapping/Style.js
 /org/hisrc/jsonix/Jsonix/Mapping/Styled.js
+/org/hisrc/jsonix/Jsonix/Binding.js
+/org/hisrc/jsonix/Jsonix/Binding/ElementMarshaller.js
 /org/hisrc/jsonix/Jsonix/Model/TypeInfo.js
 /org/hisrc/jsonix/Jsonix/Model/ClassInfo.js
 /org/hisrc/jsonix/Jsonix/Model/EnumLeafInfo.js

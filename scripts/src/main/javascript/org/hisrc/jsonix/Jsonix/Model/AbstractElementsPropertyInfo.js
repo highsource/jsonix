@@ -70,14 +70,14 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 
 		if (!this.collection) {
-			this.marshalElement(value, context, output, scope);
+			this.marshalElementNode(value, context, output, scope);
 		} else {
 			Jsonix.Util.Ensure.ensureArray(value);
 			// TODO Exception if not array
 			for ( var index = 0; index < value.length; index++) {
 				var item = value[index];
 				// TODO Exception if item does not exist
-				this.marshalElement(item, context, output, scope);
+				this.marshalElementNode(item, context, output, scope);
 			}
 		}
 
@@ -85,7 +85,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			output.writeEndElement();
 		}
 	},
-	marshalElement : function(value, context, output, scope) {
+	marshalElementNode : function(value, context, output, scope) {
 		throw new Error("Abstract method [marshalElement].");
 	},
 	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {

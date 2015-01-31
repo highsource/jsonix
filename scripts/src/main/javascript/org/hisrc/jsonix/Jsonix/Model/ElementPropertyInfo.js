@@ -25,7 +25,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 			unmarshalElement : function(context, input, scope, callback) {
 				return callback(this.typeInfo.unmarshal(context, input, scope));
 			},
-			marshalElement : function(value, context, output, scope) {
+			marshalElementNode : function(value, context, output, scope) {
 				this.marshalElementTypeInfo(this.elementName, value, this.typeInfo, context, output, scope);
 			},
 			doBuild : function(context, module) {

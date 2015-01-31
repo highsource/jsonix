@@ -86,13 +86,13 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 			output.writeStartElement(this.wrapperElementName);
 		}
 
-		this.marshalElement(value, context, output, scope);
+		this.marshalElementNode(value, context, output, scope);
 
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			output.writeEndElement();
 		}
 	},
-	marshalElement : function(value, context, output, scope) {
+	marshalElementNode : function(value, context, output, scope) {
 		if (!!value) {
 			for ( var attributeName in value) {
 				if (value.hasOwnProperty(attributeName)) {

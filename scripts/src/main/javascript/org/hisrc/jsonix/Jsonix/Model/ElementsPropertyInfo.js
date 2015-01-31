@@ -22,7 +22,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						// TODO better exception
 						throw new Error("Element [" + elementNameKey + "] is not known in this context");
 					},
-					marshalElement : function(value, context, output, scope) {
+					marshalElementNode : function(value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
 							var typeInfo = elementTypeInfo.typeInfo;

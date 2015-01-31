@@ -1,4 +1,4 @@
-Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Model.PropertyInfo, {
 	allowDom : true,
 	allowTypedObject : true,
 	mixed : true,
@@ -84,17 +84,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 			output.writeNode(value);
 
 		} else {
-			// Typed object
-			var name = Jsonix.XML.QName.fromObjectOrString(value.name, context);
-			if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
-				var elementDeclaration = context.getElementInfo(name, scope);
-				var typeInfo = elementDeclaration.typeInfo;
-				output.writeStartElement(name);
-				typeInfo.marshal(value.value, context, output, scope);
-				output.writeEndElement();
-			} else {
-				// TODO better exception
-				throw new Error("Element [" + name.toString() + "] is not known in this context");
+			if (this.allowTypedObject)
+			{
+				this.marshalElementNode(value, context, output, scope);
 			}
 		}
 	},

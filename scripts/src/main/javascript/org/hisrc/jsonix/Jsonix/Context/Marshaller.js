@@ -1,4 +1,4 @@
-Jsonix.Context.Marshaller = Jsonix.Class({
+Jsonix.Context.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
 	context : null,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);
@@ -15,32 +15,9 @@ Jsonix.Context.Marshaller = Jsonix.Class({
 		});
 
 		var doc = output.writeStartDocument();
-
-		this.marshalElementNode(value, output);
-
+		this.marshalElementNode(value, this.context, output, undefined);
 		output.writeEndDocument();
-
 		return doc;
-
-	},
-	marshalElementNode : function(value, output, scope) {
-
-		Jsonix.Util.Ensure.ensureObject(value);
-		Jsonix.Util.Ensure.ensureExists(value.value);
-
-		var name = Jsonix.XML.QName.fromObjectOrString(value.name, this.context);
-
-		var elementDeclaration = this.context.getElementInfo(name, scope);
-		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw new Error("Could not find element declaration for the element [" + name.key + "].");
-		}
-		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
-		var typeInfo = elementDeclaration.typeInfo;
-		var element = output.writeStartElement(name);
-		typeInfo.marshal(value.value, this.context, output, scope);
-		output.writeEndElement();
-		return element;
-
 	},
 	CLASS_NAME : 'Jsonix.Context.Marshaller'
 });

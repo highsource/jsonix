@@ -1,11 +1,11 @@
-Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
 	mixed : true,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping, 'Mapping must be an object.');
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var wen = mapping.wrapperElementName||mapping.wen||undefined;
-		var mx = mapping.mixed||mapping.mx||true;
+		var wen = mapping.wrapperElementName || mapping.wen || undefined;
+		var mx = mapping.mixed || mapping.mx || true;
 		if (Jsonix.Util.Type.isObject(wen)) {
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
 		} else if (Jsonix.Util.Type.isString(wen)) {
@@ -49,7 +49,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 					if (result === null) {
 						result = [];
 					}
-					for ( var index = 0; index < value.length; index++) {
+					for (var index = 0; index < value.length; index++) {
 						result.push(value[index]);
 					}
 
@@ -91,14 +91,17 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		var name = input.getName();
 		var typeInfo = this.getElementTypeInfo(name, context, scope);
 		var value = typeInfo.unmarshal(context, input, scope);
-		var elementValue = this.convertToElementValue({name : name, value: value}, context, input, scope); 
+		var elementValue = this.convertToElementValue({
+			name : name,
+			value : value
+		}, context, input, scope);
 		if (this.collection) {
 			return [ elementValue ];
 		} else {
 			return elementValue;
 		}
 	},
-	convertToElementValue : function (elementValue, context, input, scope) {
+	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
 	marshal : function(value, context, output, scope) {
@@ -112,7 +115,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 				this.marshalItem(value, context, output, scope);
 			} else {
 				Jsonix.Util.Ensure.ensureArray(value, 'Collection property requires an array value.');
-				for ( var index = 0; index < value.length; index++) {
+				for (var index = 0; index < value.length; index++) {
 					var item = value[index];
 					this.marshalItem(item, context, output, scope);
 				}
@@ -125,7 +128,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 
 	},
 	marshalItem : function(value, context, output, scope) {
-
 		if (Jsonix.Util.Type.isString(value)) {
 			if (!this.mixed) {
 				// TODO
@@ -134,7 +136,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 				output.writeCharacters(value);
 			}
 		} else if (Jsonix.Util.Type.isObject(value)) {
-			this.marshalElement(value, context, output, scope);
+			this.marshalElementNode(value, context, output, scope);
 
 		} else {
 			if (this.mixed) {
@@ -145,28 +147,31 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		}
 
 	},
-	marshalElement : function(value, context, output, scope) {
+	/*
+	marshalElementNode : function(value, context, output, scope) {
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
 		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
-		return this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
+		this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
 	},
-	convertFromElementValue: function(elementValue, context, output, scope) {
+	convertFromElementValue : function(elementValue, context, output, scope) {
 		var name;
 		var value;
 		if (Jsonix.Util.Type.exists(elementValue.name) && !Jsonix.Util.Type.isUndefined(elementValue.value)) {
 			name = Jsonix.XML.QName.fromObjectOrString(elementValue.name, context);
 			value = Jsonix.Util.Type.exists(elementValue.value) ? elementValue.value : null;
-			return {name : name, value : value};
-		}
-		else
-		{
-			for (var propertyName in elementValue)
-			{
-				if (elementValue.hasOwnProperty(propertyName))
-				{
+			return {
+				name : name,
+				value : value
+			};
+		} else {
+			for ( var propertyName in elementValue) {
+				if (elementValue.hasOwnProperty(propertyName)) {
 					name = Jsonix.XML.QName.fromObjectOrString(propertyName, context);
 					value = elementValue[propertyName];
-					return {name : name, value : value};
+					return {
+						name : name,
+						value : value
+					};
 				}
 			}
 		}
@@ -178,8 +183,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 			typeInfo.marshal(value, context, output, scope);
 		}
 		output.writeEndElement();
-
-	},
+	},*/
 	getElementTypeInfo : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
@@ -192,7 +196,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 				throw new Error("Element [" + elementName.key + "] is not known in this context.");
 			}
 		}
-
 	},
 	getPropertyElementTypeInfo : function(elementName, context) {
 		throw new Error("Abstract method [getPropertyElementTypeInfo].");
@@ -241,7 +244,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 		structure.elements[elementTypeInfo.elementName.key] = this;
 		var substitutionMembers = context.getSubstitutionMembers(elementTypeInfo.elementName);
 		if (Jsonix.Util.Type.isArray(substitutionMembers)) {
-			for ( var jndex = 0; jndex < substitutionMembers.length; jndex++) {
+			for (var jndex = 0; jndex < substitutionMembers.length; jndex++) {
 				var substitutionElementInfo = substitutionMembers[jndex];
 				this.buildStructureElementTypeInfos(context, structure, substitutionElementInfo);
 			}
@@ -252,10 +255,10 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.Propert
 });
 
 Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
-	convertToElementValue : function (elementValue, context, input, scope) {
+	convertToElementValue : function(elementValue, context, input, scope) {
 		var propertyName = elementValue.name.toCanonicalString(context);
 		var value = {};
 		value[propertyName] = elementValue.value;
 		return value;
-	}		
+	}
 });

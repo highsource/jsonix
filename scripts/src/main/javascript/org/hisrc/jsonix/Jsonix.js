@@ -46,6 +46,8 @@
 'Jsonix/Mapping.js',
 'Jsonix/Mapping/Style.js',
 'Jsonix/Mapping/Styled.js',
+'Jsonix/Binding.js',
+'Jsonix/Binding/ElementMarshaller.js',
 'Jsonix/Model/TypeInfo.js',
 'Jsonix/Model/ClassInfo.js',
 'Jsonix/Model/EnumLeafInfo.js',
