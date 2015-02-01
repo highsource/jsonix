@@ -1,0 +1,13 @@
+{
+	"element" : {
+		"element" : "one",
+		"elements" : [ "two", "three" ],
+		"item" : [ "four", "five" ],
+		"items" : [ {
+			"items" : [ "six", "seven" ]
+		}, {
+			"items" : [ "eight", "nine" ]
+		} ],
+		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementType"
+	}
+}
