@@ -21,3 +21,6 @@ Jsonix.Context.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
 	},
 	CLASS_NAME : 'Jsonix.Context.Marshaller'
 });
+Jsonix.Context.Marshaller.Simplified = Jsonix.Class(Jsonix.Context.Marshaller, {
+	CLASS_NAME : 'Jsonix.Context.Marshaller.Simplified'
+});

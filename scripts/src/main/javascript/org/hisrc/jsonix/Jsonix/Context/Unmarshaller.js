@@ -50,32 +50,43 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 
 		var result = null;
 		input.nextTag();
-		return this.unmarshalElementNode(input);
+		return this.unmarshalElement(this.context, input);
 
 	},
-	unmarshalElementNode : function(input, scope) {
+	unmarshalElement : function(context, input, scope) {
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 
 		var result = null;
-		// It's OK to use fromObject here because input gives objects, guaranteed
-		var name = Jsonix.XML.QName.fromObject(input.getName());
-
-		var elementDeclaration = this.context.getElementInfo(name, scope);
-		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw new Error("Could not find element declaration for the element [" + name.key + "].");
-		}
-		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
-		var typeInfo = elementDeclaration.typeInfo;
-		var value = typeInfo.unmarshal(this.context, input, scope);
-		result = {
+		var name = input.getName();
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
+		var value = typeInfo.unmarshal(context, input, scope);
+		var elementValue = this.convertToElementValue({
 			name : name,
 			value : value
-		};
-
-		return result;
-
+		}, context, input, scope);
+		return elementValue;
+	},
+	getElementTypeInfo : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			throw new Error("Element [" + name.key + "] is not known in this context.");
+		}
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue;
 	},
 	CLASS_NAME : 'Jsonix.Context.Unmarshaller'
+});
+Jsonix.Context.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Context.Unmarshaller, {
+	convertToElementValue : function(elementValue, context, input, scope) {
+		var propertyName = elementValue.name.toCanonicalString(context);
+		var value = {};
+		value[propertyName] = elementValue.value;
+		return value;
+	},
+	CLASS_NAME : 'Jsonix.Context.Unmarshaller.Simplified'
 });
