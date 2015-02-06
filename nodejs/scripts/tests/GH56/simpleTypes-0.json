@@ -1,0 +1,12 @@
+{
+	"simpleTypes" : {
+		"qName" : {
+			"namespaceURI" : "urn:a",
+			"prefix" : "a",
+			"localPart" : "aq",
+			"key" : "{urn:a}aq",
+			"string" : "{urn:a}a:aq"
+		},
+		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.SimpleTypesType"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"extendedExtended" : {
+		"alpha" : "one",
+		"beta" : [ 2 ],
+		"gamma" : "urn:three",
+		"epsilon" : 0.7,
+		"zeta" : [ 8 ],
+		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ExtendedExtendedType"
+	}
+}

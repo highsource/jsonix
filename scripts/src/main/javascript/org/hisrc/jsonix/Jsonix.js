@@ -48,6 +48,9 @@
 'Jsonix/Mapping/Styled.js',
 'Jsonix/Binding.js',
 'Jsonix/Binding/ElementMarshaller.js',
+'Jsonix/Binding/ElementUnmarshaller.js',
+'Jsonix/Context/Marshaller.js',
+'Jsonix/Context/Unmarshaller.js',
 'Jsonix/Model/TypeInfo.js',
 'Jsonix/Model/ClassInfo.js',
 'Jsonix/Model/EnumLeafInfo.js',
@@ -115,9 +118,7 @@
 'Jsonix/Schema/XSD/ID.js',
 'Jsonix/Schema/XSD/IDREF.js',
 'Jsonix/Schema/XSD/IDREFS.js',
-'Jsonix/Context.js',
-'Jsonix/Context/Marshaller.js',
-'Jsonix/Context/Unmarshaller.js'
+'Jsonix/Context.js'
       ]; // etc.
       }
 

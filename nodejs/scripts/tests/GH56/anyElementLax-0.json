@@ -1,0 +1,9 @@
+{
+	"anyElementLax" : {
+		"any" : {
+			"name" : { "localPart" : "string", "prefix" : "", "namespaceURI" : "", "key" : "string", "string" : "string" },
+			"value" : "test"
+		},
+		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.AnyElementLaxType"
+	}
+}

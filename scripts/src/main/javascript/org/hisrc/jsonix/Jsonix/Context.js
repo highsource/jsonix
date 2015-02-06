@@ -185,10 +185,10 @@ Jsonix.Context = Jsonix
 						.fromObject(name).key];
 			},
 			createMarshaller : function() {
-				return new Jsonix.Context.Marshaller(this);
+				return new this.mappingStyle.marshaller(this);
 			},
 			createUnmarshaller : function() {
-				return new Jsonix.Context.Unmarshaller(this);
+				return new this.mappingStyle.unmarshaller(this);
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);

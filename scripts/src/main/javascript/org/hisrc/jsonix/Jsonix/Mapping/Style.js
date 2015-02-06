@@ -1,4 +1,6 @@
 Jsonix.Mapping.Style = Jsonix.Class({
+	marshaller : null,
+	unmarshaller : null,
 	module : null,
 	elementInfo : null,
 	classInfo : null,

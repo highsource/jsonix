@@ -507,25 +507,25 @@ function testThreeUnmarshalElementRefsSimplifiedType() {
 	//
 	'</elementRefs>';
 	var result = unmarshaller.unmarshalString(text);
-	assertEquals('elementRefs', result.name.localPart);
-	assertEquals('one', result.value.element.element);
-	assertEquals('one.1', result.value.element1.element1);
-	assertEquals('two', result.value.elements.element);
-	assertEquals(2.1, result.value.elements1.element1);
-	assertEquals(2, result.value.item.length);
-	assertEquals('three', result.value.item[0].item);
-	assertEquals('four', result.value.item[1].item);
-	assertEquals(2, result.value.items.length);
-	assertEquals('five', result.value.items[0].item);
-	assertEquals('six', result.value.items[1].item);
-	assertEquals(3, result.value.mixes.length);
-	assertEquals('seven', result.value.mixes[0].mix.value);
-	assertEquals('eight', result.value.mixes[1]);
-	assertEquals('nine', result.value.mixes[2].mix.value);
-	assertEquals(3, result.value.mix.length);
-	assertEquals('ten', result.value.mix[0]);
-	assertEquals('eleven', result.value.mix[1].mix.value);
-	assertEquals('twelve', result.value.mix[2]);
+//	assertEquals('elementRefs', result.name.localPart);
+	assertEquals('one', result.elementRefs.element.element);
+	assertEquals('one.1', result.elementRefs.element1.element1);
+	assertEquals('two', result.elementRefs.elements.element);
+	assertEquals(2.1, result.elementRefs.elements1.element1);
+	assertEquals(2, result.elementRefs.item.length);
+	assertEquals('three', result.elementRefs.item[0].item);
+	assertEquals('four', result.elementRefs.item[1].item);
+	assertEquals(2, result.elementRefs.items.length);
+	assertEquals('five', result.elementRefs.items[0].item);
+	assertEquals('six', result.elementRefs.items[1].item);
+	assertEquals(3, result.elementRefs.mixes.length);
+	assertEquals('seven', result.elementRefs.mixes[0].mix.value);
+	assertEquals('eight', result.elementRefs.mixes[1]);
+	assertEquals('nine', result.elementRefs.mixes[2].mix.value);
+	assertEquals(3, result.elementRefs.mix.length);
+	assertEquals('ten', result.elementRefs.mix[0]);
+	assertEquals('eleven', result.elementRefs.mix[1].mix.value);
+	assertEquals('twelve', result.elementRefs.mix[2]);
 }
 
 function testThreeMarhshalAnyElementType() {

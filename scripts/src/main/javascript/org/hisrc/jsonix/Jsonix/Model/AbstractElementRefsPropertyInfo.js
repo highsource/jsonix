@@ -1,4 +1,4 @@
-Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
 	mixed : true,
 	initialize : function(mapping) {
@@ -100,9 +100,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		} else {
 			return elementValue;
 		}
-	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
 	},
 	marshal : function(value, context, output, scope) {
 

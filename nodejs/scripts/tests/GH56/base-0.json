@@ -1,0 +1,7 @@
+{
+	"base" : {
+		"alpha" : "one",
+		"beta" : [ 2 ],
+		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.BaseType"
+	}
+}

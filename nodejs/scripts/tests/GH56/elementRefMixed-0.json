@@ -1,0 +1,10 @@
+{
+	"elementRefMixed" : {
+		"content" : [ {
+			"value" : "a"
+		}, "b", {
+			"value" : "c"
+		} ],
+		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementRefMixedType"
+	}
+}

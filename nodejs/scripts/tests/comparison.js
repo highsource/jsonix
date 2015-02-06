@@ -43,11 +43,10 @@ var comparison = function(test, context, resource) {
 
 	var unmarshalledJSON = unmarshaller.unmarshalDocument(xml);
 
-	/* TODO
 	test.ok(Jsonix.Util.Type.isEqual(json, unmarshalledJSON, function(text) {
 		console.log(text);
 	}), "Expected JSON and JSON unmarshalled from [" + xmlFile + "] differ.");
-	*/
+
 	test.done();
 
 };

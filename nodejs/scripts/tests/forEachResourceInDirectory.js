@@ -4,9 +4,16 @@ var forEachResourceInDirectory = function(testFunction, args, directory, suffix)
 	var testFunctionFactory = function(resource) {
 		return function(test) {
 			console.log('Testing [' + resource + '].');
-			args.splice(0, 0, test);
-			args.push(resource);
-			testFunction.apply(null, args);
+			var testFunctionArgs = [test];
+			// TODO there is a better way
+			for (var i = 0; i < args.length; i++)
+			{
+				testFunctionArgs.push(args[i]);
+			}
+			testFunctionArgs.push(resource);
+			console.log("Test function args:");
+			console.log(testFunctionArgs);
+			testFunction.apply(null, testFunctionArgs);
 		};
 	};
 	var files = fs.readdirSync(directory);

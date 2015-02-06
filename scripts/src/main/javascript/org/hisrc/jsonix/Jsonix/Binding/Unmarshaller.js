@@ -1,4 +1,4 @@
-Jsonix.Context.Unmarshaller = Jsonix.Class({
+Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	context : null,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);
@@ -21,8 +21,7 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		}, options);
 	},
 	unmarshalFile : function(fileName, callback, options) {
-		if (typeof _jsonix_fs === 'undefined')
-		{
+		if (typeof _jsonix_fs === 'undefined') {
 			throw new Error("File unmarshalling is only available in environments which support file systems.");
 		}
 		Jsonix.Util.Ensure.ensureString(fileName);
@@ -31,14 +30,11 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 			Jsonix.Util.Ensure.ensureObject(options);
 		}
 		that = this;
-		var fs =_jsonix_fs;
+		var fs = _jsonix_fs;
 		fs.readFile(fileName, options, function(err, data) {
-			if (err)
-			{
+			if (err) {
 				throw err;
-			}
-			else
-			{
+			} else {
 				var text = data.toString();
 				var doc = Jsonix.DOM.parse(text);
 				callback(that.unmarshalDocument(doc));
@@ -57,7 +53,6 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
-
 		var result = null;
 		var name = input.getName();
 		var typeInfo = this.getElementTypeInfo(name, context, scope);
@@ -76,17 +71,8 @@ Jsonix.Context.Unmarshaller = Jsonix.Class({
 			throw new Error("Element [" + name.key + "] is not known in this context.");
 		}
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
-	},
-	CLASS_NAME : 'Jsonix.Context.Unmarshaller'
+	CLASS_NAME : 'Jsonix.Binding.Unmarshaller'
 });
-Jsonix.Context.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Context.Unmarshaller, {
-	convertToElementValue : function(elementValue, context, input, scope) {
-		var propertyName = elementValue.name.toCanonicalString(context);
-		var value = {};
-		value[propertyName] = elementValue.value;
-		return value;
-	},
-	CLASS_NAME : 'Jsonix.Context.Unmarshaller.Simplified'
+Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshaller, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+	CLASS_NAME : 'Jsonix.Binding.Unmarshaller.Simplified'
 });

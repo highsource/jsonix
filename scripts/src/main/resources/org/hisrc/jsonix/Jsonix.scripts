@@ -18,6 +18,9 @@
 /org/hisrc/jsonix/Jsonix/Mapping/Styled.js
 /org/hisrc/jsonix/Jsonix/Binding.js
 /org/hisrc/jsonix/Jsonix/Binding/ElementMarshaller.js
+/org/hisrc/jsonix/Jsonix/Binding/ElementUnmarshaller.js
+/org/hisrc/jsonix/Jsonix/Binding/Marshaller.js
+/org/hisrc/jsonix/Jsonix/Binding/Unmarshaller.js
 /org/hisrc/jsonix/Jsonix/Model/TypeInfo.js
 /org/hisrc/jsonix/Jsonix/Model/ClassInfo.js
 /org/hisrc/jsonix/Jsonix/Model/EnumLeafInfo.js
@@ -87,5 +90,3 @@
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREF.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREFS.js
 /org/hisrc/jsonix/Jsonix/Context.js
-/org/hisrc/jsonix/Jsonix/Context/Marshaller.js
-/org/hisrc/jsonix/Jsonix/Context/Unmarshaller.js

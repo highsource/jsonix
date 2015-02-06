@@ -1,4 +1,6 @@
 Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
+	marshaller : Jsonix.Binding.Marshaller,
+	unmarshaller : Jsonix.Binding.Unmarshaller,
 	module : Jsonix.Model.Module,
 	elementInfo : Jsonix.Model.ElementInfo,
 	classInfo : Jsonix.Model.ClassInfo,

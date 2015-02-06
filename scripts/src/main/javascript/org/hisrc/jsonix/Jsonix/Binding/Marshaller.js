@@ -1,4 +1,4 @@
-Jsonix.Context.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
+Jsonix.Binding.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
 	context : null,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);
@@ -19,8 +19,8 @@ Jsonix.Context.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
 		output.writeEndDocument();
 		return doc;
 	},
-	CLASS_NAME : 'Jsonix.Context.Marshaller'
+	CLASS_NAME : 'Jsonix.Binding.Marshaller'
 });
-Jsonix.Context.Marshaller.Simplified = Jsonix.Class(Jsonix.Context.Marshaller, {
-	CLASS_NAME : 'Jsonix.Context.Marshaller.Simplified'
+Jsonix.Binding.Marshaller.Simplified = Jsonix.Class(Jsonix.Binding.Marshaller, {
+	CLASS_NAME : 'Jsonix.Binding.Marshaller.Simplified'
 });

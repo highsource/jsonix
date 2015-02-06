@@ -1,0 +1,16 @@
+{
+		"elementRefs" : {
+			"alphaOrBeta" : [ {
+				"alpha" : {
+					"value" : "one",
+					"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ValueType"
+				}
+			}, {
+				"beta" : {
+					"value" : "2",
+					"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ValueType"
+				}
+			} ],
+			"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementRefsType"
+		}
+	}

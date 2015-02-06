@@ -1,4 +1,6 @@
 Jsonix.Mapping.Style.Simplified = Jsonix.Class(Jsonix.Mapping.Style, {
+	marshaller : Jsonix.Binding.Marshaller.Simplified,
+	unmarshaller : Jsonix.Binding.Unmarshaller.Simplified,
 	module : Jsonix.Model.Module,
 	elementInfo : Jsonix.Model.ElementInfo,
 	classInfo : Jsonix.Model.ClassInfo,
