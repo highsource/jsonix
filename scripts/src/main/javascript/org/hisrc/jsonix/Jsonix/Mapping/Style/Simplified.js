@@ -6,7 +6,7 @@ Jsonix.Mapping.Style.Simplified = Jsonix.Class(Jsonix.Mapping.Style, {
 	classInfo : Jsonix.Model.ClassInfo,
 	enumLeafInfo : Jsonix.Model.EnumLeafInfo,
 	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo,
-	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo,
+	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo.Simplified,
 	attributePropertyInfo : Jsonix.Model.AttributePropertyInfo,
 	elementMapPropertyInfo : Jsonix.Model.ElementMapPropertyInfo,
 	elementPropertyInfo : Jsonix.Model.ElementPropertyInfo,

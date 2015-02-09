@@ -43,6 +43,6 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'
 });
-Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo.Simplified'
 });

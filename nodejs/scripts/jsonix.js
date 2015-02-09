@@ -3269,15 +3269,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	},
 	CLASS_NAME : 'Jsonix.Model.AbstractElementRefsPropertyInfo'
 });
-
-Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
-	convertToElementValue : function(elementValue, context, input, scope) {
-		var propertyName = elementValue.name.toCanonicalString(context);
-		var value = {};
-		value[propertyName] = elementValue.value;
-		return value;
-	}
-});
 Jsonix.Model.ElementRefPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementRefsPropertyInfo, {
 	typeInfo : 'String',
 	elementName : null,
@@ -3318,7 +3309,7 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementR
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo'
 });
-Jsonix.Model.ElementRefPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+Jsonix.Model.ElementRefPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
 	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo.Simplified'
 });
 Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementRefsPropertyInfo, {
@@ -3366,11 +3357,11 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'
 });
-Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo.Simplified'
 });
 
-Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	allowDom : true,
 	allowTypedObject : true,
 	mixed : true,
@@ -3410,28 +3401,25 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		}
 	},
 	unmarshalElement : function(context, input, scope) {
-
 		var name = input.getName();
-		var value;
-
+		var elementValue;
 		if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
-			// TODO optimize
-			var elementDeclaration = context.getElementInfo(name, scope);
-			var typeInfo = elementDeclaration.typeInfo;
-			value = {
+			var typeInfo = this.getElementTypeInfo(name, context, scope);
+			var value = typeInfo.unmarshal(context, input, scope);
+			elementValue = this.convertToElementValue({
 				name : name,
-				value : typeInfo.unmarshal(context, input, scope)
-			};
+				value : value
+			}, context, input, scope);
 		} else if (this.allowDom) {
-			value = input.getElement();
+			elementValue = input.getElement();
 		} else {
 			// TODO better exception
 			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
 		}
 		if (this.collection) {
-			return [ value ];
+			return [ elementValue ];
 		} else {
-			return value;
+			return elementValue;
 		}
 	},
 	marshal : function(value, context, output, scope) {
@@ -3497,7 +3485,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	},
 	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo'
 });
-
+Jsonix.Model.AnyElementPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.AnyElementPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo.Simplified'
+});
 Jsonix.Model.Module = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
 			name : null,
@@ -3765,7 +3755,7 @@ Jsonix.Mapping.Style.Simplified = Jsonix.Class(Jsonix.Mapping.Style, {
 	classInfo : Jsonix.Model.ClassInfo,
 	enumLeafInfo : Jsonix.Model.EnumLeafInfo,
 	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo,
-	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo,
+	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo.Simplified,
 	attributePropertyInfo : Jsonix.Model.AttributePropertyInfo,
 	elementMapPropertyInfo : Jsonix.Model.ElementMapPropertyInfo,
 	elementPropertyInfo : Jsonix.Model.ElementPropertyInfo,

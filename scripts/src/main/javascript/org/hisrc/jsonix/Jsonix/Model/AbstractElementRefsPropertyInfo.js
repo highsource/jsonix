@@ -213,12 +213,3 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	},
 	CLASS_NAME : 'Jsonix.Model.AbstractElementRefsPropertyInfo'
 });
-
-Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
-	convertToElementValue : function(elementValue, context, input, scope) {
-		var propertyName = elementValue.name.toCanonicalString(context);
-		var value = {};
-		value[propertyName] = elementValue.value;
-		return value;
-	}
-});
