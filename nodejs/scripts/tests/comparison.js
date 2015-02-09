@@ -5,26 +5,26 @@ var Jsonix = require('../jsonix').Jsonix;
 var comparison = function(test, context, resource) {
 	var jsonFile = resource + '.json';
 
-	console.log("Loading JSON from the file [" + jsonFile + "].");
+//	console.log("Loading JSON from the file [" + jsonFile + "].");
 
 	var jsonData = fs.readFileSync(jsonFile);
 
 	var jsonText = jsonData.toString();
 
-	console.log("Loading JSON from the text [" + jsonText + "].");
+//	console.log("Loading JSON from the text [" + jsonText + "].");
 
 	var json = JSON.parse(jsonText);
 
-	console.log("Loaded JSON from the file [" + jsonFile + "].");
+//	console.log("Loaded JSON from the file [" + jsonFile + "].");
 
-	console.log(JSON.stringify(json, null, 4));
+//	console.log(JSON.stringify(json, null, 4));
 
 	var marshaller = context.createMarshaller();
 
 	var marshalledXMLText = marshaller.marshalString(json);
 
-	console.log("Marshalled JSON from the file [" + jsonFile + "] as XML:");
-	console.log(marshalledXMLText);
+//	console.log("Marshalled JSON from the file [" + jsonFile + "] as XML:");
+//	console.log(marshalledXMLText);
 
 	var xmlFile = resource + '.xml';
 
@@ -32,8 +32,8 @@ var comparison = function(test, context, resource) {
 
 	var xmlText = xmlData.toString();
 
-	console.log("Loaded XML from the file [" + xmlFile + "]:");
-	console.log(xmlText);
+//	console.log("Loaded XML from the file [" + xmlFile + "]:");
+//	console.log(xmlText);
 
 	test.equal(xmlText, marshalledXMLText, "Expected XML and XML marshalled from [" + jsonFile + "] differ.");
 

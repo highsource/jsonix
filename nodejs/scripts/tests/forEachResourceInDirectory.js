@@ -11,8 +11,6 @@ var forEachResourceInDirectory = function(testFunction, args, directory, suffix)
 				testFunctionArgs.push(args[i]);
 			}
 			testFunctionArgs.push(resource);
-			console.log("Test function args:");
-			console.log(testFunctionArgs);
 			testFunction.apply(null, testFunctionArgs);
 		};
 	};
@@ -22,7 +20,7 @@ var forEachResourceInDirectory = function(testFunction, args, directory, suffix)
 		var file = files[index];
 		if (file.indexOf(suffix, file.length - suffix.length) !== -1) {
 			var resource = directory + '/' + file.substring(0, file.length - suffix.length);
-			console.log('Adding roundtrip test [' + resource + ']');
+//			console.log('Adding roundtrip test [' + resource + ']');
 			result[file] = testFunctionFactory(resource);
 		}
 	}
