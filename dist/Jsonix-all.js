@@ -1683,6 +1683,8 @@ Jsonix.XML.Output = Jsonix.Class({
 });
 Jsonix.Mapping = {};
 Jsonix.Mapping.Style = Jsonix.Class({
+	marshaller : null,
+	unmarshaller : null,
 	module : null,
 	elementInfo : null,
 	classInfo : null,
@@ -1770,6 +1772,124 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 			throw new Error("Element [" + name.key + "] is not known in this context.");
 		}
 	}
+});
+Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue;
+	}
+});
+
+Jsonix.Binding.ElementUnmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
+	convertToElementValue : function(elementValue, context, input, scope) {
+		var propertyName = elementValue.name.toCanonicalString(context);
+		var value = {};
+		value[propertyName] = elementValue.value;
+		return value;
+	}
+});
+Jsonix.Binding.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
+	context : null,
+	initialize : function(context) {
+		Jsonix.Util.Ensure.ensureObject(context);
+		this.context = context;
+	},
+	marshalString : function(value) {
+		var doc = this.marshalDocument(value);
+		var text = Jsonix.DOM.serialize(doc);
+		return text;
+	},
+	marshalDocument : function(value) {
+		var output = new Jsonix.XML.Output({
+			namespacePrefixes : this.context.namespacePrefixes
+		});
+
+		var doc = output.writeStartDocument();
+		this.marshalElementNode(value, this.context, output, undefined);
+		output.writeEndDocument();
+		return doc;
+	},
+	CLASS_NAME : 'Jsonix.Binding.Marshaller'
+});
+Jsonix.Binding.Marshaller.Simplified = Jsonix.Class(Jsonix.Binding.Marshaller, {
+	CLASS_NAME : 'Jsonix.Binding.Marshaller.Simplified'
+});
+Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
+	context : null,
+	initialize : function(context) {
+		Jsonix.Util.Ensure.ensureObject(context);
+		this.context = context;
+	},
+	unmarshalString : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		var doc = Jsonix.DOM.parse(text);
+		return this.unmarshalDocument(doc);
+	},
+	unmarshalURL : function(url, callback, options) {
+		Jsonix.Util.Ensure.ensureString(url);
+		Jsonix.Util.Ensure.ensureFunction(callback);
+		if (Jsonix.Util.Type.exists(options)) {
+			Jsonix.Util.Ensure.ensureObject(options);
+		}
+		that = this;
+		Jsonix.DOM.load(url, function(doc) {
+			callback(that.unmarshalDocument(doc));
+		}, options);
+	},
+	unmarshalFile : function(fileName, callback, options) {
+		if (typeof _jsonix_fs === 'undefined') {
+			throw new Error("File unmarshalling is only available in environments which support file systems.");
+		}
+		Jsonix.Util.Ensure.ensureString(fileName);
+		Jsonix.Util.Ensure.ensureFunction(callback);
+		if (Jsonix.Util.Type.exists(options)) {
+			Jsonix.Util.Ensure.ensureObject(options);
+		}
+		that = this;
+		var fs = _jsonix_fs;
+		fs.readFile(fileName, options, function(err, data) {
+			if (err) {
+				throw err;
+			} else {
+				var text = data.toString();
+				var doc = Jsonix.DOM.parse(text);
+				callback(that.unmarshalDocument(doc));
+			}
+		});
+	},
+	unmarshalDocument : function(doc) {
+		var input = new Jsonix.XML.Input(doc);
+
+		var result = null;
+		input.nextTag();
+		return this.unmarshalElement(this.context, input);
+
+	},
+	unmarshalElement : function(context, input, scope) {
+		if (input.eventType != 1) {
+			throw new Error("Parser must be on START_ELEMENT to read next text.");
+		}
+		var result = null;
+		var name = input.getName();
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
+		var value = typeInfo.unmarshal(context, input, scope);
+		var elementValue = this.convertToElementValue({
+			name : name,
+			value : value
+		}, context, input, scope);
+		return elementValue;
+	},
+	getElementTypeInfo : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			throw new Error("Element [" + name.key + "] is not known in this context.");
+		}
+	},
+	CLASS_NAME : 'Jsonix.Binding.Unmarshaller'
+});
+Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshaller, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+	CLASS_NAME : 'Jsonix.Binding.Unmarshaller.Simplified'
 });
 Jsonix.Model.TypeInfo = Jsonix.Class({
 	name : null,
@@ -2934,7 +3054,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 	CLASS_NAME : 'Jsonix.Model.ElementMapPropertyInfo'
 });
 
-Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
 	mixed : true,
 	initialize : function(mapping) {
@@ -3037,9 +3157,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			return elementValue;
 		}
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (Jsonix.Util.Type.exists(value)) {
@@ -3083,43 +3200,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		}
 
 	},
-	/*
-	marshalElementNode : function(value, context, output, scope) {
-		var elementValue = this.convertFromElementValue(value, context, output, scope);
-		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
-		this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
-	},
-	convertFromElementValue : function(elementValue, context, output, scope) {
-		var name;
-		var value;
-		if (Jsonix.Util.Type.exists(elementValue.name) && !Jsonix.Util.Type.isUndefined(elementValue.value)) {
-			name = Jsonix.XML.QName.fromObjectOrString(elementValue.name, context);
-			value = Jsonix.Util.Type.exists(elementValue.value) ? elementValue.value : null;
-			return {
-				name : name,
-				value : value
-			};
-		} else {
-			for ( var propertyName in elementValue) {
-				if (elementValue.hasOwnProperty(propertyName)) {
-					name = Jsonix.XML.QName.fromObjectOrString(propertyName, context);
-					value = elementValue[propertyName];
-					return {
-						name : name,
-						value : value
-					};
-				}
-			}
-		}
-		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
-	},
-	marshalElementTypeInfo : function(name, value, typeInfo, context, output, scope) {
-		output.writeStartElement(name);
-		if (Jsonix.Util.Type.exists(value)) {
-			typeInfo.marshal(value, context, output, scope);
-		}
-		output.writeEndElement();
-	},*/
 	getElementTypeInfo : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
@@ -3189,15 +3269,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	},
 	CLASS_NAME : 'Jsonix.Model.AbstractElementRefsPropertyInfo'
 });
-
-Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified = Jsonix.Class({
-	convertToElementValue : function(elementValue, context, input, scope) {
-		var propertyName = elementValue.name.toCanonicalString(context);
-		var value = {};
-		value[propertyName] = elementValue.value;
-		return value;
-	}
-});
 Jsonix.Model.ElementRefPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementRefsPropertyInfo, {
 	typeInfo : 'String',
 	elementName : null,
@@ -3238,7 +3309,7 @@ Jsonix.Model.ElementRefPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementR
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo'
 });
-Jsonix.Model.ElementRefPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+Jsonix.Model.ElementRefPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
 	CLASS_NAME : 'Jsonix.Model.ElementRefPropertyInfo.Simplified'
 });
 Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementRefsPropertyInfo, {
@@ -3286,11 +3357,11 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'
 });
-Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Model.AbstractElementRefsPropertyInfo.Simplified, {
+Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo.Simplified'
 });
 
-Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	allowDom : true,
 	allowTypedObject : true,
 	mixed : true,
@@ -3330,28 +3401,25 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		}
 	},
 	unmarshalElement : function(context, input, scope) {
-
 		var name = input.getName();
-		var value;
-
+		var elementValue;
 		if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
-			// TODO optimize
-			var elementDeclaration = context.getElementInfo(name, scope);
-			var typeInfo = elementDeclaration.typeInfo;
-			value = {
+			var typeInfo = this.getElementTypeInfo(name, context, scope);
+			var value = typeInfo.unmarshal(context, input, scope);
+			elementValue = this.convertToElementValue({
 				name : name,
-				value : typeInfo.unmarshal(context, input, scope)
-			};
+				value : value
+			}, context, input, scope);
 		} else if (this.allowDom) {
-			value = input.getElement();
+			elementValue = input.getElement();
 		} else {
 			// TODO better exception
 			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
 		}
 		if (this.collection) {
-			return [ value ];
+			return [ elementValue ];
 		} else {
-			return value;
+			return elementValue;
 		}
 	},
 	marshal : function(value, context, output, scope) {
@@ -3417,7 +3485,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	},
 	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo'
 });
-
+Jsonix.Model.AnyElementPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.AnyElementPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo.Simplified'
+});
 Jsonix.Model.Module = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
 			name : null,
@@ -3655,6 +3725,8 @@ Jsonix.Model.Module.prototype.typeInfoCreators = {
 	"l" : Jsonix.Model.Module.prototype.createList
 };
 Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
+	marshaller : Jsonix.Binding.Marshaller,
+	unmarshaller : Jsonix.Binding.Unmarshaller,
 	module : Jsonix.Model.Module,
 	elementInfo : Jsonix.Model.ElementInfo,
 	classInfo : Jsonix.Model.ClassInfo,
@@ -3676,12 +3748,14 @@ Jsonix.Mapping.Style.Standard = Jsonix.Class(Jsonix.Mapping.Style, {
 Jsonix.Mapping.Style.STYLES.standard = new Jsonix.Mapping.Style.Standard();
 
 Jsonix.Mapping.Style.Simplified = Jsonix.Class(Jsonix.Mapping.Style, {
+	marshaller : Jsonix.Binding.Marshaller.Simplified,
+	unmarshaller : Jsonix.Binding.Unmarshaller.Simplified,
 	module : Jsonix.Model.Module,
 	elementInfo : Jsonix.Model.ElementInfo,
 	classInfo : Jsonix.Model.ClassInfo,
 	enumLeafInfo : Jsonix.Model.EnumLeafInfo,
 	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo,
-	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo,
+	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo.Simplified,
 	attributePropertyInfo : Jsonix.Model.AttributePropertyInfo,
 	elementMapPropertyInfo : Jsonix.Model.ElementMapPropertyInfo,
 	elementPropertyInfo : Jsonix.Model.ElementPropertyInfo,
@@ -5462,10 +5536,10 @@ Jsonix.Context = Jsonix
 						.fromObject(name).key];
 			},
 			createMarshaller : function() {
-				return new Jsonix.Context.Marshaller(this);
+				return new this.mappingStyle.marshaller(this);
 			},
 			createUnmarshaller : function() {
-				return new Jsonix.Context.Unmarshaller(this);
+				return new this.mappingStyle.unmarshaller(this);
 			},
 			getNamespaceURI : function(prefix) {
 				Jsonix.Util.Ensure.ensureString(prefix);
@@ -5534,110 +5608,6 @@ Jsonix.Context = Jsonix
 					Jsonix.Schema.XSD.UnsignedShort.INSTANCE ],
 			CLASS_NAME : 'Jsonix.Context'
 		});
-Jsonix.Context.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
-	context : null,
-	initialize : function(context) {
-		Jsonix.Util.Ensure.ensureObject(context);
-		this.context = context;
-	},
-	marshalString : function(value) {
-		var doc = this.marshalDocument(value);
-		var text = Jsonix.DOM.serialize(doc);
-		return text;
-	},
-	marshalDocument : function(value) {
-		var output = new Jsonix.XML.Output({
-			namespacePrefixes : this.context.namespacePrefixes
-		});
-
-		var doc = output.writeStartDocument();
-		this.marshalElementNode(value, this.context, output, undefined);
-		output.writeEndDocument();
-		return doc;
-	},
-	CLASS_NAME : 'Jsonix.Context.Marshaller'
-});
-Jsonix.Context.Unmarshaller = Jsonix.Class({
-	context : null,
-	initialize : function(context) {
-		Jsonix.Util.Ensure.ensureObject(context);
-		this.context = context;
-	},
-	unmarshalString : function(text) {
-		Jsonix.Util.Ensure.ensureString(text);
-		var doc = Jsonix.DOM.parse(text);
-		return this.unmarshalDocument(doc);
-	},
-	unmarshalURL : function(url, callback, options) {
-		Jsonix.Util.Ensure.ensureString(url);
-		Jsonix.Util.Ensure.ensureFunction(callback);
-		if (Jsonix.Util.Type.exists(options)) {
-			Jsonix.Util.Ensure.ensureObject(options);
-		}
-		that = this;
-		Jsonix.DOM.load(url, function(doc) {
-			callback(that.unmarshalDocument(doc));
-		}, options);
-	},
-	unmarshalFile : function(fileName, callback, options) {
-		if (typeof _jsonix_fs === 'undefined')
-		{
-			throw new Error("File unmarshalling is only available in environments which support file systems.");
-		}
-		Jsonix.Util.Ensure.ensureString(fileName);
-		Jsonix.Util.Ensure.ensureFunction(callback);
-		if (Jsonix.Util.Type.exists(options)) {
-			Jsonix.Util.Ensure.ensureObject(options);
-		}
-		that = this;
-		var fs =_jsonix_fs;
-		fs.readFile(fileName, options, function(err, data) {
-			if (err)
-			{
-				throw err;
-			}
-			else
-			{
-				var text = data.toString();
-				var doc = Jsonix.DOM.parse(text);
-				callback(that.unmarshalDocument(doc));
-			}
-		});
-	},
-	unmarshalDocument : function(doc) {
-		var input = new Jsonix.XML.Input(doc);
-
-		var result = null;
-		input.nextTag();
-		return this.unmarshalElementNode(input);
-
-	},
-	unmarshalElementNode : function(input, scope) {
-		if (input.eventType != 1) {
-			throw new Error("Parser must be on START_ELEMENT to read next text.");
-		}
-
-		var result = null;
-		// It's OK to use fromObject here because input gives objects, guaranteed
-		var name = Jsonix.XML.QName.fromObject(input.getName());
-
-		var elementDeclaration = this.context.getElementInfo(name, scope);
-		if (!Jsonix.Util.Type.exists(elementDeclaration)) {
-			throw new Error("Could not find element declaration for the element [" + name.key + "].");
-		}
-		Jsonix.Util.Ensure.ensureObject(elementDeclaration.typeInfo);
-		var typeInfo = elementDeclaration.typeInfo;
-		var value = typeInfo.unmarshal(this.context, input, scope);
-		result = {
-			name : name,
-			value : value
-		};
-
-		return result;
-
-	},
-	CLASS_NAME : 'Jsonix.Context.Unmarshaller'
-});
 	// Complete Jsonix script is included above
 	return { Jsonix: Jsonix };
 };
