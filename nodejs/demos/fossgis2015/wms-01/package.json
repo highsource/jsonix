@@ -1,0 +1,21 @@
+{
+	"name": "jsonix-demos-fossgis2015-wms-01",
+	"description": "Jsonix Demos FOSSGIS2015 WMS 01",
+	"version": "1.0.0",
+	"engines": [
+		"node >= 0.8.0"
+	],
+	"main": "jsonix-demos-wms.js",
+	"dependencies": {
+		"jsonix": "2.x.x",
+		"jsonix-schema-compiler": "2.x.x"
+	},
+	"devDependencies" : {
+		"nodeunit" : "~0.8.6",
+		"node-static" : "~0.7.3"
+	},
+	"scripts": {
+		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar -compact -d mappings -catalog schemas/catalog.cat schemas/ogc/wms/1.3.0/capabilities_1_3_0.xsd -b bindings",
+		"test": "nodeunit tests/tests.js" 
+	}
+}

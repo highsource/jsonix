@@ -1,0 +1,2 @@
+REWRITE_SYSTEM "http://schemas.opengis.net" "ogc"
+REWRITE_SYSTEM "http://www.w3.org" "w3c"
