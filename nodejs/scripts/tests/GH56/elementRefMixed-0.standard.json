@@ -1,0 +1,13 @@
+{
+	"name" : { "localPart" : "elementRefMixed", "namespaceURI" : "", "prefix" : "", "key" : "elementRefMixed", "string" : "elementRefMixed" },
+	"value" : {
+		"content" : [ {
+			"name" : { "localPart" : "value", "namespaceURI" : "", "prefix" : "", "key" : "value", "string" : "value" },
+			"value" : "a"
+		}, "b", {
+			"name" : { "localPart" : "value", "namespaceURI" : "", "prefix" : "", "key" : "value", "string" : "value" },
+			"value" : "c"
+		} ],
+		"TYPE_NAME" : "Zero.ElementRefMixedType"
+	}
+}

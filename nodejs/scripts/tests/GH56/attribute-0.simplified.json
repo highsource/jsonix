@@ -3,6 +3,6 @@
 		"value" : "test",
 		"string" : "zero",
 		"integers" : [ 1, 2 ],
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.AttributeType"
+		"TYPE_NAME" : "Zero.AttributeType"
 	}
 }

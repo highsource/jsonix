@@ -1,16 +1,16 @@
 var fs = require('fs');
-var forEachResourceInDirectory = function(testFunction, args, directory, suffix) {
+var forEachResourceInDirectory = function(directory, suffix, testFunction, args) {
 	args = args || [];
 	var testFunctionFactory = function(resource) {
 		return function(test) {
 			console.log('Testing [' + resource + '].');
 			var testFunctionArgs = [test];
+			testFunctionArgs.push(resource);
 			// TODO there is a better way
 			for (var i = 0; i < args.length; i++)
 			{
 				testFunctionArgs.push(args[i]);
 			}
-			testFunctionArgs.push(resource);
 			testFunction.apply(null, testFunctionArgs);
 		};
 	};

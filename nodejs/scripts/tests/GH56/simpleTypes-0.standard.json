@@ -1,0 +1,13 @@
+{
+	"name" : { "localPart" : "simpleTypes", "namespaceURI" : "", "prefix" : "", "key" : "simpleTypes", "string" : "simpleTypes" },
+	"value" : {
+		"qName" : {
+			"namespaceURI" : "urn:a",
+			"prefix" : "a",
+			"localPart" : "aq",
+			"key" : "{urn:a}aq",
+			"string" : "{urn:a}a:aq"
+		},
+		"TYPE_NAME" : "Zero.SimpleTypesType"
+	}
+}

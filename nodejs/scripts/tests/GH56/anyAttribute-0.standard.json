@@ -1,0 +1,11 @@
+{
+	"name" : { "localPart" : "anyAttribute", "namespaceURI" : "", "prefix" : "", "key" : "anyAttribute", "string" : "anyAttribute" },
+	"value" : {
+		"value" : "test",
+		"otherAttributes" : {
+			"a" : "a",
+			"b" : "b"
+		},
+		"TYPE_NAME" : "Zero.AnyAttributeType"
+	}
+}

@@ -1,0 +1,10 @@
+{
+	"name" : { "localPart" : "anyElementLax", "namespaceURI" : "", "prefix" : "", "key" : "anyElementLax", "string" : "anyElementLax" },
+	"value" : {
+		"any" : {
+			"name" : { "localPart" : "string", "namespaceURI" : "", "prefix" : "", "key" : "string", "string" : "string" },
+			"value" : "test"
+		},
+		"TYPE_NAME" : "Zero.AnyElementLaxType"
+	}
+}

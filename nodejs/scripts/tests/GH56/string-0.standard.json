@@ -1,0 +1,4 @@
+{
+	"name" : { "localPart" : "string", "namespaceURI" : "", "prefix" : "", "key" : "string", "string" : "string" },
+	"value" : "test"
+}

@@ -5,6 +5,6 @@
 		}, "b", {
 			"value" : "c"
 		} ],
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementRefMixedType"
+		"TYPE_NAME" : "Zero.ElementRefMixedType"
 	}
 }

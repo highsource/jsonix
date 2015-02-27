@@ -1,5 +1,5 @@
-var org_hisrc_jsonix_tests_zero = {
-  name: 'org_hisrc_jsonix_tests_zero',
+var Zero = {
+  name: 'Zero',
   typeInfos: [{
       type: 'classInfo',
       localName: 'AnyElementStrictType',
@@ -51,7 +51,7 @@ var org_hisrc_jsonix_tests_zero = {
     }, {
       type: 'classInfo',
       localName: 'ExtendedType',
-      baseTypeInfo: 'org_hisrc_jsonix_tests_zero.BaseType',
+      baseTypeInfo: 'Zero.BaseType',
       propertyInfos: [{
           type: 'element',
           name: 'gamma',
@@ -118,7 +118,7 @@ var org_hisrc_jsonix_tests_zero = {
           name: 'base',
           collection: true,
           elementName: 'base',
-          typeInfo: 'org_hisrc_jsonix_tests_zero.BaseType',
+          typeInfo: 'Zero.BaseType',
           type: 'elementRef'
         }]
     }, {
@@ -149,10 +149,10 @@ var org_hisrc_jsonix_tests_zero = {
           collection: true,
           elementTypeInfos: [{
               elementName: 'beta',
-              typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType'
+              typeInfo: 'Zero.ValueType'
             }, {
               elementName: 'alpha',
-              typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType'
+              typeInfo: 'Zero.ValueType'
             }],
           type: 'elementRefs'
         }]
@@ -397,7 +397,7 @@ var org_hisrc_jsonix_tests_zero = {
     }, {
       type: 'classInfo',
       localName: 'ExtendedExtendedType',
-      baseTypeInfo: 'org_hisrc_jsonix_tests_zero.ExtendedType',
+      baseTypeInfo: 'Zero.ExtendedType',
       propertyInfos: [{
           type: 'element',
           name: 'epsilon',
@@ -428,7 +428,7 @@ var org_hisrc_jsonix_tests_zero = {
     }, {
       type: 'classInfo',
       localName: 'ExtendedMixedType',
-      baseTypeInfo: 'org_hisrc_jsonix_tests_zero.AbstractBaseType',
+      baseTypeInfo: 'Zero.AbstractBaseType',
       propertyInfos: []
     }, {
       type: 'classInfo',
@@ -437,81 +437,81 @@ var org_hisrc_jsonix_tests_zero = {
     }],
   elementInfos: [{
       elementName: 'anyElementStrict',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.AnyElementStrictType'
+      typeInfo: 'Zero.AnyElementStrictType'
     }, {
       elementName: 'element',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ElementType'
+      typeInfo: 'Zero.ElementType'
     }, {
       elementName: 'anyElementSkip',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.AnyElementSkipType'
+      typeInfo: 'Zero.AnyElementSkipType'
     }, {
       elementName: 'extended',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ExtendedType',
+      typeInfo: 'Zero.ExtendedType',
       substitutionHead: 'base'
     }, {
       elementName: 'attribute',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.AttributeType'
+      typeInfo: 'Zero.AttributeType'
     }, {
       elementName: 'enum',
       typeInfo: 'String'
     }, {
       elementName: 'anyAttribute',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.AnyAttributeType'
+      typeInfo: 'Zero.AnyAttributeType'
     }, {
       elementName: 'abstractElement',
       typeInfo: 'AnyType'
     }, {
       elementName: 'elementRef',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ElementRefType'
+      typeInfo: 'Zero.ElementRefType'
     }, {
       elementName: 'anyElementLax',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.AnyElementLaxType'
+      typeInfo: 'Zero.AnyElementLaxType'
     }, {
       elementName: 'elementRefMixed',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ElementRefMixedType'
+      typeInfo: 'Zero.ElementRefMixedType'
     }, {
       elementName: 'elementRefs',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ElementRefsType'
+      typeInfo: 'Zero.ElementRefsType'
     }, {
       elementName: 'string',
       typeInfo: 'String'
     }, {
       elementName: 'value',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType'
+      typeInfo: 'Zero.ValueType'
     }, {
       elementName: 'simpleTypes',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.SimpleTypesType'
+      typeInfo: 'Zero.SimpleTypesType'
     }, {
       elementName: 'base',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.BaseType'
+      typeInfo: 'Zero.BaseType'
     }, {
       elementName: 'elements',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ElementsType'
+      typeInfo: 'Zero.ElementsType'
     }, {
       elementName: 'extendedExtended',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ExtendedExtendedType',
+      typeInfo: 'Zero.ExtendedExtendedType',
       substitutionHead: 'base'
     }, {
       elementName: 'alpha',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType',
-      scope: 'org_hisrc_jsonix_tests_zero.ElementRefsType'
+      typeInfo: 'Zero.ValueType',
+      scope: 'Zero.ElementRefsType'
     }, {
       elementName: 'beta',
-      typeInfo: 'org_hisrc_jsonix_tests_zero.ValueType',
-      scope: 'org_hisrc_jsonix_tests_zero.ElementRefsType'
+      typeInfo: 'Zero.ValueType',
+      scope: 'Zero.ElementRefsType'
     }, {
       elementName: 'value',
       typeInfo: 'String',
-      scope: 'org_hisrc_jsonix_tests_zero.ElementRefMixedType'
+      scope: 'Zero.ElementRefMixedType'
     }, {
       elementName: 'items',
       typeInfo: {
         type: 'list',
         typeInfo: 'String'
       },
-      scope: 'org_hisrc_jsonix_tests_zero.ElementType'
+      scope: 'Zero.ElementType'
     }]
 };
 if (typeof require === 'function') {
-  module.exports.org_hisrc_jsonix_tests_zero = org_hisrc_jsonix_tests_zero;
+  module.exports.Zero = Zero;
 }

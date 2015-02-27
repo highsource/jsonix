@@ -2,13 +2,20 @@ var Jsonix = require('../../jsonix').Jsonix;
 var roundtrips = require('../roundtrip').roundtrips;
 var comparisons = require('../comparison').comparisons;
 
-var Zero = require('./Mappings.js').org_hisrc_jsonix_tests_zero;
+var Zero = require('./Mappings.js').Zero;
 
 var mappings = [Zero];
 
-var context = new Jsonix.Context(mappings, { mappingStyle : 'simplified' });
+var simplifiedContext = new Jsonix.Context(mappings, { mappingStyle : 'simplified' });
+var standardContext = new Jsonix.Context(mappings, { mappingStyle : 'standard' });
 
 module.exports = {
-	"Roundtrips" : roundtrips(context, __dirname),
-	"Comparisons" : comparisons(context, __dirname)
+	"Standard" : {
+		"Roundtrips" : roundtrips(__dirname, [standardContext]),
+		"Comparisons" : comparisons(__dirname, [standardContext, '.standard.json'])
+	},
+	"Simplified" : {
+		"Roundtrips" : roundtrips(__dirname, [simplifiedContext]),
+		"Comparisons" : comparisons(__dirname, [simplifiedContext, '.simplified.json'])
+	}
 };

@@ -3,16 +3,16 @@
 				"base" : {
 					"alpha" : "one",
 					"beta" : [ 2 ],
-					"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.BaseType"
+					"TYPE_NAME" : "Zero.BaseType"
 				}
 			}, {
 				"extended" : {
 					"alpha" : "one",
 					"beta" : [ 2 ],
 					"gamma" : "urn:three",
-					"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ExtendedType"
+					"TYPE_NAME" : "Zero.ExtendedType"
 				}
 			} ],
-			"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementRefType"
+			"TYPE_NAME" : "Zero.ElementRefType"
 		}
 	}

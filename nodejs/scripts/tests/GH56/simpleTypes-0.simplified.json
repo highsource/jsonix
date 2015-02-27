@@ -7,6 +7,6 @@
 			"key" : "{urn:a}aq",
 			"string" : "{urn:a}a:aq"
 		},
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.SimpleTypesType"
+		"TYPE_NAME" : "Zero.SimpleTypesType"
 	}
 }

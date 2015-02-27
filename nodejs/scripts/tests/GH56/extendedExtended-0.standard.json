@@ -1,0 +1,11 @@
+{
+	"name" : { "localPart" : "extendedExtended", "namespaceURI" : "", "prefix" : "", "key" : "extendedExtended", "string" : "extendedExtended" },
+	"value" : {
+		"alpha" : "one",
+		"beta" : [ 2 ],
+		"gamma" : "urn:three",
+		"epsilon" : 0.7,
+		"zeta" : [ 8 ],
+		"TYPE_NAME" : "Zero.ExtendedExtendedType"
+	}
+}

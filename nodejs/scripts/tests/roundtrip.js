@@ -1,6 +1,6 @@
 var forEachResourceInDirectory = require('./forEachResourceInDirectory');
 var Jsonix = require('../jsonix').Jsonix;
-var roundtrip = function(test, context, resource) {
+var roundtrip = function(test, resource, context) {
 	var xmlFile = resource + '.xml';
 	var unmarshallerOne = context.createUnmarshaller();
 	var unmarshallerTwo = context.createUnmarshaller();
@@ -23,8 +23,8 @@ var roundtrip = function(test, context, resource) {
 		test.done();
 	});
 };
-var roundtrips = function(context, directory) {
-	return forEachResourceInDirectory(roundtrip, [ context ], directory, ".xml");
+var roundtrips = function(directory, args) {
+	return forEachResourceInDirectory(directory, ".xml", roundtrip, args);
 };
 module.exports = {
 	roundtrip : roundtrip,

@@ -1,0 +1,9 @@
+{
+	"name" : { "localPart" : "attribute", "namespaceURI" : "", "prefix" : "", "key" : "attribute", "string" : "attribute" },
+	"value" : {
+		"value" : "test",
+		"string" : "zero",
+		"integers" : [ 1, 2 ],
+		"TYPE_NAME" : "Zero.AttributeType"
+	}
+}

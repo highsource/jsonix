@@ -1,6 +1,6 @@
 {
 	"elements" : {
 		"stringOrInteger" : [ "one", 2, 3, "four" ],
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementsType"
+		"TYPE_NAME" : "Zero.ElementsType"
 	}
 }

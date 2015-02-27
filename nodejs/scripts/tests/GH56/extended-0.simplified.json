@@ -3,6 +3,6 @@
 		"alpha" : "one",
 		"beta" : [ 2 ],
 		"gamma" : "urn:three",
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ExtendedType"
+		"TYPE_NAME" : "Zero.ExtendedType"
 	}
 }

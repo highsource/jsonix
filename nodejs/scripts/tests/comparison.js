@@ -2,8 +2,8 @@ var fs = require('fs');
 var forEachResourceInDirectory = require('./forEachResourceInDirectory');
 var Jsonix = require('../jsonix').Jsonix;
 
-var comparison = function(test, context, resource) {
-	var jsonFile = resource + '.json';
+var comparison = function(test, resource, context, jsonSuffix) {
+	var jsonFile = resource + (jsonSuffix || '.json');
 
 //	console.log("Loading JSON from the file [" + jsonFile + "].");
 
@@ -50,8 +50,8 @@ var comparison = function(test, context, resource) {
 	test.done();
 
 };
-var comparisons = function(context, directory) {
-	return forEachResourceInDirectory(comparison, [ context ], directory, ".xml");
+var comparisons = function(directory, args) {
+	return forEachResourceInDirectory(directory, ".xml", comparison, args);
 };
 module.exports = {
 	comparison : comparison,

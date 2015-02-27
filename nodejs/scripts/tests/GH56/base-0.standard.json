@@ -1,0 +1,8 @@
+{
+	"name" : { "localPart" : "base", "namespaceURI" : "", "prefix" : "", "key" : "base", "string" : "base" },
+	"value" : {
+		"alpha" : "one",
+		"beta" : [ 2 ],
+		"TYPE_NAME" : "Zero.BaseType"
+	}
+}

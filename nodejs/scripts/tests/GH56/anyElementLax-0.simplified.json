@@ -3,6 +3,6 @@
 		"any" : {
 			"string" : "test"
 		},
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.AnyElementLaxType"
+		"TYPE_NAME" : "Zero.AnyElementLaxType"
 	}
 }

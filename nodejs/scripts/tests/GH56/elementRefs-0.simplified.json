@@ -1,0 +1,16 @@
+{
+		"elementRefs" : {
+			"alphaOrBeta" : [ {
+				"alpha" : {
+					"value" : "one",
+					"TYPE_NAME" : "Zero.ValueType"
+				}
+			}, {
+				"beta" : {
+					"value" : "2",
+					"TYPE_NAME" : "Zero.ValueType"
+				}
+			} ],
+			"TYPE_NAME" : "Zero.ElementRefsType"
+		}
+	}

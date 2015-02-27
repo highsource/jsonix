@@ -5,6 +5,6 @@
 		"gamma" : "urn:three",
 		"epsilon" : 0.7,
 		"zeta" : [ 8 ],
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ExtendedExtendedType"
+		"TYPE_NAME" : "Zero.ExtendedExtendedType"
 	}
 }

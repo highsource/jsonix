@@ -1,0 +1,6 @@
+{
+	"elements" : {
+		"stringOrInteger" : [ "one", 2 ],
+		"TYPE_NAME" : "Zero.ElementsType"
+	}
+}

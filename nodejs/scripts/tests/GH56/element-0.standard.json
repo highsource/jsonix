@@ -1,0 +1,16 @@
+{
+	"name" : { "localPart" : "element", "namespaceURI" : "", "prefix" : "", "key" : "element", "string" : "element" },
+	"value" : {
+		"element" : "one",
+		"elements" : [ "two", "three" ],
+		"item" : [ "four", "five" ],
+		"items" : [ {
+			"name" : { "localPart" : "items", "namespaceURI" : "", "prefix" : "", "key" : "items", "string" : "items" },
+			"value" : [ "six", "seven" ]
+		}, {
+			"name" : { "localPart" : "items", "namespaceURI" : "", "prefix" : "", "key" : "items", "string" : "items" },
+			"value" : [ "eight", "nine" ]
+		} ],
+		"TYPE_NAME" : "Zero.ElementType"
+	}
+}

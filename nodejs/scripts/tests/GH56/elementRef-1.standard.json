@@ -1,0 +1,22 @@
+{
+	"name" : { "localPart" : "elementRef", "namespaceURI" : "", "prefix" : "", "key" : "elementRef", "string" : "elementRef" },
+	"value" : {
+		"base" : [ {
+			"name" : { "localPart" : "base", "namespaceURI" : "", "prefix" : "", "key" : "base", "string" : "base" },
+			"value" : {
+				"alpha" : "one",
+				"beta" : [ 2 ],
+				"TYPE_NAME" : "Zero.BaseType"
+			}
+		}, {
+			"name" : { "localPart" : "extended", "namespaceURI" : "", "prefix" : "", "key" : "extended", "string" : "extended" },
+			"value" : {
+				"alpha" : "one",
+				"beta" : [ 2 ],
+				"gamma" : "urn:three",
+				"TYPE_NAME" : "Zero.ExtendedType"
+			}
+		} ],
+		"TYPE_NAME" : "Zero.ElementRefType"
+	}
+}

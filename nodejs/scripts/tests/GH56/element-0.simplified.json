@@ -8,6 +8,6 @@
 		}, {
 			"items" : [ "eight", "nine" ]
 		} ],
-		"TYPE_NAME" : "org_hisrc_jsonix_tests_zero.ElementType"
+		"TYPE_NAME" : "Zero.ElementType"
 	}
 }
