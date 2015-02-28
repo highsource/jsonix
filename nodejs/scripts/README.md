@@ -25,7 +25,7 @@ java -jar node_modules/jsonix/lib/jsonix-schema-compiler-full.jar
 
 Generates mappings for the `purchaseorder.xsd` schema in the `mappings\PO.js`; mappings will be placed in the variable `PO`.
 
-### Unmarshalling:
+### Parse XML into JS
 
 ```javascript
 // Include or require PO.js so that PO variable is available
@@ -53,7 +53,7 @@ unmarshaller.unmarshalURL('po.xml',
 
 You can also `unmarshalString`, `unmarshalDocument` and (under node.js) `unmarshalFile`.
     
-### Marshalling
+### Serialize JS as XML
 
 ```javascript
 // Create a marshaller
