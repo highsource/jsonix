@@ -1,0 +1,9 @@
+{
+	"elementMap" : {
+		"element" : {
+			"one" : "earth",
+			"two" : "wind"
+		},
+		"TYPE_NAME" : "Zero.ElementMapType"
+	}
+}

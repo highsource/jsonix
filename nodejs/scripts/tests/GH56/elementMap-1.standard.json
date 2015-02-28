@@ -1,0 +1,10 @@
+{
+	"name" : { "localPart" : "elementMap", "namespaceURI" : "", "prefix" : "", "key" : "elementMap", "string" : "elementMap" },
+	"value" : {
+		"element" : {
+			"one" : "earth",
+			"two" : "wind"
+		},
+		"TYPE_NAME" : "Zero.ElementMapType"
+	}
+}

@@ -1,0 +1,22 @@
+{
+	"name" : { "localPart" : "elementMap", "namespaceURI" : "", "prefix" : "", "key" : "elementMap", "string" : "elementMap" },
+	"value" : {
+		"element" : {
+			"one" : "earth",
+			"two" : "wind"
+		},
+		"elements" : {
+			"three" : "fire",
+			"four" : "wood"
+		},
+		"elementCollection" : {
+			"one" : [ "1", "I" ],
+			"two" : [ "2", "II" ]
+		},
+		"elementsCollection" : {
+			"three" : [ "3", "III" ],
+			"four" : [ "4", "IV" ]
+		},
+		"TYPE_NAME" : "Zero.ElementMapType"
+	}
+}
