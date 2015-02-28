@@ -971,21 +971,26 @@ e++){d[this.name].push(f[e])
 }}},CLASS_NAME:"Jsonix.Model.PropertyInfo"});
 Jsonix.Model.AnyAttributePropertyInfo=Jsonix.Class(Jsonix.Model.PropertyInfo,{initialize:function(b){Jsonix.Util.Ensure.ensureObject(b);
 Jsonix.Model.PropertyInfo.prototype.initialize.apply(this,[b])
-},unmarshal:function(m,p,k){var n=p.getAttributeCount();
+},unmarshal:function(m,p,l){var n=p.getAttributeCount();
 if(n===0){return null
 }else{var j={};
 for(var o=0;
 o<n;
-o++){var i=p.getAttributeNameKey(o);
-var l=p.getAttributeValue(o);
-if(Jsonix.Util.Type.isString(l)){j[i]=l
+o++){var k=p.getAttributeValue(o);
+if(Jsonix.Util.Type.isString(k)){var i=this.convertFromAttributeName(p.getAttributeName(o),m,p,l);
+j[i]=k
 }}return j
-}},marshal:function(i,l,h,j){if(!Jsonix.Util.Type.isObject(i)){return
-}for(var g in i){if(i.hasOwnProperty(g)){var k=i[g];
-if(Jsonix.Util.Type.isString(k)){h.writeAttribute(Jsonix.XML.QName.fromString(g),k)
-}}}},doBuild:function(c,d){},buildStructure:function(c,d){Jsonix.Util.Ensure.ensureObject(d);
+}},marshal:function(j,l,n,k){if(!Jsonix.Util.Type.isObject(j)){return
+}for(var h in j){if(j.hasOwnProperty(h)){var i=j[h];
+if(Jsonix.Util.Type.isString(i)){var m=this.convertToAttributeName(h,l,n,k);
+n.writeAttribute(m,i)
+}}}},convertFromAttributeName:function(e,h,f,g){return e.key
+},convertToAttributeName:function(e,h,f,g){return Jsonix.XML.QName.fromObjectOrString(e,h)
+},doBuild:function(c,d){},buildStructure:function(c,d){Jsonix.Util.Ensure.ensureObject(d);
 d.anyAttribute=this
 },CLASS_NAME:"Jsonix.Model.AnyAttributePropertyInfo"});
+Jsonix.Model.AnyAttributePropertyInfo.Simplified=Jsonix.Class(Jsonix.Model.AnyAttributePropertyInfo,{convertFromAttributeName:function(e,h,f,g){return e.toCanonicalString(h)
+}});
 Jsonix.Model.SingleTypePropertyInfo=Jsonix.Class(Jsonix.Model.PropertyInfo,{typeInfo:"String",initialize:function(d){Jsonix.Util.Ensure.ensureObject(d);
 Jsonix.Model.PropertyInfo.prototype.initialize.apply(this,[d]);
 var c=d.typeInfo||d.ti||"String";
@@ -1435,7 +1440,7 @@ Jsonix.Model.Module.prototype.typeInfoCreators={classInfo:Jsonix.Model.Module.pr
 Jsonix.Mapping.Style.Standard=Jsonix.Class(Jsonix.Mapping.Style,{marshaller:Jsonix.Binding.Marshaller,unmarshaller:Jsonix.Binding.Unmarshaller,module:Jsonix.Model.Module,elementInfo:Jsonix.Model.ElementInfo,classInfo:Jsonix.Model.ClassInfo,enumLeafInfo:Jsonix.Model.EnumLeafInfo,anyAttributePropertyInfo:Jsonix.Model.AnyAttributePropertyInfo,anyElementPropertyInfo:Jsonix.Model.AnyElementPropertyInfo,attributePropertyInfo:Jsonix.Model.AttributePropertyInfo,elementMapPropertyInfo:Jsonix.Model.ElementMapPropertyInfo,elementPropertyInfo:Jsonix.Model.ElementPropertyInfo,elementsPropertyInfo:Jsonix.Model.ElementsPropertyInfo,elementRefPropertyInfo:Jsonix.Model.ElementRefPropertyInfo,elementRefsPropertyInfo:Jsonix.Model.ElementRefsPropertyInfo,valuePropertyInfo:Jsonix.Model.ValuePropertyInfo,initialize:function(){Jsonix.Mapping.Style.prototype.initialize.apply(this)
 },CLASS_NAME:"Jsonix.Mapping.Style.Standard"});
 Jsonix.Mapping.Style.STYLES.standard=new Jsonix.Mapping.Style.Standard();
-Jsonix.Mapping.Style.Simplified=Jsonix.Class(Jsonix.Mapping.Style,{marshaller:Jsonix.Binding.Marshaller.Simplified,unmarshaller:Jsonix.Binding.Unmarshaller.Simplified,module:Jsonix.Model.Module,elementInfo:Jsonix.Model.ElementInfo,classInfo:Jsonix.Model.ClassInfo,enumLeafInfo:Jsonix.Model.EnumLeafInfo,anyAttributePropertyInfo:Jsonix.Model.AnyAttributePropertyInfo,anyElementPropertyInfo:Jsonix.Model.AnyElementPropertyInfo.Simplified,attributePropertyInfo:Jsonix.Model.AttributePropertyInfo,elementMapPropertyInfo:Jsonix.Model.ElementMapPropertyInfo,elementPropertyInfo:Jsonix.Model.ElementPropertyInfo,elementsPropertyInfo:Jsonix.Model.ElementsPropertyInfo,elementRefPropertyInfo:Jsonix.Model.ElementRefPropertyInfo.Simplified,elementRefsPropertyInfo:Jsonix.Model.ElementRefsPropertyInfo.Simplified,valuePropertyInfo:Jsonix.Model.ValuePropertyInfo,initialize:function(){Jsonix.Mapping.Style.prototype.initialize.apply(this)
+Jsonix.Mapping.Style.Simplified=Jsonix.Class(Jsonix.Mapping.Style,{marshaller:Jsonix.Binding.Marshaller.Simplified,unmarshaller:Jsonix.Binding.Unmarshaller.Simplified,module:Jsonix.Model.Module,elementInfo:Jsonix.Model.ElementInfo,classInfo:Jsonix.Model.ClassInfo,enumLeafInfo:Jsonix.Model.EnumLeafInfo,anyAttributePropertyInfo:Jsonix.Model.AnyAttributePropertyInfo.Simplified,anyElementPropertyInfo:Jsonix.Model.AnyElementPropertyInfo.Simplified,attributePropertyInfo:Jsonix.Model.AttributePropertyInfo,elementMapPropertyInfo:Jsonix.Model.ElementMapPropertyInfo,elementPropertyInfo:Jsonix.Model.ElementPropertyInfo,elementsPropertyInfo:Jsonix.Model.ElementsPropertyInfo,elementRefPropertyInfo:Jsonix.Model.ElementRefPropertyInfo.Simplified,elementRefsPropertyInfo:Jsonix.Model.ElementRefsPropertyInfo.Simplified,valuePropertyInfo:Jsonix.Model.ValuePropertyInfo,initialize:function(){Jsonix.Mapping.Style.prototype.initialize.apply(this)
 },CLASS_NAME:"Jsonix.Mapping.Style.Simplified"});
 Jsonix.Mapping.Style.STYLES.simplified=new Jsonix.Mapping.Style.Simplified();
 Jsonix.Schema.XSD={};

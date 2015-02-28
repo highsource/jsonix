@@ -2529,10 +2529,10 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 		} else {
 			var result = {};
 			for ( var index = 0; index < attributeCount; index++) {
-				var attributeNameKey = input.getAttributeNameKey(index);
-				var attributeValue = input.getAttributeValue(index);
-				if (Jsonix.Util.Type.isString(attributeValue)) {
-					result[attributeNameKey] = attributeValue;
+				var value = input.getAttributeValue(index);
+				if (Jsonix.Util.Type.isString(value)) {
+					var propertyName = this.convertFromAttributeName(input.getAttributeName(index), context, input, scope);
+					result[propertyName] = value;
 				}
 			}
 			return result;
@@ -2543,15 +2543,21 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 			// Nothing to do
 			return;
 		}
-		for ( var attributeName in value) {
-			if (value.hasOwnProperty(attributeName)) {
-				var attributeValue = value[attributeName];
-				if (Jsonix.Util.Type.isString(attributeValue)) {
-					output.writeAttribute(Jsonix.XML.QName.fromString(attributeName), attributeValue);
+		for ( var propertyName in value) {
+			if (value.hasOwnProperty(propertyName)) {
+				var propertyValue = value[propertyName];
+				if (Jsonix.Util.Type.isString(propertyValue)) {
+					var attributeName = this.convertToAttributeName(propertyName, context, output, scope);
+					output.writeAttribute(attributeName, propertyValue);
 				}
 			}
 		}
-
+	},
+	convertFromAttributeName : function(attributeName, context, input, scope) {
+		return attributeName.key;
+	},
+	convertToAttributeName : function(propertyName, context, output, scope) {
+		return Jsonix.XML.QName.fromObjectOrString(propertyName, context);
 	},
 	doBuild : function(context, module)	{
 		// Nothing to do
@@ -2569,6 +2575,12 @@ Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, 
 		// }
 	},
 	CLASS_NAME : 'Jsonix.Model.AnyAttributePropertyInfo'
+});
+Jsonix.Model.AnyAttributePropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.AnyAttributePropertyInfo, {
+	convertFromAttributeName : function(attributeName, context, input, scope)
+	{
+		return attributeName.toCanonicalString(context);
+	}
 });
 
 Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
@@ -3754,7 +3766,7 @@ Jsonix.Mapping.Style.Simplified = Jsonix.Class(Jsonix.Mapping.Style, {
 	elementInfo : Jsonix.Model.ElementInfo,
 	classInfo : Jsonix.Model.ClassInfo,
 	enumLeafInfo : Jsonix.Model.EnumLeafInfo,
-	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo,
+	anyAttributePropertyInfo : Jsonix.Model.AnyAttributePropertyInfo.Simplified,
 	anyElementPropertyInfo : Jsonix.Model.AnyElementPropertyInfo.Simplified,
 	attributePropertyInfo : Jsonix.Model.AttributePropertyInfo,
 	elementMapPropertyInfo : Jsonix.Model.ElementMapPropertyInfo,
