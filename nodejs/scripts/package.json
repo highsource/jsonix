@@ -7,8 +7,7 @@
 			"javascript objects", "dom", "util", "utility", "jaxb", "jsonix" ],
 	"homepage" : "http://github.com/highsource/jsonix",
 	"bugs" : {
-		"url" : "http://github.com/highsource/jsonix/issues",
-		"email" : "jsonix-users@lists.sourceforge.net"
+		"url" : "http://github.com/highsource/jsonix/issues"
 	},
 	"repository": {
 		"type": "git",
@@ -20,7 +19,7 @@
 	} ],
 	"author" : {
 		"name" : "Alexey Valikov",
-		"url" : "http://confluence.highsource.org"
+		"url" : "http://github.com/highsource"
 	},
 	"contributors" : [ {
 		"name" : "Conrad Pankoff",
@@ -35,13 +34,13 @@
 		"test" : "nodeunit tests/tests.js"
 	},
 	"dependencies" : {
-		"amdefine" : ">=0.1.0",
-		"xmldom" : "~0.1.19",
-		"xmlhttprequest" : "~1.6.0"
+		"amdefine" : "0.x.x",
+		"xmldom" : "0.x.x",
+		"xmlhttprequest" : "1.x.x"
 	},
 	"devDependencies" : {
-		"nodeunit" : "~0.8.6",
-		"node-static" : "~0.7.3"
+		"nodeunit" : "0.x.x",
+		"node-static" : "0.x.x"
 	},
 	"engines" : [ "node >= 0.8.0" ]
 }
