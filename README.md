@@ -10,6 +10,28 @@ Jsonix advantages:
 * Type-safe.
 * (Optionally) XML Schema-driven.
 
+Jsonix features:
+
+* Runs in almost any modern browser
+* Runs in [Node.js](http://nodejs.org/)
+* Implements *marshalling* (serializing the JavaScript object into XML)
+  * Supports *string* data and *DOM* nodes as result
+* Implements *unmarshalling* (parsing a JavaScript object from XML)	
+  * Supports *string* data, *DOM** nodes, *URLs* or *files* (with Node.js) as source
+* Driven by *declarative** XML/JS *mappings* which control how JavaScript object is converted into XML or vice versa
+* *Mappings* can be *automatically generated* based on the *XML Schema*
+* *Strongly-structured* - XML/object mappings describe structures of JavaScript objects
+* *Strongly-typed* - Conversion between string content on XML side and values on the JavaScript side is controlled by declared property types
+* Provides *extensible type system*
+  * Supports most XML Schema simple types (inlcuding QNames)
+  * Supports enumerations, list and union simple types
+  * Allows adding own simple types
+  * Supports complex types consisting of several properties
+  * Supports deriving complex types by extension
+* Provides *advanced property system*
+  * Value, attribute, element, element reference properties for string processing of XML content
+  * Any attribute, any element properties for "lax" processing for XML content
+
 ## Example
 
 Here's a working example for the [purchase order schema](http://www.w3.org/TR/xmlschema-0/#po.xsd) (try it [online in JSFiddle](http://jsfiddle.net/lexi/LP3DC/)).
@@ -49,7 +71,7 @@ unmarshaller.unmarshalURL('po.xml',
     });
 ```
 
-You can also ``unmarshalString``, ``unmarshalDocument`` and (under node.js) ``unmarshalFile``.
+You can also `unmarshalString`, `unmarshalDocument` and (under node.js) `unmarshalFile`.
     
 ### Marshalling
 
@@ -79,9 +101,9 @@ var doc = marshaller.marshalDocument({
 });
 ```
 
-You can also ``marshalString``.
+You can also `marshalString`.
 
 ## Documentation
 
-* [Homepage](http://confluence.highsource.org/display/JSNX/Jsonix) 
-* See the [User Guide](http://confluence.highsource.org/display/JSNX/User+Guide) for the extensive documentation ([PDF](https://github.com/highsource/jsonix/raw/master/docs/Jsonix.pdf)) 
+* [Jsonix GitHub Project](https://github.com/highsource/jsonix)
+* [Jsonix Wiki](https://github.com/highsource/jsonix/wiki)
