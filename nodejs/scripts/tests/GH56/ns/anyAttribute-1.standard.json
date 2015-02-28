@@ -1,0 +1,13 @@
+{
+	"name" : { "localPart" : "anyAttribute", "namespaceURI" : "", "prefix" : "", "key" : "anyAttribute", "string" : "anyAttribute" },
+	"value" : {
+		"value" : "test",
+		"otherAttributes" : {
+			"{http://www.w3.org/2000/xmlns/}a" : "urn:a",
+			"{http://www.w3.org/2000/xmlns/}b" : "urn:b",
+			"{urn:a}a" : "a",
+			"{urn:b}b" : "b"
+		},
+		"TYPE_NAME" : "Zero.AnyAttributeType"
+	}
+}

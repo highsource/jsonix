@@ -9,6 +9,9 @@ var mappings = [Zero];
 var simplifiedContext = new Jsonix.Context(mappings, { mappingStyle : "simplified" });
 var standardContext = new Jsonix.Context(mappings, { mappingStyle : "standard" });
 
+var simplifiedNsContext = new Jsonix.Context(mappings, { mappingStyle : "simplified", namespacePrefixes : { "urn:a" : "a", "urn:b" : "b" } });
+var standardNsContext = new Jsonix.Context(mappings, { mappingStyle : "standard", namespacePrefixes : { "urn:a" : "a", "urn:b" : "b" } });
+
 module.exports = {
 	"Standard" : {
 		"Roundtrips" : roundtrips(__dirname, [standardContext]),
@@ -17,5 +20,13 @@ module.exports = {
 	"Simplified" : {
 		"Roundtrips" : roundtrips(__dirname, [simplifiedContext]),
 		"Comparisons" : comparisons(__dirname, [simplifiedContext, ".simplified.json"])
+	},
+	"StandardNs" : {
+		"Roundtrips" : roundtrips(__dirname + "/ns", [standardNsContext]),
+		"Comparisons" : comparisons(__dirname + "/ns", [standardNsContext, ".standard.json"])
+	},
+	"SimplifiedNs" : {
+		"Roundtrips" : roundtrips(__dirname + "/ns", [simplifiedNsContext]),
+		"Comparisons" : comparisons(__dirname + "/ns", [simplifiedNsContext, ".simplified.json"])
 	}
 };

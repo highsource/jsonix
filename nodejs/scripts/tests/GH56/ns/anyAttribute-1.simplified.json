@@ -1,0 +1,12 @@
+{
+	"anyAttribute" : {
+		"value" : "test",
+		"otherAttributes" : {
+			"xmlns:a" : "urn:a",
+			"xmlns:b" : "urn:b",
+			"a:a" : "a",
+			"b:b" : "b"
+		},
+		"TYPE_NAME" : "Zero.AnyAttributeType"
+	}
+}
