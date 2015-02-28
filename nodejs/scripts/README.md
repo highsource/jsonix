@@ -6,9 +6,10 @@
 
 Jsonix advantages:
 
-* Strongly structured.
-* Type-safe.
-* (Optionally) XML Schema-driven.
+* Strongly structured
+* Type-safe
+* Bidirectional
+* (Optionally) XML Schema-driven
 
 See also the other [Jsonix features](#jsonix-features).
 
