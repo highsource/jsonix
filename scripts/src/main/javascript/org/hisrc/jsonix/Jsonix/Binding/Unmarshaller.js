@@ -56,19 +56,26 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 		var result = null;
 		var name = input.getName();
 		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		var value = typeInfo.unmarshal(context, input, scope);
-		var elementValue = this.convertToElementValue({
-			name : name,
-			value : value
-		}, context, input, scope);
-		return elementValue;
+		if (Jsonix.Util.Type.exists(typeInfo))
+		{
+			var value = typeInfo.unmarshal(context, input, scope);
+			var elementValue = this.convertToElementValue({
+				name : name,
+				value : value
+			}, context, input, scope);
+			return elementValue;
+		}
+		else
+		{
+			throw new Error("Element [" + name.key + "] is not known in this context.");
+		}
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
 		} else {
-			throw new Error("Element [" + name.key + "] is not known in this context.");
+			return undefined;
 		}
 	},
 	CLASS_NAME : 'Jsonix.Binding.Unmarshaller'
