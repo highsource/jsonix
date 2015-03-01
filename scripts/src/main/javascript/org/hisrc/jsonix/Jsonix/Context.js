@@ -2,6 +2,7 @@ Jsonix.Context = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
 			modules : [],
 			typeInfos : null,
+			typeNameKeyToTypeInfo : null,
 			elementInfos : null,
 			options : null,
 			substitutionMembersMap : null,
@@ -11,6 +12,7 @@ Jsonix.Context = Jsonix
 				this.modules = [];
 				this.elementInfos = [];
 				this.typeInfos = {};
+				this.typeNameKeyToTypeInfo = {};
 				this.registerBuiltinTypeInfos();
 				this.namespacePrefixes = {};
 				this.prefixNamespaces = {};
@@ -91,6 +93,10 @@ Jsonix.Context = Jsonix
 				var n = typeInfo.name||typeInfo.n||null;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.typeInfos[n] = typeInfo;
+				if (typeInfo.typeName && typeInfo.typeName.key)
+				{
+					this.typeNameKeyToTypeInfo[typeInfo.typeName.key] = typeInfo;
+				}
 			},
 			resolveTypeInfo : function(mapping, module) {
 				if (!Jsonix.Util.Type.exists(mapping)) {
@@ -154,6 +160,9 @@ Jsonix.Context = Jsonix
 				}
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
+			},
+			getTypeInfoByTypeNameKey : function(typeNameKey) {
+				return this.typeNameKeyToTypeInfo[typeNameKey];
 			},
 			getElementInfo : function(name, scope) {
 				if (Jsonix.Util.Type.exists(scope)) {

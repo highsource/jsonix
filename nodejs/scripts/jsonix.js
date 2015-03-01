@@ -1914,6 +1914,8 @@ Jsonix.Model.TypeInfo = Jsonix.Class({
 Jsonix.Model.ClassInfo = Jsonix
 		.Class(Jsonix.Model.TypeInfo, Jsonix.Mapping.Styled, {
 			name : null,
+			localName : null,
+			typeName : null,
 			baseTypeInfo : null,
 			instanceFactory : null,
 			properties : null,
@@ -1929,6 +1931,9 @@ Jsonix.Model.ClassInfo = Jsonix
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
 				
+				var ln = mapping.localName||mapping.ln||null;
+				this.localName = ln;
+
 				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
 				this.defaultElementNamespaceURI = dens;
 
@@ -1946,12 +1951,23 @@ Jsonix.Model.ClassInfo = Jsonix
 					this.instanceFactory = inF;
 				}
 				
+				var tn = mapping.typeName||mapping.tn||undefined;
+				
+				if (Jsonix.Util.Type.exists(tn))
+				{
+					this.typeName = Jsonix.XML.QName.fromObject(tn);  
+				}
+				else if (Jsonix.Util.Type.exists(ln))
+				{
+					this.typeName = new Jsonix.XML.QName(dens, ln);
+				}
+				
 				this.properties = [];
 				var ps = mapping.propertyInfos||mapping.ps||[];
 				Jsonix.Util.Ensure.ensureArray(ps);
 				for ( var index = 0; index < ps.length; index++) {
 					this.p(ps[index]);
-				}
+				}				
 			},
 			// Obsolete
 			destroy : function() {
@@ -5400,6 +5416,7 @@ Jsonix.Context = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
 			modules : [],
 			typeInfos : null,
+			typeNameKeyToTypeInfo : null,
 			elementInfos : null,
 			options : null,
 			substitutionMembersMap : null,
@@ -5409,6 +5426,7 @@ Jsonix.Context = Jsonix
 				this.modules = [];
 				this.elementInfos = [];
 				this.typeInfos = {};
+				this.typeNameKeyToTypeInfo = {};
 				this.registerBuiltinTypeInfos();
 				this.namespacePrefixes = {};
 				this.prefixNamespaces = {};
@@ -5489,6 +5507,10 @@ Jsonix.Context = Jsonix
 				var n = typeInfo.name||typeInfo.n||null;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.typeInfos[n] = typeInfo;
+				if (typeInfo.typeName && typeInfo.typeName.key)
+				{
+					this.typeNameKeyToTypeInfo[typeInfo.typeName.key] = typeInfo;
+				}
 			},
 			resolveTypeInfo : function(mapping, module) {
 				if (!Jsonix.Util.Type.exists(mapping)) {
@@ -5552,6 +5574,9 @@ Jsonix.Context = Jsonix
 				}
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
+			},
+			getTypeInfoByTypeNameKey : function(typeNameKey) {
+				return this.typeNameKeyToTypeInfo[typeNameKey];
 			},
 			getElementInfo : function(name, scope) {
 				if (Jsonix.Util.Type.exists(scope)) {

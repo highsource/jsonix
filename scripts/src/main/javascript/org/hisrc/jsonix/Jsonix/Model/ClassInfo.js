@@ -1,6 +1,8 @@
 Jsonix.Model.ClassInfo = Jsonix
 		.Class(Jsonix.Model.TypeInfo, Jsonix.Mapping.Styled, {
 			name : null,
+			localName : null,
+			typeName : null,
 			baseTypeInfo : null,
 			instanceFactory : null,
 			properties : null,
@@ -16,6 +18,9 @@ Jsonix.Model.ClassInfo = Jsonix
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
 				
+				var ln = mapping.localName||mapping.ln||null;
+				this.localName = ln;
+
 				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
 				this.defaultElementNamespaceURI = dens;
 
@@ -33,12 +38,23 @@ Jsonix.Model.ClassInfo = Jsonix
 					this.instanceFactory = inF;
 				}
 				
+				var tn = mapping.typeName||mapping.tn||undefined;
+				
+				if (Jsonix.Util.Type.exists(tn))
+				{
+					this.typeName = Jsonix.XML.QName.fromObject(tn);  
+				}
+				else if (Jsonix.Util.Type.exists(ln))
+				{
+					this.typeName = new Jsonix.XML.QName(dens, ln);
+				}
+				
 				this.properties = [];
 				var ps = mapping.propertyInfos||mapping.ps||[];
 				Jsonix.Util.Ensure.ensureArray(ps);
 				for ( var index = 0; index < ps.length; index++) {
 					this.p(ps[index]);
-				}
+				}				
 			},
 			// Obsolete
 			destroy : function() {
