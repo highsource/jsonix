@@ -3,7 +3,14 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
 		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
-		this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
+		if (Jsonix.Util.Type.exists(typeInfo))
+		{
+			this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
+		}
+		else
+		{
+			throw new Error("Element [" + elementValue.name.key + "] is not known in this context.");
+		}
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
 		var name;
@@ -41,7 +48,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
 		} else {
-			throw new Error("Element [" + name.key + "] is not known in this context.");
+			return undefined;
 		}
 	}
 });
