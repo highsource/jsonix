@@ -1731,7 +1731,14 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
 		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
-		this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
+		if (Jsonix.Util.Type.exists(typeInfo))
+		{
+			this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
+		}
+		else
+		{
+			throw new Error("Element [" + elementValue.name.key + "] is not known in this context.");
+		}
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
 		var name;
@@ -1769,7 +1776,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
 		} else {
-			throw new Error("Element [" + name.key + "] is not known in this context.");
+			return undefined;
 		}
 	}
 });
@@ -1871,19 +1878,26 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 		var result = null;
 		var name = input.getName();
 		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		var value = typeInfo.unmarshal(context, input, scope);
-		var elementValue = this.convertToElementValue({
-			name : name,
-			value : value
-		}, context, input, scope);
-		return elementValue;
+		if (Jsonix.Util.Type.exists(typeInfo))
+		{
+			var value = typeInfo.unmarshal(context, input, scope);
+			var elementValue = this.convertToElementValue({
+				name : name,
+				value : value
+			}, context, input, scope);
+			return elementValue;
+		}
+		else
+		{
+			throw new Error("Element [" + name.key + "] is not known in this context.");
+		}
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
 		} else {
-			throw new Error("Element [" + name.key + "] is not known in this context.");
+			return undefined;
 		}
 	},
 	CLASS_NAME : 'Jsonix.Binding.Unmarshaller'
@@ -3068,12 +3082,13 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 
 Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
+	allowDom : true,
+	allowTypedObject : true,
 	mixed : true,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping, 'Mapping must be an object.');
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 		var wen = mapping.wrapperElementName || mapping.wen || undefined;
-		var mx = mapping.mixed || mapping.mx || true;
 		if (Jsonix.Util.Type.isObject(wen)) {
 			this.wrapperElementName = Jsonix.XML.QName.fromObject(wen);
 		} else if (Jsonix.Util.Type.isString(wen)) {
@@ -3081,6 +3096,11 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		} else {
 			this.wrapperElementName = null;
 		}
+		var dom = mapping.allowDom || mapping.dom || true;
+		var typed = mapping.allowTypedObject || mapping.typed || true;
+		var mx = mapping.mixed || mapping.mx || true;
+		this.allowDom = dom;
+		this.allowTypedObject = typed;
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
@@ -3157,12 +3177,21 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	},
 	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
+		var elementValue;
 		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		var value = typeInfo.unmarshal(context, input, scope);
-		var elementValue = this.convertToElementValue({
-			name : name,
-			value : value
-		}, context, input, scope);
+		if (Jsonix.Util.Type.exists(typeInfo)) {
+			var value = typeInfo.unmarshal(context, input, scope);
+			elementValue = this.convertToElementValue({
+				name : name,
+				value : value
+			}, context, input, scope);
+		} else if (this.allowDom) {
+			elementValue = input.getElement();
+		} else {
+			// TODO better exception
+			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
+		}
+
 		if (this.collection) {
 			return [ elementValue ];
 		} else {
@@ -3200,6 +3229,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			} else {
 				output.writeCharacters(value);
 			}
+		} else if (this.allowDom && Jsonix.Util.Type.exists(value.nodeType)) {
+			// DOM node
+			output.writeNode(value);
 		} else if (Jsonix.Util.Type.isObject(value)) {
 			this.marshalElementNode(value, context, output, scope);
 
@@ -3221,7 +3253,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			if (Jsonix.Util.Type.exists(contextElementTypeInfo)) {
 				return contextElementTypeInfo.typeInfo;
 			} else {
-				throw new Error("Element [" + elementName.key + "] is not known in this context.");
+				return undefined;
 			}
 		}
 	},
@@ -3253,7 +3285,10 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		// {
 		// structure.elements[key] = this;
 		// }
-
+		
+		if ((this.allowDom || this.allowTypedObject)) {
+			structure.any = this;
+		}
 		if (this.mixed && !Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			// if (Jsonix.Util.Type.exists(structure.mixed)) {
 			// // TODO better exception
@@ -3415,8 +3450,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
 		var elementValue;
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
-			var typeInfo = this.getElementTypeInfo(name, context, scope);
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
+		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
 			var value = typeInfo.unmarshal(context, input, scope);
 			elementValue = this.convertToElementValue({
 				name : name,
