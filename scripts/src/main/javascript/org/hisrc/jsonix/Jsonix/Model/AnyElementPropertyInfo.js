@@ -40,8 +40,8 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	unmarshalElement : function(context, input, scope) {
 		var name = input.getName();
 		var elementValue;
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(context.getElementInfo(name, scope))) {
-			var typeInfo = this.getElementTypeInfo(name, context, scope);
+		var typeInfo = this.getElementTypeInfo(name, context, scope);
+		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
 			var value = typeInfo.unmarshal(context, input, scope);
 			elementValue = this.convertToElementValue({
 				name : name,
