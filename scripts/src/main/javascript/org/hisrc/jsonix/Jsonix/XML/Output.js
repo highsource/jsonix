@@ -208,7 +208,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		{
 			if (p === '')
 			{
-				this.writeAttribute({ns : Jsonix.XML.XMLNS_NS, lp : Jsonix.XML.XMLNS_P}, ns);
+				this.writeAttribute({lp : Jsonix.XML.XMLNS_P}, ns);
 			}
 			else
 			{

@@ -33,7 +33,7 @@ module.exports = {
 			}
 		};
 		var marshalled = marshaller.marshalString(data);
-		test.equal("<root xmlns:gh62=\"urn:gh62\"><toor>orto</toor></root>", marshalled);
+		test.equal("<root xmlns=\"urn:gh62\"><toor>orto</toor></root>", marshalled);
 		test.done();
 	}
 };

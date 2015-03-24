@@ -81,7 +81,6 @@ Jsonix.Class = function() {
 Jsonix.XML = {
 		XMLNS_NS : 'http://www.w3.org/2000/xmlns/',
 		XMLNS_P : 'xmlns'
-		
 };
 
 
@@ -1608,7 +1607,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		{
 			if (p === '')
 			{
-				this.writeAttribute({ns : Jsonix.XML.XMLNS_NS, lp : Jsonix.XML.XMLNS_P}, ns);
+				this.writeAttribute({lp : Jsonix.XML.XMLNS_P}, ns);
 			}
 			else
 			{
