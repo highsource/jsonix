@@ -29,7 +29,7 @@ if(i===undefined){delete o.prototype.initialize
 }n.prototype=p;
 return n
 };
-Jsonix.XML={BUILTIN_NAMESPACE_PREFIXES:{xmlns:"http://www.w3.org/2000/xmlns/",xml:"http://www.w3.org/XML/1998/namespace"},XMLNS_NS:"http://www.w3.org/2000/xmlns/",XMLNS_P:"xmlns"};
+Jsonix.XML={XMLNS_NS:"http://www.w3.org/2000/xmlns/",XMLNS_P:"xmlns"};
 Jsonix.DOM={createDocument:function(){if(typeof _jsonix_xmldom!=="undefined"){return new (_jsonix_xmldom.DOMImplementation)().createDocument()
 }else{if(typeof document!=="undefined"&&Jsonix.Util.Type.exists(document.implementation)&&Jsonix.Util.Type.isFunction(document.implementation.createDocument)){return document.implementation.createDocument("","",null)
 }else{if(typeof ActiveXObject!=="undefined"){return new ActiveXObject("MSXML2.DOMDocument")
@@ -630,14 +630,13 @@ h=Jsonix.Util.Type.isNumber(h)?this.nsp[h]:h;
 var e,g;
 for(e in h){if(h.hasOwnProperty(e)){g=h[e];
 this.declareNamespace(e,g)
-}}},declareNamespace:function(j,i){if(Jsonix.XML.BUILTIN_NAMESPACE_PREFIXES[i]){return
-}var f=this.pns.length-1;
+}}},declareNamespace:function(j,i){var f=this.pns.length-1;
 var h=this.pns[f];
 var g;
 if(Jsonix.Util.Type.isNumber(h)){g=true;
 h=this.pns[h]
 }else{g=false
-}if(h[i]!==j){if(i===""){this.writeAttribute({ns:Jsonix.XML.XMLNS_NS,lp:Jsonix.XML.XMLNS_P},j)
+}if(h[i]!==j){if(i===""){this.writeAttribute({lp:Jsonix.XML.XMLNS_P},j)
 }else{this.writeAttribute({ns:Jsonix.XML.XMLNS_NS,lp:i,p:Jsonix.XML.XMLNS_P},j)
 }if(g){h=Jsonix.Util.Type.cloneObject(h,{});
 this.pns[f]=h
