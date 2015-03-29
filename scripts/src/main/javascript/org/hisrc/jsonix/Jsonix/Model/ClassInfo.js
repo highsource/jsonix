@@ -7,6 +7,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			instanceFactory : null,
 			properties : null,
 			structure : null,
+			targetNamespace : '',
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
@@ -21,8 +22,11 @@ Jsonix.Model.ClassInfo = Jsonix
 				var ln = mapping.localName||mapping.ln||null;
 				this.localName = ln;
 
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 				this.defaultElementNamespaceURI = dens;
+				
+				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+				this.targetNamespace = tns;
 
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 				this.defaultAttributeNamespaceURI = dans;
@@ -42,11 +46,17 @@ Jsonix.Model.ClassInfo = Jsonix
 				
 				if (Jsonix.Util.Type.exists(tn))
 				{
-					this.typeName = Jsonix.XML.QName.fromObject(tn);  
+					if (Jsonix.Util.Type.isString(tn))
+					{
+						this.typeName = new Jsonix.XML.QName(this.targetNamespace, tn);
+					}
+					else {
+						this.typeName = Jsonix.XML.QName.fromObject(tn);
+					}
 				}
 				else if (Jsonix.Util.Type.exists(ln))
 				{
-					this.typeName = new Jsonix.XML.QName(dens, ln);
+					this.typeName = new Jsonix.XML.QName(tns, ln);
 				}
 				
 				this.properties = [];

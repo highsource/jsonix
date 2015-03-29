@@ -3,6 +3,7 @@ Jsonix.Model.Module = Jsonix
 			name : null,
 			typeInfos : null,
 			elementInfos : null,
+			targetNamespace : '',
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			initialize : function(mapping, options) {
@@ -13,8 +14,10 @@ Jsonix.Model.Module = Jsonix
 					Jsonix.Util.Ensure.ensureObject(mapping);
 					var n = mapping.name||mapping.n||null;
 					this.name = n;
-					var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+					var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 					this.defaultElementNamespaceURI = dens;
+					var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+					this.targetNamespace = tns;
 					var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 					this.defaultAttributeNamespaceURI = dans;
 					// Initialize type infos
@@ -129,6 +132,8 @@ Jsonix.Model.Module = Jsonix
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				var dens = mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
 				mapping.defaultElementNamespaceURI = dens;
+				var tns =  mapping.targetNamespace||mapping.tns||this.targetNamespace;
+				mapping.targetNamespace = tns;
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||this.defaultAttributeNamespaceURI;
 				mapping.defaultAttributeNamespaceURI = dans;
 				this.initializeNames(mapping);
@@ -153,6 +158,17 @@ Jsonix.Model.Module = Jsonix
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				var ti = mapping.baseTypeInfo||mapping.typeInfo||mapping.bti||mapping.ti||'String';
 				var tn = mapping.typeName||mapping.tn||null;
+				
+				if (Jsonix.Util.Type.exists(tn))
+				{
+					if (Jsonix.Util.Type.isString(tn))
+					{
+						tn = new Jsonix.XML.QName(this.targetNamespace, tn);
+					}
+					else {
+						tn = Jsonix.XML.QName.fromObject(tn);
+					}
+				}
 				var s = mapping.separator||mapping.sep||' ';
 				Jsonix.Util.Ensure.ensureExists(ti);
 				return new Jsonix.Schema.XSD.List(ti, tn, s);

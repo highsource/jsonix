@@ -2,6 +2,7 @@ Jsonix.Model.PropertyInfo = Jsonix
 		.Class({
 			name : null,
 			collection : false,
+			targetNamespace : '',
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
@@ -10,8 +11,10 @@ Jsonix.Model.PropertyInfo = Jsonix
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 				this.defaultElementNamespaceURI = dens;
+				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+				this.targetNamespace = tns;
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 				this.defaultAttributeNamespaceURI = dans;
 				var col = mapping.collection||mapping.col||false;
