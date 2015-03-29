@@ -5,11 +5,7 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
-		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.unmarshalValue(text, context, input, scope);
-		} else {
-			return null;
-		}
+		return this.unmarshalValue(text, context, input, scope);
 	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
