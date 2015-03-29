@@ -1919,6 +1919,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			instanceFactory : null,
 			properties : null,
 			structure : null,
+			targetNamespace : '',
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
@@ -1933,8 +1934,11 @@ Jsonix.Model.ClassInfo = Jsonix
 				var ln = mapping.localName||mapping.ln||null;
 				this.localName = ln;
 
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 				this.defaultElementNamespaceURI = dens;
+				
+				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+				this.targetNamespace = tns;
 
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 				this.defaultAttributeNamespaceURI = dans;
@@ -1954,11 +1958,17 @@ Jsonix.Model.ClassInfo = Jsonix
 				
 				if (Jsonix.Util.Type.exists(tn))
 				{
-					this.typeName = Jsonix.XML.QName.fromObject(tn);  
+					if (Jsonix.Util.Type.isString(tn))
+					{
+						this.typeName = new Jsonix.XML.QName(this.targetNamespace, tn);
+					}
+					else {
+						this.typeName = Jsonix.XML.QName.fromObject(tn);
+					}
 				}
 				else if (Jsonix.Util.Type.exists(ln))
 				{
-					this.typeName = new Jsonix.XML.QName(dens, ln);
+					this.typeName = new Jsonix.XML.QName(tns, ln);
 				}
 				
 				this.properties = [];
@@ -2405,11 +2415,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
-		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text, context, input, scope);
-		} else {
-			return null;
-		}
+		return this.parse(text, context, input, scope);
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
@@ -2500,6 +2506,7 @@ Jsonix.Model.PropertyInfo = Jsonix
 		.Class({
 			name : null,
 			collection : false,
+			targetNamespace : '',
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			built : false,
@@ -2508,8 +2515,10 @@ Jsonix.Model.PropertyInfo = Jsonix
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 				this.defaultElementNamespaceURI = dens;
+				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+				this.targetNamespace = tns;
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 				this.defaultAttributeNamespaceURI = dans;
 				var col = mapping.collection||mapping.col||false;
@@ -2695,11 +2704,7 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
-		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.unmarshalValue(text, context, input, scope);
-		} else {
-			return null;
-		}
+		return this.unmarshalValue(text, context, input, scope);
 	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
@@ -3555,6 +3560,7 @@ Jsonix.Model.Module = Jsonix
 			name : null,
 			typeInfos : null,
 			elementInfos : null,
+			targetNamespace : '',
 			defaultElementNamespaceURI : '',
 			defaultAttributeNamespaceURI : '',
 			initialize : function(mapping, options) {
@@ -3565,8 +3571,10 @@ Jsonix.Model.Module = Jsonix
 					Jsonix.Util.Ensure.ensureObject(mapping);
 					var n = mapping.name||mapping.n||null;
 					this.name = n;
-					var dens = mapping.defaultElementNamespaceURI||mapping.dens||'';
+					var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 					this.defaultElementNamespaceURI = dens;
+					var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
+					this.targetNamespace = tns;
 					var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 					this.defaultAttributeNamespaceURI = dans;
 					// Initialize type infos
@@ -3681,6 +3689,8 @@ Jsonix.Model.Module = Jsonix
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				var dens = mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
 				mapping.defaultElementNamespaceURI = dens;
+				var tns =  mapping.targetNamespace||mapping.tns||this.targetNamespace;
+				mapping.targetNamespace = tns;
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||this.defaultAttributeNamespaceURI;
 				mapping.defaultAttributeNamespaceURI = dans;
 				this.initializeNames(mapping);
@@ -3705,6 +3715,17 @@ Jsonix.Model.Module = Jsonix
 				Jsonix.Util.Ensure.ensureObject(mapping);
 				var ti = mapping.baseTypeInfo||mapping.typeInfo||mapping.bti||mapping.ti||'String';
 				var tn = mapping.typeName||mapping.tn||null;
+				
+				if (Jsonix.Util.Type.exists(tn))
+				{
+					if (Jsonix.Util.Type.isString(tn))
+					{
+						tn = new Jsonix.XML.QName(this.targetNamespace, tn);
+					}
+					else {
+						tn = Jsonix.XML.QName.fromObject(tn);
+					}
+				}
 				var s = mapping.separator||mapping.sep||' ';
 				Jsonix.Util.Ensure.ensureExists(ti);
 				return new Jsonix.Schema.XSD.List(ti, tn, s);
@@ -3884,11 +3905,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
-		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
-			return this.parse(text, context, input, scope);
-		} else {
-			return null;
-		}
+		return this.parse(text, context, input, scope);
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
