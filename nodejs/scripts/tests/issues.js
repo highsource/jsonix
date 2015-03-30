@@ -4,6 +4,7 @@ module.exports = {
 		"GH61" : require('./GH61/GH61'),
 		"GH62" : require('./GH62/GH62'),
 		"GH70" : require('./GH70/GH70'),
-		"GH71" : require('./GH71/GH71')
+		"GH71" : require('./GH71/GH71'),
+//		"GH73" : require('./GH73/GH73')
 	}
 };

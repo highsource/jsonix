@@ -1,0 +1,32 @@
+var Jsonix = require("../../jsonix").Jsonix;
+var GH73 = require("./Mappings.js").GH73;
+
+module.exports = {
+	"EmptyElement" : function(test) {
+		var context = new Jsonix.Context([GH73]);
+		var unmarshaller = context.createUnmarshaller();
+		var marshaller = context.createMarshaller();
+
+		test.equal(101, unmarshaller.unmarshalString('<GDateTypes year="0101"/>').value.year.year);
+		test.equal(-1234567, unmarshaller.unmarshalString('<GDateTypes year="-1234567"/>').value.year.year);
+		test.equal(2013, unmarshaller.unmarshalString('<GDateTypes year="2013-05:00"/>').value.year.year);
+		test.equal(360, unmarshaller.unmarshalString('<GDateTypes year="2013-05:00"/>').value.year.timezone);
+
+		test.equal(0, unmarshaller.unmarshalString('<GDateTypes month="--01"/>').value.month.month);
+		test.equal(11, unmarshaller.unmarshalString('<GDateTypes month="--12-05:00"/>').value.month.month);
+		test.equal(360, unmarshaller.unmarshalString('<GDateTypes month="--12-05:00"/>').value.month.timezone);
+
+		test.equal(1, unmarshaller.unmarshalString('<GDateTypes day="---01"/>').value.day.day);
+		test.equal(31, unmarshaller.unmarshalString('<GDateTypes day="--12-05:00"/>').value.day.day);
+		test.equal(360, unmarshaller.unmarshalString('<GDateTypes day="---31-05:00"/>').value.day.timezone);
+
+		test.equal(2013, unmarshaller.unmarshalString('<GDateTypes yearMonth="2013-01"/>').value.yearMonth.year);
+		test.equal(0, unmarshaller.unmarshalString('<GDateTypes yearMonth="2013-01"/>').value.yearMonth.month);
+		test.equal(360, unmarshaller.unmarshalString('<GDateTypes yearMonth="2013-01-05:00"/>').value.yearMonth.timezone);
+
+		test.equal(0, unmarshaller.unmarshalString('<GDateTypes monthDay="-01-01"/>').value.monthDay.month);
+		test.equal(1, unmarshaller.unmarshalString('<GDateTypes monthDay="-01-01"/>').value.monthDay.day);
+		test.equal(1, unmarshaller.unmarshalString('<GDateTypes monthDay="-01-01-05:00"/>').value.monthDay.timezone);
+		test.done();
+	}
+};
