@@ -241,67 +241,18 @@ Jsonix.XML.Input = Jsonix.Class({
 		}
 		return content;
 	},
-	getAttributeCount : function() {
-		var attributes;
-		if (this.attributes) {
-			attributes = this.attributes;
-		} else if (this.eventType === 1) {
-			attributes = this.node.attributes;
-			this.attributes = attributes;
+	retrieveElement : function () {
+		var element;
+		if (this.eventType === 1) {
+			element = this.node;
 		} else if (this.eventType === 10) {
-			attributes = this.node.parentNode.attributes;
-			this.attributes = attributes;
+			element = this.node.parentNode;
 		} else {
-			throw new Error("Number of attributes can only be retrieved for START_ELEMENT or ATTRIBUTE.");
+			throw new Error("Element can only be retrieved for START_ELEMENT or ATTRIBUTE nodes.");
 		}
-		return attributes.length;
+		return element;
 	},
-	getAttributeName : function(index) {
-		var attributes;
-		if (this.attributes) {
-			attributes = this.attributes;
-		} else if (this.eventType === 1) {
-			attributes = this.node.attributes;
-			this.attributes = attributes;
-		} else if (this.eventType === 10) {
-			attributes = this.node.parentNode.attributes;
-			this.attributes = attributes;
-		} else {
-			throw new Error("Attribute name can only be retrieved for START_ELEMENT or ATTRIBUTE.");
-		}
-		if (index < 0 || index >= attributes.length) {
-			throw new Error("Invalid attribute index [" + index + "].");
-		}
-		var attribute = attributes[index];
-		
-		
-		if (Jsonix.Util.Type.isString(attribute.namespaceURI)) {
-			return new Jsonix.XML.QName(attribute.namespaceURI, attribute.nodeName);
-		} else {
-			return new Jsonix.XML.QName(attribute.nodeName);
-		}
-	},
-	getAttributeNameKey : function(index) {
-		var attributes;
-		if (this.attributes) {
-			attributes = this.attributes;
-		} else if (this.eventType === 1) {
-			attributes = this.node.attributes;
-			this.attributes = attributes;
-		} else if (this.eventType === 10) {
-			attributes = this.node.parentNode.attributes;
-			this.attributes = attributes;
-		} else {
-			throw new Error("Attribute name key can only be retrieved for START_ELEMENT or ATTRIBUTE.");
-		}
-		if (index < 0 || index >= attributes.length) {
-			throw new Error("Invalid attribute index [" + index + "].");
-		}
-		var attribute = attributes[index];
-
-		return Jsonix.XML.QName.key(attribute.namespaceURI, attribute.nodeName);
-	},
-	getAttributeValue : function(index) {
+	retrieveAttributes : function () {
 		var attributes;
 		if (this.attributes)
 		{
@@ -313,13 +264,78 @@ Jsonix.XML.Input = Jsonix.Class({
 			attributes = this.node.parentNode.attributes;
 			this.attributes = attributes;
 		} else {
-			throw new Error("Attribute value can only be retrieved for START_ELEMENT or ATTRIBUTE.");
+			throw new Error("Attributes can only be retrieved for START_ELEMENT or ATTRIBUTE nodes.");
 		}
+		return attributes;
+	},
+	getAttributeCount : function() {
+		var attributes = this.retrieveAttributes();
+		return attributes.length;
+	},
+	getAttributeName : function(index) {
+		var attributes = this.retrieveAttributes();
+		if (index < 0 || index >= attributes.length) {
+			throw new Error("Invalid attribute index [" + index + "].");
+		}
+		var attribute = attributes[index];
+		if (Jsonix.Util.Type.isString(attribute.namespaceURI)) {
+			return new Jsonix.XML.QName(attribute.namespaceURI, attribute.nodeName);
+		} else {
+			return new Jsonix.XML.QName(attribute.nodeName);
+		}
+	},
+	getAttributeNameKey : function(index) {
+		var attributes = this.retrieveAttributes();
+		if (index < 0 || index >= attributes.length) {
+			throw new Error("Invalid attribute index [" + index + "].");
+		}
+		var attribute = attributes[index];
+
+		return Jsonix.XML.QName.key(attribute.namespaceURI, attribute.nodeName);
+	},
+	getAttributeValue : function(index) {
+		var attributes = this.retrieveAttributes();
 		if (index < 0 || index >= attributes.length) {
 			throw new Error("Invalid attribute index [" + index + "].");
 		}
 		var attribute = attributes[index];
 		return attribute.value;
+	},
+	getAttributeValueNS : null,
+	getAttributeValueNSViaElement : function(namespaceURI, localPart) {
+		var element = this.retrieveElement();
+		return element.getAttributeNS(namespaceURI, localPart);
+	},
+	getAttributeValueNSViaAttribute : function(namespaceURI, localPart) {
+		var attributeNode = this.getAttributeNodeNS(namespaceURI, localPart);
+		if (Jsonix.Util.Type.exists(attributeNode)) {
+			return attributeNode.nodeValue;
+		}
+		else
+		{
+			return null;
+		}
+	},
+	getAttributeNodeNS : null,
+	getAttributeNodeNSViaElement : function(namespaceURI, localPart) {
+		var element = this.retrieveElement();
+		return element.getAttributeNodeNS(namespaceURI, localPart);
+	},
+	getAttributeNodeNSViaAttributes : function(namespaceURI, localPart) {
+		var attributeNode = null;
+		var attributes = this.retrieveAttributes();
+		var potentialNode, fullName;
+		for (var i = 0, len = attributes.length; i < len; ++i) {
+			potentialNode = attributes[i];
+			if (potentialNode.namespaceURI === namespaceURI) {
+				fullName = (potentialNode.prefix) ? (potentialNode.prefix + ':' + localPart) : localPart;
+				if (fullName === potentialNode.nodeName) {
+					attributeNode = potentialNode;
+					break;
+				}
+			}
+		}
+		return attributeNode;
 	},
 	getElement : function() {
 		if (this.eventType === 1 || this.eventType === 2) {
@@ -390,6 +406,9 @@ Jsonix.XML.Input = Jsonix.Class({
 	CLASS_NAME : "Jsonix.XML.Input"
 
 });
+
+Jsonix.XML.Input.prototype.getAttributeValueNS = (Jsonix.DOM.isDomImplementationAvailable()) ? Jsonix.XML.Input.prototype.getAttributeValueNSViaElement : Jsonix.XML.Input.prototype.getAttributeValueNSViaAttribute;
+Jsonix.XML.Input.prototype.getAttributeNodeNS = (Jsonix.DOM.isDomImplementationAvailable()) ? Jsonix.XML.Input.prototype.getAttributeNodeNSViaElement : Jsonix.XML.Input.prototype.getAttributeNodeNSViaAttributes;
 
 Jsonix.XML.Input.START_ELEMENT = 1;
 Jsonix.XML.Input.END_ELEMENT = 2;

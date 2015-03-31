@@ -1,4 +1,14 @@
 Jsonix.DOM = {
+	isDomImplementationAvailable : function () {
+		if (typeof _jsonix_xmldom !== 'undefined')
+		{
+			return true;
+		} else if (typeof document !== 'undefined' && Jsonix.Util.Type.exists(document.implementation) && Jsonix.Util.Type.isFunction(document.implementation.createDocument)) {
+			return true;
+		} else {
+			return false;
+		}
+	},
 	createDocument : function() {
 		// REWORK
 		// Node.js

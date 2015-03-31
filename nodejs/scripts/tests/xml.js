@@ -141,6 +141,15 @@ module.exports =
 				test.equal('h0 h h1', input.getElementText());
 			}
 			test.done();
+		},
+		"Three": function(test) {
+			var doc = Jsonix.DOM
+					.parse('<root xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Literal"/>');
+			var input = new Jsonix.XML.Input(doc.documentElement);
+			input.nextTag();
+			test.equal("Literal", input.getAttributeNodeNS("http://www.w3.org/2001/XMLSchema-instance", "type").nodeValue);
+			test.equal("Literal", input.getAttributeValueNS("http://www.w3.org/2001/XMLSchema-instance", "type"));
+			test.done();
 		}
 	}
 };

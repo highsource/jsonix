@@ -30,7 +30,10 @@ if(i===undefined){delete o.prototype.initialize
 return n
 };
 Jsonix.XML={XMLNS_NS:"http://www.w3.org/2000/xmlns/",XMLNS_P:"xmlns"};
-Jsonix.DOM={createDocument:function(){if(typeof _jsonix_xmldom!=="undefined"){return new (_jsonix_xmldom.DOMImplementation)().createDocument()
+Jsonix.DOM={isDomImplementationAvailable:function(){if(typeof _jsonix_xmldom!=="undefined"){return true
+}else{if(typeof document!=="undefined"&&Jsonix.Util.Type.exists(document.implementation)&&Jsonix.Util.Type.isFunction(document.implementation.createDocument)){return true
+}else{return false
+}}},createDocument:function(){if(typeof _jsonix_xmldom!=="undefined"){return new (_jsonix_xmldom.DOMImplementation)().createDocument()
 }else{if(typeof document!=="undefined"&&Jsonix.Util.Type.exists(document.implementation)&&Jsonix.Util.Type.isFunction(document.implementation.createDocument)){return document.implementation.createDocument("","",null)
 }else{if(typeof ActiveXObject!=="undefined"){return new ActiveXObject("MSXML2.DOMDocument")
 }else{throw new Error("Error created the DOM document.")
@@ -456,45 +459,51 @@ while(c!==2){if(c===4||c===12||c===6||c===9){d=d+this.getText()
 }else{throw new Error("Unexpected event type ["+c+"].")
 }}}}c=this.next()
 }return d
-},getAttributeCount:function(){var b;
+},retrieveElement:function(){var b;
+if(this.eventType===1){b=this.node
+}else{if(this.eventType===10){b=this.node.parentNode
+}else{throw new Error("Element can only be retrieved for START_ELEMENT or ATTRIBUTE nodes.")
+}}return b
+},retrieveAttributes:function(){var b;
 if(this.attributes){b=this.attributes
 }else{if(this.eventType===1){b=this.node.attributes;
 this.attributes=b
 }else{if(this.eventType===10){b=this.node.parentNode.attributes;
 this.attributes=b
-}else{throw new Error("Number of attributes can only be retrieved for START_ELEMENT or ATTRIBUTE.")
-}}}return b.length
-},getAttributeName:function(d){var e;
-if(this.attributes){e=this.attributes
-}else{if(this.eventType===1){e=this.node.attributes;
-this.attributes=e
-}else{if(this.eventType===10){e=this.node.parentNode.attributes;
-this.attributes=e
-}else{throw new Error("Attribute name can only be retrieved for START_ELEMENT or ATTRIBUTE.")
-}}}if(d<0||d>=e.length){throw new Error("Invalid attribute index ["+d+"].")
+}else{throw new Error("Attributes can only be retrieved for START_ELEMENT or ATTRIBUTE nodes.")
+}}}return b
+},getAttributeCount:function(){var b=this.retrieveAttributes();
+return b.length
+},getAttributeName:function(d){var e=this.retrieveAttributes();
+if(d<0||d>=e.length){throw new Error("Invalid attribute index ["+d+"].")
 }var f=e[d];
 if(Jsonix.Util.Type.isString(f.namespaceURI)){return new Jsonix.XML.QName(f.namespaceURI,f.nodeName)
 }else{return new Jsonix.XML.QName(f.nodeName)
-}},getAttributeNameKey:function(d){var e;
-if(this.attributes){e=this.attributes
-}else{if(this.eventType===1){e=this.node.attributes;
-this.attributes=e
-}else{if(this.eventType===10){e=this.node.parentNode.attributes;
-this.attributes=e
-}else{throw new Error("Attribute name key can only be retrieved for START_ELEMENT or ATTRIBUTE.")
-}}}if(d<0||d>=e.length){throw new Error("Invalid attribute index ["+d+"].")
+}},getAttributeNameKey:function(d){var e=this.retrieveAttributes();
+if(d<0||d>=e.length){throw new Error("Invalid attribute index ["+d+"].")
 }var f=e[d];
 return Jsonix.XML.QName.key(f.namespaceURI,f.nodeName)
-},getAttributeValue:function(d){var e;
-if(this.attributes){e=this.attributes
-}else{if(this.eventType===1){e=this.node.attributes;
-this.attributes=e
-}else{if(this.eventType===10){e=this.node.parentNode.attributes;
-this.attributes=e
-}else{throw new Error("Attribute value can only be retrieved for START_ELEMENT or ATTRIBUTE.")
-}}}if(d<0||d>=e.length){throw new Error("Invalid attribute index ["+d+"].")
+},getAttributeValue:function(d){var e=this.retrieveAttributes();
+if(d<0||d>=e.length){throw new Error("Invalid attribute index ["+d+"].")
 }var f=e[d];
 return f.value
+},getAttributeValueNS:null,getAttributeValueNSViaElement:function(d,e){var f=this.retrieveElement();
+return f.getAttributeNS(d,e)
+},getAttributeValueNSViaAttribute:function(d,e){var f=this.getAttributeNodeNS(d,e);
+if(Jsonix.Util.Type.exists(f)){return f.nodeValue
+}else{return null
+}},getAttributeNodeNS:null,getAttributeNodeNSViaElement:function(d,e){var f=this.retrieveElement();
+return f.getAttributeNodeNS(d,e)
+},getAttributeNodeNSViaAttributes:function(o,p){var l=null;
+var i=this.retrieveAttributes();
+var m,k;
+for(var n=0,j=i.length;
+n<j;
+++n){m=i[n];
+if(m.namespaceURI===o){k=(m.prefix)?(m.prefix+":"+p):p;
+if(k===m.nodeName){l=m;
+break
+}}}return l
 },getElement:function(){if(this.eventType===1||this.eventType===2){this.eventType=2;
 return this.node
 }else{throw new Error("Parser must be on START_ELEMENT or END_ELEMENT to return current element.")
@@ -529,6 +538,8 @@ var f=this.pns[e];
 f=Jsonix.Util.Type.isObject(f)?f:this.pns[f];
 return f[d]
 },CLASS_NAME:"Jsonix.XML.Input"});
+Jsonix.XML.Input.prototype.getAttributeValueNS=(Jsonix.DOM.isDomImplementationAvailable())?Jsonix.XML.Input.prototype.getAttributeValueNSViaElement:Jsonix.XML.Input.prototype.getAttributeValueNSViaAttribute;
+Jsonix.XML.Input.prototype.getAttributeNodeNS=(Jsonix.DOM.isDomImplementationAvailable())?Jsonix.XML.Input.prototype.getAttributeNodeNSViaElement:Jsonix.XML.Input.prototype.getAttributeNodeNSViaAttributes;
 Jsonix.XML.Input.START_ELEMENT=1;
 Jsonix.XML.Input.END_ELEMENT=2;
 Jsonix.XML.Input.PROCESSING_INSTRUCTION=3;
