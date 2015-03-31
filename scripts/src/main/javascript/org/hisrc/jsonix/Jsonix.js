@@ -118,6 +118,7 @@
 'Jsonix/Schema/XSD/ID.js',
 'Jsonix/Schema/XSD/IDREF.js',
 'Jsonix/Schema/XSD/IDREFS.js',
+'Jsonix/Schema/XSI.js',
 'Jsonix/Context.js'
       ]; // etc.
       }

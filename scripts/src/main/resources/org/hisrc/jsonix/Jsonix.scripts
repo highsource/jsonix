@@ -89,4 +89,5 @@
 /org/hisrc/jsonix/Jsonix/Schema/XSD/ID.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREF.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/IDREFS.js
+/org/hisrc/jsonix/Jsonix/Schema/XSI.js
 /org/hisrc/jsonix/Jsonix/Context.js

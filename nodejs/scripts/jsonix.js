@@ -5457,6 +5457,15 @@ Jsonix.Schema.XSD.IDREFS = Jsonix.Class(Jsonix.Schema.XSD.List, {
 	CLASS_NAME : 'Jsonix.Schema.XSD.IDREFS'
 });
 Jsonix.Schema.XSD.IDREFS.INSTANCE = new Jsonix.Schema.XSD.IDREFS();
+Jsonix.Schema.XSI = {};
+Jsonix.Schema.XSI.NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema-instance';
+Jsonix.Schema.XSI.PREFIX = 'xsi';
+Jsonix.Schema.XSI.qname = function(localPart) {
+	Jsonix.Util.Ensure.ensureString(localPart);
+	return new Jsonix.XML.QName(Jsonix.Schema.XSI.NAMESPACE_URI, localPart,
+			Jsonix.Schema.XSI.PREFIX);
+};
+
 Jsonix.Context = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
 			modules : [],
