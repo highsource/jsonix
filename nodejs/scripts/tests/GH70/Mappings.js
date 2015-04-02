@@ -5,6 +5,7 @@ var GH70_Module_Factory = function () {
     tis: [
       { ln: 'Expression'},
       { ln: 'Literal', bti: '.Expression', ps: [{ n: 'value', t: 'v' }]},
+      { ln: 'And', bti: '.Expression', ps: [{ n: 'expressions', en: 'Expression', t: 'e', ti: '.Expression', col: true}]},
     ],
     eis: [{
         en: 'Literal',
@@ -12,6 +13,9 @@ var GH70_Module_Factory = function () {
       },{
         en: 'Expression',
         ti: '.Expression'
+      },{
+        en: 'And',
+        ti: '.And'
       }]
   };
   return {
