@@ -14,9 +14,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		} else {
 			this.wrapperElementName = null;
 		}
-		var dom = mapping.allowDom || mapping.dom || true;
-		var typed = mapping.allowTypedObject || mapping.typed || true;
-		var mx = mapping.mixed || mapping.mx || true;
+		var dom = Jsonix.Util.Type.defaultValue(mapping.allowDom, mapping.dom, true);
+		var typed = Jsonix.Util.Type.defaultValue(mapping.allowTypedObject, mapping.typed, true);
+		var mx = Jsonix.Util.Type.defaultValue(mapping.mixed, mapping.mx, true);
 		this.allowDom = dom;
 		this.allowTypedObject = typed;
 		this.mixed = mx;

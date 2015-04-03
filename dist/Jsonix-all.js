@@ -503,6 +503,29 @@ Jsonix.Util.Type = {
 			}
 		}
 		return target;
+	},
+	defaultValue : function()
+	{
+		var args = arguments;
+		if (args.length === 0)
+		{
+			return undefined;
+		}
+		else
+		{
+			var defaultValue = args[args.length - 1];
+			var typeOfDefaultValue = typeof defaultValue;
+			for (var index = 0; index < args.length - 1; index++)
+			{
+				var candidateValue = args[index];
+				if (typeof candidateValue === typeOfDefaultValue)
+				{
+					return candidateValue;
+				}
+			}
+			return defaultValue;
+			
+		}
 	}
 };
 Jsonix.Util.NumberUtils = {
@@ -1904,8 +1927,18 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 		var result = null;
+		// Issue #70 work in progress here
+		var xsiTypeInfo = null;
+		if (context.supportXsiType) {
+			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
+			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
+			{
+				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
+				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
+			}
+		}
 		var name = input.getName();
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
+		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
 		if (Jsonix.Util.Type.exists(typeInfo))
 		{
 			var value = typeInfo.unmarshal(context, input, scope);
@@ -3145,9 +3178,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		} else {
 			this.wrapperElementName = null;
 		}
-		var dom = mapping.allowDom || mapping.dom || true;
-		var typed = mapping.allowTypedObject || mapping.typed || true;
-		var mx = mapping.mixed || mapping.mx || true;
+		var dom = Jsonix.Util.Type.defaultValue(mapping.allowDom, mapping.dom, true);
+		var typed = Jsonix.Util.Type.defaultValue(mapping.allowTypedObject, mapping.typed, true);
+		var mx = Jsonix.Util.Type.defaultValue(mapping.mixed, mapping.mx, true);
 		this.allowDom = dom;
 		this.allowTypedObject = typed;
 		this.mixed = mx;
@@ -3464,9 +3497,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var dom = mapping.allowDom || mapping.dom || true;
-		var typed = mapping.allowTypedObject || mapping.typed || true;
-		var mx = mapping.mixed || mapping.mx || true;
+		var dom = Jsonix.Util.Type.defaultValue(mapping.allowDom, mapping.dom, true);
+		var typed = Jsonix.Util.Type.defaultValue(mapping.allowTypedObject, mapping.typed, true);
+		var mx = Jsonix.Util.Type.defaultValue(mapping.mixed, mapping.mx, true);
 		this.allowDom = dom;
 		this.allowTypedObject = typed;
 		this.mixed = mx;
@@ -5457,6 +5490,17 @@ Jsonix.Schema.XSD.IDREFS = Jsonix.Class(Jsonix.Schema.XSD.List, {
 	CLASS_NAME : 'Jsonix.Schema.XSD.IDREFS'
 });
 Jsonix.Schema.XSD.IDREFS.INSTANCE = new Jsonix.Schema.XSD.IDREFS();
+Jsonix.Schema.XSI = {};
+Jsonix.Schema.XSI.NAMESPACE_URI = 'http://www.w3.org/2001/XMLSchema-instance';
+Jsonix.Schema.XSI.PREFIX = 'xsi';
+Jsonix.Schema.XSI.TYPE = 'type';
+Jsonix.Schema.XSI.NIL = 'nil';
+Jsonix.Schema.XSI.qname = function(localPart) {
+	Jsonix.Util.Ensure.ensureString(localPart);
+	return new Jsonix.XML.QName(Jsonix.Schema.XSI.NAMESPACE_URI, localPart,
+			Jsonix.Schema.XSI.PREFIX);
+};
+
 Jsonix.Context = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
 			modules : [],
@@ -5466,6 +5510,7 @@ Jsonix.Context = Jsonix
 			options : null,
 			substitutionMembersMap : null,
 			scopedElementInfosMap : null,
+			supportXsiType : true,
 			initialize : function(mappings, options) {
 				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
 				this.modules = [];
@@ -5478,7 +5523,6 @@ Jsonix.Context = Jsonix
 				this.substitutionMembersMap = {};
 				this.scopedElementInfosMap = {};
 
-
 				// Initialize options
 				if (Jsonix.Util.Type.exists(options)) {
 					Jsonix.Util.Ensure.ensureObject(options);
@@ -5486,6 +5530,10 @@ Jsonix.Context = Jsonix
 							.isObject(options.namespacePrefixes)) {
 						this.namespacePrefixes = 
 							Jsonix.Util.Type.cloneObject(options.namespacePrefixes, {});
+					}
+					if (Jsonix.Util.Type
+							.isBoolean(options.supportXsiType)) {
+						this.supportXsiType = options.supportXsiType; 
 					}
 				}
 				

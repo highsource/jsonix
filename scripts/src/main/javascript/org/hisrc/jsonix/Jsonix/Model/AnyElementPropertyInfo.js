@@ -5,9 +5,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var dom = mapping.allowDom || mapping.dom || true;
-		var typed = mapping.allowTypedObject || mapping.typed || true;
-		var mx = mapping.mixed || mapping.mx || true;
+		var dom = Jsonix.Util.Type.defaultValue(mapping.allowDom, mapping.dom, true);
+		var typed = Jsonix.Util.Type.defaultValue(mapping.allowTypedObject, mapping.typed, true);
+		var mx = Jsonix.Util.Type.defaultValue(mapping.mixed, mapping.mx, true);
 		this.allowDom = dom;
 		this.allowTypedObject = typed;
 		this.mixed = mx;

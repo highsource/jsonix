@@ -191,7 +191,16 @@ w("Right: ["+t[q]+"].")
 },cloneObject:function(e,f){f=f||{};
 for(var d in e){if(e.hasOwnProperty(d)){f[d]=e[d]
 }}return f
-}};
+},defaultValue:function(){var i=arguments;
+if(i.length===0){return undefined
+}else{var g=i[i.length-1];
+var f=typeof g;
+for(var j=0;
+j<i.length-1;
+j++){var h=i[j];
+if(typeof h===f){return h
+}}return g
+}}};
 Jsonix.Util.NumberUtils={isInteger:function(b){return Jsonix.Util.Type.isNumber(b)&&((b%1)===0)
 }};
 Jsonix.Util.StringUtils={trim:(!!String.prototype.trim)?function(b){Jsonix.Util.Ensure.ensureString(b);
@@ -750,14 +759,18 @@ h(that.unmarshalDocument(b))
 var e=null;
 d.nextTag();
 return this.unmarshalElement(this.context,d)
-},unmarshalElement:function(o,i,n){if(i.eventType!=1){throw new Error("Parser must be on START_ELEMENT to read next text.")
-}var j=null;
-var p=i.getName();
-var l=this.getElementTypeInfo(p,o,n);
-if(Jsonix.Util.Type.exists(l)){var m=l.unmarshal(o,i,n);
-var k=this.convertToElementValue({name:p,value:m},o,i,n);
-return k
-}else{throw new Error("Element ["+p.key+"] is not known in this context.")
+},unmarshalElement:function(u,r,n){if(r.eventType!=1){throw new Error("Parser must be on START_ELEMENT to read next text.")
+}var l=null;
+var m=null;
+if(u.supportXsiType){var t=r.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI,Jsonix.Schema.XSI.TYPE);
+if(Jsonix.Util.StringUtils.isNotBlank(t)){var p=Jsonix.Schema.XSD.QName.INSTANCE.parse(t,u,r,n);
+m=u.getTypeInfoByTypeNameKey(p.key)
+}}var v=r.getName();
+var o=m?m:this.getElementTypeInfo(v,u,n);
+if(Jsonix.Util.Type.exists(o)){var q=o.unmarshal(u,r,n);
+var s=this.convertToElementValue({name:v,value:q},u,r,n);
+return s
+}else{throw new Error("Element ["+v.key+"] is not known in this context.")
 }},getElementTypeInfo:function(f,e,g){var h=e.getElementInfo(f,g);
 if(Jsonix.Util.Type.exists(h)){return h.typeInfo
 }else{return undefined
@@ -1209,9 +1222,9 @@ var g=f.wrapperElementName||f.wen||undefined;
 if(Jsonix.Util.Type.isObject(g)){this.wrapperElementName=Jsonix.XML.QName.fromObject(g)
 }else{if(Jsonix.Util.Type.isString(g)){this.wrapperElementName=new Jsonix.XML.QName(this.defaultElementNamespaceURI,g)
 }else{this.wrapperElementName=null
-}}var h=f.allowDom||f.dom||true;
-var j=f.allowTypedObject||f.typed||true;
-var i=f.mixed||f.mx||true;
+}}var h=Jsonix.Util.Type.defaultValue(f.allowDom,f.dom,true);
+var j=Jsonix.Util.Type.defaultValue(f.allowTypedObject,f.typed,true);
+var i=Jsonix.Util.Type.defaultValue(f.mixed,f.mx,true);
 this.allowDom=h;
 this.allowTypedObject=j;
 this.mixed=i
@@ -1328,9 +1341,9 @@ this.buildStructureElementTypeInfos(g,f,e)
 Jsonix.Model.ElementRefsPropertyInfo.Simplified=Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo,Jsonix.Binding.ElementUnmarshaller.Simplified,{CLASS_NAME:"Jsonix.Model.ElementRefsPropertyInfo.Simplified"});
 Jsonix.Model.AnyElementPropertyInfo=Jsonix.Class(Jsonix.Binding.ElementMarshaller,Jsonix.Binding.ElementUnmarshaller,Jsonix.Model.PropertyInfo,{allowDom:true,allowTypedObject:true,mixed:true,initialize:function(f){Jsonix.Util.Ensure.ensureObject(f);
 Jsonix.Model.PropertyInfo.prototype.initialize.apply(this,[f]);
-var g=f.allowDom||f.dom||true;
-var e=f.allowTypedObject||f.typed||true;
-var h=f.mixed||f.mx||true;
+var g=Jsonix.Util.Type.defaultValue(f.allowDom,f.dom,true);
+var e=Jsonix.Util.Type.defaultValue(f.allowTypedObject,f.typed,true);
+var h=Jsonix.Util.Type.defaultValue(f.mixed,f.mx,true);
 this.allowDom=g;
 this.allowTypedObject=e;
 this.mixed=h
@@ -2147,7 +2160,15 @@ Jsonix.Schema.XSD.IDREF.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.X
 Jsonix.Schema.XSD.IDREFS=Jsonix.Class(Jsonix.Schema.XSD.List,{name:"IDREFS",initialize:function(){Jsonix.Schema.XSD.List.prototype.initialize.apply(this,[Jsonix.Schema.XSD.IDREF.INSTANCE,Jsonix.Schema.XSD.qname("IDREFS")," "])
 },CLASS_NAME:"Jsonix.Schema.XSD.IDREFS"});
 Jsonix.Schema.XSD.IDREFS.INSTANCE=new Jsonix.Schema.XSD.IDREFS();
-Jsonix.Context=Jsonix.Class(Jsonix.Mapping.Styled,{modules:[],typeInfos:null,typeNameKeyToTypeInfo:null,elementInfos:null,options:null,substitutionMembersMap:null,scopedElementInfosMap:null,initialize:function(i,l){Jsonix.Mapping.Styled.prototype.initialize.apply(this,[l]);
+Jsonix.Schema.XSI={};
+Jsonix.Schema.XSI.NAMESPACE_URI="http://www.w3.org/2001/XMLSchema-instance";
+Jsonix.Schema.XSI.PREFIX="xsi";
+Jsonix.Schema.XSI.TYPE="type";
+Jsonix.Schema.XSI.NIL="nil";
+Jsonix.Schema.XSI.qname=function(b){Jsonix.Util.Ensure.ensureString(b);
+return new Jsonix.XML.QName(Jsonix.Schema.XSI.NAMESPACE_URI,b,Jsonix.Schema.XSI.PREFIX)
+};
+Jsonix.Context=Jsonix.Class(Jsonix.Mapping.Styled,{modules:[],typeInfos:null,typeNameKeyToTypeInfo:null,elementInfos:null,options:null,substitutionMembersMap:null,scopedElementInfosMap:null,supportXsiType:true,initialize:function(i,l){Jsonix.Mapping.Styled.prototype.initialize.apply(this,[l]);
 this.modules=[];
 this.elementInfos=[];
 this.typeInfos={};
@@ -2159,6 +2180,7 @@ this.substitutionMembersMap={};
 this.scopedElementInfosMap={};
 if(Jsonix.Util.Type.exists(l)){Jsonix.Util.Ensure.ensureObject(l);
 if(Jsonix.Util.Type.isObject(l.namespacePrefixes)){this.namespacePrefixes=Jsonix.Util.Type.cloneObject(l.namespacePrefixes,{})
+}if(Jsonix.Util.Type.isBoolean(l.supportXsiType)){this.supportXsiType=l.supportXsiType
 }}for(var j in this.namespacePrefixes){if(this.namespacePrefixes.hasOwnProperty(j)){p=this.namespacePrefixes[j];
 this.prefixNamespaces[p]=j
 }}if(Jsonix.Util.Type.exists(i)){Jsonix.Util.Ensure.ensureArray(i);

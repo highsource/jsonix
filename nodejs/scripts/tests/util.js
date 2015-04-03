@@ -22,6 +22,15 @@ module.exports = {
 		test.equal(true, Jsonix.Util.Type.isNumberOrNaN(Number.NaN));
 		test.equal(true, Jsonix.Util.Type.isNaN(Number.NaN));
 		test.equal(false, Jsonix.Util.Type.isNumber(Number.NaN));
+
+		test.equal("undefined", typeof Jsonix.Util.Type.defaultValue());
+		test.equal(1, Jsonix.Util.Type.defaultValue(1));
+		test.equal(1, Jsonix.Util.Type.defaultValue(1, undefined, 2));
+		test.equal(2, Jsonix.Util.Type.defaultValue(undefined, 2, 3));
+		test.equal(3, Jsonix.Util.Type.defaultValue("1", {t:2}, 3));
+		test.equal(false, Jsonix.Util.Type.defaultValue(false, undefined, true));
+		test.equal(false, Jsonix.Util.Type.defaultValue("true", false, true));
+		test.equal(false, Jsonix.Util.Type.defaultValue("true", null, false));
 		test.done();
         },
 	"StringUtils" : function(test) {

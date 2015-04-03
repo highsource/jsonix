@@ -503,6 +503,29 @@ Jsonix.Util.Type = {
 			}
 		}
 		return target;
+	},
+	defaultValue : function()
+	{
+		var args = arguments;
+		if (args.length === 0)
+		{
+			return undefined;
+		}
+		else
+		{
+			var defaultValue = args[args.length - 1];
+			var typeOfDefaultValue = typeof defaultValue;
+			for (var index = 0; index < args.length - 1; index++)
+			{
+				var candidateValue = args[index];
+				if (typeof candidateValue === typeOfDefaultValue)
+				{
+					return candidateValue;
+				}
+			}
+			return defaultValue;
+			
+		}
 	}
 };
 Jsonix.Util.NumberUtils = {
@@ -1904,6 +1927,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 			throw new Error("Parser must be on START_ELEMENT to read next text.");
 		}
 		var result = null;
+		// Issue #70 work in progress here
 		var xsiTypeInfo = null;
 		if (context.supportXsiType) {
 			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
@@ -3154,9 +3178,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		} else {
 			this.wrapperElementName = null;
 		}
-		var dom = mapping.allowDom || mapping.dom || true;
-		var typed = mapping.allowTypedObject || mapping.typed || true;
-		var mx = mapping.mixed || mapping.mx || true;
+		var dom = Jsonix.Util.Type.defaultValue(mapping.allowDom, mapping.dom, true);
+		var typed = Jsonix.Util.Type.defaultValue(mapping.allowTypedObject, mapping.typed, true);
+		var mx = Jsonix.Util.Type.defaultValue(mapping.mixed, mapping.mx, true);
 		this.allowDom = dom;
 		this.allowTypedObject = typed;
 		this.mixed = mx;
@@ -3473,9 +3497,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
-		var dom = mapping.allowDom || mapping.dom || true;
-		var typed = mapping.allowTypedObject || mapping.typed || true;
-		var mx = mapping.mixed || mapping.mx || true;
+		var dom = Jsonix.Util.Type.defaultValue(mapping.allowDom, mapping.dom, true);
+		var typed = Jsonix.Util.Type.defaultValue(mapping.allowTypedObject, mapping.typed, true);
+		var mx = Jsonix.Util.Type.defaultValue(mapping.mixed, mapping.mx, true);
 		this.allowDom = dom;
 		this.allowTypedObject = typed;
 		this.mixed = mx;

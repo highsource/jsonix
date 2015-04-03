@@ -168,5 +168,28 @@ Jsonix.Util.Type = {
 			}
 		}
 		return target;
+	},
+	defaultValue : function()
+	{
+		var args = arguments;
+		if (args.length === 0)
+		{
+			return undefined;
+		}
+		else
+		{
+			var defaultValue = args[args.length - 1];
+			var typeOfDefaultValue = typeof defaultValue;
+			for (var index = 0; index < args.length - 1; index++)
+			{
+				var candidateValue = args[index];
+				if (typeof candidateValue === typeOfDefaultValue)
+				{
+					return candidateValue;
+				}
+			}
+			return defaultValue;
+			
+		}
 	}
 };
