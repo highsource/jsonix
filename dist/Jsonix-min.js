@@ -759,18 +759,15 @@ h(that.unmarshalDocument(b))
 var e=null;
 d.nextTag();
 return this.unmarshalElement(this.context,d)
-},unmarshalElement:function(u,r,n){if(r.eventType!=1){throw new Error("Parser must be on START_ELEMENT to read next text.")
-}var l=null;
-var m=null;
-if(u.supportXsiType){var t=r.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI,Jsonix.Schema.XSI.TYPE);
-if(Jsonix.Util.StringUtils.isNotBlank(t)){var p=Jsonix.Schema.XSD.QName.INSTANCE.parse(t,u,r,n);
-m=u.getTypeInfoByTypeNameKey(p.key)
-}}var v=r.getName();
-var o=m?m:this.getElementTypeInfo(v,u,n);
-if(Jsonix.Util.Type.exists(o)){var q=o.unmarshal(u,r,n);
-var s=this.convertToElementValue({name:v,value:q},u,r,n);
-return s
-}else{throw new Error("Element ["+v.key+"] is not known in this context.")
+},unmarshalElement:function(q,o,l){if(o.eventType!=1){throw new Error("Parser must be on START_ELEMENT to read next text.")
+}var j=null;
+var k=null;
+var r=o.getName();
+var m=k?k:this.getElementTypeInfo(r,q,l);
+if(Jsonix.Util.Type.exists(m)){var n=m.unmarshal(q,o,l);
+var p=this.convertToElementValue({name:r,value:n},q,o,l);
+return p
+}else{throw new Error("Element ["+r.key+"] is not known in this context.")
 }},getElementTypeInfo:function(f,e,g){var h=e.getElementInfo(f,g);
 if(Jsonix.Util.Type.exists(h)){return h.typeInfo
 }else{return undefined
@@ -841,9 +838,9 @@ this.unmarshalProperty(B,w,r,p)
 }else{if(Jsonix.Util.Type.exists(this.structure.any)){var s=this.structure.any;
 this.unmarshalProperty(B,w,s,p)
 }else{v=w.skipElement()
-}}}else{if((v===Jsonix.XML.Input.CHARACTERS||v===Jsonix.XML.Input.CDATA||v===Jsonix.XML.Input.ENTITY_REFERENCE)&&Jsonix.Util.Type.exists(this.structure.mixed)){var x=this.structure.mixed;
+}}}else{if((v===Jsonix.XML.Input.CHARACTERS||v===Jsonix.XML.Input.CDATA||v===Jsonix.XML.Input.ENTITY_REFERENCE)){if(Jsonix.Util.Type.exists(this.structure.mixed)){var x=this.structure.mixed;
 this.unmarshalProperty(B,w,x,p)
-}else{if(v===Jsonix.XML.Input.SPACE||v===Jsonix.XML.Input.COMMENT||v===Jsonix.XML.Input.PROCESSING_INSTRUCTION){}else{throw new Error("Illegal state: unexpected event type ["+v+"].")
+}}else{if(v===Jsonix.XML.Input.SPACE||v===Jsonix.XML.Input.COMMENT||v===Jsonix.XML.Input.PROCESSING_INSTRUCTION){}else{throw new Error("Illegal state: unexpected event type ["+v+"].")
 }}}v=w.next()
 }}else{if(Jsonix.Util.Type.exists(this.structure.value)){var t=this.structure.value;
 this.unmarshalProperty(B,w,t,p)

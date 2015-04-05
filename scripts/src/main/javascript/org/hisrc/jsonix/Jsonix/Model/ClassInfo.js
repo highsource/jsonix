@@ -171,11 +171,14 @@ Jsonix.Model.ClassInfo = Jsonix
 								// TODO optionally report a validation error that the element is not expected
 								et = input.skipElement();
 							}
-						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
-							// Characters and structure has a mixed property
-							var mixedPropertyInfo = this.structure.mixed;
-							this.unmarshalProperty(context, input,
-									mixedPropertyInfo, result);
+						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
+							if (Jsonix.Util.Type.exists(this.structure.mixed))
+							{
+								// Characters and structure has a mixed property
+								var mixedPropertyInfo = this.structure.mixed;
+								this.unmarshalProperty(context, input,
+										mixedPropertyInfo, result);
+							}
 						} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT	|| et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 							// Ignore
 						} else {

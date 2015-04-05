@@ -1929,6 +1929,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 		var result = null;
 		// Issue #70 work in progress here
 		var xsiTypeInfo = null;
+		/*
 		if (context.supportXsiType) {
 			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
 			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
@@ -1936,7 +1937,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
 				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
 			}
-		}
+		}*/
 		var name = input.getName();
 		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
 		if (Jsonix.Util.Type.exists(typeInfo))
@@ -2145,11 +2146,14 @@ Jsonix.Model.ClassInfo = Jsonix
 								// TODO optionally report a validation error that the element is not expected
 								et = input.skipElement();
 							}
-						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE) && Jsonix.Util.Type.exists(this.structure.mixed)) {
-							// Characters and structure has a mixed property
-							var mixedPropertyInfo = this.structure.mixed;
-							this.unmarshalProperty(context, input,
-									mixedPropertyInfo, result);
+						} else if ((et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
+							if (Jsonix.Util.Type.exists(this.structure.mixed))
+							{
+								// Characters and structure has a mixed property
+								var mixedPropertyInfo = this.structure.mixed;
+								this.unmarshalProperty(context, input,
+										mixedPropertyInfo, result);
+							}
 						} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT	|| et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 							// Ignore
 						} else {
