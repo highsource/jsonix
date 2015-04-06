@@ -1,6 +1,10 @@
 Jsonix.Schema.XSD.String = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'String',
 	typeName : Jsonix.Schema.XSD.qname('string'),
+	unmarshal : function(context, input, scope) {
+		var text = input.getElementText();
+		return this.parse(text, context, input, scope);
+	},
 	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureString(value);
 		return value;

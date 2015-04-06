@@ -6,10 +6,11 @@ module.exports = {
 		var context = new Jsonix.Context([GH71]);
 		var unmarshaller = context.createUnmarshaller();
 		var marshaller = context.createMarshaller();
-		var xml = "<Configuration><Install><ConfigFile>config.xml</ConfigFile><InstallDir></InstallDir><DataDir></DataDir></Install><Date></Date></Configuration>";
-		var unmarshalled = unmarshaller.unmarshalString(xml);
+		var alpha = "<Configuration><Install><ConfigFile>config.xml</ConfigFile><InstallDir></InstallDir><DataDir></DataDir></Install><Date></Date></Configuration>";
+		var omega = "<Configuration><Install><ConfigFile>config.xml</ConfigFile><InstallDir></InstallDir><DataDir></DataDir></Install></Configuration>";
+		var unmarshalled = unmarshaller.unmarshalString(alpha);
 		var marshalled = marshaller.marshalString(unmarshalled);
-		test.equal(xml, marshalled);
+		test.equal(omega, marshalled);
 		test.done();
 	}
 };

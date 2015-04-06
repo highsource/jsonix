@@ -1504,8 +1504,9 @@ Jsonix.Schema.XSD.AnySimpleType=Jsonix.Class(Jsonix.Model.TypeInfo,{name:"AnySim
 },reprint:function(g,e,f,h){if(Jsonix.Util.Type.isString(g)&&!this.isInstance(g,e,h)){return this.print(this.parse(g,e,null,h),e,f,h)
 }else{return this.print(g,e,f,h)
 }},unmarshal:function(e,f,h){var g=f.getElementText();
-return this.parse(g,e,f,h)
-},marshal:function(g,e,f,h){if(Jsonix.Util.Type.exists(g)){f.writeCharacters(this.reprint(g,e,f,h))
+if(Jsonix.Util.StringUtils.isNotBlank(g)){return this.parse(g,e,f,h)
+}else{return null
+}},marshal:function(g,e,f,h){if(Jsonix.Util.Type.exists(g)){f.writeCharacters(this.reprint(g,e,f,h))
 }},build:function(c,d){},CLASS_NAME:"Jsonix.Schema.XSD.AnySimpleType"});
 Jsonix.Schema.XSD.List=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:null,typeName:null,typeInfo:null,separator:" ",trimmedSeparator:Jsonix.Util.StringUtils.whitespaceCharacters,simpleType:true,built:false,initialize:function(e,f,h){Jsonix.Util.Ensure.ensureExists(e);
 this.typeInfo=e;
@@ -1534,7 +1535,9 @@ m<h.length;
 m++){i.push(this.typeInfo.parse(Jsonix.Util.StringUtils.trim(h[m]),l,n,k))
 }return i
 },CLASS_NAME:"Jsonix.Schema.XSD.List"});
-Jsonix.Schema.XSD.String=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"String",typeName:Jsonix.Schema.XSD.qname("string"),print:function(g,e,f,h){Jsonix.Util.Ensure.ensureString(g);
+Jsonix.Schema.XSD.String=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"String",typeName:Jsonix.Schema.XSD.qname("string"),unmarshal:function(e,f,h){var g=f.getElementText();
+return this.parse(g,e,f,h)
+},print:function(g,e,f,h){Jsonix.Util.Ensure.ensureString(g);
 return g
 },parse:function(g,e,f,h){Jsonix.Util.Ensure.ensureString(g);
 return g

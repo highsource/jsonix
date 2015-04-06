@@ -23,7 +23,13 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
-		return this.parse(text, context, input, scope);
+		if (Jsonix.Util.StringUtils.isNotBlank(text)) {
+			return this.parse(text, context, input, scope);
+		}
+		else
+		{
+			return null;
+		}
 	},
 	marshal : function(value, context, output, scope) {
 		if (Jsonix.Util.Type.exists(value)) {
