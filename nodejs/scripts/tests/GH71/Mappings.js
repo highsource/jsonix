@@ -17,6 +17,12 @@ var GH71 = {
            elementName: {
              localPart: 'DataDir'
            }
+         }, {
+           name: 'date',
+           elementName: {
+             localPart: 'Date',
+             typeInfo: 'Date'
+           }
          }]
      }, {
        localName: 'Configuration',
