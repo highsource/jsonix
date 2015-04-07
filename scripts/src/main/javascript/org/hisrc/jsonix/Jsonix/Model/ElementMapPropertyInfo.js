@@ -26,9 +26,6 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		});
 
 	},
-	unmarshalWrapperElement : function(context, input, scope) {
-		var result = Jsonix.Model.AbstractElementsPropertyInfo.prototype.unmarshalWrapperElement.apply(this, arguments);
-	},
 	unmarshal : function(context, input, scope) {
 		var result = null;
 		var that = this;
@@ -67,13 +64,16 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		}
 		return result;
 	},
-	unmarshalElement : function(context, input, scope, callback) {
-		var entry = this.entryTypeInfo.unmarshal(context, input, scope);
+	getInputTypeInfo : function (context, input, scope) {
+		return this.entryTypeInfo;
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		var entry = elementValue.value;
 		var result = {};
-		if (!!entry[this.key.name]) {
+		if (Jsonix.Util.Type.isString(entry[this.key.name])) {
 			result[entry[this.key.name]] = entry[this.value.name];
 		}
-		return callback(result);
+		return result;
 	},
 	marshal : function(value, context, output, scope) {
 

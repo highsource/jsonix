@@ -44,6 +44,17 @@ module.exports = {
 			test.equal(2, data.value.expressions.length);
 			test.done();
 		},
+		"AndLiteral" : function(test) {
+			var unmarshaller = context.createUnmarshaller();
+			var data = unmarshaller.unmarshalString('<And xmlns="urn:GH70"><Expression xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Literal">a</Expression><Expression  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Literal">b</Expression></And>');
+			test.equal("GH70.And", data.value.TYPE_NAME);
+			test.equal(2, data.value.expressions.length);
+			test.equal('GH70.Literal', data.value.expressions[0].TYPE_NAME);
+			test.equal('a', data.value.expressions[0].value);
+			test.equal('GH70.Literal', data.value.expressions[1].TYPE_NAME);
+			test.equal('b', data.value.expressions[1].value);
+			test.done();
+		}
 	},
 };
 // TODO marshalling
