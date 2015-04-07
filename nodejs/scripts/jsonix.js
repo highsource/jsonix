@@ -1835,11 +1835,13 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 	allowTypedObject : true,
 	allowDom : false,
 	collection : false,
-	unmarshalElement : function(context, input, scope) {
+	unmarshalElement : function(context, input, scope, callback) {
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
 		}
-		var result = null;
+		callback = callback || function(result) {
+			return result;
+		};
 		// Issue #70 work in progress here
 		var xsiTypeInfo = null;
 		if (context.supportXsiType) {
@@ -1865,11 +1867,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 			// TODO better exception
 			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
 		}
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
+		return this.collection ? [ callback(elementValue) ] : callback(elementValue);
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
@@ -1956,11 +1954,15 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 			}
 		});
 	},
-	unmarshalDocument : function(doc) {
+	unmarshalDocument : function(doc, scope) {
 		var input = new Jsonix.XML.Input(doc);
 		var result = null;
+		var callback = function(_result) {
+			result = _result;
+		};
 		input.nextTag();
-		return this.unmarshalElement(this.context, input);
+		this.unmarshalElement(this.context, input, scope, callback);
+		return result;
 
 	},
 	getElementTypeInfo : function(name, context, scope) {
@@ -3199,98 +3201,57 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
-		var et = input.eventType;
+		var result = null;
+		var that = this;
+		var callback = function(value) {
+			if (that.collection) {
+				if (result === null) {
+					result = [];
+				}
+				result.push(value);
 
+			} else {
+				if (result === null) {
+					result = value;
+				} else {
+					// TODO Report validation error
+					throw new Error("Value already set.");
+				}
+			}
+		};
+
+		var et = input.eventType;
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
 			if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
-				return this.unmarshalWrapperElement(context, input, scope);
+				this.unmarshalWrapperElement(context, input, scope, callback);
 			} else {
-				return this.unmarshalElement(context, input, scope);
+				this.unmarshalElement(context, input, scope, callback);
 			}
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-			var value = input.getText();
-			if (this.collection) {
-				return [ value ];
-
-			} else {
-				return value;
-			}
+			callback(input.getText());
 		} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 			// Skip whitespace
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
+		return result;
 	},
-	unmarshalWrapperElement : function(context, input, scope) {
-		var result = null;
+	unmarshalWrapperElement : function(context, input, scope, callback) {
 		var et = input.next();
 		while (et !== Jsonix.XML.Input.END_ELEMENT) {
 			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				var value = this.unmarshalElement(context, input, scope);
-				if (this.collection) {
-					if (result === null) {
-						result = [];
-					}
-					for (var index = 0; index < value.length; index++) {
-						result.push(value[index]);
-					}
-
-				} else {
-					if (result === null) {
-						result = value;
-					} else {
-						// TODO Report validation error
-						throw new Error("Value already set.");
-					}
-				}
+				this.unmarshalElement(context, input, scope, callback);
 			} else
 			// Characters
 			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-				var text = input.getText();
-				if (this.collection) {
-					if (result === null) {
-						result = [];
-					}
-					result.push(text);
-				} else {
-					if (result === null) {
-						result = text;
-					} else {
-						// TODO Report validation error
-						throw new Error("Value already set.");
-					}
-				}
+				callback(input.getText());
 			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 				// Skip whitespace
 			} else {
 				throw new Error("Illegal state: unexpected event type [" + et + "].");
 			}
 			et = input.next();
-		}
-		return result;
-	},
-	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var elementValue;
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		if (Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-		} else if (this.allowDom) {
-			elementValue = input.getElement();
-		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
-		}
-
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
 		}
 	},
 	marshal : function(value, context, output, scope) {
@@ -3518,29 +3479,42 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
+		var result = null;
+		var that = this;
+		var callback = function(value) {
+			if (that.collection) {
+				if (result === null) {
+					result = [];
+				}
+				result.push(value);
+
+			} else {
+				if (result === null) {
+					result = value;
+				} else {
+					// TODO Report validation error
+					throw new Error("Value already set.");
+				}
+			}
+		};
+		
 		var et = input.eventType;
 
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
-			return this.unmarshalElement(context, input, scope);
+			this.unmarshalElement(context, input, scope, callback);
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-			var value = input.getText();
-			if (this.collection) {
-				return [ value ];
-
-			} else {
-				return value;
-			}
+			callback(input.getText());
 		} else if (this.mixed && (et === Jsonix.XML.Input.SPACE)) {
 			// Whitespace
-			return null;
+			// return null;
 		} else if (et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-			return null;
-
+			//return null;
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
-
 		}
+		
+		return result;
 	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {

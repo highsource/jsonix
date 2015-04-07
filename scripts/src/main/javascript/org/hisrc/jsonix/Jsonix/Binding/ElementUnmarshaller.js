@@ -2,11 +2,13 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 	allowTypedObject : true,
 	allowDom : false,
 	collection : false,
-	unmarshalElement : function(context, input, scope) {
+	unmarshalElement : function(context, input, scope, callback) {
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
 		}
-		var result = null;
+		callback = callback || function(result) {
+			return result;
+		};
 		// Issue #70 work in progress here
 		var xsiTypeInfo = null;
 		if (context.supportXsiType) {
@@ -32,11 +34,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 			// TODO better exception
 			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
 		}
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
+		return this.collection ? [ callback(elementValue) ] : callback(elementValue);
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;

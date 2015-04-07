@@ -22,68 +22,51 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
-		var et = input.eventType;
+		var result = null;
+		var that = this;
+		var callback = function(value) {
+			if (that.collection) {
+				if (result === null) {
+					result = [];
+				}
+				result.push(value);
 
+			} else {
+				if (result === null) {
+					result = value;
+				} else {
+					// TODO Report validation error
+					throw new Error("Value already set.");
+				}
+			}
+		};
+
+		var et = input.eventType;
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
 			if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
-				return this.unmarshalWrapperElement(context, input, scope);
+				this.unmarshalWrapperElement(context, input, scope, callback);
 			} else {
-				return this.unmarshalElement(context, input, scope);
+				this.unmarshalElement(context, input, scope, callback);
 			}
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-			var value = input.getText();
-			if (this.collection) {
-				return [ value ];
-
-			} else {
-				return value;
-			}
+			callback(input.getText());
 		} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 			// Skip whitespace
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
+		return result;
 	},
-	unmarshalWrapperElement : function(context, input, scope) {
-		var result = null;
+	unmarshalWrapperElement : function(context, input, scope, callback) {
 		var et = input.next();
 		while (et !== Jsonix.XML.Input.END_ELEMENT) {
 			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				var value = this.unmarshalElement(context, input, scope);
-				if (this.collection) {
-					if (result === null) {
-						result = [];
-					}
-					for (var index = 0; index < value.length; index++) {
-						result.push(value[index]);
-					}
-
-				} else {
-					if (result === null) {
-						result = value;
-					} else {
-						// TODO Report validation error
-						throw new Error("Value already set.");
-					}
-				}
+				this.unmarshalElement(context, input, scope, callback);
 			} else
 			// Characters
 			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-				var text = input.getText();
-				if (this.collection) {
-					if (result === null) {
-						result = [];
-					}
-					result.push(text);
-				} else {
-					if (result === null) {
-						result = text;
-					} else {
-						// TODO Report validation error
-						throw new Error("Value already set.");
-					}
-				}
+				callback(input.getText());
 			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 				// Skip whitespace
 			} else {
@@ -91,7 +74,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			}
 			et = input.next();
 		}
-		return result;
 	},
 	marshal : function(value, context, output, scope) {
 

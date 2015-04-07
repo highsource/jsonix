@@ -44,11 +44,15 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 			}
 		});
 	},
-	unmarshalDocument : function(doc) {
+	unmarshalDocument : function(doc, scope) {
 		var input = new Jsonix.XML.Input(doc);
 		var result = null;
+		var callback = function(_result) {
+			result = _result;
+		};
 		input.nextTag();
-		return this.unmarshalElement(this.context, input);
+		this.unmarshalElement(this.context, input, scope, callback);
+		return result;
 
 	},
 	getElementTypeInfo : function(name, context, scope) {

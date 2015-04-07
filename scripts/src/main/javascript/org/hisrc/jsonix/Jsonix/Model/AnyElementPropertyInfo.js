@@ -13,29 +13,42 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
+		var result = null;
+		var that = this;
+		var callback = function(value) {
+			if (that.collection) {
+				if (result === null) {
+					result = [];
+				}
+				result.push(value);
+
+			} else {
+				if (result === null) {
+					result = value;
+				} else {
+					// TODO Report validation error
+					throw new Error("Value already set.");
+				}
+			}
+		};
+		
 		var et = input.eventType;
 
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
-			return this.unmarshalElement(context, input, scope);
+			this.unmarshalElement(context, input, scope, callback);
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-			var value = input.getText();
-			if (this.collection) {
-				return [ value ];
-
-			} else {
-				return value;
-			}
+			callback(input.getText());
 		} else if (this.mixed && (et === Jsonix.XML.Input.SPACE)) {
 			// Whitespace
-			return null;
+			// return null;
 		} else if (et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-			return null;
-
+			//return null;
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
-
 		}
+		
+		return result;
 	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
