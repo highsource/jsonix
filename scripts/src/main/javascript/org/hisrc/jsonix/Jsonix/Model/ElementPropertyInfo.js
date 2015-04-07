@@ -22,8 +22,8 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 				}
 			},
-			unmarshalElement : function(context, input, scope, callback) {
-				return callback(this.typeInfo.unmarshal(context, input, scope));
+			getElementTypeInfo : function(elementName, context, scope) {
+				return this.typeInfo;
 			},
 			marshalElementNode : function(value, context, output, scope) {
 				this.marshalElementTypeInfo(this.elementName, value, this.typeInfo, context, output, scope);

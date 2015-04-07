@@ -1,5 +1,8 @@
-Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
+	allowDom : false,
+	allowTypedObject : true,
+	mixed : false,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
@@ -55,9 +58,6 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 			et = input.next();
 		}
 	},
-	unmarshalElement : function(context, input, scope, callback) {
-		throw new Error("Abstract method [unmarshalElement].");
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (!Jsonix.Util.Type.exists(value)) {
@@ -84,6 +84,9 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			output.writeEndElement();
 		}
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue.value;
 	},
 	marshalElementNode : function(value, context, output, scope) {
 		throw new Error("Abstract method [marshalElement].");

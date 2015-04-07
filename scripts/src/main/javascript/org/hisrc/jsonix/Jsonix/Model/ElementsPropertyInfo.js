@@ -12,15 +12,9 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
-					unmarshalElement : function(context, input, scope, callback) {
-						// TODO make sure it's the right event type
-						var elementNameKey = input.getNameKey();
-						var typeInfo = this.elementTypeInfosMap[elementNameKey];
-						if (Jsonix.Util.Type.exists(typeInfo)) {
-							return callback(typeInfo.unmarshal(context, input, scope));
-						}
-						// TODO better exception
-						throw new Error("Element [" + elementNameKey + "] is not known in this context");
+					getElementTypeInfo : function(elementName, context, scope) {
+						var elementNameKey = elementName.key;
+						return this.elementTypeInfosMap[elementNameKey];
 					},
 					marshalElementNode : function(value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
