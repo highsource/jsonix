@@ -1,5 +1,8 @@
 Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	context : null,
+	allowTypedObject : true,
+	allowDom : false,
+	collection : false,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);
 		this.context = context;
@@ -43,42 +46,10 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	},
 	unmarshalDocument : function(doc) {
 		var input = new Jsonix.XML.Input(doc);
-
 		var result = null;
 		input.nextTag();
 		return this.unmarshalElement(this.context, input);
 
-	},
-	unmarshalElement : function(context, input, scope) {
-		if (input.eventType != 1) {
-			throw new Error("Parser must be on START_ELEMENT to read next text.");
-		}
-		var result = null;
-		// Issue #70 work in progress here
-		var xsiTypeInfo = null;
-		if (context.supportXsiType) {
-			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
-			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
-			{
-				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
-				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
-			}
-		}
-		var name = input.getName();
-		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
-		if (Jsonix.Util.Type.exists(typeInfo))
-		{
-			var value = typeInfo.unmarshal(context, input, scope);
-			var elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-			return elementValue;
-		}
-		else
-		{
-			throw new Error("Element [" + name.key + "] is not known in this context.");
-		}
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);

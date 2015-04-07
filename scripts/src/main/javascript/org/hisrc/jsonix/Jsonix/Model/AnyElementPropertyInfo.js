@@ -37,28 +37,6 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 
 		}
 	},
-	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var elementValue;
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-		} else if (this.allowDom) {
-			elementValue = input.getElement();
-		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
-		}
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
-	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
@@ -85,6 +63,14 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			{
 				this.marshalElementNode(value, context, output, scope);
 			}
+		}
+	},
+	getElementTypeInfo : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			return undefined;
 		}
 	},
 	doBuild : function(context, module)	{

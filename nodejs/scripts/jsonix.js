@@ -1832,6 +1832,45 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	}
 });
 Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
+	allowTypedObject : true,
+	allowDom : false,
+	collection : false,
+	unmarshalElement : function(context, input, scope) {
+		if (input.eventType != 1) {
+			throw new Error("Parser must be on START_ELEMENT to read next element.");
+		}
+		var result = null;
+		// Issue #70 work in progress here
+		var xsiTypeInfo = null;
+		if (context.supportXsiType) {
+			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
+			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
+			{
+				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
+				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
+			}
+		}
+		var name = input.getName();
+		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
+		var elementValue;
+		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
+			var value = typeInfo.unmarshal(context, input, scope);
+			elementValue = this.convertToElementValue({
+				name : name,
+				value : value
+			}, context, input, scope);
+		} else if (this.allowDom) {
+			elementValue = input.getElement();
+		} else {
+			// TODO better exception
+			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
+		}
+		if (this.collection) {
+			return [ elementValue ];
+		} else {
+			return elementValue;
+		}
+	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	}
@@ -1873,6 +1912,9 @@ Jsonix.Binding.Marshaller.Simplified = Jsonix.Class(Jsonix.Binding.Marshaller, {
 });
 Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	context : null,
+	allowTypedObject : true,
+	allowDom : false,
+	collection : false,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);
 		this.context = context;
@@ -1916,43 +1958,10 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	},
 	unmarshalDocument : function(doc) {
 		var input = new Jsonix.XML.Input(doc);
-
 		var result = null;
 		input.nextTag();
 		return this.unmarshalElement(this.context, input);
 
-	},
-	unmarshalElement : function(context, input, scope) {
-		if (input.eventType != 1) {
-			throw new Error("Parser must be on START_ELEMENT to read next text.");
-		}
-		var result = null;
-		// Issue #70 work in progress here
-		var xsiTypeInfo = null;
-		/*
-		if (context.supportXsiType) {
-			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
-			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
-			{
-				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
-				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
-			}
-		}*/
-		var name = input.getName();
-		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
-		if (Jsonix.Util.Type.exists(typeInfo))
-		{
-			var value = typeInfo.unmarshal(context, input, scope);
-			var elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-			return elementValue;
-		}
-		else
-		{
-			throw new Error("Element [" + name.key + "] is not known in this context.");
-		}
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
@@ -3533,28 +3542,6 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 
 		}
 	},
-	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var elementValue;
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-		} else if (this.allowDom) {
-			elementValue = input.getElement();
-		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
-		}
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
-	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
@@ -3581,6 +3568,14 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			{
 				this.marshalElementNode(value, context, output, scope);
 			}
+		}
+	},
+	getElementTypeInfo : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			return undefined;
 		}
 	},
 	doBuild : function(context, module)	{
