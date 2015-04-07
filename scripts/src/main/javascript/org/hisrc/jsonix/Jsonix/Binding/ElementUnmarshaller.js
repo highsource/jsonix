@@ -5,9 +5,6 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
 		}
-		callback = callback || function(result) {
-			return result;
-		};
 		// Issue #70 work in progress here
 		var xsiTypeInfo = null;
 		if (context.supportXsiType) {
