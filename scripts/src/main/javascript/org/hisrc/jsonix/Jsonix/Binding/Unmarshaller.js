@@ -56,7 +56,6 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 		var result = null;
 		// Issue #70 work in progress here
 		var xsiTypeInfo = null;
-		/*
 		if (context.supportXsiType) {
 			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
 			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
@@ -64,7 +63,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
 				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
 			}
-		}*/
+		}
 		var name = input.getName();
 		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
 		if (Jsonix.Util.Type.exists(typeInfo))
