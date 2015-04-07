@@ -33,7 +33,6 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		};
 		
 		var et = input.eventType;
-
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
 			this.unmarshalElement(context, input, scope, callback);
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
