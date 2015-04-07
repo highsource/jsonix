@@ -93,29 +93,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		}
 		return result;
 	},
-	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var elementValue;
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		if (Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-		} else if (this.allowDom) {
-			elementValue = input.getElement();
-		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
-		}
-
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (Jsonix.Util.Type.exists(value)) {
