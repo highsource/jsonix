@@ -73,7 +73,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		} else {
 			if (this.allowTypedObject)
 			{
-				this.marshalElementNode(value, context, output, scope);
+				this.marshalElement(value, context, output, scope);
 			}
 		}
 	},

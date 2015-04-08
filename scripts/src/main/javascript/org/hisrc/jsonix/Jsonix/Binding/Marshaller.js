@@ -15,7 +15,7 @@ Jsonix.Binding.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
 		});
 
 		var doc = output.writeStartDocument();
-		this.marshalElementNode(value, this.context, output, undefined);
+		this.marshalElement(value, this.context, output, undefined);
 		output.writeEndDocument();
 		return doc;
 	},

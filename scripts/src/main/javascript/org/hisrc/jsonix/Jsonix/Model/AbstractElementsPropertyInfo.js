@@ -54,14 +54,14 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 		}
 
 		if (!this.collection) {
-			this.marshalElementNode(value, context, output, scope);
+			this.marshalElement(value, context, output, scope);
 		} else {
 			Jsonix.Util.Ensure.ensureArray(value);
 			// TODO Exception if not array
 			for ( var index = 0; index < value.length; index++) {
 				var item = value[index];
 				// TODO Exception if item does not exist
-				this.marshalElementNode(item, context, output, scope);
+				this.marshalElement(item, context, output, scope);
 			}
 		}
 
@@ -71,13 +71,6 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue.value;
-	},
-	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {
-		output.writeStartElement(elementName);
-		if (Jsonix.Util.Type.exists(value)) {
-			typeInfo.marshal(value, context, output, scope);
-		}
-		output.writeEndElement();
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);

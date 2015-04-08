@@ -93,7 +93,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			// DOM node
 			output.writeNode(value);
 		} else if (Jsonix.Util.Type.isObject(value)) {
-			this.marshalElementNode(value, context, output, scope);
+			this.marshalElement(value, context, output, scope);
 
 		} else {
 			if (this.mixed) {

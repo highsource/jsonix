@@ -1778,7 +1778,7 @@ Jsonix.Mapping.Styled = Jsonix.Class({
 });
 Jsonix.Binding = {};
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
-	marshalElementNode : function(value, context, output, scope) {
+	marshalElement : function(value, context, output, scope) {
 		var elementInfo = this.getOutputElementInfo(value, context, output, scope);
 		var typeInfo = this.getOutputTypeInfo(elementInfo, context, output, scope);
 		if (Jsonix.Util.Type.exists(typeInfo))
@@ -1928,7 +1928,7 @@ Jsonix.Binding.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
 		});
 
 		var doc = output.writeStartDocument();
-		this.marshalElementNode(value, this.context, output, undefined);
+		this.marshalElement(value, this.context, output, undefined);
 		output.writeEndDocument();
 		return doc;
 	},
@@ -2890,14 +2890,14 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 		}
 
 		if (!this.collection) {
-			this.marshalElementNode(value, context, output, scope);
+			this.marshalElement(value, context, output, scope);
 		} else {
 			Jsonix.Util.Ensure.ensureArray(value);
 			// TODO Exception if not array
 			for ( var index = 0; index < value.length; index++) {
 				var item = value[index];
 				// TODO Exception if item does not exist
-				this.marshalElementNode(item, context, output, scope);
+				this.marshalElement(item, context, output, scope);
 			}
 		}
 
@@ -2907,13 +2907,6 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue.value;
-	},
-	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {
-		output.writeStartElement(elementName);
-		if (Jsonix.Util.Type.exists(value)) {
-			typeInfo.marshal(value, context, output, scope);
-		}
-		output.writeEndElement();
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);
@@ -2980,7 +2973,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 
 Jsonix.Model.ElementsPropertyInfo = Jsonix
 		.Class(
-				Jsonix.Model.AbstractElementsPropertyInfo,
+				Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller,
 				{
 					elementTypeInfos : null,
 					elementTypeInfosMap : null,
@@ -2996,16 +2989,27 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						var elementNameKey = elementName.key;
 						return this.elementTypeInfosMap[elementNameKey];
 					},
-					marshalElementNode : function(value, context, output, scope) {
+					getOutputElementInfo : function (value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
 							var typeInfo = elementTypeInfo.typeInfo;
 							if (typeInfo.isInstance(value, context, scope)) {
 								var elementName = elementTypeInfo.elementName;
-								this.marshalElementTypeInfo(elementName, value, typeInfo, context, output, scope);
-								return;
+								return {name : elementName, value : value};
 							}
 						}
+						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
+						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
+					},
+					getOutputTypeInfo : function (value, context, output, scope) {
+						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
+							var elementTypeInfo = this.elementTypeInfos[index];
+							var typeInfo = elementTypeInfo.typeInfo;
+							if (typeInfo.isInstance(value.value, context, scope)) {
+								return typeInfo;
+							}
+						}
+						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
 						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
 					},
 					doBuild : function(context, module) {
@@ -3118,13 +3122,13 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 			output.writeStartElement(this.wrapperElementName);
 		}
 
-		this.marshalElementNode(value, context, output, scope);
+		this.marshalElement(value, context, output, scope);
 
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			output.writeEndElement();
 		}
 	},
-	marshalElementNode : function(value, context, output, scope) {
+	marshalElement : function(value, context, output, scope) {
 		if (!!value) {
 			for ( var attributeName in value) {
 				if (value.hasOwnProperty(attributeName)) {
@@ -3283,7 +3287,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			// DOM node
 			output.writeNode(value);
 		} else if (Jsonix.Util.Type.isObject(value)) {
-			this.marshalElementNode(value, context, output, scope);
+			this.marshalElement(value, context, output, scope);
 
 		} else {
 			if (this.mixed) {
@@ -3533,7 +3537,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		} else {
 			if (this.allowTypedObject)
 			{
-				this.marshalElementNode(value, context, output, scope);
+				this.marshalElement(value, context, output, scope);
 			}
 		}
 	},

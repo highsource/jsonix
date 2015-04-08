@@ -1,5 +1,5 @@
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
-	marshalElementNode : function(value, context, output, scope) {
+	marshalElement : function(value, context, output, scope) {
 		var elementInfo = this.getOutputElementInfo(value, context, output, scope);
 		var typeInfo = this.getOutputTypeInfo(elementInfo, context, output, scope);
 		if (Jsonix.Util.Type.exists(typeInfo))

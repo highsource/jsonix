@@ -1,6 +1,6 @@
 Jsonix.Model.ElementsPropertyInfo = Jsonix
 		.Class(
-				Jsonix.Model.AbstractElementsPropertyInfo,
+				Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller,
 				{
 					elementTypeInfos : null,
 					elementTypeInfosMap : null,
@@ -16,16 +16,27 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						var elementNameKey = elementName.key;
 						return this.elementTypeInfosMap[elementNameKey];
 					},
-					marshalElementNode : function(value, context, output, scope) {
+					getOutputElementInfo : function (value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
 							var typeInfo = elementTypeInfo.typeInfo;
 							if (typeInfo.isInstance(value, context, scope)) {
 								var elementName = elementTypeInfo.elementName;
-								this.marshalElementTypeInfo(elementName, value, typeInfo, context, output, scope);
-								return;
+								return {name : elementName, value : value};
 							}
 						}
+						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
+						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
+					},
+					getOutputTypeInfo : function (value, context, output, scope) {
+						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
+							var elementTypeInfo = this.elementTypeInfos[index];
+							var typeInfo = elementTypeInfo.typeInfo;
+							if (typeInfo.isInstance(value.value, context, scope)) {
+								return typeInfo;
+							}
+						}
+						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
 						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
 					},
 					doBuild : function(context, module) {
