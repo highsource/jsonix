@@ -1,26 +1,23 @@
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
-		var elementInfo = this.getOutputElementInfo(value, context, output, scope);
-		var typeInfo = this.getOutputTypeInfo(elementInfo, context, output, scope);
-		if (Jsonix.Util.Type.exists(typeInfo))
+		var elementValue = this.getOutputElementValue(value, context, output, scope);
+		if (Jsonix.Util.Type.exists(elementValue.typeInfo))
 		{
-			this.marshalElementTypeInfo(elementInfo.name, elementInfo.value, typeInfo, context, output, scope);
+			output.writeStartElement(elementValue.name);
+			if (Jsonix.Util.Type.exists(elementValue.value)) {
+				elementValue.typeInfo.marshal(elementValue.value, context, output, scope);
+			}
+			output.writeEndElement();
 		}
 		else
 		{
 			throw new Error("Element [" + elementValue.name.key + "] is not known in this context.");
 		}
 	},
-	marshalElementTypeInfo : function(name, value, typeInfo, context, output, scope) {
-		output.writeStartElement(name);
-		if (Jsonix.Util.Type.exists(value)) {
-			typeInfo.marshal(value, context, output, scope);
-		}
-		output.writeEndElement();
-	},
-	getOutputElementInfo : function (value, context, output, scope) {
+	getOutputElementValue : function (value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
+		elementValue.typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
 		return elementValue;
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
@@ -46,10 +43,6 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 			}
 		}
 		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
-	},
-	getOutputTypeInfo : function (value, context, output, scope)
-	{
-		return this.getElementTypeInfo(value.name, context, scope);
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);

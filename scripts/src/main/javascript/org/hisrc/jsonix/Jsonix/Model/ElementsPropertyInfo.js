@@ -16,24 +16,13 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						var elementNameKey = elementName.key;
 						return this.elementTypeInfosMap[elementNameKey];
 					},
-					getOutputElementInfo : function (value, context, output, scope) {
+					getOutputElementValue : function (value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
 							var typeInfo = elementTypeInfo.typeInfo;
 							if (typeInfo.isInstance(value, context, scope)) {
 								var elementName = elementTypeInfo.elementName;
-								return {name : elementName, value : value};
-							}
-						}
-						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
-						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
-					},
-					getOutputTypeInfo : function (value, context, output, scope) {
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							var typeInfo = elementTypeInfo.typeInfo;
-							if (typeInfo.isInstance(value.value, context, scope)) {
-								return typeInfo;
+								return {name : elementName, value : value, typeInfo : typeInfo};
 							}
 						}
 						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.

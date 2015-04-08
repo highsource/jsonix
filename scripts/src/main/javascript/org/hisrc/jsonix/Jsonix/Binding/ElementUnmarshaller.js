@@ -55,10 +55,6 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		var name = input.getName();
 		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
 		return typeInfo;
-		
-	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
 	}
 });
 

@@ -25,11 +25,8 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 			getElementTypeInfo : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
-			getOutputElementInfo : function (value, context, output, scope) {
-				return { name : this.elementName, value : value};
-			},
-			getOutputTypeInfo : function (value, context, output, scope) {
-				return this.typeInfo;
+			getOutputElementValue : function (value, context, output, scope) {
+				return { name : this.elementName, value : value, typeInfo : this.typeInfo};
 			},
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);

@@ -1779,27 +1779,24 @@ Jsonix.Mapping.Styled = Jsonix.Class({
 Jsonix.Binding = {};
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
-		var elementInfo = this.getOutputElementInfo(value, context, output, scope);
-		var typeInfo = this.getOutputTypeInfo(elementInfo, context, output, scope);
-		if (Jsonix.Util.Type.exists(typeInfo))
+		var elementValue = this.getOutputElementValue(value, context, output, scope);
+		if (Jsonix.Util.Type.exists(elementValue.typeInfo))
 		{
-			this.marshalElementTypeInfo(elementInfo.name, elementInfo.value, typeInfo, context, output, scope);
+			output.writeStartElement(elementValue.name);
+			if (Jsonix.Util.Type.exists(elementValue.value)) {
+				elementValue.typeInfo.marshal(elementValue.value, context, output, scope);
+			}
+			output.writeEndElement();
 		}
 		else
 		{
 			throw new Error("Element [" + elementValue.name.key + "] is not known in this context.");
 		}
 	},
-	marshalElementTypeInfo : function(name, value, typeInfo, context, output, scope) {
-		output.writeStartElement(name);
-		if (Jsonix.Util.Type.exists(value)) {
-			typeInfo.marshal(value, context, output, scope);
-		}
-		output.writeEndElement();
-	},
-	getOutputElementInfo : function (value, context, output, scope) {
+	getOutputElementValue : function (value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
+		elementValue.typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
 		return elementValue;
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
@@ -1825,10 +1822,6 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 			}
 		}
 		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
-	},
-	getOutputTypeInfo : function (value, context, output, scope)
-	{
-		return this.getElementTypeInfo(value.name, context, scope);
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
@@ -1896,10 +1889,6 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		var name = input.getName();
 		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
 		return typeInfo;
-		
-	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
 	}
 });
 
@@ -1992,6 +1981,9 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 		this.unmarshalElement(this.context, input, scope, callback);
 		return result;
 
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue;
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
@@ -2956,11 +2948,8 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 			getElementTypeInfo : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
-			getOutputElementInfo : function (value, context, output, scope) {
-				return { name : this.elementName, value : value};
-			},
-			getOutputTypeInfo : function (value, context, output, scope) {
-				return this.typeInfo;
+			getOutputElementValue : function (value, context, output, scope) {
+				return { name : this.elementName, value : value, typeInfo : this.typeInfo};
 			},
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
@@ -2989,24 +2978,13 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						var elementNameKey = elementName.key;
 						return this.elementTypeInfosMap[elementNameKey];
 					},
-					getOutputElementInfo : function (value, context, output, scope) {
+					getOutputElementValue : function (value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
 							var elementTypeInfo = this.elementTypeInfos[index];
 							var typeInfo = elementTypeInfo.typeInfo;
 							if (typeInfo.isInstance(value, context, scope)) {
 								var elementName = elementTypeInfo.elementName;
-								return {name : elementName, value : value};
-							}
-						}
-						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
-						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
-					},
-					getOutputTypeInfo : function (value, context, output, scope) {
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							var typeInfo = elementTypeInfo.typeInfo;
-							if (typeInfo.isInstance(value.value, context, scope)) {
-								return typeInfo;
+								return {name : elementName, value : value, typeInfo : typeInfo};
 							}
 						}
 						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
@@ -3298,6 +3276,9 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		}
 
 	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue;
+	},
 	getElementTypeInfo : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
@@ -3540,6 +3521,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 				this.marshalElement(value, context, output, scope);
 			}
 		}
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue;
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
@@ -5647,6 +5631,10 @@ Jsonix.Context = Jsonix
 				}
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
+			},
+			getTypeInfoByTypeName : function(typeName) {
+				var tn = Jsonix.XML.QName.fromObjectOrString(typeName, this);
+				return this.typeNameKeyToTypeInfo[tn.key];
 			},
 			getTypeInfoByTypeNameKey : function(typeNameKey) {
 				return this.typeNameKeyToTypeInfo[typeNameKey];

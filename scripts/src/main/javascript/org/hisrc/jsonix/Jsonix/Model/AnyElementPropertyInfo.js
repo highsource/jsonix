@@ -77,6 +77,9 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			}
 		}
 	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue;
+	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
