@@ -72,12 +72,11 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue.value;
 	},
-	marshalElementNode : function(value, context, output, scope) {
-		throw new Error("Abstract method [marshalElement].");
-	},
 	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {
 		output.writeStartElement(elementName);
-		typeInfo.marshal(value, context, output, scope);
+		if (Jsonix.Util.Type.exists(value)) {
+			typeInfo.marshal(value, context, output, scope);
+		}
 		output.writeEndElement();
 	},
 	buildStructure : function(context, structure) {

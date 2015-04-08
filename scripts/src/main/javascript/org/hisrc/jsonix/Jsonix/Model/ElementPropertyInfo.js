@@ -1,5 +1,5 @@
 Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
-		Jsonix.Model.AbstractElementsPropertyInfo, {
+		Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller, {
 			typeInfo : 'String',
 			elementName : null,
 			initialize : function(mapping) {
@@ -25,8 +25,11 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 			getElementTypeInfo : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
-			marshalElementNode : function(value, context, output, scope) {
-				this.marshalElementTypeInfo(this.elementName, value, this.typeInfo, context, output, scope);
+			getOutputElementInfo : function (value, context, output, scope) {
+				return { name : this.elementName, value : value};
+			},
+			getOutputTypeInfo : function (value, context, output, scope) {
+				return this.typeInfo;
 			},
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);

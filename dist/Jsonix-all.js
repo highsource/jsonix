@@ -1779,17 +1779,28 @@ Jsonix.Mapping.Styled = Jsonix.Class({
 Jsonix.Binding = {};
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElementNode : function(value, context, output, scope) {
-		Jsonix.Util.Ensure.ensureObject(value);
-		var elementValue = this.convertFromElementValue(value, context, output, scope);
-		var typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
+		var elementInfo = this.getOutputElementInfo(value, context, output, scope);
+		var typeInfo = this.getOutputTypeInfo(elementInfo, context, output, scope);
 		if (Jsonix.Util.Type.exists(typeInfo))
 		{
-			this.marshalElementTypeInfo(elementValue.name, elementValue.value, typeInfo, context, output, scope);
+			this.marshalElementTypeInfo(elementInfo.name, elementInfo.value, typeInfo, context, output, scope);
 		}
 		else
 		{
 			throw new Error("Element [" + elementValue.name.key + "] is not known in this context.");
 		}
+	},
+	marshalElementTypeInfo : function(name, value, typeInfo, context, output, scope) {
+		output.writeStartElement(name);
+		if (Jsonix.Util.Type.exists(value)) {
+			typeInfo.marshal(value, context, output, scope);
+		}
+		output.writeEndElement();
+	},
+	getOutputElementInfo : function (value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var elementValue = this.convertFromElementValue(value, context, output, scope);
+		return elementValue;
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
 		var name;
@@ -1815,12 +1826,9 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		}
 		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
 	},
-	marshalElementTypeInfo : function(name, value, typeInfo, context, output, scope) {
-		output.writeStartElement(name);
-		if (Jsonix.Util.Type.exists(value)) {
-			typeInfo.marshal(value, context, output, scope);
-		}
-		output.writeEndElement();
+	getOutputTypeInfo : function (value, context, output, scope)
+	{
+		return this.getElementTypeInfo(value.name, context, scope);
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
@@ -2900,12 +2908,11 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue.value;
 	},
-	marshalElementNode : function(value, context, output, scope) {
-		throw new Error("Abstract method [marshalElement].");
-	},
 	marshalElementTypeInfo : function(elementName, value, typeInfo, context, output, scope) {
 		output.writeStartElement(elementName);
-		typeInfo.marshal(value, context, output, scope);
+		if (Jsonix.Util.Type.exists(value)) {
+			typeInfo.marshal(value, context, output, scope);
+		}
 		output.writeEndElement();
 	},
 	buildStructure : function(context, structure) {
@@ -2930,7 +2937,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 });
 
 Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
-		Jsonix.Model.AbstractElementsPropertyInfo, {
+		Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller, {
 			typeInfo : 'String',
 			elementName : null,
 			initialize : function(mapping) {
@@ -2956,8 +2963,11 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 			getElementTypeInfo : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
-			marshalElementNode : function(value, context, output, scope) {
-				this.marshalElementTypeInfo(this.elementName, value, this.typeInfo, context, output, scope);
+			getOutputElementInfo : function (value, context, output, scope) {
+				return { name : this.elementName, value : value};
+			},
+			getOutputTypeInfo : function (value, context, output, scope) {
+				return this.typeInfo;
 			},
 			doBuild : function(context, module) {
 				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
