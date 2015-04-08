@@ -1834,6 +1834,24 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 	allowTypedObject : true,
 	allowDom : false,
+	mixed : false,
+	unmarshalWrapperElement : function(context, input, scope, callback) {
+		var et = input.next();
+		while (et !== Jsonix.XML.Input.END_ELEMENT) {
+			if (et === Jsonix.XML.Input.START_ELEMENT) {
+				this.unmarshalElement(context, input, scope, callback);
+			} else
+			// Characters
+			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
+				callback(input.getText());
+			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
+				// Skip whitespace
+			} else {
+				throw new Error("Illegal state: unexpected event type [" + et + "].");
+			}
+			et = input.next();
+		}
+	},
 	unmarshalElement : function(context, input, scope, callback) {
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
@@ -2852,22 +2870,6 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 		}
 		return result;
 	},
-	unmarshalWrapperElement : function(context, input, scope, callback) {
-		var et = input.next();
-		while (et !== Jsonix.XML.Input.END_ELEMENT) {
-			// New sub-element starts
-			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				this.unmarshalElement(context, input, scope, callback);
-			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-				// Skip whitespace
-			} else {
-				// TODO ignore comments, processing
-				// instructions
-				throw new Error("Illegal state: unexpected event type [" + et + "].");
-			}
-			et = input.next();
-		}
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (!Jsonix.Util.Type.exists(value)) {
@@ -3235,23 +3237,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
 		return result;
-	},
-	unmarshalWrapperElement : function(context, input, scope, callback) {
-		var et = input.next();
-		while (et !== Jsonix.XML.Input.END_ELEMENT) {
-			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				this.unmarshalElement(context, input, scope, callback);
-			} else
-			// Characters
-			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-				callback(input.getText());
-			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-				// Skip whitespace
-			} else {
-				throw new Error("Illegal state: unexpected event type [" + et + "].");
-			}
-			et = input.next();
-		}
 	},
 	marshal : function(value, context, output, scope) {
 

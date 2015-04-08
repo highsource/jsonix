@@ -1832,6 +1832,64 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	}
 });
 Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
+	allowTypedObject : true,
+	allowDom : false,
+	mixed : false,
+	unmarshalWrapperElement : function(context, input, scope, callback) {
+		var et = input.next();
+		while (et !== Jsonix.XML.Input.END_ELEMENT) {
+			if (et === Jsonix.XML.Input.START_ELEMENT) {
+				this.unmarshalElement(context, input, scope, callback);
+			} else
+			// Characters
+			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
+				callback(input.getText());
+			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
+				// Skip whitespace
+			} else {
+				throw new Error("Illegal state: unexpected event type [" + et + "].");
+			}
+			et = input.next();
+		}
+	},
+	unmarshalElement : function(context, input, scope, callback) {
+		if (input.eventType != 1) {
+			throw new Error("Parser must be on START_ELEMENT to read next element.");
+		}
+		var typeInfo = this.getInputTypeInfo(context, input, scope);
+		var name = input.getName();
+		var elementValue;
+		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
+			var value = typeInfo.unmarshal(context, input, scope);
+			elementValue = this.convertToElementValue({
+				name : name,
+				value : value
+			}, context, input, scope);
+		} else if (this.allowDom) {
+			elementValue = input.getElement();
+		} else {
+			// TODO better exception
+			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
+		}
+		callback(elementValue);
+	},
+	getInputTypeInfo : function (context, input, scope)
+	{
+		// Issue #70 work in progress here
+		var xsiTypeInfo = null;
+		if (context.supportXsiType) {
+			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
+			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
+			{
+				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
+				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
+			}
+		}
+		var name = input.getName();
+		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
+		return typeInfo;
+		
+	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	}
@@ -1873,6 +1931,8 @@ Jsonix.Binding.Marshaller.Simplified = Jsonix.Class(Jsonix.Binding.Marshaller, {
 });
 Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	context : null,
+	allowTypedObject : true,
+	allowDom : false,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);
 		this.context = context;
@@ -1914,45 +1974,16 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 			}
 		});
 	},
-	unmarshalDocument : function(doc) {
+	unmarshalDocument : function(doc, scope) {
 		var input = new Jsonix.XML.Input(doc);
-
 		var result = null;
+		var callback = function(_result) {
+			result = _result;
+		};
 		input.nextTag();
-		return this.unmarshalElement(this.context, input);
+		this.unmarshalElement(this.context, input, scope, callback);
+		return result;
 
-	},
-	unmarshalElement : function(context, input, scope) {
-		if (input.eventType != 1) {
-			throw new Error("Parser must be on START_ELEMENT to read next text.");
-		}
-		var result = null;
-		// Issue #70 work in progress here
-		var xsiTypeInfo = null;
-		/*
-		if (context.supportXsiType) {
-			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
-			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
-			{
-				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
-				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
-			}
-		}*/
-		var name = input.getName();
-		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
-		if (Jsonix.Util.Type.exists(typeInfo))
-		{
-			var value = typeInfo.unmarshal(context, input, scope);
-			var elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-			return elementValue;
-		}
-		else
-		{
-			throw new Error("Element [" + name.key + "] is not known in this context.");
-		}
 	},
 	getElementTypeInfo : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
@@ -2795,8 +2826,11 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 	CLASS_NAME : 'Jsonix.Model.ValuePropertyInfo'
 });
 
-Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
+	allowDom : false,
+	allowTypedObject : true,
+	mixed : false,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
@@ -2836,25 +2870,6 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		}
 		return result;
 	},
-	unmarshalWrapperElement : function(context, input, scope, callback) {
-		var et = input.next();
-		while (et !== Jsonix.XML.Input.END_ELEMENT) {
-			// New sub-element starts
-			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				this.unmarshalElement(context, input, scope, callback);
-			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-				// Skip whitespace
-			} else {
-				// TODO ignore comments, processing
-				// instructions
-				throw new Error("Illegal state: unexpected event type [" + et + "].");
-			}
-			et = input.next();
-		}
-	},
-	unmarshalElement : function(context, input, scope, callback) {
-		throw new Error("Abstract method [unmarshalElement].");
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (!Jsonix.Util.Type.exists(value)) {
@@ -2881,6 +2896,9 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Model.PropertyIn
 		if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
 			output.writeEndElement();
 		}
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		return elementValue.value;
 	},
 	marshalElementNode : function(value, context, output, scope) {
 		throw new Error("Abstract method [marshalElement].");
@@ -2935,8 +2953,8 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 				}
 			},
-			unmarshalElement : function(context, input, scope, callback) {
-				return callback(this.typeInfo.unmarshal(context, input, scope));
+			getElementTypeInfo : function(elementName, context, scope) {
+				return this.typeInfo;
 			},
 			marshalElementNode : function(value, context, output, scope) {
 				this.marshalElementTypeInfo(this.elementName, value, this.typeInfo, context, output, scope);
@@ -2964,15 +2982,9 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
-					unmarshalElement : function(context, input, scope, callback) {
-						// TODO make sure it's the right event type
-						var elementNameKey = input.getNameKey();
-						var typeInfo = this.elementTypeInfosMap[elementNameKey];
-						if (Jsonix.Util.Type.exists(typeInfo)) {
-							return callback(typeInfo.unmarshal(context, input, scope));
-						}
-						// TODO better exception
-						throw new Error("Element [" + elementNameKey + "] is not known in this context");
+					getElementTypeInfo : function(elementName, context, scope) {
+						var elementNameKey = elementName.key;
+						return this.elementTypeInfosMap[elementNameKey];
 					},
 					marshalElementNode : function(value, context, output, scope) {
 						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
@@ -3036,9 +3048,6 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		});
 
 	},
-	unmarshalWrapperElement : function(context, input, scope) {
-		var result = Jsonix.Model.AbstractElementsPropertyInfo.prototype.unmarshalWrapperElement.apply(this, arguments);
-	},
 	unmarshal : function(context, input, scope) {
 		var result = null;
 		var that = this;
@@ -3077,13 +3086,16 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		}
 		return result;
 	},
-	unmarshalElement : function(context, input, scope, callback) {
-		var entry = this.entryTypeInfo.unmarshal(context, input, scope);
+	getInputTypeInfo : function (context, input, scope) {
+		return this.entryTypeInfo;
+	},
+	convertToElementValue : function(elementValue, context, input, scope) {
+		var entry = elementValue.value;
 		var result = {};
-		if (!!entry[this.key.name]) {
+		if (Jsonix.Util.Type.isString(entry[this.key.name])) {
 			result[entry[this.key.name]] = entry[this.value.name];
 		}
-		return callback(result);
+		return result;
 	},
 	marshal : function(value, context, output, scope) {
 
@@ -3190,99 +3202,41 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
-		var et = input.eventType;
+		var result = null;
+		var that = this;
+		var callback = function(value) {
+			if (that.collection) {
+				if (result === null) {
+					result = [];
+				}
+				result.push(value);
 
+			} else {
+				if (result === null) {
+					result = value;
+				} else {
+					// TODO Report validation error
+					throw new Error("Value already set.");
+				}
+			}
+		};
+
+		var et = input.eventType;
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
 			if (Jsonix.Util.Type.exists(this.wrapperElementName)) {
-				return this.unmarshalWrapperElement(context, input, scope);
+				this.unmarshalWrapperElement(context, input, scope, callback);
 			} else {
-				return this.unmarshalElement(context, input, scope);
+				this.unmarshalElement(context, input, scope, callback);
 			}
 		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-			var value = input.getText();
-			if (this.collection) {
-				return [ value ];
-
-			} else {
-				return value;
-			}
+			callback(input.getText());
 		} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
 			// Skip whitespace
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
-	},
-	unmarshalWrapperElement : function(context, input, scope) {
-		var result = null;
-		var et = input.next();
-		while (et !== Jsonix.XML.Input.END_ELEMENT) {
-			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				var value = this.unmarshalElement(context, input, scope);
-				if (this.collection) {
-					if (result === null) {
-						result = [];
-					}
-					for (var index = 0; index < value.length; index++) {
-						result.push(value[index]);
-					}
-
-				} else {
-					if (result === null) {
-						result = value;
-					} else {
-						// TODO Report validation error
-						throw new Error("Value already set.");
-					}
-				}
-			} else
-			// Characters
-			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-				var text = input.getText();
-				if (this.collection) {
-					if (result === null) {
-						result = [];
-					}
-					result.push(text);
-				} else {
-					if (result === null) {
-						result = text;
-					} else {
-						// TODO Report validation error
-						throw new Error("Value already set.");
-					}
-				}
-			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-				// Skip whitespace
-			} else {
-				throw new Error("Illegal state: unexpected event type [" + et + "].");
-			}
-			et = input.next();
-		}
 		return result;
-	},
-	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var elementValue;
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		if (Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-		} else if (this.allowDom) {
-			elementValue = input.getElement();
-		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
-		}
-
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
 	},
 	marshal : function(value, context, output, scope) {
 
@@ -3509,51 +3463,41 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 		this.mixed = mx;
 	},
 	unmarshal : function(context, input, scope) {
-		var et = input.eventType;
-
-		if (et === Jsonix.XML.Input.START_ELEMENT) {
-			return this.unmarshalElement(context, input, scope);
-		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-			var value = input.getText();
-			if (this.collection) {
-				return [ value ];
+		var result = null;
+		var that = this;
+		var callback = function(value) {
+			if (that.collection) {
+				if (result === null) {
+					result = [];
+				}
+				result.push(value);
 
 			} else {
-				return value;
+				if (result === null) {
+					result = value;
+				} else {
+					// TODO Report validation error
+					throw new Error("Value already set.");
+				}
 			}
+		};
+		
+		var et = input.eventType;
+		if (et === Jsonix.XML.Input.START_ELEMENT) {
+			this.unmarshalElement(context, input, scope, callback);
+		} else if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
+			callback(input.getText());
 		} else if (this.mixed && (et === Jsonix.XML.Input.SPACE)) {
 			// Whitespace
-			return null;
+			// return null;
 		} else if (et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-			return null;
-
+			//return null;
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
-
 		}
-	},
-	unmarshalElement : function(context, input, scope) {
-		var name = input.getName();
-		var elementValue;
-		var typeInfo = this.getElementTypeInfo(name, context, scope);
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
-				name : name,
-				value : value
-			}, context, input, scope);
-		} else if (this.allowDom) {
-			elementValue = input.getElement();
-		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
-		}
-		if (this.collection) {
-			return [ elementValue ];
-		} else {
-			return elementValue;
-		}
+		
+		return result;
 	},
 	marshal : function(value, context, output, scope) {
 		if (!Jsonix.Util.Type.exists(value)) {
@@ -3581,6 +3525,14 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			{
 				this.marshalElementNode(value, context, output, scope);
 			}
+		}
+	},
+	getElementTypeInfo : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			return undefined;
 		}
 	},
 	doBuild : function(context, module)	{

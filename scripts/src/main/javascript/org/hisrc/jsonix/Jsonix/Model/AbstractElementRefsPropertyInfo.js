@@ -58,23 +58,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		}
 		return result;
 	},
-	unmarshalWrapperElement : function(context, input, scope, callback) {
-		var et = input.next();
-		while (et !== Jsonix.XML.Input.END_ELEMENT) {
-			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				this.unmarshalElement(context, input, scope, callback);
-			} else
-			// Characters
-			if (this.mixed && (et === Jsonix.XML.Input.CHARACTERS || et === Jsonix.XML.Input.CDATA || et === Jsonix.XML.Input.ENTITY_REFERENCE)) {
-				callback(input.getText());
-			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-				// Skip whitespace
-			} else {
-				throw new Error("Illegal state: unexpected event type [" + et + "].");
-			}
-			et = input.next();
-		}
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (Jsonix.Util.Type.exists(value)) {

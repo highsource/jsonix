@@ -42,22 +42,6 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 		}
 		return result;
 	},
-	unmarshalWrapperElement : function(context, input, scope, callback) {
-		var et = input.next();
-		while (et !== Jsonix.XML.Input.END_ELEMENT) {
-			// New sub-element starts
-			if (et === Jsonix.XML.Input.START_ELEMENT) {
-				this.unmarshalElement(context, input, scope, callback);
-			} else if (et === Jsonix.XML.Input.SPACE || et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-				// Skip whitespace
-			} else {
-				// TODO ignore comments, processing
-				// instructions
-				throw new Error("Illegal state: unexpected event type [" + et + "].");
-			}
-			et = input.next();
-		}
-	},
 	marshal : function(value, context, output, scope) {
 
 		if (!Jsonix.Util.Type.exists(value)) {
