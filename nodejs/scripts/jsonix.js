@@ -1780,11 +1780,12 @@ Jsonix.Binding = {};
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
 		var elementValue = this.getOutputElementValue(value, context, output, scope);
-		if (Jsonix.Util.Type.exists(elementValue.typeInfo))
+		var typeInfo = elementValue.typeInfo;
+		if (Jsonix.Util.Type.exists(typeInfo))
 		{
 			output.writeStartElement(elementValue.name);
 			if (Jsonix.Util.Type.exists(elementValue.value)) {
-				elementValue.typeInfo.marshal(elementValue.value, context, output, scope);
+				typeInfo.marshal(elementValue.value, context, output, scope);
 			}
 			output.writeEndElement();
 		}
@@ -1796,7 +1797,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	getOutputElementValue : function (value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
-		elementValue.typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
+		elementValue.typeInfo = this.getTypeInfoByElementName(elementValue.name, context, scope);
 		return elementValue;
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
@@ -1823,7 +1824,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		}
 		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
@@ -1887,7 +1888,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 			}
 		}
 		var name = input.getName();
-		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
+		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getTypeInfoByElementName(name, context, scope);
 		return typeInfo;
 	}
 });
@@ -1985,7 +1986,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
@@ -2000,7 +2001,19 @@ Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshalle
 });
 Jsonix.Model.TypeInfo = Jsonix.Class({
 	name : null,
+	baseTypeInfo : null,
 	initialize : function() {
+	},
+	isBasedOn : function(typeInfo) {
+		var currentTypeInfo = this;
+		while (currentTypeInfo) {
+			if (typeInfo === currentTypeInfo)
+			{
+				return true;
+			}
+			currentTypeInfo = currentTypeInfo.baseTypeInfo;
+		}
+		return false;
 	},
 	CLASS_NAME : 'Jsonix.Model.TypeInfo'
 });
@@ -2009,7 +2022,6 @@ Jsonix.Model.ClassInfo = Jsonix
 			name : null,
 			localName : null,
 			typeName : null,
-			baseTypeInfo : null,
 			instanceFactory : null,
 			properties : null,
 			structure : null,
@@ -2945,7 +2957,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 				}
 			},
-			getElementTypeInfo : function(elementName, context, scope) {
+			getTypeInfoByElementName : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
 			getOutputElementValue : function (value, context, output, scope) {
@@ -2974,7 +2986,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
-					getElementTypeInfo : function(elementName, context, scope) {
+					getTypeInfoByElementName : function(elementName, context, scope) {
 						var elementNameKey = elementName.key;
 						return this.elementTypeInfosMap[elementNameKey];
 					},
@@ -3279,7 +3291,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(elementName, context, scope) {
+	getTypeInfoByElementName : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
 			return propertyElementTypeInfo.typeInfo;
@@ -3525,7 +3537,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
@@ -5631,6 +5643,10 @@ Jsonix.Context = Jsonix
 				}
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
+			},
+			// TODO public API
+			getTypeInfoByName : function(name) {
+				return this.typeInfos[name];
 			},
 			getTypeInfoByTypeName : function(typeName) {
 				var tn = Jsonix.XML.QName.fromObjectOrString(typeName, this);

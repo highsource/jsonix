@@ -8,6 +8,14 @@ var context = new Jsonix.Context([GH70], {
 });
 
 module.exports = {
+	"IsAssignableForm" : function(test) {
+		var expressionTypeInfo = context.getTypeInfoByName('GH70.Expression');
+		var literalTypeInfo = context.getTypeInfoByName('GH70.Literal');
+		test.ok(literalTypeInfo.isBasedOn(expressionTypeInfo));
+		test.ok(expressionTypeInfo.isBasedOn(expressionTypeInfo));
+		test.ok(!expressionTypeInfo.isBasedOn(literalTypeInfo));
+		test.done();
+	},
 	"Unmarshalls" : {
 		"Expression" : function(test) {
 			var nonXsiContext = new Jsonix.Context([GH70], {
@@ -54,7 +62,7 @@ module.exports = {
 			test.equal('GH70.Literal', data.value.expressions[1].TYPE_NAME);
 			test.equal('b', data.value.expressions[1].value);
 			test.done();
-		}
+		},
 	},
 };
 // TODO marshalling

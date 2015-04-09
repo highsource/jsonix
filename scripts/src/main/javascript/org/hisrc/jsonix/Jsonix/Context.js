@@ -165,6 +165,10 @@ Jsonix.Context = Jsonix
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
 			},
+			// TODO public API
+			getTypeInfoByName : function(name) {
+				return this.typeInfos[name];
+			},
 			getTypeInfoByTypeName : function(typeName) {
 				var tn = Jsonix.XML.QName.fromObjectOrString(typeName, this);
 				return this.typeNameKeyToTypeInfo[tn.key];
