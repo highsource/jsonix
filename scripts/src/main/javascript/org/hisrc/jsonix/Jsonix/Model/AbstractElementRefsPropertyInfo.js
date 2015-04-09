@@ -107,7 +107,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(elementName, context, scope) {
+	getTypeInfoByElementName : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
 			return propertyElementTypeInfo.typeInfo;

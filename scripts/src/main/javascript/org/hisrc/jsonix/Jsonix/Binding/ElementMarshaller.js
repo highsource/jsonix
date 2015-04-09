@@ -1,11 +1,12 @@
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
 		var elementValue = this.getOutputElementValue(value, context, output, scope);
-		if (Jsonix.Util.Type.exists(elementValue.typeInfo))
+		var typeInfo = elementValue.typeInfo;
+		if (Jsonix.Util.Type.exists(typeInfo))
 		{
 			output.writeStartElement(elementValue.name);
 			if (Jsonix.Util.Type.exists(elementValue.value)) {
-				elementValue.typeInfo.marshal(elementValue.value, context, output, scope);
+				typeInfo.marshal(elementValue.value, context, output, scope);
 			}
 			output.writeEndElement();
 		}
@@ -17,7 +18,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	getOutputElementValue : function (value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
-		elementValue.typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
+		elementValue.typeInfo = this.getTypeInfoByElementName(elementValue.name, context, scope);
 		return elementValue;
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
@@ -44,7 +45,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		}
 		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;

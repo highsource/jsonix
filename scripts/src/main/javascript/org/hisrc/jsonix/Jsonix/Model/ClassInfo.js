@@ -3,7 +3,6 @@ Jsonix.Model.ClassInfo = Jsonix
 			name : null,
 			localName : null,
 			typeName : null,
-			baseTypeInfo : null,
 			instanceFactory : null,
 			properties : null,
 			structure : null,

@@ -22,7 +22,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 				}
 			},
-			getElementTypeInfo : function(elementName, context, scope) {
+			getTypeInfoByElementName : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
 			getOutputElementValue : function (value, context, output, scope) {

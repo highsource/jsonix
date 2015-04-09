@@ -57,7 +57,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;

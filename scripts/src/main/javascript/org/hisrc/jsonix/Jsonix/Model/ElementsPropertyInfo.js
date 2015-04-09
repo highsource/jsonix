@@ -12,7 +12,7 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix
 						Jsonix.Util.Ensure.ensureArray(etis);
 						this.elementTypeInfos = etis;
 					},
-					getElementTypeInfo : function(elementName, context, scope) {
+					getTypeInfoByElementName : function(elementName, context, scope) {
 						var elementNameKey = elementName.key;
 						return this.elementTypeInfosMap[elementNameKey];
 					},
