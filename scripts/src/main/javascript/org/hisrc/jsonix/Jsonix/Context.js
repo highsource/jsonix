@@ -165,6 +165,26 @@ Jsonix.Context = Jsonix
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
 			},
+			getTypeInfoByValue : function(value)
+			{
+				if (!Jsonix.Util.Type.exists(value))
+				{
+					return undefined;
+				}
+				if (Jsonix.Util.Type.isObject(value))
+				{
+					var typeName = value.TYPE_NAME;
+					if (Jsonix.Util.Type.isString(typeName))
+					{
+						var typeInfoByName = this.getTypeInfoByName(typeName);
+						if (typeInfoByName)
+						{
+							return typeInfoByName;
+						}
+					}
+				}
+				return undefined;
+			},
 			// TODO public API
 			getTypeInfoByName : function(name) {
 				return this.typeInfos[name];
