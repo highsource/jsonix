@@ -1,11 +1,22 @@
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
 		var elementValue = this.getOutputElementValue(value, context, output, scope);
-		var typeInfo = elementValue.typeInfo;
-		if (Jsonix.Util.Type.exists(typeInfo))
+		var declaredTypeInfo = elementValue.typeInfo;
+		var typeInfo = declaredTypeInfo;
+		if (Jsonix.Util.Type.exists(declaredTypeInfo))
 		{
 			output.writeStartElement(elementValue.name);
 			if (Jsonix.Util.Type.exists(elementValue.value)) {
+				if (context.supportXsiType) {
+					var actualTypeInfo = context.getTypeInfoByValue(elementValue.value);
+					if (actualTypeInfo && actualTypeInfo.typeName && declaredTypeInfo !== actualTypeInfo)
+					{
+						typeInfo = actualTypeInfo;
+						var xsiTypeName = actualTypeInfo.typeName;
+						var xsiType = Jsonix.Schema.XSD.QName.INSTANCE.print(xsiTypeName, context, output, scope);
+						output.writeAttribute(Jsonix.Schema.XSI.TYPE_QNAME, xsiType);
+					}
+				}
 				typeInfo.marshal(elementValue.value, context, output, scope);
 			}
 			output.writeEndElement();
@@ -18,8 +29,11 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	getOutputElementValue : function (value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
-		elementValue.typeInfo = this.getTypeInfoByElementName(elementValue.name, context, scope);
-		return elementValue;
+		return {
+			name : elementValue.name,
+			value : elementValue.value,
+			typeInfo : this.getTypeInfoByElementName(elementValue.name, context, scope)
+		};
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
 		var name;

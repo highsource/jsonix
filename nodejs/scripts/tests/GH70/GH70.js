@@ -16,6 +16,15 @@ module.exports = {
 		test.ok(!expressionTypeInfo.isBasedOn(literalTypeInfo));
 		test.done();
 	},
+	"GetTypeInfoByValue" : function(test) {
+		var literal = {
+			value : 'test',
+			TYPE_NAME : 'GH70.Literal'
+		};
+		var literalTypeInfo = context.getTypeInfoByValue(literal);
+		test.equal("GH70.Literal", literalTypeInfo.name);
+		test.done();
+	},
 	"Unmarshalls" : {
 		"Expression" : function(test) {
 			var nonXsiContext = new Jsonix.Context([GH70], {
@@ -64,6 +73,22 @@ module.exports = {
 			test.done();
 		},
 	},
+	"Marshalls" : {
+		"AndLiteral" : function(test) {
+			var marshaller = context.createMarshaller();
+			var data = {
+				name : 'gh70:Expression',
+				value : {
+					expressions : [
+						{ value : 'one', TYPE_NAME : 'GH70.Literal'},
+						{ value : 'two', TYPE_NAME : 'GH70.Literal'}
+					],
+					TYPE_NAME : "GH70.And"
+				}
+			}
+			var str = marshaller.marshalString(data);
+			test.equal('<gh70:Expression xmlns:gh70="urn:GH70" xsi:type="gh70:And" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><gh70:Expression xsi:type="gh70:Literal">one</gh70:Expression><gh70:Expression xsi:type="gh70:Literal">two</gh70:Expression></gh70:Expression>', str);
+			test.done();
+		},
+	}
 };
-// TODO marshalling
-// local vs. root
