@@ -72,6 +72,17 @@ module.exports = {
 			test.equal('b', data.value.expressions[1].value);
 			test.done();
 		},
+		"Or" : function(test) {
+			var unmarshaller = context.createUnmarshaller();
+			var data = unmarshaller.unmarshalString('<Expression xmlns="urn:GH70" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Or"><Expression xsi:type="Literal"></Expression><Expression xsi:type="Literal"></Expression></Expression>');
+			test.equal("GH70.Or", data.value.TYPE_NAME);
+			test.equal(2, data.value.expressions.length);
+			test.equal("Expression", data.value.expressions[0].name.localPart);
+			test.equal("GH70.Literal", data.value.expressions[0].value.TYPE_NAME);
+			test.equal("Expression", data.value.expressions[1].name.localPart);
+			test.equal("GH70.Literal", data.value.expressions[1].value.TYPE_NAME);
+			test.done();
+		},
 	},
 	"Marshalls" : {
 		"AndLiteral" : function(test) {
