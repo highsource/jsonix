@@ -61,6 +61,7 @@ Jsonix.Context = Jsonix
 				if (mapping instanceof this.mappingStyle.module) {
 					module = mapping;
 				} else {
+					mapping = Jsonix.Util.Type.cloneObject(mapping);
 					module = new this.mappingStyle.module(mapping, 
 					{
 						mappingStyle : this.mappingStyle
