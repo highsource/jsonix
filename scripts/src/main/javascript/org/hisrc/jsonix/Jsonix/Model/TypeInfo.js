@@ -6,8 +6,7 @@ Jsonix.Model.TypeInfo = Jsonix.Class({
 	isBasedOn : function(typeInfo) {
 		var currentTypeInfo = this;
 		while (currentTypeInfo) {
-			if (typeInfo === currentTypeInfo)
-			{
+			if (typeInfo === currentTypeInfo) {
 				return true;
 			}
 			currentTypeInfo = currentTypeInfo.baseTypeInfo;
