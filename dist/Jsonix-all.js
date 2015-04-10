@@ -1780,11 +1780,23 @@ Jsonix.Binding = {};
 Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
 		var elementValue = this.getOutputElementValue(value, context, output, scope);
-		if (Jsonix.Util.Type.exists(elementValue.typeInfo))
+		var declaredTypeInfo = elementValue.typeInfo;
+		var typeInfo = declaredTypeInfo;
+		if (Jsonix.Util.Type.exists(declaredTypeInfo))
 		{
 			output.writeStartElement(elementValue.name);
 			if (Jsonix.Util.Type.exists(elementValue.value)) {
-				elementValue.typeInfo.marshal(elementValue.value, context, output, scope);
+				if (context.supportXsiType) {
+					var actualTypeInfo = context.getTypeInfoByValue(elementValue.value);
+					if (actualTypeInfo && actualTypeInfo.typeName && declaredTypeInfo !== actualTypeInfo)
+					{
+						typeInfo = actualTypeInfo;
+						var xsiTypeName = actualTypeInfo.typeName;
+						var xsiType = Jsonix.Schema.XSD.QName.INSTANCE.print(xsiTypeName, context, output, scope);
+						output.writeAttribute(Jsonix.Schema.XSI.TYPE_QNAME, xsiType);
+					}
+				}
+				typeInfo.marshal(elementValue.value, context, output, scope);
 			}
 			output.writeEndElement();
 		}
@@ -1796,8 +1808,11 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 	getOutputElementValue : function (value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var elementValue = this.convertFromElementValue(value, context, output, scope);
-		elementValue.typeInfo = this.getElementTypeInfo(elementValue.name, context, scope);
-		return elementValue;
+		return {
+			name : elementValue.name,
+			value : elementValue.value,
+			typeInfo : this.getTypeInfoByElementName(elementValue.name, context, scope)
+		};
 	},
 	convertFromElementValue : function(elementValue, context, output, scope) {
 		var name;
@@ -1823,7 +1838,7 @@ Jsonix.Binding.ElementMarshaller = Jsonix.Class({
 		}
 		throw new Error("Invalid element value [" + elementValue + "]. Element values must either have {name:'myElementName', value: elementValue} or {myElementName:elementValue} structure.");
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
@@ -1887,7 +1902,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 			}
 		}
 		var name = input.getName();
-		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getElementTypeInfo(name, context, scope);
+		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getTypeInfoByElementName(name, context, scope);
 		return typeInfo;
 	}
 });
@@ -1985,7 +2000,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
@@ -2000,7 +2015,18 @@ Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshalle
 });
 Jsonix.Model.TypeInfo = Jsonix.Class({
 	name : null,
+	baseTypeInfo : null,
 	initialize : function() {
+	},
+	isBasedOn : function(typeInfo) {
+		var currentTypeInfo = this;
+		while (currentTypeInfo) {
+			if (typeInfo === currentTypeInfo) {
+				return true;
+			}
+			currentTypeInfo = currentTypeInfo.baseTypeInfo;
+		}
+		return false;
 	},
 	CLASS_NAME : 'Jsonix.Model.TypeInfo'
 });
@@ -2009,7 +2035,6 @@ Jsonix.Model.ClassInfo = Jsonix
 			name : null,
 			localName : null,
 			typeName : null,
-			baseTypeInfo : null,
 			instanceFactory : null,
 			properties : null,
 			structure : null,
@@ -2273,21 +2298,22 @@ Jsonix.Model.ClassInfo = Jsonix
 			ps : function() {
 				return this;
 			},
-			p : function(property) {
-				Jsonix.Util.Ensure.ensureObject(property);
-				// If property is an instance of the property class
-				if (property instanceof Jsonix.Model.PropertyInfo) {
-					this.addProperty(property);
+			p : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				// If mapping is an instance of the property class
+				if (mapping instanceof Jsonix.Model.PropertyInfo) {
+					this.addProperty(mapping);
 				}
 				// Else create it via generic mapping configuration
 				else {
-					var type = property.type||property.t||'element';
+					mapping = Jsonix.Util.Type.cloneObject(mapping);
+					var type = mapping.type||mapping.t||'element';
 					// Locate the creator function
 					if (Jsonix.Util.Type
 							.isFunction(this.propertyInfoCreators[type])) {
 						var propertyInfoCreator = this.propertyInfoCreators[type];
 						// Call the creator function
-						propertyInfoCreator.call(this, property);
+						propertyInfoCreator.call(this, mapping);
 					} else {
 						throw new Error("Unknown property info type [" + type + "].");
 					}
@@ -2599,59 +2625,57 @@ Jsonix.Model.ElementInfo = Jsonix.Class({
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementInfo'
 });
-Jsonix.Model.PropertyInfo = Jsonix
-		.Class({
-			name : null,
-			collection : false,
-			targetNamespace : '',
-			defaultElementNamespaceURI : '',
-			defaultAttributeNamespaceURI : '',
-			built : false,
-			initialize : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				var n = mapping.name||mapping.n||undefined;
-				Jsonix.Util.Ensure.ensureString(n);
-				this.name = n;
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
-				this.defaultElementNamespaceURI = dens;
-				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
-				this.targetNamespace = tns;
-				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
-				this.defaultAttributeNamespaceURI = dans;
-				var col = mapping.collection||mapping.col||false;
-				this.collection = col;
-			},
-			build : function(context, module) {
-				if (!this.built) {
-					this.doBuild(context, module);
-					this.built = true;
+Jsonix.Model.PropertyInfo = Jsonix.Class({
+	name : null,
+	collection : false,
+	targetNamespace : '',
+	defaultElementNamespaceURI : '',
+	defaultAttributeNamespaceURI : '',
+	built : false,
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		var n = mapping.name || mapping.n || undefined;
+		Jsonix.Util.Ensure.ensureString(n);
+		this.name = n;
+		var dens = mapping.defaultElementNamespaceURI || mapping.dens || mapping.targetNamespace || mapping.tns || '';
+		this.defaultElementNamespaceURI = dens;
+		var tns = mapping.targetNamespace || mapping.tns || mapping.defaultElementNamespaceURI || mapping.dens || this.defaultElementNamespaceURI;
+		this.targetNamespace = tns;
+		var dans = mapping.defaultAttributeNamespaceURI || mapping.dans || '';
+		this.defaultAttributeNamespaceURI = dans;
+		var col = mapping.collection || mapping.col || false;
+		this.collection = col;
+	},
+	build : function(context, module) {
+		if (!this.built) {
+			this.doBuild(context, module);
+			this.built = true;
+		}
+	},
+	doBuild : function(context, module) {
+		throw new Error("Abstract method [doBuild].");
+	},
+	buildStructure : function(context, structure) {
+		throw new Error("Abstract method [buildStructure].");
+	},
+	setProperty : function(object, value) {
+		if (Jsonix.Util.Type.exists(value)) {
+			if (this.collection) {
+				Jsonix.Util.Ensure.ensureArray(value, 'Collection property requires an array value.');
+				if (!Jsonix.Util.Type.exists(object[this.name])) {
+					object[this.name] = [];
 				}
-			},
-			doBuild : function(context, module) {
-				throw new Error("Abstract method [doBuild].");
-			},
-			buildStructure : function(context, structure) {
-				throw new Error("Abstract method [buildStructure].");
-			},
-			setProperty : function(object, value) {
-				if (Jsonix.Util.Type.exists(value)) {
-					if (this.collection) {
-						Jsonix.Util.Ensure.ensureArray(value,
-								'Collection property requires an array value.');
-						if (!Jsonix.Util.Type.exists(object[this.name])) {
-							object[this.name] = [];
-						}
-						for ( var index = 0; index < value.length; index++) {
-							object[this.name].push(value[index]);
-						}
+				for (var index = 0; index < value.length; index++) {
+					object[this.name].push(value[index]);
+				}
 
-					} else {
-						object[this.name] = value;
-					}
-				}
-			},
-			CLASS_NAME : 'Jsonix.Model.PropertyInfo'
-		});
+			} else {
+				object[this.name] = value;
+			}
+		}
+	},
+	CLASS_NAME : 'Jsonix.Model.PropertyInfo'
+});
 Jsonix.Model.AnyAttributePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
@@ -2718,30 +2742,28 @@ Jsonix.Model.AnyAttributePropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.Any
 	}
 });
 
-Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo,
-		{
-			typeInfo : 'String',
-			initialize : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				Jsonix.Model.PropertyInfo.prototype.initialize.apply(this,
-						[ mapping ]);
-				var ti = mapping.typeInfo || mapping.ti || 'String';
-				this.typeInfo = ti;
-			},
-			doBuild : function(context, module) {
-				this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
-			},
-			unmarshalValue : function(value, context, input, scope) {
-				return this.parse(value, context, input, scope);
-			},
-			parse : function(value, context, input, scope) {
-				return this.typeInfo.parse(value, context, input, scope);
-			},
-			print : function(value, context, output, scope) {
-				return this.typeInfo.reprint(value, context, output, scope);
-			},
-			CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
-		});
+Jsonix.Model.SingleTypePropertyInfo = Jsonix.Class(Jsonix.Model.PropertyInfo, {
+	typeInfo : 'String',
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.PropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		var ti = mapping.typeInfo || mapping.ti || 'String';
+		this.typeInfo = ti;
+	},
+	doBuild : function(context, module) {
+		this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
+	},
+	unmarshalValue : function(value, context, input, scope) {
+		return this.parse(value, context, input, scope);
+	},
+	parse : function(value, context, input, scope) {
+		return this.typeInfo.parse(value, context, input, scope);
+	},
+	print : function(value, context, output, scope) {
+		return this.typeInfo.reprint(value, context, output, scope);
+	},
+	CLASS_NAME : 'Jsonix.Model.SingleTypePropertyInfo'
+});
 
 Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo, {
 	attributeName : null,
@@ -2945,7 +2967,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 					this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 				}
 			},
-			getElementTypeInfo : function(elementName, context, scope) {
+			getTypeInfoByElementName : function(elementName, context, scope) {
 				return this.typeInfo;
 			},
 			getOutputElementValue : function (value, context, output, scope) {
@@ -2960,57 +2982,89 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(
 			CLASS_NAME : 'Jsonix.Model.ElementPropertyInfo'
 		});
 
-Jsonix.Model.ElementsPropertyInfo = Jsonix
-		.Class(
-				Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller,
-				{
-					elementTypeInfos : null,
-					elementTypeInfosMap : null,
-					initialize : function(mapping) {
-						Jsonix.Util.Ensure.ensureObject(mapping);
-						Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize
-								.apply(this, [ mapping ]);
-						var etis = mapping.elementTypeInfos||mapping.etis||[];
-						Jsonix.Util.Ensure.ensureArray(etis);
-						this.elementTypeInfos = etis;
-					},
-					getElementTypeInfo : function(elementName, context, scope) {
-						var elementNameKey = elementName.key;
-						return this.elementTypeInfosMap[elementNameKey];
-					},
-					getOutputElementValue : function (value, context, output, scope) {
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							var typeInfo = elementTypeInfo.typeInfo;
-							if (typeInfo.isInstance(value, context, scope)) {
-								var elementName = elementTypeInfo.elementName;
-								return {name : elementName, value : value, typeInfo : typeInfo};
-							}
-						}
-						// TODO harmonize error handling. See also marshallElement. Error must only be on one place.
-						throw new Error("Could not find an element with type info supporting the value ["	+ value + "].");
-					},
-					doBuild : function(context, module) {
-						this.elementTypeInfosMap = {};
-						var etiti, etien;
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
-							etiti = elementTypeInfo.typeInfo||elementTypeInfo.ti||'String';
-							elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
-							etien = elementTypeInfo.elementName||elementTypeInfo.en||undefined;
-							elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
-							this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
-						}
-					},
-					buildStructureElements : function(context, structure) {
-						for ( var index = 0; index < this.elementTypeInfos.length; index++) {
-							var elementTypeInfo = this.elementTypeInfos[index];
-							structure.elements[elementTypeInfo.elementName.key] = this;
-						}
-					},
-					CLASS_NAME : 'Jsonix.Model.ElementsPropertyInfo'
-				});
+Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller, {
+	elementTypeInfos : null,
+	elementTypeInfosMap : null,
+	initialize : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+		var etis = mapping.elementTypeInfos || mapping.etis || [];
+		Jsonix.Util.Ensure.ensureArray(etis);
+		this.elementTypeInfos = [];
+		for (var index = 0; index < etis.length; index++)
+		{
+			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]); 
+		}
+	},
+	getTypeInfoByElementName : function(elementName, context, scope) {
+		var elementNameKey = elementName.key;
+		return this.elementTypeInfosMap[elementNameKey];
+	},
+	getOutputElementValue : function(value, context, output, scope) {
+		for (var index = 0; index < this.elementTypeInfos.length; index++) {
+			var elementTypeInfo = this.elementTypeInfos[index];
+			var typeInfo = elementTypeInfo.typeInfo;
+			if (typeInfo.isInstance(value, context, scope)) {
+				var elementName = elementTypeInfo.elementName;
+				return {
+					name : elementName,
+					value : value,
+					typeInfo : typeInfo
+				};
+			}
+		}
+		// If xsi:type is supported
+		if (context.supportXsiType) {
+			// Find the actual type
+			var actualTypeInfo = context.getTypeInfoByValue(value);
+			if (actualTypeInfo && actualTypeInfo.typeName)
+			{
+				console.log("Actual type info:");
+				console.log(actualTypeInfo);
+				for (var jndex = 0; jndex < this.elementTypeInfos.length; jndex++) {
+					var eti = this.elementTypeInfos[jndex];
+					console.log("Checking element type info:");
+					console.log(eti);
+					var ti = eti.typeInfo;
+					// TODO Can be optimized
+					// Find an element type info which has a type info that is a supertype of the actual type info
+					if (actualTypeInfo.isBasedOn(ti))
+					{
+						var en = eti.elementName; 
+						return {
+							name : en,
+							value : value,
+							typeInfo : ti
+						};
+					}
+				}
+			}
+		}
+		// TODO harmonize error handling. See also marshallElement. Error must
+		// only be on one place.
+		throw new Error("Could not find an element with type info supporting the value [" + value + "].");
+	},
+	doBuild : function(context, module) {
+		this.elementTypeInfosMap = {};
+		var etiti, etien;
+		for (var index = 0; index < this.elementTypeInfos.length; index++) {
+			var elementTypeInfo = this.elementTypeInfos[index];
+			Jsonix.Util.Ensure.ensureObject(elementTypeInfo);
+			etiti = elementTypeInfo.typeInfo || elementTypeInfo.ti || 'String';
+			elementTypeInfo.typeInfo = context.resolveTypeInfo(etiti, module);
+			etien = elementTypeInfo.elementName || elementTypeInfo.en || undefined;
+			elementTypeInfo.elementName = Jsonix.XML.QName.fromObjectOrString(etien, context, this.defaultElementNamespaceURI);
+			this.elementTypeInfosMap[elementTypeInfo.elementName.key] = elementTypeInfo.typeInfo;
+		}
+	},
+	buildStructureElements : function(context, structure) {
+		for (var index = 0; index < this.elementTypeInfos.length; index++) {
+			var elementTypeInfo = this.elementTypeInfos[index];
+			structure.elements[elementTypeInfo.elementName.key] = this;
+		}
+	},
+	CLASS_NAME : 'Jsonix.Model.ElementsPropertyInfo'
+});
 
 Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPropertyInfo, {
 	elementName : null,
@@ -3279,7 +3333,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(elementName, context, scope) {
+	getTypeInfoByElementName : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
 			return propertyElementTypeInfo.typeInfo;
@@ -3403,7 +3457,11 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 		// TODO Ensure correct arguments
 		var etis = mapping.elementTypeInfos || mapping.etis || [];
 		Jsonix.Util.Ensure.ensureArray(etis);
-		this.elementTypeInfos = etis;
+		this.elementTypeInfos = [];
+		for (var index = 0; index < etis.length; index++)
+		{
+			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]); 
+		}
 	},
 	getPropertyElementTypeInfo : function(elementName, context) {
 		var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
@@ -3525,7 +3583,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getElementTypeInfo : function(name, context, scope) {
+	getTypeInfoByElementName : function(name, context, scope) {
 		var elementInfo = context.getElementInfo(name, scope);
 		if (Jsonix.Util.Type.exists(elementInfo)) {
 			return elementInfo.typeInfo;
@@ -3571,250 +3629,242 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 Jsonix.Model.AnyElementPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.AnyElementPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
 	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo.Simplified'
 });
-Jsonix.Model.Module = Jsonix
-		.Class(Jsonix.Mapping.Styled, {
-			name : null,
-			typeInfos : null,
-			elementInfos : null,
-			targetNamespace : '',
-			defaultElementNamespaceURI : '',
-			defaultAttributeNamespaceURI : '',
-			initialize : function(mapping, options) {
-				Jsonix.Mapping.Styled.prototype.initialize.apply(this, [options]);
-				this.typeInfos = [];
-				this.elementInfos = [];
-				if (typeof mapping !== 'undefined') {
-					Jsonix.Util.Ensure.ensureObject(mapping);
-					var n = mapping.name||mapping.n||null;
-					this.name = n;
-					var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
-					this.defaultElementNamespaceURI = dens;
-					var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
-					this.targetNamespace = tns;
-					var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
-					this.defaultAttributeNamespaceURI = dans;
-					// Initialize type infos
-					var tis = mapping.typeInfos||mapping.tis||[];
-					this.initializeTypeInfos(tis);
+Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
+	name : null,
+	typeInfos : null,
+	elementInfos : null,
+	targetNamespace : '',
+	defaultElementNamespaceURI : '',
+	defaultAttributeNamespaceURI : '',
+	initialize : function(mapping, options) {
+		Jsonix.Mapping.Styled.prototype.initialize.apply(this, [ options ]);
+		this.typeInfos = [];
+		this.elementInfos = [];
+		if (typeof mapping !== 'undefined') {
+			Jsonix.Util.Ensure.ensureObject(mapping);
+			var n = mapping.name || mapping.n || null;
+			this.name = n;
+			var dens = mapping.defaultElementNamespaceURI || mapping.dens || mapping.targetNamespace || mapping.tns || '';
+			this.defaultElementNamespaceURI = dens;
+			var tns = mapping.targetNamespace || mapping.tns || mapping.defaultElementNamespaceURI || mapping.dens || this.defaultElementNamespaceURI;
+			this.targetNamespace = tns;
+			var dans = mapping.defaultAttributeNamespaceURI || mapping.dans || '';
+			this.defaultAttributeNamespaceURI = dans;
+			// Initialize type infos
+			var tis = mapping.typeInfos || mapping.tis || [];
+			this.initializeTypeInfos(tis);
 
-					// Backwards compatibility: class infos can also be defined
-					// as properties of the schema, for instance Schema.MyType
-					for ( var typeInfoName in mapping) {
-						if (mapping.hasOwnProperty(typeInfoName)) {
-							if (mapping[typeInfoName] instanceof this.mappingStyle.classInfo) {
-								this.typeInfos.push(mapping[typeInfoName]);
-							}
-						}
-					}
-					var eis = mapping.elementInfos||mapping.eis||[];
-					// Initialize element infos
-					this.initializeElementInfos(eis);
-				}
-			},
-			initializeTypeInfos : function(typeInfoMappings) {
-				Jsonix.Util.Ensure.ensureArray(typeInfoMappings);
-				var index, typeInfoMapping, typeInfo;
-				for (index = 0; index < typeInfoMappings.length; index++) {
-					typeInfoMapping = typeInfoMappings[index];
-					typeInfo = this.createTypeInfo(typeInfoMapping);
-					this.typeInfos.push(typeInfo);
-				}
-			},
-			initializeElementInfos : function(elementInfoMappings) {
-				Jsonix.Util.Ensure.ensureArray(elementInfoMappings);
-				var index, elementInfoMapping, elementInfo;
-				for (index = 0; index < elementInfoMappings.length; index++) {
-					elementInfoMapping = elementInfoMappings[index];
-					elementInfo = this.createElementInfo(elementInfoMapping);
-					this.elementInfos.push(elementInfo);
-				}
-			},
-			createTypeInfo : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				var typeInfo;
-				// If mapping is already a type info, do nothing
-				if (mapping instanceof Jsonix.Model.TypeInfo) {
-					typeInfo = mapping;
-				}
-				// Else create it via generic mapping configuration
-				else {
-					var type = mapping.type||mapping.t||'classInfo';
-					// Locate the creator function
-					if (Jsonix.Util.Type
-							.isFunction(this.typeInfoCreators[type])) {
-						var typeInfoCreator = this.typeInfoCreators[type];
-						// Call the creator function
-						typeInfo = typeInfoCreator.call(this, mapping);
-					} else {
-						throw new Error("Unknown type info type [" + type + "].");
+			// Backwards compatibility: class infos can also be defined
+			// as properties of the schema, for instance Schema.MyType
+			for ( var typeInfoName in mapping) {
+				if (mapping.hasOwnProperty(typeInfoName)) {
+					if (mapping[typeInfoName] instanceof this.mappingStyle.classInfo) {
+						this.typeInfos.push(mapping[typeInfoName]);
 					}
 				}
-				return typeInfo;
-			},
-			initializeNames : function(mapping) {
-				var ln = mapping.localName||mapping.ln||null;
-				mapping.localName = ln;
-				var n = mapping.name||mapping.n||null;
-				mapping.name = n;
-				// Calculate both name as well as localName
-				// name is provided
-				if (Jsonix.Util.Type.isString(mapping.name)) {
-					// Nothing to do - only name matters
-					
-					// Obsolete code below
-//					// localName is not provided
-//					if (!Jsonix.Util.Type.isString(mapping.localName)) {
-//						// But module name is provided
-//						if (Jsonix.Util.Type.isString(this.name)) {
-//							// If name starts with module name, use second part
-//							// as local name
-//							if (mapping.name.indexOf(this.name + '.') === 0) {
-//								mapping.localName = mapping.name
-//										.substring(this.name.length + 1);
-//							}
-//							// Else use name as local name
-//							else {
-//								mapping.localName = mapping.name;
-//							}
-//						}
-//						// Module name is not provided, use name as local name
-//						else {
-//							mapping.localName = mapping.name;
-//						}
-//					}
-					if (mapping.name.length > 0 && mapping.name.charAt(0) === '.' && Jsonix.Util.Type.isString(this.name))
-					{
-						mapping.name = this.name + mapping.name;
-					}
-				}
-				// name is not provided but local name is provided
-				else if (Jsonix.Util.Type.isString(mapping.localName)) {
-					// Module name is provided
-					if (Jsonix.Util.Type.isString(this.name)) {
-						mapping.name = this.name + '.' + mapping.localName;
-					}
-					// Module name is not provided
-					else {
-						mapping.name = mapping.localName;
-					}
-				} else {
-					throw new Error("Neither [name/n] nor [localName/ln] was provided for the class info.");
-				}
-			},
-			createClassInfo : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
-				mapping.defaultElementNamespaceURI = dens;
-				var tns =  mapping.targetNamespace||mapping.tns||this.targetNamespace;
-				mapping.targetNamespace = tns;
-				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||this.defaultAttributeNamespaceURI;
-				mapping.defaultAttributeNamespaceURI = dans;
-				this.initializeNames(mapping);
-				// Now both name an local name are initialized
-				var classInfo = new this.mappingStyle.classInfo(mapping,
-				{
-					mappingStyle : this.mappingStyle
-				});
-				return classInfo;
-			},
-			createEnumLeafInfo : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				this.initializeNames(mapping);
-				// Now both name an local name are initialized
-				var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping,
-				{
-					mappingStyle : this.mappingStyle
-				});
-				return enumLeafInfo;
-			},
-			createList : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				var ti = mapping.baseTypeInfo||mapping.typeInfo||mapping.bti||mapping.ti||'String';
-				var tn = mapping.typeName||mapping.tn||null;
-				
-				if (Jsonix.Util.Type.exists(tn))
-				{
-					if (Jsonix.Util.Type.isString(tn))
-					{
-						tn = new Jsonix.XML.QName(this.targetNamespace, tn);
-					}
-					else {
-						tn = Jsonix.XML.QName.fromObject(tn);
-					}
-				}
-				var s = mapping.separator||mapping.sep||' ';
-				Jsonix.Util.Ensure.ensureExists(ti);
-				return new Jsonix.Schema.XSD.List(ti, tn, s);
-			},
-			createElementInfo : function(mapping) {
-				Jsonix.Util.Ensure.ensureObject(mapping);
-				var dens = mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
-				mapping.defaultElementNamespaceURI = dens;
-				var en = mapping.elementName||mapping.en||undefined;
-				Jsonix.Util.Ensure.ensureExists(en);
-				
-				var ti = mapping.typeInfo||mapping.ti||'String';
-				Jsonix.Util.Ensure.ensureExists(ti);
-				
-				mapping.typeInfo = ti;
-				if (Jsonix.Util.Type.isObject(en)) {
-					mapping.elementName = Jsonix.XML.QName.fromObject(en);
-				} else if (Jsonix.Util.Type.isString(en)) {
-					mapping.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
-				} else {
-					throw new Error('Element info [' + mapping + '] must provide an element name.');
-				}
-				
-				var sh = mapping.substitutionHead||mapping.sh||null;
-				if (Jsonix.Util.Type.exists(sh)) {
-					if (Jsonix.Util.Type.isObject(sh)) {
-						mapping.substitutionHead = Jsonix.XML.QName.fromObject(sh);
-					} else {
-						Jsonix.Util.Ensure.ensureString(sh);
-						mapping.substitutionHead = new Jsonix.XML.QName(this.defaultElementNamespaceURI, sh);
-					}
-				}
-				
-				var elementInfo = new this.mappingStyle.elementInfo(mapping,
-				{
-					mappingStyle : this.mappingStyle
-				});
-				return elementInfo;
-			},
-			registerTypeInfos : function(context) {
-				for ( var index = 0; index < this.typeInfos.length; index++) {
-					var typeInfo = this.typeInfos[index];
-					context.registerTypeInfo(typeInfo, this);
-				}
-			},
-			buildTypeInfos : function(context) {
-				for ( var index = 0; index < this.typeInfos.length; index++) {
-					var typeInfo = this.typeInfos[index];
-					typeInfo.build(context, this);
-				}
-			},
-			registerElementInfos : function(context) {
-				for ( var index = 0; index < this.elementInfos.length; index++) {
-					var elementInfo = this.elementInfos[index];
-					context.registerElementInfo(elementInfo, this);
-				}
-			},
-			buildElementInfos : function(context) {
-				for ( var index = 0; index < this.elementInfos.length; index++) {
-					var elementInfo = this.elementInfos[index];
-					elementInfo.build(context, this);
-				}
-			},
-			// Obsolete, retained for backwards compatibility
-			cs : function() {
-				return this;
-			},
-			// Obsolete, retained for backwards compatibility
-			es : function() {
-				return this;
-			},
-			CLASS_NAME : 'Jsonix.Model.Module'
+			}
+			var eis = mapping.elementInfos || mapping.eis || [];
+			// Initialize element infos
+			this.initializeElementInfos(eis);
+		}
+	},
+	initializeTypeInfos : function(typeInfoMappings) {
+		Jsonix.Util.Ensure.ensureArray(typeInfoMappings);
+		var index, typeInfoMapping, typeInfo;
+		for (index = 0; index < typeInfoMappings.length; index++) {
+			typeInfoMapping = typeInfoMappings[index];
+			typeInfo = this.createTypeInfo(typeInfoMapping);
+			this.typeInfos.push(typeInfo);
+		}
+	},
+	initializeElementInfos : function(elementInfoMappings) {
+		Jsonix.Util.Ensure.ensureArray(elementInfoMappings);
+		var index, elementInfoMapping, elementInfo;
+		for (index = 0; index < elementInfoMappings.length; index++) {
+			elementInfoMapping = elementInfoMappings[index];
+			elementInfo = this.createElementInfo(elementInfoMapping);
+			this.elementInfos.push(elementInfo);
+		}
+	},
+	createTypeInfo : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		var typeInfo;
+		// If mapping is already a type info, do nothing
+		if (mapping instanceof Jsonix.Model.TypeInfo) {
+			typeInfo = mapping;
+		}
+		// Else create it via generic mapping configuration
+		else {
+			mapping = Jsonix.Util.Type.cloneObject(mapping);
+			var type = mapping.type || mapping.t || 'classInfo';
+			// Locate the creator function
+			if (Jsonix.Util.Type.isFunction(this.typeInfoCreators[type])) {
+				var typeInfoCreator = this.typeInfoCreators[type];
+				// Call the creator function
+				typeInfo = typeInfoCreator.call(this, mapping);
+			} else {
+				throw new Error("Unknown type info type [" + type + "].");
+			}
+		}
+		return typeInfo;
+	},
+	initializeNames : function(mapping) {
+		var ln = mapping.localName || mapping.ln || null;
+		mapping.localName = ln;
+		var n = mapping.name || mapping.n || null;
+		mapping.name = n;
+		// Calculate both name as well as localName
+		// name is provided
+		if (Jsonix.Util.Type.isString(mapping.name)) {
+			// Obsolete code below
+			// // localName is not provided
+			// if (!Jsonix.Util.Type.isString(mapping.localName)) {
+			// // But module name is provided
+			// if (Jsonix.Util.Type.isString(this.name)) {
+			// // If name starts with module name, use second part
+			// // as local name
+			// if (mapping.name.indexOf(this.name + '.') === 0) {
+			// mapping.localName = mapping.name
+			// .substring(this.name.length + 1);
+			// }
+			// // Else use name as local name
+			// else {
+			// mapping.localName = mapping.name;
+			// }
+			// }
+			// // Module name is not provided, use name as local name
+			// else {
+			// mapping.localName = mapping.name;
+			// }
+			// }
+			if (mapping.name.length > 0 && mapping.name.charAt(0) === '.' && Jsonix.Util.Type.isString(this.name)) {
+				mapping.name = this.name + mapping.name;
+			}
+		}
+		// name is not provided but local name is provided
+		else if (Jsonix.Util.Type.isString(ln)) {
+			// Module name is provided
+			if (Jsonix.Util.Type.isString(this.name)) {
+				mapping.name = this.name + '.' + ln;
+			}
+			// Module name is not provided
+			else {
+				mapping.name = ln;
+			}
+		} else {
+			throw new Error("Neither [name/n] nor [localName/ln] was provided for the class info.");
+		}
+	},
+	createClassInfo : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		var dens = mapping.defaultElementNamespaceURI || mapping.dens || this.defaultElementNamespaceURI;
+		mapping.defaultElementNamespaceURI = dens;
+		var tns = mapping.targetNamespace || mapping.tns || this.targetNamespace;
+		mapping.targetNamespace = tns;
+		var dans = mapping.defaultAttributeNamespaceURI || mapping.dans || this.defaultAttributeNamespaceURI;
+		mapping.defaultAttributeNamespaceURI = dans;
+		this.initializeNames(mapping);
+		// Now both name an local name are initialized
+		var classInfo = new this.mappingStyle.classInfo(mapping, {
+			mappingStyle : this.mappingStyle
 		});
+		return classInfo;
+	},
+	createEnumLeafInfo : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		this.initializeNames(mapping);
+		// Now both name an local name are initialized
+		var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping, {
+			mappingStyle : this.mappingStyle
+		});
+		return enumLeafInfo;
+	},
+	createList : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		var ti = mapping.baseTypeInfo || mapping.typeInfo || mapping.bti || mapping.ti || 'String';
+		var tn = mapping.typeName || mapping.tn || null;
+
+		if (Jsonix.Util.Type.exists(tn)) {
+			if (Jsonix.Util.Type.isString(tn)) {
+				tn = new Jsonix.XML.QName(this.targetNamespace, tn);
+			} else {
+				tn = Jsonix.XML.QName.fromObject(tn);
+			}
+		}
+		var s = mapping.separator || mapping.sep || ' ';
+		Jsonix.Util.Ensure.ensureExists(ti);
+		return new Jsonix.Schema.XSD.List(ti, tn, s);
+	},
+	createElementInfo : function(mapping) {
+		Jsonix.Util.Ensure.ensureObject(mapping);
+		mapping = Jsonix.Util.Type.cloneObject(mapping);
+
+		var dens = mapping.defaultElementNamespaceURI || mapping.dens || this.defaultElementNamespaceURI;
+		mapping.defaultElementNamespaceURI = dens;
+		var en = mapping.elementName || mapping.en || undefined;
+		Jsonix.Util.Ensure.ensureExists(en);
+
+		var ti = mapping.typeInfo || mapping.ti || 'String';
+		Jsonix.Util.Ensure.ensureExists(ti);
+
+		mapping.typeInfo = ti;
+		if (Jsonix.Util.Type.isObject(en)) {
+			mapping.elementName = Jsonix.XML.QName.fromObject(en);
+		} else if (Jsonix.Util.Type.isString(en)) {
+			mapping.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, en);
+		} else {
+			throw new Error('Element info [' + mapping + '] must provide an element name.');
+		}
+
+		var sh = mapping.substitutionHead || mapping.sh || null;
+		if (Jsonix.Util.Type.exists(sh)) {
+			if (Jsonix.Util.Type.isObject(sh)) {
+				mapping.substitutionHead = Jsonix.XML.QName.fromObject(sh);
+			} else {
+				Jsonix.Util.Ensure.ensureString(sh);
+				mapping.substitutionHead = new Jsonix.XML.QName(this.defaultElementNamespaceURI, sh);
+			}
+		}
+
+		var elementInfo = new this.mappingStyle.elementInfo(mapping, {
+			mappingStyle : this.mappingStyle
+		});
+		return elementInfo;
+	},
+	registerTypeInfos : function(context) {
+		for (var index = 0; index < this.typeInfos.length; index++) {
+			var typeInfo = this.typeInfos[index];
+			context.registerTypeInfo(typeInfo, this);
+		}
+	},
+	buildTypeInfos : function(context) {
+		for (var index = 0; index < this.typeInfos.length; index++) {
+			var typeInfo = this.typeInfos[index];
+			typeInfo.build(context, this);
+		}
+	},
+	registerElementInfos : function(context) {
+		for (var index = 0; index < this.elementInfos.length; index++) {
+			var elementInfo = this.elementInfos[index];
+			context.registerElementInfo(elementInfo, this);
+		}
+	},
+	buildElementInfos : function(context) {
+		for (var index = 0; index < this.elementInfos.length; index++) {
+			var elementInfo = this.elementInfos[index];
+			elementInfo.build(context, this);
+		}
+	},
+	// Obsolete, retained for backwards compatibility
+	cs : function() {
+		return this;
+	},
+	// Obsolete, retained for backwards compatibility
+	es : function() {
+		return this;
+	},
+	CLASS_NAME : 'Jsonix.Model.Module'
+});
 Jsonix.Model.Module.prototype.typeInfoCreators = {
 	"classInfo" : Jsonix.Model.Module.prototype.createClassInfo,
 	"c" : Jsonix.Model.Module.prototype.createClassInfo,
@@ -4128,128 +4178,121 @@ Jsonix.Schema.XSD.Boolean = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 });
 Jsonix.Schema.XSD.Boolean.INSTANCE = new Jsonix.Schema.XSD.Boolean();
 Jsonix.Schema.XSD.Boolean.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Boolean.INSTANCE);
-Jsonix.Schema.XSD.Base64Binary = Jsonix
-		.Class(
-				Jsonix.Schema.XSD.AnySimpleType,
-				{
-					name : 'Base64Binary',
-					typeName : Jsonix.Schema.XSD.qname('base64Binary'),
-					charToByte : {},
-					byteToChar : [],
-					initialize : function() {
-						Jsonix.Schema.XSD.AnySimpleType.prototype.initialize
-								.apply(this);
-						// Initialize charToByte and byteToChar table for fast
-						// lookups
-						var charTable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
-						for ( var i = 0; i < charTable.length; i++) {
-							var _char = charTable.charAt(i);
-							var _byte = charTable.charCodeAt(i);
-							this.byteToChar[i] = _char;
-							this.charToByte[_char] = i;
-						}
-					},
-					print : function(value, context, output, scope) {
-						Jsonix.Util.Ensure.ensureArray(value);
-						return this.encode(value);
-					},
+Jsonix.Schema.XSD.Base64Binary = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+	name : 'Base64Binary',
+	typeName : Jsonix.Schema.XSD.qname('base64Binary'),
+	charToByte : {},
+	byteToChar : [],
+	initialize : function() {
+		Jsonix.Schema.XSD.AnySimpleType.prototype.initialize.apply(this);
+		// Initialize charToByte and byteToChar table for fast
+		// lookups
+		var charTable = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/=";
+		for (var i = 0; i < charTable.length; i++) {
+			var _char = charTable.charAt(i);
+			var _byte = charTable.charCodeAt(i);
+			this.byteToChar[i] = _char;
+			this.charToByte[_char] = i;
+		}
+	},
+	print : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureArray(value);
+		return this.encode(value);
+	},
 
-					parse : function(text, context, input, scope) {
-						Jsonix.Util.Ensure.ensureString(text);
-						return this.decode(text);
-					},
-					encode : function(uarray) {
-						var output = "";
-						var byte0;
-						var byte1;
-						var byte2;
-						var char0;
-						var char1;
-						var char2;
-						var char3;
-						var i = 0;
-						var j = 0;
-						var length = uarray.length;
+	parse : function(text, context, input, scope) {
+		Jsonix.Util.Ensure.ensureString(text);
+		return this.decode(text);
+	},
+	encode : function(uarray) {
+		var output = "";
+		var byte0;
+		var byte1;
+		var byte2;
+		var char0;
+		var char1;
+		var char2;
+		var char3;
+		var i = 0;
+		var j = 0;
+		var length = uarray.length;
 
-						for (i = 0; i < length; i += 3) {
-							byte0 = uarray[i] & 0xFF;
-							char0 = this.byteToChar[byte0 >> 2];
+		for (i = 0; i < length; i += 3) {
+			byte0 = uarray[i] & 0xFF;
+			char0 = this.byteToChar[byte0 >> 2];
 
-							if (i + 1 < length) {
-								byte1 = uarray[i + 1] & 0xFF;
-								char1 = this.byteToChar[((byte0 & 0x03) << 4)
-										| (byte1 >> 4)];
-								if (i + 2 < length) {
-									byte2 = uarray[i + 2] & 0xFF;
-									char2 = this.byteToChar[((byte1 & 0x0F) << 2)
-											| (byte2 >> 6)];
-									char3 = this.byteToChar[byte2 & 0x3F];
-								} else {
-									char2 = this.byteToChar[(byte1 & 0x0F) << 2];
-									char3 = "=";
-								}
-							} else {
-								char1 = this.byteToChar[(byte0 & 0x03) << 4];
-								char2 = "=";
-								char3 = "=";
-							}
-							output = output + char0 + char1 + char2 + char3;
-						}
-						return output;
-					},
-					decode : function(text) {
+			if (i + 1 < length) {
+				byte1 = uarray[i + 1] & 0xFF;
+				char1 = this.byteToChar[((byte0 & 0x03) << 4) | (byte1 >> 4)];
+				if (i + 2 < length) {
+					byte2 = uarray[i + 2] & 0xFF;
+					char2 = this.byteToChar[((byte1 & 0x0F) << 2) | (byte2 >> 6)];
+					char3 = this.byteToChar[byte2 & 0x3F];
+				} else {
+					char2 = this.byteToChar[(byte1 & 0x0F) << 2];
+					char3 = "=";
+				}
+			} else {
+				char1 = this.byteToChar[(byte0 & 0x03) << 4];
+				char2 = "=";
+				char3 = "=";
+			}
+			output = output + char0 + char1 + char2 + char3;
+		}
+		return output;
+	},
+	decode : function(text) {
 
-						input = text.replace(/[^A-Za-z0-9\+\/\=]/g, "");
+		input = text.replace(/[^A-Za-z0-9\+\/\=]/g, "");
 
-						var length = (input.length / 4) * 3;
-						if (input.charAt(input.length - 1) === "=") {
-							length--;
-						}
-						if (input.charAt(input.length - 2) === "=") {
-							length--;
-						}
+		var length = (input.length / 4) * 3;
+		if (input.charAt(input.length - 1) === "=") {
+			length--;
+		}
+		if (input.charAt(input.length - 2) === "=") {
+			length--;
+		}
 
-						var uarray = new Array(length);
+		var uarray = new Array(length);
 
-						var byte0;
-						var byte1;
-						var byte2;
-						var char0;
-						var char1;
-						var char2;
-						var char3;
-						var i = 0;
-						var j = 0;
+		var byte0;
+		var byte1;
+		var byte2;
+		var char0;
+		var char1;
+		var char2;
+		var char3;
+		var i = 0;
+		var j = 0;
 
-						for (i = 0; i < length; i += 3) {
-							// get the 3 octects in 4 ascii chars
-							char0 = this.charToByte[input.charAt(j++)];
-							char1 = this.charToByte[input.charAt(j++)];
-							char2 = this.charToByte[input.charAt(j++)];
-							char3 = this.charToByte[input.charAt(j++)];
+		for (i = 0; i < length; i += 3) {
+			// get the 3 octects in 4 ascii chars
+			char0 = this.charToByte[input.charAt(j++)];
+			char1 = this.charToByte[input.charAt(j++)];
+			char2 = this.charToByte[input.charAt(j++)];
+			char3 = this.charToByte[input.charAt(j++)];
 
-							byte0 = (char0 << 2) | (char1 >> 4);
-							byte1 = ((char1 & 0x0F) << 4) | (char2 >> 2);
-							byte2 = ((char2 & 0x03) << 6) | char3;
+			byte0 = (char0 << 2) | (char1 >> 4);
+			byte1 = ((char1 & 0x0F) << 4) | (char2 >> 2);
+			byte2 = ((char2 & 0x03) << 6) | char3;
 
-							uarray[i] = byte0;
-							if (char2 != 64) {
-								uarray[i + 1] = byte1;
-							}
-							if (char3 != 64) {
-								uarray[i + 2] = byte2;
-							}
-						}
-						return uarray;
-					},
-					isInstance : function(value, context, scope) {
-						return Jsonix.Util.Type.isArray(value);
-					},
-					CLASS_NAME : 'Jsonix.Schema.XSD.Base64Binary'
-				});
+			uarray[i] = byte0;
+			if (char2 != 64) {
+				uarray[i + 1] = byte1;
+			}
+			if (char3 != 64) {
+				uarray[i + 2] = byte2;
+			}
+		}
+		return uarray;
+	},
+	isInstance : function(value, context, scope) {
+		return Jsonix.Util.Type.isArray(value);
+	},
+	CLASS_NAME : 'Jsonix.Schema.XSD.Base64Binary'
+});
 Jsonix.Schema.XSD.Base64Binary.INSTANCE = new Jsonix.Schema.XSD.Base64Binary();
-Jsonix.Schema.XSD.Base64Binary.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
-		Jsonix.Schema.XSD.Base64Binary.INSTANCE);
+Jsonix.Schema.XSD.Base64Binary.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Base64Binary.INSTANCE);
 Jsonix.Schema.XSD.HexBinary = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'HexBinary',
 	typeName : Jsonix.Schema.XSD.qname('hexBinary'),
@@ -4602,472 +4645,472 @@ Jsonix.Schema.XSD.QName = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 Jsonix.Schema.XSD.QName.INSTANCE = new Jsonix.Schema.XSD.QName();
 Jsonix.Schema.XSD.QName.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
 		Jsonix.Schema.XSD.QName.INSTANCE);
-Jsonix.Schema.XSD.Calendar = Jsonix
-		.Class(
-				Jsonix.Schema.XSD.AnySimpleType,
-				{
-					name : 'Calendar',
-					typeName : Jsonix.Schema.XSD.qname('calendar'),
-					parse : function(text, context, input, scope) {
-						Jsonix.Util.Ensure.ensureString(text);
-						var negative = (text.charAt(0) === '-');
-						var sign = negative ? -1 : 1;
-						var data = negative ? text.substring(1) : text;
+Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+	name : 'Calendar',
+	typeName : Jsonix.Schema.XSD.qname('calendar'),
+	parse : function(text, context, input, scope) {
+		Jsonix.Util.Ensure.ensureString(text);
+		var negative = (text.charAt(0) === '-');
+		var sign = negative ? -1 : 1;
+		var data = negative ? text.substring(1) : text;
 
-						// Detect pattern
+		// Detect pattern
 
-						var result;
-						if (data.length >= 19 && data.charAt(4) === '-' && data.charAt(7) === '-' && data.charAt(10) === 'T' && data.charAt(13) === ':' && data.charAt(16) === ':') {
-							return this.parseDateTime(text);
-						} else if (data.length >= 10 && data.charAt(4) === '-' && data.charAt(7) === '-') {
-							return this.parseDate(text);
-						} else if (data.length >= 8 && data.charAt(2) === ':' && data.charAt(5) === ':') {
-							return this.parseTime(text);
-						} else {
-							throw new Error('Value [' + text + '] does not match dateTime, date or time patterns.');
-						}
-					},
-					parseDateTime : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						var negative = (text.charAt(0) === '-');
-						var sign = negative ? -1 : 1;
+		var result;
+		if (data.length >= 19 && data.charAt(4) === '-' && data.charAt(7) === '-' && data.charAt(10) === 'T' && data.charAt(13) === ':' && data.charAt(16) === ':') {
+			return this.parseDateTime(text);
+		} else if (data.length >= 10 && data.charAt(4) === '-' && data.charAt(7) === '-') {
+			return this.parseDate(text);
+		} else if (data.length >= 8 && data.charAt(2) === ':' && data.charAt(5) === ':') {
+			return this.parseTime(text);
+		} else {
+			throw new Error('Value [' + text + '] does not match dateTime, date or time patterns.');
+		}
+	},
+	parseDateTime : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		var negative = (text.charAt(0) === '-');
+		var sign = negative ? -1 : 1;
 
-						var dateTimeWithTimeZone = negative ? text.substring(1) : text;
+		var dateTimeWithTimeZone = negative ? text.substring(1) : text;
 
-						if (dateTimeWithTimeZone.length < 19 || dateTimeWithTimeZone.charAt(4) !== '-' || dateTimeWithTimeZone.charAt(7) !== '-' || dateTimeWithTimeZone.charAt(10) !== 'T' || dateTimeWithTimeZone.charAt(13) !== ':' || dateTimeWithTimeZone.charAt(16) !== ':') {
-							throw new Error('Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].');
-						}
+		if (dateTimeWithTimeZone.length < 19 || dateTimeWithTimeZone.charAt(4) !== '-' || dateTimeWithTimeZone.charAt(7) !== '-' || dateTimeWithTimeZone.charAt(10) !== 'T'	|| dateTimeWithTimeZone.charAt(13) !== ':' || dateTimeWithTimeZone.charAt(16) !== ':') {
+			throw new Error('Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].');
+		}
 
-						var timeZoneIndex;
-						var plusIndex = dateTimeWithTimeZone.indexOf('+', 19);
-						if (plusIndex >= 0) {
-							timeZoneIndex = plusIndex;
-						} else {
-							var minusIndex = dateTimeWithTimeZone.indexOf('-', 19);
-							if (minusIndex >= 0) {
-								timeZoneIndex = minusIndex;
-							} else {
-								var zIndex = dateTimeWithTimeZone.indexOf('Z', 19);
-								if (zIndex >= 0) {
-									timeZoneIndex = zIndex;
-								} else {
-									timeZoneIndex = dateTimeWithTimeZone.length;
-								}
-							}
-						}
+		var timeZoneIndex;
+		var plusIndex = dateTimeWithTimeZone.indexOf('+', 19);
+		if (plusIndex >= 0) {
+			timeZoneIndex = plusIndex;
+		} else {
+			var minusIndex = dateTimeWithTimeZone.indexOf('-', 19);
+			if (minusIndex >= 0) {
+				timeZoneIndex = minusIndex;
+			} else {
+				var zIndex = dateTimeWithTimeZone.indexOf('Z', 19);
+				if (zIndex >= 0) {
+					timeZoneIndex = zIndex;
+				} else {
+					timeZoneIndex = dateTimeWithTimeZone.length;
+				}
+			}
+		}
 
-						var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < dateTimeWithTimeZone.length;
+		var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < dateTimeWithTimeZone.length;
 
-						var dateString = dateTimeWithTimeZone.substring(0, 10);
-						var timeString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(11, timeZoneIndex) : dateTimeWithTimeZone.substring(11);
-						var timeZoneString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(timeZoneIndex) : '';
-						var date = this.parseDateString(dateString);
-						var time = this.parseTimeString(timeString);
-						var timezone = this.parseTimeZoneString(timeZoneString);
+		var dateString = dateTimeWithTimeZone.substring(0, 10);
+		var timeString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(11, timeZoneIndex) : dateTimeWithTimeZone.substring(11);
+		var timeZoneString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(timeZoneIndex) : '';
+		var date = this.parseDateString(dateString);
+		var time = this.parseTimeString(timeString);
+		var timezone = this.parseTimeZoneString(timeZoneString);
 
-						return Jsonix.XML.Calendar.fromObject({
-							year : sign * date.year,
-							month : date.month,
-							day : date.day,
-							hour : time.hour,
-							minute : time.minute,
-							second : time.second,
-							fractionalSecond : time.fractionalSecond,
-							timezone : timezone
-						});
+		return Jsonix.XML.Calendar.fromObject({
+			year : sign * date.year,
+			month : date.month,
+			day : date.day,
+			hour : time.hour,
+			minute : time.minute,
+			second : time.second,
+			fractionalSecond : time.fractionalSecond,
+			timezone : timezone
+		});
 
-					},
-					parseDate : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
+	},
+	parseDate : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
 
-						var negative = (text.charAt(0) === '-');
-						var sign = negative ? -1 : 1;
+		var negative = (text.charAt(0) === '-');
+		var sign = negative ? -1 : 1;
 
-						var dateWithTimeZone = negative ? text.substring(1) : text;
+		var dateWithTimeZone = negative ? text.substring(1) : text;
 
-						var timeZoneIndex;
-						var plusIndex = dateWithTimeZone.indexOf('+', 10);
-						if (plusIndex >= 0) {
-							timeZoneIndex = plusIndex;
-						} else {
-							var minusIndex = dateWithTimeZone.indexOf('-', 10);
-							if (minusIndex >= 0) {
-								timeZoneIndex = minusIndex;
-							} else {
-								var zIndex = dateWithTimeZone.indexOf('Z', 10);
-								if (zIndex >= 0) {
-									timeZoneIndex = zIndex;
-								} else {
-									timeZoneIndex = dateWithTimeZone.length;
-								}
-							}
-						}
-						var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < dateWithTimeZone.length;
-						var dateString = validTimeZoneIndex ? dateWithTimeZone.substring(0, timeZoneIndex) : dateWithTimeZone;
+		var timeZoneIndex;
+		var plusIndex = dateWithTimeZone.indexOf('+', 10);
+		if (plusIndex >= 0) {
+			timeZoneIndex = plusIndex;
+		} else {
+			var minusIndex = dateWithTimeZone.indexOf('-', 10);
+			if (minusIndex >= 0) {
+				timeZoneIndex = minusIndex;
+			} else {
+				var zIndex = dateWithTimeZone.indexOf('Z', 10);
+				if (zIndex >= 0) {
+					timeZoneIndex = zIndex;
+				} else {
+					timeZoneIndex = dateWithTimeZone.length;
+				}
+			}
+		}
+		var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < dateWithTimeZone.length;
+		var dateString = validTimeZoneIndex ? dateWithTimeZone.substring(0, timeZoneIndex) : dateWithTimeZone;
 
-						var date = this.parseDateString(dateString);
-						var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-						var timezone = this.parseTimeZoneString(timeZoneString);
+		var date = this.parseDateString(dateString);
+		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
+		var timezone = this.parseTimeZoneString(timeZoneString);
 
-						return Jsonix.XML.Calendar.fromObject({
-							year : sign * date.year,
-							month : date.month,
-							day : date.day,
-							timezone : timezone
-						});
+		return Jsonix.XML.Calendar.fromObject({
+			year : sign * date.year,
+			month : date.month,
+			day : date.day,
+			timezone : timezone
+		});
 
-					},
-					parseTime : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						var timeZoneIndex;
-						var plusIndex = text.indexOf('+', 7);
-						if (plusIndex >= 0) {
-							timeZoneIndex = plusIndex;
-						} else {
-							var minusIndex = text.indexOf('-', 7);
-							if (minusIndex >= 0) {
-								timeZoneIndex = minusIndex;
-							} else {
-								var zIndex = text.indexOf('Z', 7);
-								if (zIndex >= 0) {
-									timeZoneIndex = zIndex;
-								} else {
-									timeZoneIndex = text.length;
-								}
-							}
-						}
+	},
+	parseTime : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		var timeZoneIndex;
+		var plusIndex = text.indexOf('+', 7);
+		if (plusIndex >= 0) {
+			timeZoneIndex = plusIndex;
+		} else {
+			var minusIndex = text.indexOf('-', 7);
+			if (minusIndex >= 0) {
+				timeZoneIndex = minusIndex;
+			} else {
+				var zIndex = text.indexOf('Z', 7);
+				if (zIndex >= 0) {
+					timeZoneIndex = zIndex;
+				} else {
+					timeZoneIndex = text.length;
+				}
+			}
+		}
 
-						var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < text.length;
-						var timeString = validTimeZoneIndex ? text.substring(0, timeZoneIndex) : text;
+		var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < text.length;
+		var timeString = validTimeZoneIndex ? text.substring(0, timeZoneIndex) : text;
 
-						var time = this.parseTimeString(timeString);
-						var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-						var timezone = this.parseTimeZoneString(timeZoneString);
+		var time = this.parseTimeString(timeString);
+		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
+		var timezone = this.parseTimeZoneString(timeZoneString);
 
-						return Jsonix.XML.Calendar.fromObject({
-							hour : time.hour,
-							minute : time.minute,
-							second : time.second,
-							fractionalSecond : time.fractionalSecond,
-							timezone : timezone
-						});
+		return Jsonix.XML.Calendar.fromObject({
+			hour : time.hour,
+			minute : time.minute,
+			second : time.second,
+			fractionalSecond : time.fractionalSecond,
+			timezone : timezone
+		});
 
-					},
-					parseDateString : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 10) {
-							throw new Error('Date string [' + text + '] must be 10 characters long.');
-						}
+	},
+	parseDateString : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 10) {
+			throw new Error('Date string [' + text + '] must be 10 characters long.');
+		}
 
-						if (text.charAt(4) !== '-' || text.charAt(7) !== '-') {
-							throw new Error('Date string [' + text + '] must be a string in format [yyyy \'-\' mm \'-\' ss ].');
-						}
+		if (text.charAt(4) !== '-' || text.charAt(7) !== '-') {
+			throw new Error('Date string [' + text + '] must be a string in format [yyyy \'-\' mm \'-\' ss ].');
+		}
 
-						var year = this.parseYear(text.substring(0, 4));
-						var month = this.parseMonth(text.substring(5, 7));
-						var day = this.parseDay(text.substring(8, 10));
+		var year = this.parseYear(text.substring(0, 4));
+		var month = this.parseMonth(text.substring(5, 7));
+		var day = this.parseDay(text.substring(8, 10));
 
-						return {
-							year : year,
-							month : month,
-							day : day
-						};
-					},
-					parseTimeString : function(timeString) {
-						Jsonix.Util.Ensure.ensureString(timeString);
-						if (timeString.length < 8 || timeString.charAt(2) !== ':' || timeString.charAt(5) !== ':') {
-							throw new Error('Time string [' + timeString + '] must be a string in format [hh \':\' mm \':\' ss (\'.\' s+)?].');
-						}
-						var hourString = timeString.substring(0, 2);
-						var minuteString = timeString.substring(3, 5);
-						var secondString = timeString.substring(6, 8);
-						var fractionalSecondString = timeString.length >= 9 ? timeString.substring(8) : '';
-						var hour = this.parseHour(hourString);
-						var minute = this.parseHour(minuteString);
-						var second = this.parseSecond(secondString);
-						var fractionalSecond = this.parseFractionalSecond(fractionalSecondString);
-						return {
-							hour : hour,
-							minute : minute,
-							second : second,
-							fractionalSecond : fractionalSecond
-						};
+		return {
+			year : year,
+			month : month,
+			day : day
+		};
+	},
+	parseTimeString : function(timeString) {
+		Jsonix.Util.Ensure.ensureString(timeString);
+		if (timeString.length < 8 || timeString.charAt(2) !== ':' || timeString.charAt(5) !== ':') {
+			throw new Error('Time string [' + timeString + '] must be a string in format [hh \':\' mm \':\' ss (\'.\' s+)?].');
+		}
+		var hourString = timeString.substring(0, 2);
+		var minuteString = timeString.substring(3, 5);
+		var secondString = timeString.substring(6, 8);
+		var fractionalSecondString = timeString.length >= 9 ? timeString.substring(8) : '';
+		var hour = this.parseHour(hourString);
+		var minute = this.parseHour(minuteString);
+		var second = this.parseSecond(secondString);
+		var fractionalSecond = this.parseFractionalSecond(fractionalSecondString);
+		return {
+			hour : hour,
+			minute : minute,
+			second : second,
+			fractionalSecond : fractionalSecond
+		};
 
-					},
-					parseTimeZoneString : function(text) {
-						// (('+' | '-') hh ':' mm) | 'Z'
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text === '') {
-							return NaN;
-						} else if (text === 'Z') {
-							return 0;
-						} else {
-							if (text.length !== 6) {
-								throw new Error('Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].');
-							}
-							var signString = text.charAt(0);
-							var sign;
-							if (signString === '+') {
-								sign = 1;
-							} else if (signString === '-') {
-								sign = -1;
-							} else {
-								throw new Error('First character of the time zone [' + text + '] must be \'+\' or \'-\'.');
-							}
-							var hour = this.parseHour(text.substring(1, 3));
-							var minute = this.parseMinute(text.substring(4, 6));
-							return -1 * sign * (hour * 60 + minute);
-						}
+	},
+	parseTimeZoneString : function(text) {
+		// (('+' | '-') hh ':' mm) | 'Z'
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text === '') {
+			return NaN;
+		} else if (text === 'Z') {
+			return 0;
+		} else {
+			if (text.length !== 6) {
+				throw new Error('Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].');
+			}
+			var signString = text.charAt(0);
+			var sign;
+			if (signString === '+') {
+				sign = 1;
+			} else if (signString === '-') {
+				sign = -1;
+			} else {
+				throw new Error('First character of the time zone [' + text + '] must be \'+\' or \'-\'.');
+			}
+			var hour = this.parseHour(text.substring(1, 3));
+			var minute = this.parseMinute(text.substring(4, 6));
+			return -1 * sign * (hour * 60 + minute);
+		}
 
-					},
-					parseYear : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 4) {
-							throw new Error('Year [' + text + '] must be a four-digit number.');
-						}
-						var year = Number(text);
-						// TODO message
-						Jsonix.Util.Ensure.ensureInteger(year);
-						return year;
-					},
-					parseMonth : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 2) {
-							throw new Error('Month [' + text + '] must be a two-digit number.');
-						}
-						var month = Number(text);
-						// TODO message
-						Jsonix.Util.Ensure.ensureInteger(month);
-						return month;
-					},
-					parseDay : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 2) {
-							throw new Error('Day [' + text + '] must be a two-digit number.');
-						}
-						var day = Number(text);
-						// TODO message
-						Jsonix.Util.Ensure.ensureInteger(day);
-						return day;
-					},
-					parseHour : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 2) {
-							throw new Error('Hour [' + text + '] must be a two-digit number.');
-						}
-						var hour = Number(text);
-						// TODO message
-						Jsonix.Util.Ensure.ensureInteger(hour);
-						return hour;
-					},
-					parseMinute : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 2) {
-							throw new Error('Minute [' + text + '] must be a two-digit number.');
-						}
-						var minute = Number(text);
-						// TODO message
-						Jsonix.Util.Ensure.ensureInteger(minute);
-						return minute;
-					},
-					parseSecond : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text.length !== 2) {
-							throw new Error('Second [' + text + '] must be a two-digit number.');
-						}
-						var second = Number(text);
-						// TODO message
-						Jsonix.Util.Ensure.ensureNumber(second);
-						return second;
-					},
-					parseFractionalSecond : function(text) {
-						Jsonix.Util.Ensure.ensureString(text);
-						if (text === '') {
-							return 0;
-						} else {
-							var fractionalSecond = Number(text);
-							// TODO message
-							Jsonix.Util.Ensure.ensureNumber(fractionalSecond);
-							return fractionalSecond;
-						}
-					},
-					print : function(value, context, output, scope) {
-						Jsonix.Util.Ensure.ensureObject(value);
-						if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day) && Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
-								.isInteger(value.second)) {
-							return this.printDateTime(value);
-						} else if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)) {
-							return this.printDate(value);
-						} else if (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)) {
-							return this.printTime(value);
-						} else {
-							throw new Error('Value [' + value + '] is not recognized as dateTime, date or time.');
-						}
-					},
-					printDateTime : function(value) {
-						Jsonix.Util.Ensure.ensureObject(value);
-						Jsonix.Util.Ensure.ensureInteger(value.year);
-						Jsonix.Util.Ensure.ensureInteger(value.month);
-						Jsonix.Util.Ensure.ensureInteger(value.day);
-						Jsonix.Util.Ensure.ensureInteger(value.hour);
-						Jsonix.Util.Ensure.ensureInteger(value.minute);
-						Jsonix.Util.Ensure.ensureNumber(value.second);
-						if (Jsonix.Util.Type.exists(value.fractionalString)) {
-							Jsonix.Util.Ensure.ensureNumber(value.fractionalString);
-						}
-						if (Jsonix.Util.Type.exists(value.timezone) && !Jsonix.Util.Type.isNaN(value.timezone)) {
-							Jsonix.Util.Ensure.ensureInteger(value.timezone);
-						}
-						var result = this.printDateString(value);
-						result = result + 'T';
-						result = result + this.printTimeString(value);
-						if (Jsonix.Util.Type.exists(value.timezone)) {
-							result = result + this.printTimeZoneString(value.timezone);
-						}
-						return result;
-					},
-					printDate : function(value) {
-						Jsonix.Util.Ensure.ensureObject(value);
-						Jsonix.Util.Ensure.ensureNumber(value.year);
-						Jsonix.Util.Ensure.ensureNumber(value.month);
-						Jsonix.Util.Ensure.ensureNumber(value.day);
-						if (Jsonix.Util.Type.exists(value.timezone) && !Jsonix.Util.Type.isNaN(value.timezone)) {
-							Jsonix.Util.Ensure.ensureInteger(value.timezone);
-						}
-						var result = this.printDateString(value);
-						if (Jsonix.Util.Type.exists(value.timezone)) {
-							result = result + this.printTimeZoneString(value.timezone);
-						}
-						return result;
-					},
-					printTime : function(value) {
-						Jsonix.Util.Ensure.ensureObject(value);
-						Jsonix.Util.Ensure.ensureNumber(value.hour);
-						Jsonix.Util.Ensure.ensureNumber(value.minute);
-						Jsonix.Util.Ensure.ensureNumber(value.second);
-						if (Jsonix.Util.Type.exists(value.fractionalString)) {
-							Jsonix.Util.Ensure.ensureNumber(value.fractionalString);
-						}
-						if (Jsonix.Util.Type.exists(value.timezone) && !Jsonix.Util.Type.isNaN(value.timezone)) {
-							Jsonix.Util.Ensure.ensureInteger(value.timezone);
-						}
+	},
+	parseYear : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 4) {
+			throw new Error('Year [' + text + '] must be a four-digit number.');
+		}
+		var year = Number(text);
+		// TODO message
+		Jsonix.Util.Ensure.ensureInteger(year);
+		return year;
+	},
+	parseMonth : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 2) {
+			throw new Error('Month [' + text + '] must be a two-digit number.');
+		}
+		var month = Number(text);
+		// TODO message
+		Jsonix.Util.Ensure.ensureInteger(month);
+		return month;
+	},
+	parseDay : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 2) {
+			throw new Error('Day [' + text + '] must be a two-digit number.');
+		}
+		var day = Number(text);
+		// TODO message
+		Jsonix.Util.Ensure.ensureInteger(day);
+		return day;
+	},
+	parseHour : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 2) {
+			throw new Error('Hour [' + text + '] must be a two-digit number.');
+		}
+		var hour = Number(text);
+		// TODO message
+		Jsonix.Util.Ensure.ensureInteger(hour);
+		return hour;
+	},
+	parseMinute : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 2) {
+			throw new Error('Minute [' + text + '] must be a two-digit number.');
+		}
+		var minute = Number(text);
+		// TODO message
+		Jsonix.Util.Ensure.ensureInteger(minute);
+		return minute;
+	},
+	parseSecond : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text.length !== 2) {
+			throw new Error('Second [' + text + '] must be a two-digit number.');
+		}
+		var second = Number(text);
+		// TODO message
+		Jsonix.Util.Ensure.ensureNumber(second);
+		return second;
+	},
+	parseFractionalSecond : function(text) {
+		Jsonix.Util.Ensure.ensureString(text);
+		if (text === '') {
+			return 0;
+		} else {
+			var fractionalSecond = Number(text);
+			// TODO message
+			Jsonix.Util.Ensure.ensureNumber(fractionalSecond);
+			return fractionalSecond;
+		}
+	},
+	print : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)	&& Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)) {
+			return this.printDateTime(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)) {
+			return this.printDate(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)) {
+			return this.printTime(value);
+		} else {
+			throw new Error('Value [' + value + '] is not recognized as dateTime, date or time.');
+		}
+	},
+	printDateTime : function(value) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		Jsonix.Util.Ensure.ensureInteger(value.year);
+		Jsonix.Util.Ensure.ensureInteger(value.month);
+		Jsonix.Util.Ensure.ensureInteger(value.day);
+		Jsonix.Util.Ensure.ensureInteger(value.hour);
+		Jsonix.Util.Ensure.ensureInteger(value.minute);
+		Jsonix.Util.Ensure.ensureNumber(value.second);
+		if (Jsonix.Util.Type.exists(value.fractionalString)) {
+			Jsonix.Util.Ensure.ensureNumber(value.fractionalString);
+		}
+		if (Jsonix.Util.Type.exists(value.timezone) && !Jsonix.Util.Type.isNaN(value.timezone)) {
+			Jsonix.Util.Ensure.ensureInteger(value.timezone);
+		}
+		var result = this.printDateString(value);
+		result = result + 'T';
+		result = result + this.printTimeString(value);
+		if (Jsonix.Util.Type.exists(value.timezone)) {
+			result = result + this.printTimeZoneString(value.timezone);
+		}
+		return result;
+	},
+	printDate : function(value) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		Jsonix.Util.Ensure.ensureNumber(value.year);
+		Jsonix.Util.Ensure.ensureNumber(value.month);
+		Jsonix.Util.Ensure.ensureNumber(value.day);
+		if (Jsonix.Util.Type.exists(value.timezone) && !Jsonix.Util.Type.isNaN(value.timezone)) {
+			Jsonix.Util.Ensure.ensureInteger(value.timezone);
+		}
+		var result = this.printDateString(value);
+		if (Jsonix.Util.Type.exists(value.timezone)) {
+			result = result + this.printTimeZoneString(value.timezone);
+		}
+		return result;
+	},
+	printTime : function(value) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		Jsonix.Util.Ensure.ensureNumber(value.hour);
+		Jsonix.Util.Ensure.ensureNumber(value.minute);
+		Jsonix.Util.Ensure.ensureNumber(value.second);
+		if (Jsonix.Util.Type.exists(value.fractionalString)) {
+			Jsonix.Util.Ensure.ensureNumber(value.fractionalString);
+		}
+		if (Jsonix.Util.Type.exists(value.timezone) && !Jsonix.Util.Type.isNaN(value.timezone)) {
+			Jsonix.Util.Ensure.ensureInteger(value.timezone);
+		}
 
-						var result = this.printTimeString(value);
-						if (Jsonix.Util.Type.exists(value.timezone)) {
-							result = result + this.printTimeZoneString(value.timezone);
-						}
-						return result;
-					},
-					printDateString : function(value) {
-						Jsonix.Util.Ensure.ensureObject(value);
-						Jsonix.Util.Ensure.ensureInteger(value.year);
-						Jsonix.Util.Ensure.ensureInteger(value.month);
-						Jsonix.Util.Ensure.ensureInteger(value.day);
-						return (value.year < 0 ? ('-' + this.printYear(-value.year)) : this.printYear(value.year)) + '-' + this.printMonth(value.month) + '-' + this.printDay(value.day);
-					},
-					printTimeString : function(value) {
-						Jsonix.Util.Ensure.ensureObject(value);
-						Jsonix.Util.Ensure.ensureInteger(value.hour);
-						Jsonix.Util.Ensure.ensureInteger(value.minute);
-						Jsonix.Util.Ensure.ensureInteger(value.second);
-						if (Jsonix.Util.Type.exists(value.fractionalSecond)) {
-							Jsonix.Util.Ensure.ensureNumber(value.fractionalSecond);
-						}
-						var result = this.printHour(value.hour);
-						result = result + ':';
-						result = result + this.printMinute(value.minute);
-						result = result + ':';
-						result = result + this.printSecond(value.second);
-						if (Jsonix.Util.Type.exists(value.fractionalSecond)) {
-							result = result + this.printFractionalSecond(value.fractionalSecond);
-						}
-						return result;
-					},
-					printTimeZoneString : function(value) {
-						if (!Jsonix.Util.Type.exists(value) || Jsonix.Util.Type.isNaN(value)) {
-							return '';
-						} else {
-							Jsonix.Util.Ensure.ensureInteger(value);
+		var result = this.printTimeString(value);
+		if (Jsonix.Util.Type.exists(value.timezone)) {
+			result = result + this.printTimeZoneString(value.timezone);
+		}
+		return result;
+	},
+	printDateString : function(value) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		Jsonix.Util.Ensure.ensureInteger(value.year);
+		Jsonix.Util.Ensure.ensureInteger(value.month);
+		Jsonix.Util.Ensure.ensureInteger(value.day);
+		return (value.year < 0 ? ('-' + this.printYear(-value.year)) : this.printYear(value.year)) + '-' + this.printMonth(value.month) + '-' + this.printDay(value.day);
+	},
+	printTimeString : function(value) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		Jsonix.Util.Ensure.ensureInteger(value.hour);
+		Jsonix.Util.Ensure.ensureInteger(value.minute);
+		Jsonix.Util.Ensure.ensureInteger(value.second);
+		if (Jsonix.Util.Type.exists(value.fractionalSecond)) {
+			Jsonix.Util.Ensure.ensureNumber(value.fractionalSecond);
+		}
+		var result = this.printHour(value.hour);
+		result = result + ':';
+		result = result + this.printMinute(value.minute);
+		result = result + ':';
+		result = result + this.printSecond(value.second);
+		if (Jsonix.Util.Type.exists(value.fractionalSecond)) {
+			result = result + this.printFractionalSecond(value.fractionalSecond);
+		}
+		return result;
+	},
+	printTimeZoneString : function(value) {
+		if (!Jsonix.Util.Type.exists(value) || Jsonix.Util.Type.isNaN(value)) {
+			return '';
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value);
 
-							var sign = value < 0 ? -1 : (value > 0 ? 1 : 0);
-							var data = value * sign;
-							var minute = data % 60;
-							var hour = Math.floor(data / 60);
+			var sign = value < 0 ? -1 : (value > 0 ? 1 : 0);
+			var data = value * sign;
+			var minute = data % 60;
+			var hour = Math.floor(data / 60);
 
-							var result;
-							if (sign === 0) {
-								return 'Z';
-							} else {
-								if (sign > 0) {
-									result = '-';
-								} else if (sign < 0) {
-									result = '+';
-								}
-								result = result + this.printHour(hour);
-								result = result + ':';
-								result = result + this.printMinute(minute);
-								return result;
-							}
-						}
-					},
-					printYear : function(value) {
-						return this.printInteger(value, 4);
-					},
-					printMonth : function(value) {
-						return this.printInteger(value, 2);
-					},
-					printDay : function(value) {
-						return this.printInteger(value, 2);
-					},
-					printHour : function(value) {
-						return this.printInteger(value, 2);
-					},
-					printMinute : function(value) {
-						return this.printInteger(value, 2);
-					},
-					printSecond : function(value) {
-						return this.printInteger(value, 2);
-					},
-					printFractionalSecond : function(value) {
-						Jsonix.Util.Ensure.ensureNumber(value);
-						if (value < 0 || value >= 1) {
-							throw new Error('Fractional second [' + value + '] must be between 0 and 1.');
-						} else if (value === 0) {
-							return '';
-						} else {
-							var string = String(value);
-							var dotIndex = string.indexOf('.');
-							if (dotIndex < 0) {
-								return '';
-							} else {
-								return string.substring(dotIndex);
-							}
-						}
-					},
-					printInteger : function(value, length) {
-						Jsonix.Util.Ensure.ensureInteger(value);
-						Jsonix.Util.Ensure.ensureInteger(length);
-						if (length <= 0) {
-							throw new Error('Length [' + value + '] must be positive.');
-						}
-						if (value < 0) {
-							throw new Error('Value [' + value + '] must not be negative.');
-						}
-						if (value >= Math.pow(10, length)) {
-							throw new Error('Value [' + value + '] must be less than [' + Math.pow(10, length) + '].');
-						}
-						var result = String(value);
-						for ( var i = result.length; i < length; i++) {
-							result = '0' + result;
-						}
-						return result;
-					},
-					isInstance : function(value, context, scope) {
-						return Jsonix.Util.Type.isObject(value) && ((Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)) || (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils
-								.isInteger(value.second)));
-					},
-					CLASS_NAME : 'Jsonix.Schema.XSD.Calendar'
-				});
+			var result;
+			if (sign === 0) {
+				return 'Z';
+			} else {
+				if (sign > 0) {
+					result = '-';
+				} else if (sign < 0) {
+					result = '+';
+				}
+				result = result + this.printHour(hour);
+				result = result + ':';
+				result = result + this.printMinute(minute);
+				return result;
+			}
+		}
+	},
+	printYear : function(value) {
+		return this.printInteger(value, 4);
+	},
+	printMonth : function(value) {
+		return this.printInteger(value, 2);
+	},
+	printDay : function(value) {
+		return this.printInteger(value, 2);
+	},
+	printHour : function(value) {
+		return this.printInteger(value, 2);
+	},
+	printMinute : function(value) {
+		return this.printInteger(value, 2);
+	},
+	printSecond : function(value) {
+		return this.printInteger(value, 2);
+	},
+	printFractionalSecond : function(value) {
+		Jsonix.Util.Ensure.ensureNumber(value);
+		if (value < 0 || value >= 1) {
+			throw new Error('Fractional second [' + value + '] must be between 0 and 1.');
+		} else if (value === 0) {
+			return '';
+		} else {
+			var string = String(value);
+			var dotIndex = string.indexOf('.');
+			if (dotIndex < 0) {
+				return '';
+			} else {
+				return string.substring(dotIndex);
+			}
+		}
+	},
+	printInteger : function(value, length) {
+		Jsonix.Util.Ensure.ensureInteger(value);
+		Jsonix.Util.Ensure.ensureInteger(length);
+		if (length <= 0) {
+			throw new Error('Length [' + value + '] must be positive.');
+		}
+		if (value < 0) {
+			throw new Error('Value [' + value + '] must not be negative.');
+		}
+		if (value >= Math.pow(10, length)) {
+			throw new Error('Value [' + value + '] must be less than [' + Math.pow(10, length) + '].');
+		}
+		var result = String(value);
+		for (var i = result.length; i < length; i++) {
+			result = '0' + result;
+		}
+		return result;
+	},
+	isInstance : function(value, context, scope) {
+		return Jsonix.Util.Type.isObject(value)	&& ((Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)) || (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)));
+	},
+	CLASS_NAME : 'Jsonix.Schema.XSD.Calendar'
+});
+
+Jsonix.Schema.XSD.Calendar.YEAR_PATTERN = "-?([1-9][0-9]*)?((?!(0000))[0-9]{4})";
+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN = "Z|[\\-\\+][0-9][0-9]:[0-5][0-9]";
+Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.YEAR_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
+
 Jsonix.Schema.XSD.Calendar.INSTANCE = new Jsonix.Schema.XSD.Calendar();
 Jsonix.Schema.XSD.Calendar.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Calendar.INSTANCE);
 Jsonix.Schema.XSD.Duration = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
@@ -5397,14 +5440,94 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 Jsonix.Schema.XSD.GYearMonth.INSTANCE = new Jsonix.Schema.XSD.GYearMonth();
 Jsonix.Schema.XSD.GYearMonth.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
 		Jsonix.Schema.XSD.GYearMonth.INSTANCE);
-Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+// REVIEW AV: GYear extends Calendar
+Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GYear',
 	typeName : Jsonix.Schema.XSD.qname('gYear'),
+	// TODO: find appropriate place for the regex (e.g.
+	// Jsonix.XML.Calendar.regex ?)
+	// REVIEW AV: I've first moved as constants to the Calendar 
+
+	parse : function(value, context, input, scope) {
+		var returnValue = this.splitGYear(value);
+		returnValue.toString = function() {
+			return "EmptyXMLElement. Call embedded 'year' or 'timezone' property";
+		};
+
+		return returnValue;
+	},
+
+	/**
+	 * @param {string}
+	 *            year datetype in ISO 8601 format
+	 * @returns {object} pair of date, timestamp properties as a number
+	 * @throws {Error}
+	 *             if the datetype is not valid
+	 * 
+	 */
+	splitGYear : function(value) {
+
+		var gYearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN + "$");
+		var results = value.match(gYearExpression);
+
+		// TODO: underscored functions and properties are for testing proposes
+		// only. Must be vanished in the min.js
+
+		if (results !== null) {
+			var splitedGYear = {
+				// REVIEW AV: Decimal radix
+				year : parseInt(results[1], 10),
+				_timezone : results[5],
+				timezone : this.parseTimeZoneString(results[5])
+			// TODO: parseTimeZoneString() function exists also in CALENDAR
+			// but inverts the sign, why?
+			};
+
+			return splitedGYear;
+		}
+
+		throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
+	},
+
+	parseTimeZoneString : function(text) {
+		if (text === "Z" || !Jsonix.Util.Type.exists(text)) {
+			return 0;
+		}
+
+		var splittedTimeZoneChunks = text.split(":");
+		return - (parseInt(splittedTimeZoneChunks[0], 10) * 60 + parseInt(splittedTimeZoneChunks[1], 10));
+	},
+
+	// TODO: underscored functions and properties are for testing proposes only.
+	// Must be vanished in the min.js
+
+	_validateGYear : function(value) {
+		var gYearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN + "$");
+
+		if (!gYearExpression.test(value)) {
+			throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
+		}
+	},
+
+	_validateYear : function(value) {
+		var yearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.YEAR_PATTERN + "$");
+
+		if (!yearExpression.test(value)) {
+			throw new Error('Value [' + value + '] doesn\'t match the year pattern.');
+		}
+	},
+
+	_validateTimeZone : function(value) {
+		var timeZoneExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + "$");
+
+		if (!timeZoneExpression.test(value)) {
+			throw new Error('Value [' + value + '] doesn\'t match the time zone pattern.');
+		}
+	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.GYear'
 });
 Jsonix.Schema.XSD.GYear.INSTANCE = new Jsonix.Schema.XSD.GYear();
-Jsonix.Schema.XSD.GYear.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
-		Jsonix.Schema.XSD.GYear.INSTANCE);
+Jsonix.Schema.XSD.GYear.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GYear.INSTANCE);
 Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	name : 'GMonthDay',
 	typeName : Jsonix.Schema.XSD.qname('gMonthDay'),
@@ -5464,6 +5587,7 @@ Jsonix.Schema.XSI.qname = function(localPart) {
 	return new Jsonix.XML.QName(Jsonix.Schema.XSI.NAMESPACE_URI, localPart,
 			Jsonix.Schema.XSI.PREFIX);
 };
+Jsonix.Schema.XSI.TYPE_QNAME = Jsonix.Schema.XSI.qname(Jsonix.Schema.XSI.TYPE);
 
 Jsonix.Context = Jsonix
 		.Class(Jsonix.Mapping.Styled, {
@@ -5528,6 +5652,7 @@ Jsonix.Context = Jsonix
 				if (mapping instanceof this.mappingStyle.module) {
 					module = mapping;
 				} else {
+					mapping = Jsonix.Util.Type.cloneObject(mapping);
 					module = new this.mappingStyle.module(mapping, 
 					{
 						mappingStyle : this.mappingStyle
@@ -5631,6 +5756,30 @@ Jsonix.Context = Jsonix
 				}
 				scopedElementInfos[elementInfo.elementName.key] = elementInfo;
 
+			},
+			getTypeInfoByValue : function(value)
+			{
+				if (!Jsonix.Util.Type.exists(value))
+				{
+					return undefined;
+				}
+				if (Jsonix.Util.Type.isObject(value))
+				{
+					var typeName = value.TYPE_NAME;
+					if (Jsonix.Util.Type.isString(typeName))
+					{
+						var typeInfoByName = this.getTypeInfoByName(typeName);
+						if (typeInfoByName)
+						{
+							return typeInfoByName;
+						}
+					}
+				}
+				return undefined;
+			},
+			// TODO public API
+			getTypeInfoByName : function(name) {
+				return this.typeInfos[name];
 			},
 			getTypeInfoByTypeName : function(typeName) {
 				var tn = Jsonix.XML.QName.fromObjectOrString(typeName, this);
