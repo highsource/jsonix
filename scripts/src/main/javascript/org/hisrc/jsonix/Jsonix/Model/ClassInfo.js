@@ -266,21 +266,22 @@ Jsonix.Model.ClassInfo = Jsonix
 			ps : function() {
 				return this;
 			},
-			p : function(property) {
-				Jsonix.Util.Ensure.ensureObject(property);
-				// If property is an instance of the property class
-				if (property instanceof Jsonix.Model.PropertyInfo) {
-					this.addProperty(property);
+			p : function(mapping) {
+				Jsonix.Util.Ensure.ensureObject(mapping);
+				// If mapping is an instance of the property class
+				if (mapping instanceof Jsonix.Model.PropertyInfo) {
+					this.addProperty(mapping);
 				}
 				// Else create it via generic mapping configuration
 				else {
-					var type = property.type||property.t||'element';
+					mapping = Jsonix.Util.Type.cloneObject(mapping);
+					var type = mapping.type||mapping.t||'element';
 					// Locate the creator function
 					if (Jsonix.Util.Type
 							.isFunction(this.propertyInfoCreators[type])) {
 						var propertyInfoCreator = this.propertyInfoCreators[type];
 						// Call the creator function
-						propertyInfoCreator.call(this, property);
+						propertyInfoCreator.call(this, mapping);
 					} else {
 						throw new Error("Unknown property info type [" + type + "].");
 					}
