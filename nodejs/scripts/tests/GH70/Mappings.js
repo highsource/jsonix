@@ -7,6 +7,7 @@ var GH70_Module_Factory = function () {
       { ln: 'Literal', bti: '.Expression', ps: [{ n: 'value', t: 'v' }]},
       { ln: 'And', bti: '.Expression', ps: [{ n: 'expressions', en: 'Expression', t: 'e', ti: '.Expression', col: true}]},
       { ln: 'Or', bti: '.Expression', ps: [{ n: 'expressions', en: 'Expression', t: 'er', ti: '.Expression', col: true}]},
+      { ln: 'Xor', bti: '.Expression', ps: [{ n: 'expressions', t: 'ers', col: true, etis : [{ en: 'Expression', ti:'.Expression'} ]}]},
     ],
     eis: [{
         en: 'Literal',
@@ -20,6 +21,9 @@ var GH70_Module_Factory = function () {
       },{
         en: 'Or',
         ti: '.Or'
+      },{
+        en: 'Xor',
+        ti: '.Xor'
       }]
   };
   return {

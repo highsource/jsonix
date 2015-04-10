@@ -25,7 +25,7 @@ module.exports = {
 		test.equal("GH70.Literal", literalTypeInfo.name);
 		test.done();
 	},
-	"Unmarshalls" : {
+	"Context" : {
 		"Expression" : function(test) {
 			var nonXsiContext = new Jsonix.Context([GH70], {
 				namespacePrefixes : {
@@ -33,35 +33,19 @@ module.exports = {
 				},
 				supportXsiType : false
 			});
-			var unmarshaller = nonXsiContext.createUnmarshaller();
-			var data = unmarshaller.unmarshalString('<Expression xmlns="urn:GH70"/>');
 			test.equal(false, nonXsiContext.supportXsiType);
-			test.equal("GH70.Expression", data.value.TYPE_NAME);
 			test.done();
 		},
-		"Literal" : function(test) {
-			var unmarshaller = context.createUnmarshaller();
-			var data = unmarshaller.unmarshalString('<Literal xmlns="urn:GH70">test</Literal>');
-			test.equal(true, context.supportXsiType);
-			test.equal("GH70.Literal", data.value.TYPE_NAME);
-			test.equal("test", data.value.value);
-			test.done();
-		},
-		"ExpressionAsLiteral" : function(test) {
+	},
+	"Unmarshalls" : {
+		"Root" : function(test) {
 			var unmarshaller = context.createUnmarshaller();
 			var data = unmarshaller.unmarshalString('<Expression xmlns="urn:GH70" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Literal">test</Expression>');
 			test.equal("GH70.Literal", data.value.TYPE_NAME);
 			test.equal("test", data.value.value);
 			test.done();
 		},
-		"And" : function(test) {
-			var unmarshaller = context.createUnmarshaller();
-			var data = unmarshaller.unmarshalString('<And xmlns="urn:GH70"><Expression/><Expression/></And>');
-			test.equal("GH70.And", data.value.TYPE_NAME);
-			test.equal(2, data.value.expressions.length);
-			test.done();
-		},
-		"AndLiteral" : function(test) {
+		"ElementPropertyInfo" : function(test) {
 			var unmarshaller = context.createUnmarshaller();
 			var data = unmarshaller.unmarshalString('<And xmlns="urn:GH70"><Expression xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Literal">a</Expression><Expression  xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Literal">b</Expression></And>');
 			test.equal("GH70.And", data.value.TYPE_NAME);
@@ -72,9 +56,9 @@ module.exports = {
 			test.equal('b', data.value.expressions[1].value);
 			test.done();
 		},
-		"Or" : function(test) {
+		"ElementRefPropertyInfo" : function(test) {
 			var unmarshaller = context.createUnmarshaller();
-			var data = unmarshaller.unmarshalString('<Expression xmlns="urn:GH70" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Or"><Expression xsi:type="Literal"></Expression><Expression xsi:type="Literal"></Expression></Expression>');
+			var data = unmarshaller.unmarshalString('<Expression xmlns="urn:GH70" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Or"><Expression xsi:type="Literal">one</Expression><Expression xsi:type="Literal">two</Expression></Expression>');
 			test.equal("GH70.Or", data.value.TYPE_NAME);
 			test.equal(2, data.value.expressions.length);
 			test.equal("Expression", data.value.expressions[0].name.localPart);
@@ -83,9 +67,20 @@ module.exports = {
 			test.equal("GH70.Literal", data.value.expressions[1].value.TYPE_NAME);
 			test.done();
 		},
+		"ElementRefsPropertyInfo" : function(test) {
+			var unmarshaller = context.createUnmarshaller();
+			var data = unmarshaller.unmarshalString('<Expression xmlns="urn:GH70" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:type="Xor"><Literal>one</Literal><Expression xsi:type="Literal">two</Expression></Expression>');
+			test.equal("GH70.Xor", data.value.TYPE_NAME);
+			test.equal(2, data.value.expressions.length);
+			test.equal("Literal", data.value.expressions[0].name.localPart);
+			test.equal("GH70.Literal", data.value.expressions[0].value.TYPE_NAME);
+			test.equal("Expression", data.value.expressions[1].name.localPart);
+			test.equal("GH70.Literal", data.value.expressions[1].value.TYPE_NAME);
+			test.done();
+		},
 	},
 	"Marshalls" : {
-		"AndLiteral" : function(test) {
+		"ElementPropertyInfo" : function(test) {
 			var marshaller = context.createMarshaller();
 			var data = {
 				name : 'gh70:Expression',
@@ -99,6 +94,38 @@ module.exports = {
 			}
 			var str = marshaller.marshalString(data);
 			test.equal('<gh70:Expression xmlns:gh70="urn:GH70" xsi:type="gh70:And" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><gh70:Expression xsi:type="gh70:Literal">one</gh70:Expression><gh70:Expression xsi:type="gh70:Literal">two</gh70:Expression></gh70:Expression>', str);
+			test.done();
+		},
+		"ElementRefPropertyInfo" : function(test) {
+			var marshaller = context.createMarshaller();
+			var data = {
+				name : 'gh70:Expression',
+				value : {
+					expressions : [
+						{ name : 'gh70:Expression', value : { value : 'one', TYPE_NAME : 'GH70.Literal'} },
+						{ name : 'gh70:Expression', value : { value : 'two', TYPE_NAME : 'GH70.Literal'} }
+					],
+					TYPE_NAME : "GH70.Or"
+				}
+			}
+			var str = marshaller.marshalString(data);
+			test.equal('<gh70:Expression xmlns:gh70="urn:GH70" xsi:type="gh70:Or" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><gh70:Expression xsi:type="gh70:Literal">one</gh70:Expression><gh70:Expression xsi:type="gh70:Literal">two</gh70:Expression></gh70:Expression>', str);
+			test.done();
+		},
+		"ElementRefsPropertyInfo" : function(test) {
+			var marshaller = context.createMarshaller();
+			var data = {
+				name : 'gh70:Expression',
+				value : {
+					expressions : [
+						{ name : 'gh70:Literal', value : { value : 'one', TYPE_NAME : 'GH70.Literal'} },
+						{ name : 'gh70:Expression', value : { value : 'two', TYPE_NAME : 'GH70.Literal'} }
+					],
+					TYPE_NAME : "GH70.Xor"
+				}
+			}
+			var str = marshaller.marshalString(data);
+			test.equal('<gh70:Expression xmlns:gh70="urn:GH70" xsi:type="gh70:Xor" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"><gh70:Literal>one</gh70:Literal><gh70:Expression xsi:type="gh70:Literal">two</gh70:Expression></gh70:Expression>', str);
 			test.done();
 		},
 	}
