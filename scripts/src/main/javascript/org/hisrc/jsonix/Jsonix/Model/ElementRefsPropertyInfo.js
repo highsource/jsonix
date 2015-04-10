@@ -7,7 +7,11 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 		// TODO Ensure correct arguments
 		var etis = mapping.elementTypeInfos || mapping.etis || [];
 		Jsonix.Util.Ensure.ensureArray(etis);
-		this.elementTypeInfos = etis;
+		this.elementTypeInfos = [];
+		for (var index = 0; index < etis.length; index++)
+		{
+			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]); 
+		}
 	},
 	getPropertyElementTypeInfo : function(elementName, context) {
 		var name = Jsonix.XML.QName.fromObjectOrString(elementName, context);
