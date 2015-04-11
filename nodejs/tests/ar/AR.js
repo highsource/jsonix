@@ -4,6 +4,7 @@ var AR_Module_Factory = function () {
     defaultElementNamespaceURI: 'urn:test',
     typeInfos: [{
         localName: 'AccumulateResponse.TestCase',
+        typeName: null,
         propertyInfos: [{
             name: 'transactionId',
             elementName: 'TransactionId'
