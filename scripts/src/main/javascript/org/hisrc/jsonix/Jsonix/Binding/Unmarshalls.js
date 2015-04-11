@@ -1,6 +1,7 @@
-Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
-	allowTypedObject : true,
-	allowDom : false,
+Jsonix.Binding.Unmarshalls = {
+};
+
+Jsonix.Binding.Unmarshalls.WrapperElement = Jsonix.Class({
 	mixed : false,
 	unmarshalWrapperElement : function(context, input, scope, callback) {
 		var et = input.next();
@@ -18,7 +19,12 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 			}
 			et = input.next();
 		}
-	},
+	}
+});
+
+Jsonix.Binding.Unmarshalls.Element = Jsonix.Class({
+	allowTypedObject : true,
+	allowDom : false,
 	unmarshalElement : function(context, input, scope, callback) {
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
@@ -28,10 +34,12 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		var elementValue;
 		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
 			var value = typeInfo.unmarshal(context, input, scope);
-			elementValue = this.convertToElementValue({
+			var typedNamedValue = {
 				name : name,
-				value : value
-			}, context, input, scope);
+				value : value,
+				typeInfo : typeInfo
+			};
+			elementValue = this.convertFromTypedNamedValue(typedNamedValue, context, input, scope);
 		} else if (this.allowDom) {
 			elementValue = input.getElement();
 		} else {
@@ -63,11 +71,20 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 	}
 });
 
-Jsonix.Binding.ElementUnmarshaller.Simplified = Jsonix.Class({
-	convertToElementValue : function(elementValue, context, input, scope) {
-		var propertyName = elementValue.name.toCanonicalString(context);
+Jsonix.Binding.Unmarshalls.Element.AsElementRef = Jsonix.Class({
+	convertFromTypedNamedValue : function(typedNamedValue, context, input, scope) {
+		return {
+			name : typedNamedValue.name,
+			value : typedNamedValue.value
+		};
+	}
+});
+
+Jsonix.Binding.Unmarshalls.Element.AsSimplifiedElementRef = Jsonix.Class({
+	convertFromTypedNamedValue : function(typedNamedValue, context, input, scope) {
+		var propertyName = typedNamedValue.name.toCanonicalString(context);
 		var value = {};
-		value[propertyName] = elementValue.value;
+		value[propertyName] = typedNamedValue.value;
 		return value;
 	}
 });

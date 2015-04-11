@@ -10,7 +10,7 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 		this.elementTypeInfos = [];
 		for (var index = 0; index < etis.length; index++)
 		{
-			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]); 
+			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]);
 		}
 	},
 	getPropertyElementTypeInfo : function(elementName, context) {
@@ -47,6 +47,6 @@ Jsonix.Model.ElementRefsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElement
 	},
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo'
 });
-Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+Jsonix.Model.ElementRefsPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.ElementRefsPropertyInfo, Jsonix.Binding.Unmarshalls.Element.AsSimplifiedElementRef, {
 	CLASS_NAME : 'Jsonix.Model.ElementRefsPropertyInfo.Simplified'
 });

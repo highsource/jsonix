@@ -1,4 +1,4 @@
-Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Marshalls.Element, Jsonix.Binding.Marshalls.Element.AsElementRef, Jsonix.Binding.Unmarshalls.Element, Jsonix.Binding.Unmarshalls.WrapperElement, Jsonix.Binding.Unmarshalls.Element.AsElementRef, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
 	allowDom : true,
 	allowTypedObject : true,
@@ -104,9 +104,6 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		}
 
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
-	},
 	getTypeInfoByElementName : function(elementName, context, scope) {
 		var propertyElementTypeInfo = this.getPropertyElementTypeInfo(elementName, context);
 		if (Jsonix.Util.Type.exists(propertyElementTypeInfo)) {
@@ -148,7 +145,7 @@ Jsonix.Model.AbstractElementRefsPropertyInfo = Jsonix.Class(Jsonix.Binding.Eleme
 		// {
 		// structure.elements[key] = this;
 		// }
-		
+
 		if ((this.allowDom || this.allowTypedObject)) {
 			structure.any = this;
 		}

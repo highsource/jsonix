@@ -1,4 +1,4 @@
-Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.Unmarshalls.Element, Jsonix.Binding.Unmarshalls.WrapperElement, Jsonix.Model.PropertyInfo, {
 	wrapperElementName : null,
 	allowDom : false,
 	allowTypedObject : true,
@@ -69,7 +69,7 @@ Jsonix.Model.AbstractElementsPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementU
 			output.writeEndElement();
 		}
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
+	convertFromTypedNamedValue : function(elementValue, context, input, scope) {
 		return elementValue.value;
 	},
 	buildStructure : function(context, structure) {

@@ -1,4 +1,4 @@
-Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.ElementMarshaller, {
+Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPropertyInfo, Jsonix.Binding.Marshalls.Element, {
 	elementTypeInfos : null,
 	elementTypeInfosMap : null,
 	initialize : function(mapping) {
@@ -7,16 +7,14 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPr
 		var etis = mapping.elementTypeInfos || mapping.etis || [];
 		Jsonix.Util.Ensure.ensureArray(etis);
 		this.elementTypeInfos = [];
-		for (var index = 0; index < etis.length; index++)
-		{
-			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]); 
+		for (var index = 0; index < etis.length; index++) {
+			this.elementTypeInfos[index] = Jsonix.Util.Type.cloneObject(etis[index]);
 		}
 	},
 	getTypeInfoByElementName : function(elementName, context, scope) {
-		var elementNameKey = elementName.key;
-		return this.elementTypeInfosMap[elementNameKey];
+		return this.elementTypeInfosMap[elementName.key];
 	},
-	getOutputElementValue : function(value, context, output, scope) {
+	convertToTypedNamedValue : function(value, context, output, scope) {
 		for (var index = 0; index < this.elementTypeInfos.length; index++) {
 			var elementTypeInfo = this.elementTypeInfos[index];
 			var typeInfo = elementTypeInfo.typeInfo;
@@ -33,16 +31,15 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPr
 		if (context.supportXsiType) {
 			// Find the actual type
 			var actualTypeInfo = context.getTypeInfoByValue(value);
-			if (actualTypeInfo && actualTypeInfo.typeName)
-			{
+			if (actualTypeInfo && actualTypeInfo.typeName) {
 				for (var jndex = 0; jndex < this.elementTypeInfos.length; jndex++) {
 					var eti = this.elementTypeInfos[jndex];
 					var ti = eti.typeInfo;
 					// TODO Can be optimized
-					// Find an element type info which has a type info that is a supertype of the actual type info
-					if (actualTypeInfo.isBasedOn(ti))
-					{
-						var en = eti.elementName; 
+					// Find an element type info which has a type info that is a
+					// supertype of the actual type info
+					if (actualTypeInfo.isBasedOn(ti)) {
+						var en = eti.elementName;
 						return {
 							name : en,
 							value : value,

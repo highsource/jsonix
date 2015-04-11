@@ -7,12 +7,12 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.AbstractElementsPropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 		// TODO Ensure correct argument
-		var k = mapping.key||mapping.k||undefined;
+		var k = mapping.key || mapping.k || undefined;
 		Jsonix.Util.Ensure.ensureObject(k);
-		var v = mapping.value||mapping.v||undefined;
+		var v = mapping.value || mapping.v || undefined;
 		Jsonix.Util.Ensure.ensureObject(v);
 		// TODO Ensure correct argument
-		var en = mapping.elementName||mapping.en||undefined;
+		var en = mapping.elementName || mapping.en || undefined;
 		if (Jsonix.Util.Type.isObject(en)) {
 			this.elementName = Jsonix.XML.QName.fromObject(en);
 		} else if (Jsonix.Util.Type.isString(en)) {
@@ -21,7 +21,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 			this.elementName = new Jsonix.XML.QName(this.defaultElementNamespaceURI, this.name);
 		}
 		this.entryTypeInfo = new Jsonix.Model.ClassInfo({
-			name: 'Map<' + k.name + ',' + v.name + '>',
+			name : 'Map<' + k.name + ',' + v.name + '>',
 			propertyInfos : [ k, v ]
 		});
 
@@ -64,10 +64,10 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		}
 		return result;
 	},
-	getTypeInfoByInputElement : function (context, input, scope) {
+	getTypeInfoByInputElement : function(context, input, scope) {
 		return this.entryTypeInfo;
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
+	convertFromTypedNamedValue : function(elementValue, context, input, scope) {
 		var entry = elementValue.value;
 		var result = {};
 		if (Jsonix.Util.Type.isString(entry[this.key.name])) {
@@ -106,7 +106,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 						output.writeEndElement();
 
 					} else {
-						for ( var index = 0; index < attributeValue.length; index++) {
+						for (var index = 0; index < attributeValue.length; index++) {
 							var collectionEntry = {};
 							collectionEntry[this.key.name] = attributeName;
 							collectionEntry[this.value.name] = attributeValue[index];
@@ -119,10 +119,10 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 			}
 		}
 	},
-	doBuild: function(context, module) {
+	doBuild : function(context, module) {
 		this.entryTypeInfo.build(context, module);
 		// TODO get property by name
-		this.key = this.entryTypeInfo.properties[0]; 
+		this.key = this.entryTypeInfo.properties[0];
 		this.value = this.entryTypeInfo.properties[1];
 	},
 	buildStructureElements : function(context, structure) {
@@ -143,7 +143,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 							map[attributeName] = [];
 						}
 
-						for ( var index = 0; index < attributeValue.length; index++) {
+						for (var index = 0; index < attributeValue.length; index++) {
 							map[attributeName].push(attributeValue[index]);
 						}
 					} else {

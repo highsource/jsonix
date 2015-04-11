@@ -17,8 +17,8 @@
 /org/hisrc/jsonix/Jsonix/Mapping/Style.js
 /org/hisrc/jsonix/Jsonix/Mapping/Styled.js
 /org/hisrc/jsonix/Jsonix/Binding.js
-/org/hisrc/jsonix/Jsonix/Binding/ElementMarshaller.js
-/org/hisrc/jsonix/Jsonix/Binding/ElementUnmarshaller.js
+/org/hisrc/jsonix/Jsonix/Binding/Marshalls.js
+/org/hisrc/jsonix/Jsonix/Binding/Unmarshalls.js
 /org/hisrc/jsonix/Jsonix/Binding/Marshaller.js
 /org/hisrc/jsonix/Jsonix/Binding/Unmarshaller.js
 /org/hisrc/jsonix/Jsonix/Model/TypeInfo.js

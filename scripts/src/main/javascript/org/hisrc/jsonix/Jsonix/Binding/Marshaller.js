@@ -1,4 +1,4 @@
-Jsonix.Binding.Marshaller = Jsonix.Class(Jsonix.Binding.ElementMarshaller, {
+Jsonix.Binding.Marshaller = Jsonix.Class(Jsonix.Binding.Marshalls.Element, Jsonix.Binding.Marshalls.Element.AsElementRef, {
 	context : null,
 	initialize : function(context) {
 		Jsonix.Util.Ensure.ensureObject(context);

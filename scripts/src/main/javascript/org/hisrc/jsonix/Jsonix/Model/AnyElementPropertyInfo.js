@@ -1,4 +1,4 @@
-Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshaller, Jsonix.Binding.ElementUnmarshaller, Jsonix.Model.PropertyInfo, {
+Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.Marshalls.Element, Jsonix.Binding.Marshalls.Element.AsElementRef, Jsonix.Binding.Unmarshalls.Element, Jsonix.Binding.Unmarshalls.Element.AsElementRef, Jsonix.Model.PropertyInfo, {
 	allowDom : true,
 	allowTypedObject : true,
 	mixed : true,
@@ -31,7 +31,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 				}
 			}
 		};
-		
+
 		var et = input.eventType;
 		if (et === Jsonix.XML.Input.START_ELEMENT) {
 			this.unmarshalElement(context, input, scope, callback);
@@ -41,12 +41,12 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			// Whitespace
 			// return null;
 		} else if (et === Jsonix.XML.Input.COMMENT || et === Jsonix.XML.Input.PROCESSING_INSTRUCTION) {
-			//return null;
+			// return null;
 		} else {
 			// TODO better exception
 			throw new Error("Illegal state: unexpected event type [" + et + "].");
 		}
-		
+
 		return result;
 	},
 	marshal : function(value, context, output, scope) {
@@ -57,7 +57,7 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			this.marshalItem(value, context, output, scope);
 		} else {
 			Jsonix.Util.Ensure.ensureArray(value);
-			for ( var index = 0; index < value.length; index++) {
+			for (var index = 0; index < value.length; index++) {
 				this.marshalItem(value[index], context, output, scope);
 			}
 		}
@@ -71,16 +71,12 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 			output.writeNode(value);
 
 		} else {
-			if (this.allowTypedObject)
-			{
+			if (this.allowTypedObject) {
 				this.marshalElement(value, context, output, scope);
 			}
 		}
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
-	},
-	doBuild : function(context, module)	{
+	doBuild : function(context, module) {
 		// Nothing to do
 	},
 	buildStructure : function(context, structure) {
@@ -115,6 +111,6 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	},
 	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo'
 });
-Jsonix.Model.AnyElementPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.AnyElementPropertyInfo, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+Jsonix.Model.AnyElementPropertyInfo.Simplified = Jsonix.Class(Jsonix.Model.AnyElementPropertyInfo, Jsonix.Binding.Unmarshalls.Element.AsSimplifiedElementRef, {
 	CLASS_NAME : 'Jsonix.Model.AnyElementPropertyInfo.Simplified'
 });

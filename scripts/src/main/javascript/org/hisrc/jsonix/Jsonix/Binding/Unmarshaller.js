@@ -1,4 +1,4 @@
-Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
+Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.Unmarshalls.Element, Jsonix.Binding.Unmarshalls.Element.AsElementRef, {
 	context : null,
 	allowTypedObject : true,
 	allowDom : false,
@@ -54,11 +54,8 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 		return result;
 
 	},
-	convertToElementValue : function(elementValue, context, input, scope) {
-		return elementValue;
-	},
 	CLASS_NAME : 'Jsonix.Binding.Unmarshaller'
 });
-Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshaller, Jsonix.Binding.ElementUnmarshaller.Simplified, {
+Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshaller, Jsonix.Binding.Unmarshalls.Element.AsSimplifiedElementRef, {
 	CLASS_NAME : 'Jsonix.Binding.Unmarshaller.Simplified'
 });
