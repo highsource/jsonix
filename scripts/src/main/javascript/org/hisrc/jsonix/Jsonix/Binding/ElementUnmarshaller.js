@@ -58,7 +58,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 	}
 });
 
-Jsonix.Binding.ElementUnmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
+Jsonix.Binding.ElementUnmarshaller.Simplified = Jsonix.Class({
 	convertToElementValue : function(elementValue, context, input, scope) {
 		var propertyName = elementValue.name.toCanonicalString(context);
 		var value = {};

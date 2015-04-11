@@ -35,12 +35,8 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPr
 			var actualTypeInfo = context.getTypeInfoByValue(value);
 			if (actualTypeInfo && actualTypeInfo.typeName)
 			{
-				console.log("Actual type info:");
-				console.log(actualTypeInfo);
 				for (var jndex = 0; jndex < this.elementTypeInfos.length; jndex++) {
 					var eti = this.elementTypeInfos[jndex];
-					console.log("Checking element type info:");
-					console.log(eti);
 					var ti = eti.typeInfo;
 					// TODO Can be optimized
 					// Find an element type info which has a type info that is a supertype of the actual type info

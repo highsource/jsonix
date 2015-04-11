@@ -101,7 +101,6 @@ Jsonix.Request = Jsonix
 						transport.onreadystatechange = function() {
 							that.handleTransport(transport, onSuccess, onFailure);
 						};
-						console.log('Sending.');
 						transport.send(data);
 					}
 				}
