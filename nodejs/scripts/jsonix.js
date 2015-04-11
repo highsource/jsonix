@@ -297,7 +297,6 @@ Jsonix.Request = Jsonix
 						transport.onreadystatechange = function() {
 							that.handleTransport(transport, onSuccess, onFailure);
 						};
-						console.log('Sending.');
 						transport.send(data);
 					}
 				}
@@ -1872,7 +1871,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
 		}
-		var typeInfo = this.getInputTypeInfo(context, input, scope);
+		var typeInfo = this.getTypeInfoByInputElement(context, input, scope);
 		var name = input.getName();
 		var elementValue;
 		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
@@ -1889,14 +1888,11 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		}
 		callback(elementValue);
 	},
-	getInputTypeInfo : function (context, input, scope)
-	{
-		// Issue #70 work in progress here
+	getTypeInfoByInputElement : function(context, input, scope) {
 		var xsiTypeInfo = null;
 		if (context.supportXsiType) {
 			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
-			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
-			{
+			if (Jsonix.Util.StringUtils.isNotBlank(xsiType)) {
 				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
 				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
 			}
@@ -1904,6 +1900,14 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		var name = input.getName();
 		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getTypeInfoByElementName(name, context, scope);
 		return typeInfo;
+	},
+	getTypeInfoByElementName : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			return undefined;
+		}
 	}
 });
 
@@ -1999,14 +2003,6 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.ElementUnmarshaller, {
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
-	},
-	getTypeInfoByElementName : function(name, context, scope) {
-		var elementInfo = context.getElementInfo(name, scope);
-		if (Jsonix.Util.Type.exists(elementInfo)) {
-			return elementInfo.typeInfo;
-		} else {
-			return undefined;
-		}
 	},
 	CLASS_NAME : 'Jsonix.Binding.Unmarshaller'
 });
@@ -3019,12 +3015,8 @@ Jsonix.Model.ElementsPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPr
 			var actualTypeInfo = context.getTypeInfoByValue(value);
 			if (actualTypeInfo && actualTypeInfo.typeName)
 			{
-				console.log("Actual type info:");
-				console.log(actualTypeInfo);
 				for (var jndex = 0; jndex < this.elementTypeInfos.length; jndex++) {
 					var eti = this.elementTypeInfos[jndex];
-					console.log("Checking element type info:");
-					console.log(eti);
 					var ti = eti.typeInfo;
 					// TODO Can be optimized
 					// Find an element type info which has a type info that is a supertype of the actual type info
@@ -3132,7 +3124,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		}
 		return result;
 	},
-	getInputTypeInfo : function (context, input, scope) {
+	getTypeInfoByInputElement : function (context, input, scope) {
 		return this.entryTypeInfo;
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
@@ -3582,14 +3574,6 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
-	},
-	getTypeInfoByElementName : function(name, context, scope) {
-		var elementInfo = context.getElementInfo(name, scope);
-		if (Jsonix.Util.Type.exists(elementInfo)) {
-			return elementInfo.typeInfo;
-		} else {
-			return undefined;
-		}
 	},
 	doBuild : function(context, module)	{
 		// Nothing to do

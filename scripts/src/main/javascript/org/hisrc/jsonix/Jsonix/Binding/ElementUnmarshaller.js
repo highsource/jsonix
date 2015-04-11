@@ -23,7 +23,7 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		if (input.eventType != 1) {
 			throw new Error("Parser must be on START_ELEMENT to read next element.");
 		}
-		var typeInfo = this.getInputTypeInfo(context, input, scope);
+		var typeInfo = this.getTypeInfoByInputElement(context, input, scope);
 		var name = input.getName();
 		var elementValue;
 		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
@@ -40,14 +40,11 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		}
 		callback(elementValue);
 	},
-	getInputTypeInfo : function (context, input, scope)
-	{
-		// Issue #70 work in progress here
+	getTypeInfoByInputElement : function(context, input, scope) {
 		var xsiTypeInfo = null;
 		if (context.supportXsiType) {
 			var xsiType = input.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI, Jsonix.Schema.XSI.TYPE);
-			if (Jsonix.Util.StringUtils.isNotBlank(xsiType))
-			{
+			if (Jsonix.Util.StringUtils.isNotBlank(xsiType)) {
 				var xsiTypeName = Jsonix.Schema.XSD.QName.INSTANCE.parse(xsiType, context, input, scope);
 				xsiTypeInfo = context.getTypeInfoByTypeNameKey(xsiTypeName.key);
 			}
@@ -55,6 +52,14 @@ Jsonix.Binding.ElementUnmarshaller = Jsonix.Class({
 		var name = input.getName();
 		var typeInfo = xsiTypeInfo ? xsiTypeInfo : this.getTypeInfoByElementName(name, context, scope);
 		return typeInfo;
+	},
+	getTypeInfoByElementName : function(name, context, scope) {
+		var elementInfo = context.getElementInfo(name, scope);
+		if (Jsonix.Util.Type.exists(elementInfo)) {
+			return elementInfo.typeInfo;
+		} else {
+			return undefined;
+		}
 	}
 });
 

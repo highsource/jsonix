@@ -64,7 +64,7 @@ Jsonix.Model.ElementMapPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElements
 		}
 		return result;
 	},
-	getInputTypeInfo : function (context, input, scope) {
+	getTypeInfoByInputElement : function (context, input, scope) {
 		return this.entryTypeInfo;
 	},
 	convertToElementValue : function(elementValue, context, input, scope) {

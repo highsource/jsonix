@@ -80,14 +80,6 @@ Jsonix.Model.AnyElementPropertyInfo = Jsonix.Class(Jsonix.Binding.ElementMarshal
 	convertToElementValue : function(elementValue, context, input, scope) {
 		return elementValue;
 	},
-	getTypeInfoByElementName : function(name, context, scope) {
-		var elementInfo = context.getElementInfo(name, scope);
-		if (Jsonix.Util.Type.exists(elementInfo)) {
-			return elementInfo.typeInfo;
-		} else {
-			return undefined;
-		}
-	},
 	doBuild : function(context, module)	{
 		// Nothing to do
 	},
