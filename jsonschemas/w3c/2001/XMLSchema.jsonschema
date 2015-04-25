@@ -1,2 +1,97 @@
 {
+	"id" : "https://cdn.rawgit.com/highsource/jsonix/master/jsonschemas/w3c/2001/XMLSchema.jsonschema#"
+	"definitions" : {
+		"anyType" : {
+		},
+		"anySimpleType" : {
+		},
+		"string" : {
+		},
+		"normalizedString" : {
+		},
+		"token" : {
+		},
+		"language" : {
+		},
+		"Name" : {
+		},
+		"NCName" : {
+		},
+		"ID" : {
+		},
+		"IDREF" : {
+		},
+		"IDREFS" : {
+		},
+		"ENTITY" : {
+		},
+		"ENTITIES" : {
+		},
+		"NMTOKEN" : {
+		},
+		"NMTOKENS" : {
+		},
+		"boolean" : {
+		},
+		"base64Binary" : {
+		},
+		"hexBinary" : {
+		},
+		"hexBinary" : {
+		},
+		"float" : {
+		},
+		"decimal" : {
+		},
+		"integer" : {
+		},
+		"nonPositiveInteger" : {
+		},
+		"negativeInteger" : {
+		},
+		"long" : {
+		},
+		"int" : {
+		},
+		"byte" : {
+		},
+		"nonNegativeInteger" : {
+		},
+		"unsignedLong" : {
+		},
+		"unsignedInt" : {
+		},
+		"unsignedShort" : {
+		},
+		"unsignedByte" : {
+		},
+		"positiveInteger" : {
+		},
+		"double" : {
+		},
+		"anyURI" : {
+		},
+		"QName" : {
+		},
+		"NOTATION" : {
+		},
+		"duration" : {
+		},
+		"dateTime" : {
+		},
+		"time" : {
+		},
+		"date" : {
+		},
+		"gYearMonth" : {
+		},
+		"gYear" : {
+		},
+		"gMonthDay" : {
+		},
+		"gDay" : {
+		},
+		"gMonth" : {
+		}
+	}
 }

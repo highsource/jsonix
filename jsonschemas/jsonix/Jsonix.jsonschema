@@ -1,0 +1,11 @@
+{
+	"id" : "https://cdn.rawgit.com/highsource/jsonix/master/jsonschemas/jsonix/Jsonix.jsonschema#"
+	"definitions" : {
+		"calendar" : {
+		},
+		"dom" : {
+		},
+		"wildcard" : {
+		}
+	}	
+}
