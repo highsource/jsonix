@@ -1,5 +1,4 @@
-Jsonix.Binding.Unmarshalls = {
-};
+Jsonix.Binding.Unmarshalls = {};
 
 Jsonix.Binding.Unmarshalls.WrapperElement = Jsonix.Class({
 	mixed : false,
@@ -32,19 +31,24 @@ Jsonix.Binding.Unmarshalls.Element = Jsonix.Class({
 		var typeInfo = this.getTypeInfoByInputElement(context, input, scope);
 		var name = input.getName();
 		var elementValue;
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			var typedNamedValue = {
-				name : name,
-				value : value,
-				typeInfo : typeInfo
-			};
-			elementValue = this.convertFromTypedNamedValue(typedNamedValue, context, input, scope);
+		if (this.allowTypedObject) {
+			if (Jsonix.Util.Type.exists(typeInfo)) {
+				var value = typeInfo.unmarshal(context, input, scope);
+				var typedNamedValue = {
+					name : name,
+					value : value,
+					typeInfo : typeInfo
+				};
+				elementValue = this.convertFromTypedNamedValue(typedNamedValue, context, input, scope);
+			} else if (this.allowDom) {
+				elementValue = input.getElement();
+			} else {
+				throw new Error("Element [" + name.toString() + "] could not be unmarshalled as is not known in this context and the property does not allow DOM content.");
+			}
 		} else if (this.allowDom) {
 			elementValue = input.getElement();
 		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
+			throw new Error("Element [" + name.toString() + "] could not be unmarshalled as the property neither allows typed objects nor DOM as content. This is a sign of invalid mappings, do not use [allowTypedObject : false] and [allowDom : false] at the same time.");
 		}
 		callback(elementValue);
 	},
