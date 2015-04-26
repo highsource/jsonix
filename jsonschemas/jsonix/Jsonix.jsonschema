@@ -1,11 +1,90 @@
 {
-	"id" : "https://cdn.rawgit.com/highsource/jsonix/master/jsonschemas/jsonix/Jsonix.jsonschema#"
+	"id" : "http://highsource.github.io/jsonix/jsonschemas/jsonix/Jsonix.jsonschema#",
 	"definitions" : {
 		"calendar" : {
+			"anyOf" : [ {
+				"type" : "object",
+				"properties" : {
+					"year" : {
+						"$ref" : "#/definitions/integer"
+					},
+					"month" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/unsignedByte"
+						}, {
+							"minimum" : 1,
+							"exclusiveMinimum" : false,
+							"maximum" : 12,
+							"exclusiveMaximum" : false
+						} ]
+					},
+					"day" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/unsignedByte"
+						}, {
+							"minimum" : 1,
+							"exclusiveMinimum" : false,
+							"maximum" : 31,
+							"exclusiveMaximum" : false
+						} ]
+					},
+					"hour" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/unsignedByte"
+						}, {
+							"minimum" : 0,
+							"exclusiveMinimum" : false,
+							"maximum" : 23,
+							"exclusiveMaximum" : false
+						} ]
+					},
+					"minute" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/unsignedByte"
+						}, {
+							"minimum" : 0,
+							"exclusiveMinimum" : false,
+							"maximum" : 59,
+							"exclusiveMaximum" : false
+						} ]
+					},
+					"second" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/unsignedByte"
+						}, {
+							"minimum" : 0,
+							"exclusiveMinimum" : false,
+							"maximum" : 59,
+							"exclusiveMaximum" : false
+						} ]
+					},
+					"fractionalSecond" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/decimal"
+						}, {
+							"minimum" : 0,
+							"exclusiveMinimum" : false,
+							"maximum" : 1,
+							"exclusiveMaximum" : true
+						} ]
+					},
+					"timezone" : {
+						"allOf" : [ {
+							"$ref" : "#/definitions/integer"
+						}, {
+							"minimum" : -1440,
+							"exclusiveMinimum" : false,
+							"maximum" : 1440,
+							"exclusiveMaximum" : true
+						} ]
+					}
+				}
+			}, {
+				"type" : "null"
+			} ],
+			"description" : "http://www.w3.org/TR/xmlschema-2/#dateTime"
 		},
-		"dom" : {
-		},
-		"wildcard" : {
-		}
-	}	
+		"dom" : {},
+		"wildcard" : {}
+	}
 }
