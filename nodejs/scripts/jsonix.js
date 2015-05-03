@@ -1848,8 +1848,7 @@ Jsonix.Binding.Marshalls.Element.AsElementRef = Jsonix.Class({
 	}
 });
 
-Jsonix.Binding.Unmarshalls = {
-};
+Jsonix.Binding.Unmarshalls = {};
 
 Jsonix.Binding.Unmarshalls.WrapperElement = Jsonix.Class({
 	mixed : false,
@@ -1882,19 +1881,24 @@ Jsonix.Binding.Unmarshalls.Element = Jsonix.Class({
 		var typeInfo = this.getTypeInfoByInputElement(context, input, scope);
 		var name = input.getName();
 		var elementValue;
-		if (this.allowTypedObject && Jsonix.Util.Type.exists(typeInfo)) {
-			var value = typeInfo.unmarshal(context, input, scope);
-			var typedNamedValue = {
-				name : name,
-				value : value,
-				typeInfo : typeInfo
-			};
-			elementValue = this.convertFromTypedNamedValue(typedNamedValue, context, input, scope);
+		if (this.allowTypedObject) {
+			if (Jsonix.Util.Type.exists(typeInfo)) {
+				var value = typeInfo.unmarshal(context, input, scope);
+				var typedNamedValue = {
+					name : name,
+					value : value,
+					typeInfo : typeInfo
+				};
+				elementValue = this.convertFromTypedNamedValue(typedNamedValue, context, input, scope);
+			} else if (this.allowDom) {
+				elementValue = input.getElement();
+			} else {
+				throw new Error("Element [" + name.toString() + "] could not be unmarshalled as is not known in this context and the property does not allow DOM content.");
+			}
 		} else if (this.allowDom) {
 			elementValue = input.getElement();
 		} else {
-			// TODO better exception
-			throw new Error("Element [" + name.toString() + "] is not known in this context and property does not allow DOM.");
+			throw new Error("Element [" + name.toString() + "] could not be unmarshalled as the property neither allows typed objects nor DOM as content. This is a sign of invalid mappings, do not use [allowTypedObject : false] and [allowDom : false] at the same time.");
 		}
 		callback(elementValue);
 	},
@@ -4826,6 +4830,23 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		};
 
 	},
+	
+			// duschata
+	convertTimeZoneString : function(text) {
+
+		if (text === "Z" || !Jsonix.Util.Type.exists(text)) {
+			return 0;
+		}
+
+		else if (new RegExp(this.TIMEZONE_PATTERN).test(text) === false) {
+			throw new Error('Value [' + value + '] doesn\'t match the timzone pattern.');
+		}
+
+		var splittedTimeZoneChunks = text.split(":");
+		// changed: return value is XML.timezone not Date.timezoneOffset
+		return parseInt(splittedTimeZoneChunks[0], 10) * 60 + parseInt(splittedTimeZoneChunks[1], 10);
+	},
+	
 	parseTimeZoneString : function(text) {
 		// (('+' | '-') hh ':' mm) | 'Z'
 		Jsonix.Util.Ensure.ensureString(text);
@@ -5100,8 +5121,17 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 });
 
 Jsonix.Schema.XSD.Calendar.YEAR_PATTERN = "-?([1-9][0-9]*)?((?!(0000))[0-9]{4})";
-Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN = "Z|[\\-\\+][0-9][0-9]:[0-5][0-9]";
+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN = "Z|[\\-\\+](((0[0-9]|1[0-3]):[0-5][0-9])|(14:00))";
+Jsonix.Schema.XSD.Calendar.MONTH_PATTERN = "(0[1-9]|1[0-2])";
+Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN = "\\-\\-" + Jsonix.Schema.XSD.Calendar.MONTH_PATTERN;
+Jsonix.Schema.XSD.Calendar.DAY_PATTERN = "(0[1-9]|[12][0-9]|3[01])";
+Jsonix.Schema.XSD.Calendar.SINGLE_DAY_PATTERN = "\\-\\-\\-"+Jsonix.Schema.XSD.Calendar.DAY_PATTERN;
 Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.YEAR_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
+Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
+Jsonix.Schema.XSD.Calendar.GDAY_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_DAY_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
+Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.YEAR_PATTERN + ")" + "-" + "(" + Jsonix.Schema.XSD.Calendar.DAY_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
+
+Jsonix.Schema.XSD.Calendar.GMONTH_DAY_SPLITTER = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN + ")" +"-"+ "(" +Jsonix.Schema.XSD.Calendar.DAY_PATTERN +")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
 
 Jsonix.Schema.XSD.Calendar.INSTANCE = new Jsonix.Schema.XSD.Calendar();
 Jsonix.Schema.XSD.Calendar.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Calendar.INSTANCE);
@@ -5424,21 +5454,53 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 });
 Jsonix.Schema.XSD.Date.INSTANCE = new Jsonix.Schema.XSD.Date();
 Jsonix.Schema.XSD.Date.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Date.INSTANCE);
-Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GYearMonth',
 	typeName : Jsonix.Schema.XSD.qname('gYearMonth'),
-	CLASS_NAME : 'Jsonix.Schema.XSD.GYearMonth'
+	CLASS_NAME : 'Jsonix.Schema.XSD.GYearMonth',
+
+	parse : function(value, context, input, scope) {
+		var returnValue = this.splitGYearMonth(value);
+		returnValue.toString = function() {
+			return "EmptyXMLElement. Call embedded 'year', 'month' or 'timezone' property";
+		};
+
+		return returnValue;
+	},
+
+	/**
+	 * @param {string}
+	 *            yearmonth datetype in ISO 8601 format
+	 * @returns {object} of year, month, timestamp properties as a number
+	 * @throws {Error}
+	 *             if the datetype is not valid
+	 * 
+	 */
+	splitGYearMonth : function(value) {
+
+		var gYearMonthExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN + "$");
+		var results = value.match(gYearMonthExpression);
+
+		if (results !== null) {
+			var splitedGYearMonth = {
+				year : parseInt(results[1], 10),
+				month : parseInt(results[5], 10),
+				timezone : this.convertTimeZoneString(results[7])
+			};
+
+			return splitedGYearMonth;
+		}
+
+		throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
+	}
+
 });
 Jsonix.Schema.XSD.GYearMonth.INSTANCE = new Jsonix.Schema.XSD.GYearMonth();
-Jsonix.Schema.XSD.GYearMonth.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
-		Jsonix.Schema.XSD.GYearMonth.INSTANCE);
-// REVIEW AV: GYear extends Calendar
+Jsonix.Schema.XSD.GYearMonth.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GYearMonth.INSTANCE);
 Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GYear',
 	typeName : Jsonix.Schema.XSD.qname('gYear'),
-	// TODO: find appropriate place for the regex (e.g.
-	// Jsonix.XML.Calendar.regex ?)
-	// REVIEW AV: I've first moved as constants to the Calendar 
+	CLASS_NAME : 'Jsonix.Schema.XSD.GYear',
 
 	parse : function(value, context, input, scope) {
 		var returnValue = this.splitGYear(value);
@@ -5449,10 +5511,22 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		return returnValue;
 	},
 
+	print : function(value, context, output, scope) {
+		return "gYear.print " + JSON.stringify(value);
+	},
+
+	reprint : function(value, context, output, scope) {
+		// TODO: confirm this
+		if (value.year === undefined || isNaN(value.year) || value.year === 0) {
+			throw new Error('Value [' + value + '] can\'t be converted to gYear ');
+		}
+		return this.printYear(value.year) + this.printTimeZoneString(value.timezone);
+	},
+
 	/**
 	 * @param {string}
 	 *            year datetype in ISO 8601 format
-	 * @returns {object} pair of date, timestamp properties as a number
+	 * @returns {object} pair of year, timestamp properties as a number
 	 * @throws {Error}
 	 *             if the datetype is not valid
 	 * 
@@ -5462,88 +5536,179 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		var gYearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN + "$");
 		var results = value.match(gYearExpression);
 
-		// TODO: underscored functions and properties are for testing proposes
-		// only. Must be vanished in the min.js
-
 		if (results !== null) {
 			var splitedGYear = {
-				// REVIEW AV: Decimal radix
 				year : parseInt(results[1], 10),
-				_timezone : results[5],
-				timezone : this.parseTimeZoneString(results[5])
-			// TODO: parseTimeZoneString() function exists also in CALENDAR
-			// but inverts the sign, why?
+				timezone : this.convertTimeZoneString(results[5])
 			};
 
 			return splitedGYear;
 		}
 
 		throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
-	},
+	}
 
-	parseTimeZoneString : function(text) {
-		if (text === "Z" || !Jsonix.Util.Type.exists(text)) {
-			return 0;
-		}
-
-		var splittedTimeZoneChunks = text.split(":");
-		return - (parseInt(splittedTimeZoneChunks[0], 10) * 60 + parseInt(splittedTimeZoneChunks[1], 10));
-	},
-
-	// TODO: underscored functions and properties are for testing proposes only.
-	// Must be vanished in the min.js
-
-	_validateGYear : function(value) {
-		var gYearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN + "$");
-
-		if (!gYearExpression.test(value)) {
-			throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
-		}
-	},
-
-	_validateYear : function(value) {
-		var yearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.YEAR_PATTERN + "$");
-
-		if (!yearExpression.test(value)) {
-			throw new Error('Value [' + value + '] doesn\'t match the year pattern.');
-		}
-	},
-
-	_validateTimeZone : function(value) {
-		var timeZoneExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + "$");
-
-		if (!timeZoneExpression.test(value)) {
-			throw new Error('Value [' + value + '] doesn\'t match the time zone pattern.');
-		}
-	},
-	CLASS_NAME : 'Jsonix.Schema.XSD.GYear'
 });
 Jsonix.Schema.XSD.GYear.INSTANCE = new Jsonix.Schema.XSD.GYear();
 Jsonix.Schema.XSD.GYear.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GYear.INSTANCE);
-Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GMonthDay',
 	typeName : Jsonix.Schema.XSD.qname('gMonthDay'),
-	CLASS_NAME : 'Jsonix.Schema.XSD.GMonthDay'
+	CLASS_NAME : 'Jsonix.Schema.XSD.GMonthDay',
+
+	parse : function(value, context, input, scope) {
+		var returnValue = this.splitGMonthDay(value);
+		returnValue.toString = function() {
+			return "EmptyXMLElement. Call embedded 'month', 'day' or 'timezone' property";
+		};
+
+		return returnValue;
+	},
+
+	/**
+	 * @param {string}
+	 *            monthday datetype in ISO 8601 format
+	 * @returns {object} pair of dey, timestamp properties as a number
+	 * @throws {Error}
+	 *             if the datetype is not valid
+	 * 
+	 */
+	splitGMonthDay : function(value) {
+
+		var gMonthDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_SPLITTER + "$");
+		var results = value.match(gMonthDayExpression);
+
+		if (results !== null) {
+			var splitedGMonthDay = {
+
+				month : parseInt(results[2], 10),
+				day : parseInt(results[3], 10),
+				timezone : this.convertTimeZoneString(results[5])
+			};
+
+			 var shortMonths = [ 4, 6, 9, 11 ];
+			var validationFailed = false;
+
+			if (splitedGMonthDay.month === 2 && splitedGMonthDay.day > 29) {
+				validationFailed = true;
+			} else {
+				for ( var shortMonth in shortMonths) {
+					if (splitedGMonthDay.month === shortMonths[shortMonth] && splitedGMonthDay.day > 30) {
+						validationFailed = true;
+						break;
+					}
+				}
+			}
+
+			if (validationFailed === false) {
+				return splitedGMonthDay;
+			}
+		}
+
+		throw new Error('Value [' + value + '] doesn\'t match the gMonthDay pattern.');
+	}
 });
 Jsonix.Schema.XSD.GMonthDay.INSTANCE = new Jsonix.Schema.XSD.GMonthDay();
-Jsonix.Schema.XSD.GMonthDay.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
-		Jsonix.Schema.XSD.GMonthDay.INSTANCE);
-Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+Jsonix.Schema.XSD.GMonthDay.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GMonthDay.INSTANCE);
+Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GDay',
 	typeName : Jsonix.Schema.XSD.qname('gDay'),
-	CLASS_NAME : 'Jsonix.Schema.XSD.GDay'
+	CLASS_NAME : 'Jsonix.Schema.XSD.GDay',
+
+	parse : function(value, context, input, scope) {
+		var returnValue = this.splitGDay(value);
+		returnValue.toString = function() {
+			return "EmptyXMLElement. Call embedded 'day' or 'timezone' property";
+		};
+
+		return returnValue;
+	},
+
+	/**
+	 * @param {string}
+	 *            day datetype in ISO 8601 format
+	 * @returns {object} pair of dey, timestamp properties as a number
+	 * @throws {Error}
+	 *             if the datetype is not valid
+	 * 
+	 */
+	splitGDay : function(value) {
+
+		var gDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GDAY_PATTERN + "$");
+		var results = value.match(gDayExpression);
+
+		if (results !== null) {
+			var splitedGYDay = {
+				day : parseInt(results[2], 10),
+				timezone : this.convertTimeZoneString(results[3])
+			};
+
+			return splitedGYDay;
+		}
+
+		throw new Error('Value [' + value + '] doesn\'t match the gDay pattern.');
+	}
 });
 Jsonix.Schema.XSD.GDay.INSTANCE = new Jsonix.Schema.XSD.GDay();
-Jsonix.Schema.XSD.GDay.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
-		Jsonix.Schema.XSD.GDay.INSTANCE);
-Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
+Jsonix.Schema.XSD.GDay.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GDay.INSTANCE);
+Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GMonth',
 	typeName : Jsonix.Schema.XSD.qname('gMonth'),
-	CLASS_NAME : 'Jsonix.Schema.XSD.GMonth'
+	CLASS_NAME : 'Jsonix.Schema.XSD.GMonth',
+
+	parse : function(value, context, input, scope) {
+		var returnValue = this.splitGMonth(value);
+		returnValue.toString = function() {
+			return "EmptyXMLElement. Call embedded 'month' or 'timezone' property";
+		};
+
+		return returnValue;
+	},
+
+	reprint : function(value, context, input, scope) {
+		if (value instanceof Date) {
+			// TODO: timezoneOffset -> timezone
+			return "--" + this.printMonth(value.getMonth() + 1);
+		}
+		return "--" + this.printMonth(value.month);
+
+	},
+
+	/**
+	 * @param {string}
+	 *            month datetype in ISO 8601 format
+	 * @returns {object} pair of month, timestamp properties as a number, date
+	 *          object
+	 * @throws {Error}
+	 *             if the datetype is not valid
+	 * 
+	 */
+	splitGMonth : function(value) {
+		var gMonthExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN + "$");
+		var results = value.match(gMonthExpression);
+
+		if (results !== null) {
+
+			var gmt = "";
+			if (Jsonix.Util.Type.exists(results[3])) {
+				var splittedTimeZones = results[3].split(":");
+				gmt = " GMT" + splittedTimeZones[0] + splittedTimeZones[1];
+			}
+
+			var splitedGMonth = {
+				month : parseInt(results[2], 10),
+				timezone : this.convertTimeZoneString(results[3]),
+				date : new Date(results[2] + " 01 1970 00:00:00" + gmt)
+			};
+
+			return splitedGMonth;
+		}
+
+		throw new Error('Value [' + value + '] doesn\'t match the gMonth pattern.');
+	}
 });
 Jsonix.Schema.XSD.GMonth.INSTANCE = new Jsonix.Schema.XSD.GMonth();
-Jsonix.Schema.XSD.GMonth.INSTANCE.LIST = new Jsonix.Schema.XSD.List(
-		Jsonix.Schema.XSD.GMonth.INSTANCE);
+Jsonix.Schema.XSD.GMonth.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GMonth.INSTANCE);
 Jsonix.Schema.XSD.ID = Jsonix.Class(Jsonix.Schema.XSD.String, {
 	name : 'ID',
 	typeName : Jsonix.Schema.XSD.qname('ID'),

@@ -1,4 +1,4 @@
-package org.hisrc.jsonix.test;
+package org.hisrc.jsonix.xml.bind.test;
 
 import java.util.Calendar;
 import java.util.Date;
