@@ -8,7 +8,6 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		returnValue.toString = function() {
 			return "EmptyXMLElement. Call embedded 'day' or 'timezone' property";
 		};
-
 		return returnValue;
 	},
 

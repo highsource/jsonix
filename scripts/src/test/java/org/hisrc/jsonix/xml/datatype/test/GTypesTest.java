@@ -150,4 +150,13 @@ public class GTypesTest {
 		Assert.assertEquals(31,
 				datatypeFactory.newXMLGregorianCalendar("--02-31").getDay());
 	}
+
+	public void checksDateTime() throws DatatypeConfigurationException {
+		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+
+		Assert.assertEquals(
+				-300,
+				datatypeFactory.newXMLGregorianCalendar(
+						"2013-05-07T08:09:10-05:00").getTimezone());
+	}
 }

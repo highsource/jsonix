@@ -11,8 +11,13 @@ module.exports = {
 
 		test.equal(101, unmarshaller.unmarshalString('<GDateTypes year="0101"/>').value.year.year);
 		test.equal(-1234567, unmarshaller.unmarshalString('<GDateTypes year="-1234567"/>').value.year.year);
+		test.equal(1234567, unmarshaller.unmarshalString('<GDateTypes year="1234567"/>').value.year.year);
 		test.equal(2013, unmarshaller.unmarshalString('<GDateTypes year="2013-05:00"/>').value.year.year);
 		test.equal(-300, unmarshaller.unmarshalString('<GDateTypes year="2013-05:00"/>').value.year.timezone);
+		test.equal(-2013, unmarshaller.unmarshalString('<GDateTypes year="-2013+05:00"/>').value.year.year);
+		test.equal(300, unmarshaller.unmarshalString('<GDateTypes year="-2013+05:00"/>').value.year.timezone);
+		// TODO Exception
+		// test.equal(0, unmarshaller.unmarshalString('<GDateTypes year="0000"/>').value.year.year);
 
 		test.equal(1, unmarshaller.unmarshalString('<GDateTypes month="--01"/>').value.month.month);
 		test.equal(12, unmarshaller.unmarshalString('<GDateTypes month="--12-05:00"/>').value.month.month);

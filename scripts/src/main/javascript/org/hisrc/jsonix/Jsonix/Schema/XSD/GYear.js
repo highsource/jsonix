@@ -42,11 +42,10 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				year : parseInt(results[1], 10),
 				timezone : this.convertTimeZoneString(results[5])
 			};
-
 			return splitedGYear;
+		} else {
+			throw new Error('Value [' + value + '] does not match the gYear pattern.');
 		}
-
-		throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
 	}
 
 });

@@ -22,18 +22,17 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	 */
 	splitGMonthDay : function(value) {
 
-		var gMonthDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_SPLITTER + "$");
+		var gMonthDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN + "$");
 		var results = value.match(gMonthDayExpression);
 
 		if (results !== null) {
 			var splitedGMonthDay = {
-
 				month : parseInt(results[2], 10),
 				day : parseInt(results[3], 10),
 				timezone : this.convertTimeZoneString(results[5])
 			};
 
-			 var shortMonths = [ 4, 6, 9, 11 ];
+			var shortMonths = [ 4, 6, 9, 11 ];
 			var validationFailed = false;
 
 			if (splitedGMonthDay.month === 2 && splitedGMonthDay.day > 29) {

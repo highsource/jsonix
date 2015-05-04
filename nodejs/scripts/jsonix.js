@@ -5130,8 +5130,7 @@ Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.YEAR
 Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
 Jsonix.Schema.XSD.Calendar.GDAY_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_DAY_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
 Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.YEAR_PATTERN + ")" + "-" + "(" + Jsonix.Schema.XSD.Calendar.DAY_PATTERN + ")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
-
-Jsonix.Schema.XSD.Calendar.GMONTH_DAY_SPLITTER = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN + ")" +"-"+ "(" +Jsonix.Schema.XSD.Calendar.DAY_PATTERN +")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
+Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN = "(" + Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN + ")" +"-"+ "(" +Jsonix.Schema.XSD.Calendar.DAY_PATTERN +")" + "(" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + ")?";
 
 Jsonix.Schema.XSD.Calendar.INSTANCE = new Jsonix.Schema.XSD.Calendar();
 Jsonix.Schema.XSD.Calendar.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Calendar.INSTANCE);
@@ -5541,11 +5540,10 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				year : parseInt(results[1], 10),
 				timezone : this.convertTimeZoneString(results[5])
 			};
-
 			return splitedGYear;
+		} else {
+			throw new Error('Value [' + value + '] does not match the gYear pattern.');
 		}
-
-		throw new Error('Value [' + value + '] doesn\'t match the gYear pattern.');
 	}
 
 });
@@ -5575,18 +5573,17 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	 */
 	splitGMonthDay : function(value) {
 
-		var gMonthDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_SPLITTER + "$");
+		var gMonthDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN + "$");
 		var results = value.match(gMonthDayExpression);
 
 		if (results !== null) {
 			var splitedGMonthDay = {
-
 				month : parseInt(results[2], 10),
 				day : parseInt(results[3], 10),
 				timezone : this.convertTimeZoneString(results[5])
 			};
 
-			 var shortMonths = [ 4, 6, 9, 11 ];
+			var shortMonths = [ 4, 6, 9, 11 ];
 			var validationFailed = false;
 
 			if (splitedGMonthDay.month === 2 && splitedGMonthDay.day > 29) {
@@ -5620,7 +5617,6 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		returnValue.toString = function() {
 			return "EmptyXMLElement. Call embedded 'day' or 'timezone' property";
 		};
-
 		return returnValue;
 	},
 

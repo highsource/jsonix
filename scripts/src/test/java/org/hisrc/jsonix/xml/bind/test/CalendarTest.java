@@ -36,7 +36,7 @@ public class CalendarTest {
 		final Date date = new Date(70, 0, 1, 10, 0, 0);
 		
 		
-		System.out.println(date.getTimezoneOffset());
+		System.out.println("Timezone offset:" + date.getTimezoneOffset());
 		System.out.println(date.getTime());
 
 		System.out.println(DATATYPE_FACTORY
