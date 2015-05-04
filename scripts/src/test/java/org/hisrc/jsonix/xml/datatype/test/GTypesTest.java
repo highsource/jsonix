@@ -7,8 +7,11 @@ import java.io.StringReader;
 import javax.xml.bind.JAXBContext;
 import javax.xml.bind.JAXBException;
 import javax.xml.bind.Unmarshaller;
+import javax.xml.datatype.DatatypeConfigurationException;
+import javax.xml.datatype.DatatypeFactory;
 import javax.xml.transform.stream.StreamSource;
 
+import org.junit.Assert;
 import org.junit.Test;
 
 public class GTypesTest {
@@ -47,7 +50,6 @@ public class GTypesTest {
 				.getMonth().getTimezone()));
 
 		dateType = unmarshal(GTypesType.class, /* xmlHead + */dateTypeXml);
-
 		System.out.println(dateType.getMonth());
 		System.out.println(dateType.getMonth().getTimezone());
 
@@ -55,6 +57,97 @@ public class GTypesTest {
 				.getMonth());
 		System.out.println(dateType.getMonth().toGregorianCalendar().getTime()
 				.getTimezoneOffset());
+	}
 
+	@Test
+	public void checksGYear() throws DatatypeConfigurationException {
+		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+
+		Assert.assertEquals(101, datatypeFactory
+				.newXMLGregorianCalendar("0101").getYear());
+		Assert.assertEquals(-1234567,
+				datatypeFactory.newXMLGregorianCalendar("-1234567").getYear());
+
+		Assert.assertEquals(2013,
+				datatypeFactory.newXMLGregorianCalendar("2013-05:00").getYear());
+		Assert.assertEquals(-300,
+				datatypeFactory.newXMLGregorianCalendar("2013-05:00")
+						.getTimezone());
+
+	}
+
+	@Test
+	public void checksGMonth() throws DatatypeConfigurationException {
+		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+
+		Assert.assertEquals(01, datatypeFactory.newXMLGregorianCalendar("--01")
+				.getMonth());
+		Assert.assertEquals(12,
+				datatypeFactory.newXMLGregorianCalendar("--12-05:00")
+						.getMonth());
+		Assert.assertEquals(-300,
+				datatypeFactory.newXMLGregorianCalendar("--12-05:00")
+						.getTimezone());
+	}
+
+	@Test
+	public void checksGDay() throws DatatypeConfigurationException {
+		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+
+		Assert.assertEquals(01, datatypeFactory
+				.newXMLGregorianCalendar("---01").getDay());
+
+		Assert.assertEquals(31, datatypeFactory
+				.newXMLGregorianCalendar("---31").getDay());
+
+		Assert.assertEquals(31,
+				datatypeFactory.newXMLGregorianCalendar("---31-05:00").getDay());
+		Assert.assertEquals(-300,
+				datatypeFactory.newXMLGregorianCalendar("---31-05:00")
+						.getTimezone());
+	}
+
+	@Test
+	public void checksGYearMonth() throws DatatypeConfigurationException {
+		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+
+		Assert.assertEquals(-13,
+				datatypeFactory.newXMLGregorianCalendar("-0013-01").getYear());
+		Assert.assertEquals(2013,
+				datatypeFactory.newXMLGregorianCalendar("2013-01").getYear());
+		Assert.assertEquals(01,
+				datatypeFactory.newXMLGregorianCalendar("2013-01").getMonth());
+
+		Assert.assertEquals(12345,
+				datatypeFactory.newXMLGregorianCalendar("12345-01").getYear());
+
+		Assert.assertEquals(01,
+				datatypeFactory.newXMLGregorianCalendar("12345-01").getMonth());
+
+		Assert.assertEquals(-300,
+				datatypeFactory.newXMLGregorianCalendar("2013-01-05:00")
+						.getTimezone());
+		Assert.assertEquals(0,
+				datatypeFactory.newXMLGregorianCalendar("2013-01Z")
+						.getTimezone());
+	}
+
+	public void checksGMonthDay() throws DatatypeConfigurationException {
+		DatatypeFactory datatypeFactory = DatatypeFactory.newInstance();
+
+		Assert.assertEquals(3,
+				datatypeFactory.newXMLGregorianCalendar("--03-01").getMonth());
+		Assert.assertEquals(1,
+				datatypeFactory.newXMLGregorianCalendar("--03-01").getDay());
+		Assert.assertEquals(-300,
+				datatypeFactory.newXMLGregorianCalendar("--02-01-05:00")
+						.getTimezone());
+		Assert.assertEquals(0,
+				datatypeFactory.newXMLGregorianCalendar("--03-01Z")
+						.getTimezone());
+		Assert.assertEquals(29,
+				datatypeFactory.newXMLGregorianCalendar("--02-29").getDay());
+		Assert.assertEquals(31,
+				datatypeFactory.newXMLGregorianCalendar("--02-31").getDay());
 	}
 }
