@@ -39,10 +39,7 @@ module.exports = {
 			}
 		};
 
-		// TODO: why are negative years not allowed?
-		test.throws(function() {
-			marshaller.marshalString(gDateType);
-		}, "Error");
+		test.equal('<GDateTypes year="-0001"/>', marshaller.marshalString(gDateType));
 
 		gDateType.value = {
 			"year" : {
