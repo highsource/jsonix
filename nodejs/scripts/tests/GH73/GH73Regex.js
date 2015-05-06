@@ -325,7 +325,7 @@ module.exports = {
 	},
 
 	"GMonthDay" : function(test) {
-		var gMonthDaySplitter = "^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_SPLITTER + "$";
+		var gMonthDaySplitter = "^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN + "$";
 
 		GH73.Regex.splitExpression(gMonthDaySplitter, "--12-31+05:00");
 
