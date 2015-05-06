@@ -230,6 +230,35 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 
 	},
+	// TODO this will be _the_ TZ parsing method
+	parseTimeZoneString1 : function(text) {
+		// (('+' | '-') hh ':' mm) | 'Z'
+		if (!Jsonix.Util.Type.isString(text))
+		{
+			return NaN;
+		} else if (text === '') {
+			return NaN;
+		} else if (text === 'Z') {
+			return 0;
+		} else {
+			if (text.length !== 6) {
+				throw new Error('Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].');
+			}
+			var signString = text.charAt(0);
+			var sign;
+			if (signString === '+') {
+				sign = 1;
+			} else if (signString === '-') {
+				sign = -1;
+			} else {
+				throw new Error('First character of the time zone [' + text + '] must be \'+\' or \'-\'.');
+			}
+			var hour = this.parseHour(text.substring(1, 3));
+			var minute = this.parseMinute(text.substring(4, 6));
+			return sign * (hour * 60 + minute);
+		}
+
+	},
 	parseYear : function(text) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text.length !== 4) {
@@ -462,9 +491,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		if (value < 0) {
 			throw new Error('Value [' + value + '] must not be negative.');
 		}
-		if (value >= Math.pow(10, length)) {
-			throw new Error('Value [' + value + '] must be less than [' + Math.pow(10, length) + '].');
-		}
+//		if (value >= Math.pow(10, length)) {
+//			throw new Error('Value [' + value + '] must be less than [' + Math.pow(10, length) + '].');
+//		}
 		var result = String(value);
 		for (var i = result.length; i < length; i++) {
 			result = '0' + result;
