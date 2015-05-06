@@ -1,31 +1,31 @@
 var Jsonix = require("../../jsonix").Jsonix;
 
 module.exports = {
-	"SplitGYear" : function(test) {
+	"Parse" : function(test) {
 		var gYear = Jsonix.Schema.XSD.GYear.INSTANCE;
 
-		test.equals("1984", gYear.splitGYear("1984+00:00").year);
+		test.equals("1984", gYear.parse("1984+00:00").year);
 
-		test.equals('-300', gYear.splitGYear("1984-05:00").timezone);
-		test.equals('300', gYear.splitGYear("1984+05:00").timezone);
+		test.equals('-300', gYear.parse("1984-05:00").timezone);
+		test.equals('300', gYear.parse("1984+05:00").timezone);
 
-		test.equals("1984", gYear.splitGYear("1984").year);
-
-		test.throws(function() {
-			gYear.splitGYear("+00:00");
-		}, "Error");
-		test.throws(function() {
-			gYear.splitGYear("1984+00");
-		}, "Error");
-		test.throws(function() {
-			gYear.splitGYear("1984+");
-		}, "Error");
-		test.throws(function() {
-			gYear.splitGYear("+00:00");
-		}, "Error");
+		test.equals("1984", gYear.parse("1984").year);
 
 		test.throws(function() {
-			gYear.splitGYear("1984+14:01");
+			gYear.parse("+00:00");
+		}, "Error");
+		test.throws(function() {
+			gYear.parse("1984+00");
+		}, "Error");
+		test.throws(function() {
+			gYear.parse("1984+");
+		}, "Error");
+		test.throws(function() {
+			gYear.parse("+00:00");
+		}, "Error");
+
+		test.throws(function() {
+			gYear.parse("1984+14:01");
 		}, "Error");
 
 		test.done();
