@@ -486,5 +486,58 @@ module.exports =
 			test.done();
 
 		}
+	},
+	"GYear": {
+		"Parse": function(test) {
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+			test.equal(101, g.parse('0101').year);
+			test.equal(-1234567, g.parse('-1234567').year);
+			test.equal(1234567, g.parse('1234567').year);
+			test.equal(2013, g.parse('2013-05:00').year);
+			test.equal(-300, g.parse('2013-05:00').timezone);
+			test.equal(-2013, g.parse('-2013+05:00').year);
+			test.equal(300, g.parse('-2013+05:00').timezone);
+
+			test.throws(function(){g.parse('0000');});
+			test.throws(function(){g.parse('1');});
+			test.throws(function(){g.parse('12');});
+			test.throws(function(){g.parse('123');});
+
+			test.done();
+		},
+		"Print": function(test) {
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+
+			test.equal('0001', g.print({year:1}));
+			test.equal('0010', g.print({year:10}));
+			test.equal('0101', g.print({year:101}));
+			test.equal('1010', g.print({year:1010}));
+			test.equal('-1234567', g.print({year:-1234567}));
+			test.equal('1234567', g.print({year:1234567}));
+			test.equal('2013-05:00', g.print({year:2013,timezone:-300}));
+			test.equal('-2013+05:00', g.print({year:-2013,timezone:300}));
+
+			test.throws(function(){g.print(2013);});
+			test.throws(function(){g.print({});});
+			test.throws(function(){g.print({year:0});});
+			test.throws(function(){g.print({year:'2013'});});
+			test.throws(function(){g.print({year:2013, timezone:'-05:00'});});
+			test.throws(function(){g.print({year:2013, timezone:100000});});
+
+			test.done();
+		},
+		"Reprint": function(test) {
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+			test.equal('0001', g.reprint('0001'));
+			test.equal('0010', g.reprint('0010'));
+			test.equal('0101', g.reprint('0101'));
+			test.equal('1010', g.reprint('1010'));
+			test.equal('-1234567', g.reprint('-1234567'));
+			test.equal('1234567', g.reprint('1234567'));
+			test.equal('2013-05:00', g.reprint('2013-05:00'));
+			test.equal('-2013+05:00', g.reprint('-2013+05:00'));
+
+			test.done();
+		}
 	}
 };
