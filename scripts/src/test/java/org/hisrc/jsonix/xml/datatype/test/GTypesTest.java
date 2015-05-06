@@ -158,5 +158,9 @@ public class GTypesTest {
 				-300,
 				datatypeFactory.newXMLGregorianCalendar(
 						"2013-05-07T08:09:10-05:00").getTimezone());
+		Assert.assertEquals(
+				123456,
+				datatypeFactory.newXMLGregorianCalendar(
+						"123456-05-07T08:09:10-05:00").getYear());
 	}
 }
