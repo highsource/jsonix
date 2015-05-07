@@ -60,7 +60,7 @@ module.exports = {
 			}
 		};
 
-		test.equal('<GDateTypes year="0101-05:00"/>', marshaller.marshalString(gDateType));
+		test.equal('<GDateTypes year="0101+05:00"/>', marshaller.marshalString(gDateType));
 
 		gDateType.value = {
 			"year" : {
