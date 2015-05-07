@@ -13,22 +13,22 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
 			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
-		var timezoneOffset;
+		var timezone;
 		var unknownTimezone;
-		var localTimezoneOffset = date.getTimezoneOffset();
+		var localTimezone = - date.getTimezoneOffset();
 		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
 		{
-			timezoneOffset = - calendar.timezone;
+			timezone = calendar.timezone;
 			unknownTimezone = false;
 		}
 		else
 		{
 			// Unknown timezone
-			timezoneOffset = localTimezoneOffset;
+			timezone = localTimezone;
 			unknownTimezone = true;
 		}
 		//
-		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		var result = new Date(date.getTime() + (60000 * (- timezone + localTimezone)));
 		if (unknownTimezone)
 		{
 			// null denotes "unknown timezone"
@@ -42,8 +42,8 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	},
 	print : function(value, context, output, scope) {
 		Jsonix.Util.Ensure.ensureDate(value);
-		var timezoneOffset;
-		var localTimezoneOffset = value.getTimezoneOffset();
+		var timezone;
+		var localTimezone = - value.getTimezoneOffset();
 		var correctedValue;
 		// If original time zone was unknown, print the given value without
 		// the timezone
@@ -64,13 +64,13 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			// If original timezone was known, correct and print the value with the timezone
 			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezone))
 			{
-				timezoneOffset = - value.originalTimezone;
-				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+				timezone = value.originalTimezone;
+				correctedValue = new Date(value.getTime() - (60000 * ( - timezone + localTimezone)));
 			}
 			// If original timezone was not specified, do not correct and use the local time zone
 			else
 			{
-				timezoneOffset = localTimezoneOffset;
+				timezone = localTimezone;
 				correctedValue = value;
 			}
 			var x = this.printDateTime(new Jsonix.XML.Calendar({
@@ -81,7 +81,7 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				minute : correctedValue.getMinutes(),
 				second : correctedValue.getSeconds(),
 				fractionalSecond : (correctedValue.getMilliseconds() / 1000),
-				timezone: - timezoneOffset
+				timezone: timezone
 			}));
 			return x;
 		}

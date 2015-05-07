@@ -13,22 +13,22 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
 			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
-		var timezoneOffset;
+		var timezone;
 		var unknownTimezone;
-		var localTimezoneOffset = date.getTimezoneOffset();
+		var localTimezone = - date.getTimezoneOffset();
 		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
 		{
-			timezoneOffset = - calendar.timezone;
+			timezone = calendar.timezone;
 			unknownTimezone = false;
 		}
 		else
 		{
 			// Unknown timezone
-			timezoneOffset = localTimezoneOffset;
+			timezone = localTimezone;
 			unknownTimezone = true;
 		}
 		//
-		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		var result = new Date(date.getTime() + (60000 * ( - timezone + localTimezone)));
 		if (unknownTimezone)
 		{
 			// null denotes "unknown timezone"
@@ -36,7 +36,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		else
 		{
-			result.originalTimezone = - timezoneOffset;
+			result.originalTimezone = timezone;
 		}
 		return result;
 	},
@@ -59,16 +59,16 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		else
 		{
 			var correctedValue;
-			var timezoneOffset;
-			var localTimezoneOffset = value.getTimezoneOffset();
+			var timezone;
+			var localTimezone = - value.getTimezoneOffset();
 			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezone))
 			{
-				timezoneOffset = - value.originalTimezone;
-				correctedValue = new Date(value.getTime() - (60000 * (timezoneOffset - localTimezoneOffset)));
+				timezone = value.originalTimezone;
+				correctedValue = new Date(value.getTime() - (60000 * ( - timezone + localTimezone)));
 			}
 			else
 			{
-				timezoneOffset = localTimezoneOffset;
+				timezone = localTimezone;
 				correctedValue = value;
 			}
 			var correctedTime = correctedValue.getTime();
@@ -78,16 +78,16 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 					minute : correctedValue.getMinutes(),
 					second : correctedValue.getSeconds(),
 					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
-					timezone: - timezoneOffset
+					timezone: timezone
 				}));
 			} else {
-				var timezoneOffsetHours = Math.ceil(-correctedTime / 3600000);
+				var timezoneHours = Math.ceil(-correctedTime / 3600000);
 				return this.printTime(new Jsonix.XML.Calendar({
-					hour : (correctedValue.getHours() + timezoneOffsetHours + timezoneOffset / 60 ) % 24,
+					hour : (correctedValue.getHours() + timezoneHours - timezone / 60 ) % 24,
 					minute : correctedValue.getMinutes(),
 					second : correctedValue.getSeconds(),
 					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
-					timezone : timezoneOffsetHours * 60
+					timezone : timezoneHours * 60
 				}));
 			}
 		}

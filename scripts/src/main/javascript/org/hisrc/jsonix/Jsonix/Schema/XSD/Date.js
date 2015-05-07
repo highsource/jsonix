@@ -14,22 +14,22 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (Jsonix.Util.Type.isNumber(calendar.fractionalSecond)) {
 			date.setMilliseconds(Math.floor(1000 * calendar.fractionalSecond));
 		}
-		var timezoneOffset;
+		var timezone;
 		var unknownTimezone;
-		var localTimezoneOffset = date.getTimezoneOffset();
+		var localTimezone = - date.getTimezoneOffset();
 		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
 		{
-			timezoneOffset = - calendar.timezone;
+			timezone = calendar.timezone;
 			unknownTimezone = false;
 		}
 		else
 		{
 			// Unknown timezone
-			timezoneOffset = localTimezoneOffset;
+			timezone = localTimezone;
 			unknownTimezone = true;
 		}
 		//
-		var result = new Date(date.getTime() + (60000 * (timezoneOffset - localTimezoneOffset)));
+		var result = new Date(date.getTime() + (60000 * ( - timezone + localTimezone)));
 		if (unknownTimezone)
 		{
 			// null denotes "unknown timezone"
@@ -37,7 +37,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		else
 		{
-			result.originalTimezone = - timezoneOffset;
+			result.originalTimezone = timezone;
 		}
 		return result;
 	},
@@ -77,21 +77,21 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				// We assume that the difference between the date value and local midnight
 				// should be interpreted as a timezone offset.
 				// In case there's no difference, we assume default/unknown timezone
-				var localTimezoneOffset = value.getTime() - localDate.getTime();
-				if (localTimezoneOffset === 0) {
+				var localTimezone = - value.getTime() + localDate.getTime();
+				if (localTimezone === 0) {
 					return this.printDate(new Jsonix.XML.Calendar({
 						year : value.getFullYear(),
 						month : value.getMonth() + 1,
 						day : value.getDate()
 					}));
 				} else {
-					var timezoneOffset = localTimezoneOffset + (60000 * value.getTimezoneOffset());
-					if (timezoneOffset <= 43200000) {
+					var timezone = localTimezone - (60000 * value.getTimezoneOffset());
+					if (timezone >= -43200000) {
 						return this.printDate(new Jsonix.XML.Calendar({
 							year : value.getFullYear(),
 							month : value.getMonth() + 1,
 							day : value.getDate(),
-							timezone : - Math.floor(timezoneOffset / 60000)
+							timezone : Math.floor(timezone / 60000)
 						}));
 					} else {
 						var nextDay = new Date(value.getTime() + 86400000);
@@ -99,7 +99,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 							year : nextDay.getFullYear(),
 							month : nextDay.getMonth() + 1,
 							day : nextDay.getDate(),
-							timezone : - (Math.floor(timezoneOffset / 60000) - 1440)
+							timezone : (Math.floor(timezone / 60000) + 1440)
 						}));
 					}
 				}
