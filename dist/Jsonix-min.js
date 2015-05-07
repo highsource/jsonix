@@ -2053,15 +2053,15 @@ r=false
 }else{n=m;
 r=true
 }var k=new Date(s.getTime()+(60000*(n-m)));
-if(r){k.originalTimezoneOffset=null
-}else{k.originalTimezoneOffset=n
+if(r){k.originalTimezone=null
+}else{k.originalTimezone=n
 }return k
 },print:function(k,n,i,m){Jsonix.Util.Ensure.ensureDate(k);
 var l;
 var j=k.getTimezoneOffset();
 var h;
-if(k.originalTimezoneOffset===null){return this.printDateTime(new Jsonix.XML.Calendar({year:k.getFullYear(),month:k.getMonth()+1,day:k.getDate(),hour:k.getHours(),minute:k.getMinutes(),second:k.getSeconds(),fractionalSecond:(k.getMilliseconds()/1000)}))
-}else{if(Jsonix.Util.NumberUtils.isInteger(k.originalTimezoneOffset)){l=k.originalTimezoneOffset;
+if(k.originalTimezone===null){return this.printDateTime(new Jsonix.XML.Calendar({year:k.getFullYear(),month:k.getMonth()+1,day:k.getDate(),hour:k.getHours(),minute:k.getMinutes(),second:k.getSeconds(),fractionalSecond:(k.getMilliseconds()/1000)}))
+}else{if(Jsonix.Util.NumberUtils.isInteger(k.originalTimezone)){l=k.originalTimezone;
 h=new Date(k.getTime()-(60000*(l-j)))
 }else{l=j;
 h=k
@@ -2087,17 +2087,17 @@ r=false
 }else{n=m;
 r=true
 }var k=new Date(s.getTime()+(60000*(n-m)));
-if(r){k.originalTimezoneOffset=null
-}else{k.originalTimezoneOffset=n
+if(r){k.originalTimezone=null
+}else{k.originalTimezone=n
 }return k
 },print:function(n,t,r,k){Jsonix.Util.Ensure.ensureDate(n);
 var q=n.getTime();
 if(q<=-86400000&&q>=86400000){throw new Error("Invalid time ["+n+"].")
-}if(n.originalTimezoneOffset===null){return this.printTime(new Jsonix.XML.Calendar({hour:n.getHours(),minute:n.getMinutes(),second:n.getSeconds(),fractionalSecond:(n.getMilliseconds()/1000)}))
+}if(n.originalTimezone===null){return this.printTime(new Jsonix.XML.Calendar({hour:n.getHours(),minute:n.getMinutes(),second:n.getSeconds(),fractionalSecond:(n.getMilliseconds()/1000)}))
 }else{var s;
 var m;
 var l=n.getTimezoneOffset();
-if(Jsonix.Util.NumberUtils.isInteger(n.originalTimezoneOffset)){m=n.originalTimezoneOffset;
+if(Jsonix.Util.NumberUtils.isInteger(n.originalTimezone)){m=n.originalTimezone;
 s=new Date(n.getTime()-(60000*(m-l)))
 }else{m=l;
 s=n
@@ -2127,8 +2127,8 @@ r=false
 }else{n=m;
 r=true
 }var k=new Date(s.getTime()+(60000*(n-m)));
-if(r){k.originalTimezoneOffset=null
-}else{k.originalTimezoneOffset=n
+if(r){k.originalTimezone=null
+}else{k.originalTimezone=n
 }return k
 },print:function(m,r,p,j){Jsonix.Util.Ensure.ensureDate(m);
 var o=new Date(m.getTime());
@@ -2136,9 +2136,9 @@ o.setHours(0);
 o.setMinutes(0);
 o.setSeconds(0);
 o.setMilliseconds(0);
-if(m.originalTimezoneOffset===null){return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate()}))
-}else{if(Jsonix.Util.NumberUtils.isInteger(m.originalTimezoneOffset)){var q=new Date(m.getTime()-(60000*(m.originalTimezoneOffset-m.getTimezoneOffset())));
-return this.printDate(new Jsonix.XML.Calendar({year:q.getFullYear(),month:q.getMonth()+1,day:q.getDate(),timezone:m.originalTimezoneOffset}))
+if(m.originalTimezone===null){return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate()}))
+}else{if(Jsonix.Util.NumberUtils.isInteger(m.originalTimezone)){var q=new Date(m.getTime()-(60000*(m.originalTimezone-m.getTimezoneOffset())));
+return this.printDate(new Jsonix.XML.Calendar({year:q.getFullYear(),month:q.getMonth()+1,day:q.getDate(),timezone:m.originalTimezone}))
 }else{var k=m.getTime()-o.getTime();
 if(k===0){return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate()}))
 }else{var l=k+(60000*m.getTimezoneOffset());
