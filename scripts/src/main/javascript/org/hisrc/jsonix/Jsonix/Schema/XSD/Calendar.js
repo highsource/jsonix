@@ -56,7 +56,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		var timeZoneString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(timeZoneIndex) : '';
 		var date = this.parseDateString(dateString);
 		var time = this.parseTimeString(timeString);
-		var timezone = this.parseTimeZoneString(timeZoneString);
+		var timezone = this.parseTimeZoneString1(timeZoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			year : sign * date.year,
@@ -100,7 +100,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 		var date = this.parseDateString(dateString);
 		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-		var timezone = this.parseTimeZoneString(timeZoneString);
+		var timezone = this.parseTimeZoneString1(timeZoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			year : sign * date.year,
@@ -135,7 +135,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 		var time = this.parseTimeString(timeString);
 		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-		var timezone = this.parseTimeZoneString(timeZoneString);
+		var timezone = this.parseTimeZoneString1(timeZoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			hour : time.hour,
@@ -437,9 +437,9 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 				return 'Z';
 			} else {
 				if (sign > 0) {
-					result = '-';
-				} else if (sign < 0) {
 					result = '+';
+				} else if (sign < 0) {
+					result = '-';
 				}
 				result = result + this.printHour(hour);
 				result = result + ':';

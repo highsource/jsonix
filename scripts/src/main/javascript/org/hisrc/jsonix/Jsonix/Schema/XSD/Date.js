@@ -19,7 +19,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		var localTimezoneOffset = date.getTimezoneOffset();
 		if (Jsonix.Util.NumberUtils.isInteger(calendar.timezone))
 		{
-			timezoneOffset = calendar.timezone;
+			timezoneOffset = - calendar.timezone;
 			unknownTimezone = false;
 		}
 		else
@@ -33,11 +33,11 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (unknownTimezone)
 		{
 			// null denotes "unknown timezone"
-			result.originalTimezoneOffset = null;
+			result.originalTimezone = null;
 		}
 		else
 		{
-			result.originalTimezoneOffset = timezoneOffset;
+			result.originalTimezone = - timezoneOffset;
 		}
 		return result;
 	},
@@ -50,7 +50,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		localDate.setMilliseconds(0);
 		
 		// Original timezone is unknown
-		if (value.originalTimezoneOffset === null)
+		if (value.originalTimezone === null)
 		{
 			return this.printDate(new Jsonix.XML.Calendar({
 				year : value.getFullYear(),
@@ -61,14 +61,14 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		else
 		{
 			// If original timezone was known, correct and print the value with the timezone
-			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezoneOffset))
+			if (Jsonix.Util.NumberUtils.isInteger(value.originalTimezone))
 			{
-				var correctedValue = new Date(value.getTime() - (60000 * (value.originalTimezoneOffset - value.getTimezoneOffset())));
+				var correctedValue = new Date(value.getTime() - (60000 * (- value.originalTimezone - value.getTimezoneOffset())));
 				return this.printDate(new Jsonix.XML.Calendar({
 					year : correctedValue.getFullYear(),
 					month : correctedValue.getMonth() + 1,
 					day : correctedValue.getDate(),
-					timezone : value.originalTimezoneOffset
+					timezone : value.originalTimezone
 				}));
 			}
 			// If original timezone was not specified, do not correct and use the local time zone
@@ -91,7 +91,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 							year : value.getFullYear(),
 							month : value.getMonth() + 1,
 							day : value.getDate(),
-							timezone : Math.floor(timezoneOffset / 60000)
+							timezone : - Math.floor(timezoneOffset / 60000)
 						}));
 					} else {
 						var nextDay = new Date(value.getTime() + 86400000);
@@ -99,7 +99,7 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 							year : nextDay.getFullYear(),
 							month : nextDay.getMonth() + 1,
 							day : nextDay.getDate(),
-							timezone : (Math.floor(timezoneOffset / 60000) - 1440)
+							timezone : - (Math.floor(timezoneOffset / 60000) - 1440)
 						}));
 					}
 				}
