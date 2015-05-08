@@ -487,6 +487,51 @@ module.exports =
 
 		}
 	},
+	"Duration" : {
+		"Parse" : function (test) {
+			var t = Jsonix.Schema.XSD.Duration.INSTANCE;
+			test.equal(-1, t.parse("-P0Y").sign);
+			test.equal(1, t.parse("P1Y").years);
+			test.equal(2, t.parse("P2M").months);
+			test.equal(3, t.parse("P3D").days);
+			test.equal(4, t.parse("PT4H").hours);
+			test.equal(5, t.parse("PT5M").minutes);
+			test.equal(6.789, t.parse("PT6.789S").seconds);
+			test.throws(function(){g.parse('P');});
+			test.throws(function(){g.parse('PT');});
+			test.throws(function(){g.parse('-P');});
+			test.throws(function(){g.parse('-PT');});
+			test.throws(function(){g.parse('+P1Y');});
+			test.throws(function(){g.parse('P.1S');});
+			test.done();
+		},
+		"Print" : function(test) {
+			var t = Jsonix.Schema.XSD.Duration.INSTANCE;
+			test.equal('-P1Y2M3DT4H5M6.789S', t.print({sign : -1, years:1, months: 2, days: 3, hours: 4, minutes: 5, seconds: 6.789}));
+			test.equal('-P1Y2M3D', t.print({sign : -1, years:1, months: 2, days: 3}));
+			test.equal('-PT4H5M6.789S', t.print({sign : -1, hours: 4, minutes: 5, seconds: 6.789}));
+			test.throws(function(){g.print({});});
+			test.throws(function(){g.print({years:-1});});
+			test.throws(function(){g.print({years:'1'});});
+			test.throws(function(){g.print({months:-1});});
+			test.throws(function(){g.print({months:'1'});});
+			test.throws(function(){g.print({days:-1});});
+			test.throws(function(){g.print({days:'1'});});
+			test.throws(function(){g.print({hours:-1});});
+			test.throws(function(){g.print({hours:'1'});});
+			test.throws(function(){g.print({minutes:-1});});
+			test.throws(function(){g.print({minutes:'1'});});
+			test.throws(function(){g.print({seconds:-1});});
+			test.throws(function(){g.print({seconds:'1'});});
+			test.done();
+		},
+		"Reprint" : function(test) {
+			var t = Jsonix.Schema.XSD.Duration.INSTANCE;
+			test.equal('-P1Y2M3DT4H5M6.789S', t.reprint({sign : -1, years:1, months: 2, days: 3, hours: 4, minutes: 5, seconds: 6.789}));
+			test.equal('-P1Y2M3DT4H5M6.789S', t.reprint('-P001Y002M003DT004H005M006.789S'));
+			test.done();
+		}
+	},
 	"GYear": {
 		"Parse": function(test) {
 			var g = Jsonix.Schema.XSD.GYear.INSTANCE;

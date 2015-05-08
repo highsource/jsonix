@@ -448,3 +448,17 @@ function testSchemaXSDQNameParse() {
 	assertEquals('urn:a', input.getNamespaceURI('a'));
 	assertEquals('{urn:a}a', Jsonix.Schema.XSD.QName.INSTANCE.parse('a:a', context, input, null).key);
 }
+function testSchemaXSDDuration() {
+	var t = Jsonix.Schema.XSD.Duration.INSTANCE;
+	assertEquals('P1Y2M3DT4H5M6.789S', t.print({years:1, months: 2, days: 3, hours: 4, minutes: 5, seconds: 6.789}));
+	assertEquals('-P1Y2M3DT4H5M6.789S', t.print({sign : -1, years:1, months: 2, days: 3, hours: 4, minutes: 5, seconds: 6.789}));
+	assertEquals('-P1Y2M3D', t.print({sign : -1, years:1, months: 2, days: 3}));
+	assertEquals('-PT4H5M6.789S', t.print({sign : -1, hours: 4, minutes: 5, seconds: 6.789}));
+	assertEquals(-1, t.parse('-P1Y2M3DT4H5M6.789S').sign);
+	assertEquals(1, t.parse('-P1Y2M3DT4H5M6.789S').years);
+	assertEquals(2, t.parse('-P1Y2M3DT4H5M6.789S').months);
+	assertEquals(3, t.parse('-P1Y2M3DT4H5M6.789S').days);
+	assertEquals(4, t.parse('-P1Y2M3DT4H5M6.789S').hours);
+	assertEquals(5, t.parse('-P1Y2M3DT4H5M6.789S').minutes);
+	assertEquals(6.789, t.parse('-P1Y2M3DT4H5M6.789S').seconds);
+}
