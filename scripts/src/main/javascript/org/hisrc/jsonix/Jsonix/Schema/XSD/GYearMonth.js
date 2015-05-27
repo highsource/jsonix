@@ -29,7 +29,7 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			var splitedGYearMonth = {
 				year : parseInt(results[1], 10),
 				month : parseInt(results[5], 10),
-				timezone : this.convertTimeZoneString(results[7])
+				timezone : this.parseTimeZoneString(results[7])
 			};
 
 			return splitedGYearMonth;

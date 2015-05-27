@@ -44,7 +44,7 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 
 			var splitedGMonth = {
 				month : parseInt(results[2], 10),
-				timezone : this.convertTimeZoneString(results[3]),
+				timezone : this.parseTimeZoneString(results[3]),
 				date : new Date(results[2] + " 01 1970 00:00:00" + gmt)
 			};
 

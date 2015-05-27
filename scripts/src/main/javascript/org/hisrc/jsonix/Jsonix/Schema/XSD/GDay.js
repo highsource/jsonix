@@ -27,7 +27,7 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (results !== null) {
 			var splitedGYDay = {
 				day : parseInt(results[2], 10),
-				timezone : this.convertTimeZoneString(results[3])
+				timezone : this.parseTimeZoneString(results[3])
 			};
 
 			return splitedGYDay;

@@ -29,7 +29,7 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			var splitedGMonthDay = {
 				month : parseInt(results[2], 10),
 				day : parseInt(results[3], 10),
-				timezone : this.convertTimeZoneString(results[5])
+				timezone : this.parseTimeZoneString(results[5])
 			};
 
 			var shortMonths = [ 4, 6, 9, 11 ];
