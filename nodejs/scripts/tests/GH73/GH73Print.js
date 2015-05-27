@@ -1,102 +1,56 @@
 var Jsonix = require("../../jsonix").Jsonix;
-var GH73 = require("./Mappings.js").GH73;
 
-var GH73Helper = {
-
-	getGDateType : function() {
-		return {
-			"name" : {
-				"namespaceURI" : "",
-				"localPart" : "GDateTypes",
-				"prefix" : "",
-				"key" : "GDateTypes",
-				"string" : "GDateTypes"
-			}
-		};
-	}
-};
+process.env.TZ = 'UTC';
 
 module.exports = {
+		
+		"PrintYear": function(test) {
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
 
-	"MarschallGYear" : function(test) {
+			test.equal('0001', g.print({year:1}));
+			test.equal('0010', g.print({year:10}));
+			test.equal('0101', g.print({year:101}));
+			test.equal('1010', g.print({year:1010}));
+			test.equal('-1234567', g.print({year:-1234567}));
+			test.equal('1234567', g.print({year:1234567}));
+			test.equal('2013-05:00', g.print({year:2013,timezone:-300}));
+			test.equal('-2013+05:00', g.print({year:-2013,timezone:300}));
 
-		var context = new Jsonix.Context([ GH73 ]);
-		var marshaller = context.createMarshaller();
+			test.throws(function(){g.print(2013);});
+			test.throws(function(){g.print({});});
+			//quickfix
+			//TODO -> validation in printYear
+			test.throws(function(){g.print({year:0});});
+			test.throws(function(){g.print({year:'2013'});});
+			test.throws(function(){g.print({year:2013, timezone:'-05:00'});});
+			//failes
+			//FIXME: validate range -14*60 < timezone < 14*60
+			test.throws(function(){g.print({year:2013, timezone:100000});});
 
-		var gDateType = GH73Helper.getGDateType();
+			test.done();
+		},
+		"PrintYearFromDate" : function (test){
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+			var  gDateType = new Date();
+			gDateType.setFullYear(1970);
+			// FIXME: This depends on the time zone of the environment
+			test.equal("1970Z", g.print(gDateType));
+			test.done();
+		},
+		
+		"ReprintYear": function(test) {
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+			test.equal('0001', g.reprint('0001'));
+			test.equal('0010', g.reprint('0010'));
+			test.equal('0101', g.reprint('0101'));
+			test.equal('1010', g.reprint('1010'));
+			test.equal('-1234567', g.reprint('-1234567'));
+			test.equal('1234567', g.reprint('1234567'));
+			test.equal('2013-05:00', g.reprint('2013-05:00'));
+			test.equal('-2013+05:00', g.reprint('-2013+05:00'));
 
-		gDateType.value = {
-			"year" : {
-				"year" : 101
-			}
-		};
+			test.done();
+		},
 
-		test.equal('<GDateTypes year="0101"/>', marshaller.marshalString(gDateType));
-
-		gDateType.value = {
-			"year" : {
-				"year" : -1
-			}
-		};
-
-		test.equal('<GDateTypes year="-0001"/>', marshaller.marshalString(gDateType));
-
-		gDateType.value = {
-			"year" : {
-				"year" : 0
-			}
-		};
-
-		// TODO: why is the zero allowed by Calender.printYear()?
-		// overwritten in GYear:reprint -> move to calendar?
-		test.throws(function() {
-			marshaller.marshalString(gDateType);
-		}, "Error");
-
-		gDateType.value = {
-			"year" : {
-				"year" : 101,
-				timezone : 300
-			}
-		};
-
-		test.equal('<GDateTypes year="0101+05:00"/>', marshaller.marshalString(gDateType));
-
-		gDateType.value = {
-			"year" : {
-				"year" : 101,
-				timezone : 0
-			}
-		};
-
-		test.equal('<GDateTypes year="0101Z"/>', marshaller.marshalString(gDateType));
-
-		test.done();
-
-	},
-
-	"MarschallGMonth" : function(test) {
-
-		var context = new Jsonix.Context([ GH73 ]);
-		var marshaller = context.createMarshaller();
-
-		var gDateType = GH73Helper.getGDateType();
-
-		gDateType.value = {
-			"month" : {
-				"month" : 0
-			}
-		};
-
-		// TODO: why is the 0 allowed?
-		test.equal('<GDateTypes month="--00"/>', marshaller.marshalString(gDateType));
-
-		gDateType.value.month = new Date(0);
-		gDateType.value.month.setMonth(1);
-
-		console.log(marshaller.marshalString(gDateType));
-
-		test.done();
-	}
 
 };
