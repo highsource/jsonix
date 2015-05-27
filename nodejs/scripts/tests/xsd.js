@@ -567,6 +567,7 @@ module.exports =
 			test.throws(function(){g.print({year:0});});
 			test.throws(function(){g.print({year:'2013'});});
 			test.throws(function(){g.print({year:2013, timezone:'-05:00'});});
+			// FIXME: no throws yet here
 			test.throws(function(){g.print({year:2013, timezone:100000});});
 
 			test.done();
@@ -584,5 +585,42 @@ module.exports =
 
 			test.done();
 		}
+	
+	//moved temporary to GH73/GH73Print.js
+	// REVIEW AV: Why? I'd keep tests for print/parse for different types here
+//		"Print": function(test) {
+//			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+//
+//			test.equal('0001', g.print({year:1}));
+//			test.equal('0010', g.print({year:10}));
+//			test.equal('0101', g.print({year:101}));
+//			test.equal('1010', g.print({year:1010}));
+//			test.equal('-1234567', g.print({year:-1234567}));
+//			test.equal('1234567', g.print({year:1234567}));
+//			test.equal('2013-05:00', g.print({year:2013,timezone:-300}));
+//			test.equal('-2013+05:00', g.print({year:-2013,timezone:300}));
+//
+//			test.throws(function(){g.print(2013);});
+//			test.throws(function(){g.print({});});
+//			test.throws(function(){g.print({year:0});});
+//			test.throws(function(){g.print({year:'2013'});});
+//			test.throws(function(){g.print({year:2013, timezone:'-05:00'});});
+//			test.throws(function(){g.print({year:2013, timezone:100000});});
+//
+//			test.done();
+//		},
+//		"Reprint": function(test) {
+//			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+//			test.equal('0001', g.reprint('0001'));
+//			test.equal('0010', g.reprint('0010'));
+//			test.equal('0101', g.reprint('0101'));
+//			test.equal('1010', g.reprint('1010'));
+//			test.equal('-1234567', g.reprint('-1234567'));
+//			test.equal('1234567', g.reprint('1234567'));
+//			test.equal('2013-05:00', g.reprint('2013-05:00'));
+//			test.equal('-2013+05:00', g.reprint('-2013+05:00'));
+//
+//			test.done();
+//		}
 	}
 };

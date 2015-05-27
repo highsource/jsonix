@@ -7,21 +7,26 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (results !== null) {
 			var splitedGYear = {
 				year : parseInt(results[1], 10),
-				timezone : this.parseTimeZoneString1(results[5])
+				timezone : this.parseTimeZoneString(results[5]),
+				date : this.xmlCalendarToDate(results[1], "01", "01", "00", "00", "00", results[5])
 			};
 			return splitedGYear;
 		} else {
 			throw new Error('Value [' + value + '] does not match the gYear pattern.');
 		}
 	},
-	print: function(value) {
+	print : function(value) {
 		Jsonix.Util.Ensure.ensureObject(value);
-		Jsonix.Util.Ensure.ensureInteger(value.year);
-		var result = (value.year < 0 ? ('-' + this.printYear(-value.year)): this.printYear(value.year));
-		if (Jsonix.Util.NumberUtils.isInteger(value.timezone)) {
-			result = result + this.printTimeZoneString(value.timezone);
+		// TODO we have to validate the value HERE
+		//date might be an optional argument 
+		// see documentation pdf site 3
+		if (value instanceof Date) {
+			return this.printSignedYear(value.getFullYear()) + this.printTimeZoneString(value.getTimezoneOffset());
 		}
-		return result;
+		//TODO
+		//possible less reduntant sollution ensure.isDate() || ensure.isXmlGregorianDate() validation else -> error
+		Jsonix.Util.Ensure.ensureInteger(value.year);
+		return this.printSignedYear(value.year) + this.printTimeZoneString(value.timezone);
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.GYear'
 });

@@ -56,7 +56,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		var timeZoneString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(timeZoneIndex) : '';
 		var date = this.parseDateString(dateString);
 		var time = this.parseTimeString(timeString);
-		var timezone = this.parseTimeZoneString1(timeZoneString);
+		var timezone = this.parseTimeZoneString(timeZoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			year : sign * date.year,
@@ -100,7 +100,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 		var date = this.parseDateString(dateString);
 		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-		var timezone = this.parseTimeZoneString1(timeZoneString);
+		var timezone = this.parseTimeZoneString(timeZoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			year : sign * date.year,
@@ -135,7 +135,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 		var time = this.parseTimeString(timeString);
 		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-		var timezone = this.parseTimeZoneString1(timeZoneString);
+		var timezone = this.parseTimeZoneString(timeZoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			hour : time.hour,
@@ -188,50 +188,42 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 	},
 	
-			// duschata
-	convertTimeZoneString : function(text) {
-
-		if (text === "Z" || !Jsonix.Util.Type.exists(text)) {
-			return 0;
-		}
-
-		else if (new RegExp(this.TIMEZONE_PATTERN).test(text) === false) {
-			throw new Error('Value [' + value + '] doesn\'t match the timzone pattern.');
-		}
-
-		var splittedTimeZoneChunks = text.split(":");
-		// changed: return value is XML.timezone not Date.timezoneOffset
-		return parseInt(splittedTimeZoneChunks[0], 10) * 60 + parseInt(splittedTimeZoneChunks[1], 10);
+	parseSignedYear : function(xmlYear) {
+		// TODO: validation -> parseYear()...
+		var year = parseInt(xmlYear, 10);
+		
+		return year;
 	},
+      
+      // TODO: possible improvement xmlCalenderObject as arg
+      // REVIEW AV: Definitely. First parse to object and then convert
+      // the object to the date.
+      xmlCalendarToDate: function (year, month, day, hours, minutes, seconds, timezone) {
+          var initialDate = new Date(0);
+          initialDate.setUTCFullYear(this.parseSignedYear(year));
+          initialDate.setUTCMonth(this.parseMonth(month) - 1);
+          initialDate.setUTCDate(this.parseDay(day));
+          initialDate.setUTCHours(this.parseHour(hours));
+          initialDate.setUTCMinutes(this.parseMinute(minutes));
+          initialDate.setUTCSeconds(this.parseSecond(seconds));
+          var timezoneOffset = this.parseTimeZoneString(timezone) * -60000;
+
+          return new Date(initialDate.getTime() + timezoneOffset);
+
+      },
+
 	
-	parseTimeZoneString : function(text) {
-		// (('+' | '-') hh ':' mm) | 'Z'
-		Jsonix.Util.Ensure.ensureString(text);
-		if (text === '') {
-			return NaN;
-		} else if (text === 'Z') {
-			return 0;
-		} else {
-			if (text.length !== 6) {
-				throw new Error('Time zone must be an empty string, \'Z\' or a string in format [(\'+\' | \'-\') hh \':\' mm].');
-			}
-			var signString = text.charAt(0);
-			var sign;
-			if (signString === '+') {
-				sign = 1;
-			} else if (signString === '-') {
-				sign = -1;
-			} else {
-				throw new Error('First character of the time zone [' + text + '] must be \'+\' or \'-\'.');
-			}
-			var hour = this.parseHour(text.substring(1, 3));
-			var minute = this.parseMinute(text.substring(4, 6));
-			return -1 * sign * (hour * 60 + minute);
+     printSignedYear : function(value) {
+     	// REVIEW AV: Validation should be carried out before this
+     	// method is called, in the outmost user-facing method.
+		if (value === 0) {
+			throw new Error("Year must not be 0");
 		}
 
+		return value < 0 ? ("-" + this.printYear(value * -1)) : (this.printYear(value));
 	},
-	// TODO this will be _the_ TZ parsing method
-	parseTimeZoneString1 : function(text) {
+
+	parseTimeZoneString : function(text) {
 		// (('+' | '-') hh ':' mm) | 'Z'
 		if (!Jsonix.Util.Type.isString(text))
 		{
