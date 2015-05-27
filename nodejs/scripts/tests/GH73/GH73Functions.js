@@ -31,12 +31,12 @@ module.exports = {
 		test.done();
 	},
 
-	"ConvertTimeZoneString" : function(test) {
+	"ParseTimeZoneString" : function(test) {
 		var calendar = Jsonix.Schema.XSD.Calendar.INSTANCE;
 
-		test.equal(300, calendar.convertTimeZoneString("+05:00"));
-		test.equal(-300, calendar.convertTimeZoneString("-05:00"));
-		test.equal(0, calendar.convertTimeZoneString("Z"));
+		test.equal(300, calendar.parseTimeZoneString("+05:00"));
+		test.equal(-300, calendar.parseTimeZoneString("-05:00"));
+		test.equal(0, calendar.parseTimeZoneString("Z"));
 
 		test.done();
 	},
