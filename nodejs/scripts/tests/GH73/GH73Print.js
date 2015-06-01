@@ -23,8 +23,6 @@ module.exports = {
 			test.throws(function(){g.print({year:0});});
 			test.throws(function(){g.print({year:'2013'});});
 			test.throws(function(){g.print({year:2013, timezone:'-05:00'});});
-			//failes
-			//FIXME: validate range -14*60 < timezone < 14*60
 			test.throws(function(){g.print({year:2013, timezone:100000});});
 
 			test.done();
