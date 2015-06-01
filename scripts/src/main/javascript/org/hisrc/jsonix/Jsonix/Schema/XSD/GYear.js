@@ -21,6 +21,7 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		//date might be an optional argument 
 		// see documentation pdf site 3
 		if (value instanceof Date) {
+			//this must be fixed (timeZoneOffset is *-1)
 			return this.printSignedYear(value.getFullYear()) + this.printTimeZoneString(value.getTimezoneOffset());
 		}
 		//TODO
