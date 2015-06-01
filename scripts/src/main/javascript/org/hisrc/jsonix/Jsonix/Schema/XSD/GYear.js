@@ -17,16 +17,25 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureObject(value);
-		// TODO we have to validate the value HERE
-		//date might be an optional argument 
-		// see documentation pdf site 3
+		var year = undefined;
+		var timezone = undefined;
+		
 		if (value instanceof Date) {
-			return this.printSignedYear(value.getFullYear()) + this.printTimeZoneString(value.getTimezoneOffset());
+			
+			year = value.getFullYear();
+			timezone = value.getTimezoneOffset() * -1;
+		}else {
+			Jsonix.Util.Ensure.ensureInteger(value.year);
+			year = value.year;
+			timezone = value.timezone;
 		}
-		//TODO
-		//possible less reduntant sollution ensure.isDate() || ensure.isXmlGregorianDate() validation else -> error
-		Jsonix.Util.Ensure.ensureInteger(value.year);
-		return this.printSignedYear(value.year) + this.printTimeZoneString(value.timezone);
+		//duschata quickfix to run GH73Print.js test
+		// must be placed in --> Calendar.printTimeZoneString()
+		// but has side effects in org.hisrc.jsonix.test.JsonixTest
+		if (timezone < -14 * 60 || timezone > 14 * 60) {
+			throw new Error('Value ' + value + ' must not be <> -/+ ' + (14 * 16));
+		}
+		return this.printSignedYear(year) + this.printTimeZoneString(timezone);
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.GYear'
 });
