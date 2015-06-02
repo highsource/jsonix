@@ -32,6 +32,8 @@ module.exports = {
 			var  gDateType = new Date();
 			gDateType.setFullYear(1970);
 			// FIXME: This depends on the time zone of the environment
+			// REVIEW tom: see line 3. This works on my ubuntu 14.04
+			// with nodeunit 0.9.1
 			test.equal("1970Z", g.print(gDateType));
 			test.done();
 		},

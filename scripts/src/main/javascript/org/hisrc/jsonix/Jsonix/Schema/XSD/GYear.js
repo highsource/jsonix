@@ -20,7 +20,8 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		var year = undefined;
 		var timezone = undefined;
 		
-		if (value instanceof Date) {			
+
+		if (value instanceof Date) {
 			year = value.getFullYear();
 			timezone = value.getTimezoneOffset() * -1;
 		}else {
@@ -32,7 +33,7 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		// must be placed in --> Calendar.printTimeZoneString()
 		// but has side effects in org.hisrc.jsonix.test.JsonixTest
 		if (timezone < -14 * 60 || timezone > 14 * 60) {
-			throw new Error('Value ' + value + ' must not be <> -/+ ' + (14 * 16));
+			throw new Error('Value ' + value + ' must not be <> -/+ ' + (14 * 60));
 		}
 		return this.printSignedYear(year) + this.printTimeZoneString(timezone);
 	},
