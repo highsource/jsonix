@@ -1,6 +1,6 @@
 {
 	"name": "jsonix",
-	"version": "2.2.2-SNAPSHOT",
+	"version": "${project.version}",
 	"homepage": "http://confluence.highsource.org/display/JSNX/Jsonix",
 	"authors": [
 		"Alexey Valikov"
