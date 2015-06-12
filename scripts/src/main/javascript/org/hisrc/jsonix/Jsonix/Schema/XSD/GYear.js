@@ -19,14 +19,16 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var year = undefined;
 		var timezone = undefined;
-				year = value.getFullYear();
+
+		if (value instanceof Date) {
+			year = value.getFullYear();
 			timezone = value.getTimezoneOffset() * -1;
-		}else {
+		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.year);
 			year = value.year;
 			timezone = value.timezone;
 		}
-		//duschata quickfix to run GH73Print.js test
+		// duschata quickfix to run GH73Print.js test
 		// must be placed in --> Calendar.printTimeZoneString()
 		// but has side effects in org.hisrc.jsonix.test.JsonixTest
 		if (timezone < -14 * 60 || timezone > 14 * 60) {
