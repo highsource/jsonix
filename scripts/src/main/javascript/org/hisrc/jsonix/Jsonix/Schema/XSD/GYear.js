@@ -30,10 +30,12 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			year = value.year;
 			timezone = value.timezone;
 		}
+		
 		// TODO: validation_issue (timezone range)
-		if (timezone < -14 * 60 || timezone > 14 * 60) {
-			throw new Error('Value ' + value + ' must not be <> -/+ ' + (14 * 60));
+		if (parseInt(timezone,10) < -14 * 60 || parseInt(timezone,10) > 14 * 60) {
+			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
 		}
+		
 		// TODO: validation_issue (signedYear)
 		return this.printSignedYear(year) + this.printTimeZoneString(timezone);
 	}

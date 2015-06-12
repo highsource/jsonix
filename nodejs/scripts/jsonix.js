@@ -5649,10 +5649,12 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			year = value.year;
 			timezone = value.timezone;
 		}
+		
 		// TODO: validation_issue (timezone range)
-		if (timezone < -14 * 60 || timezone > 14 * 60) {
-			throw new Error('Value ' + value + ' must not be <> -/+ ' + (14 * 60));
+		if (parseInt(timezone,10) < -14 * 60 || parseInt(timezone,10) > 14 * 60) {
+			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
 		}
+		
 		// TODO: validation_issue (signedYear)
 		return this.printSignedYear(year) + this.printTimeZoneString(timezone);
 	}
@@ -5776,21 +5778,31 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		throw new Error('Value [' + value + '] does not match the gMonth pattern.');
 	},
-	
+
 	print : function(value, context, input, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var month = undefined;
 		var timezone = undefined;
-		
+
 		if (value instanceof Date) {
-			month = value.getMonth() +1;
+			month = value.getMonth() + 1;
 			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.month);
 			month = value.month;
 			timezone = value.timezone;
 		}
-		return "--" +  this.printMonth(month) + this.printTimeZoneString(timezone);
+		// TODO: validation_issue (month range)
+		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
+			throw new Error('Month must not be < 1 or > 12');
+		}
+
+		// TODO: validation_issue (timezone range)
+		if (parseInt(timezone,10) < -14 * 60 || parseInt(timezone,10) > 14 * 60) {
+			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
+		}
+
+		return "--" + this.printMonth(month) + this.printTimeZoneString(timezone);
 	}
 });
 Jsonix.Schema.XSD.GMonth.INSTANCE = new Jsonix.Schema.XSD.GMonth();
