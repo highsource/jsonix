@@ -4,54 +4,34 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	CLASS_NAME : 'Jsonix.Schema.XSD.GMonth',
 
 	parse : function(value, context, input, scope) {
-		var returnValue = this.splitGMonth(value);
-		returnValue.toString = function() {
-			return "EmptyXMLElement. Call embedded 'month' or 'timezone' property";
-		};
-
-		return returnValue;
-	},
-
-	reprint : function(value, context, input, scope) {
-		if (value instanceof Date) {
-			// TODO: timezoneOffset -> timezone
-			return "--" + this.printMonth(value.getMonth() + 1);
-		}
-		return "--" + this.printMonth(value.month);
-
-	},
-
-	/**
-	 * @param {string}
-	 *            month datetype in ISO 8601 format
-	 * @returns {object} pair of month, timestamp properties as a number, date
-	 *          object
-	 * @throws {Error}
-	 *             if the datetype is not valid
-	 * 
-	 */
-	splitGMonth : function(value) {
 		var gMonthExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN + "$");
 		var results = value.match(gMonthExpression);
 
 		if (results !== null) {
-
-			var gmt = "";
-			if (Jsonix.Util.Type.exists(results[3])) {
-				var splittedTimeZones = results[3].split(":");
-				gmt = " GMT" + splittedTimeZones[0] + splittedTimeZones[1];
-			}
-
 			var splitedGMonth = {
 				month : parseInt(results[2], 10),
 				timezone : this.parseTimeZoneString(results[3]),
-				date : new Date(results[2] + " 01 1970 00:00:00" + gmt)
+				date : this.xmlCalendarToDate("1970", results[2], "01", "00", "00", "00", results[3])
 			};
-
 			return splitedGMonth;
 		}
-
-		throw new Error('Value [' + value + '] doesn\'t match the gMonth pattern.');
+		throw new Error('Value [' + value + '] does not match the gMonth pattern.');
+	},
+	
+	print : function(value, context, input, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var month = undefined;
+		var timezone = undefined;
+		
+		if (value instanceof Date) {
+			month = value.getMonth() +1;
+			timezone = value.getTimezoneOffset() * -1;
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value.month);
+			month = value.month;
+			timezone = value.timezone;
+		}
+		return "--" +  this.printMonth(month) + this.printTimeZoneString(timezone);
 	}
 });
 Jsonix.Schema.XSD.GMonth.INSTANCE = new Jsonix.Schema.XSD.GMonth();
