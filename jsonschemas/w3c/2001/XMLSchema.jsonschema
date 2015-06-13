@@ -1,5 +1,5 @@
 {
-	"id" : "http://highsource.github.io/jsonix/jsonschemas/w3c/2001/XMLSchema.jsonschema#",
+	"id" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#",
 	"definitions" : {
 		"anyType" : {
 			"description" : "http://www.w3.org/TR/2001/REC-xmlschema-1-20010502/#key-urType"

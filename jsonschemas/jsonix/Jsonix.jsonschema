@@ -1,5 +1,5 @@
 {
-	"id" : "http://highsource.github.io/jsonix/jsonschemas/jsonix/Jsonix.jsonschema#",
+	"id" : "http://www.jsonix.org/jsonschemas/jsonix/Jsonix.jsonschema#",
 	"definitions" : {
 		"calendar" : {
 			"anyOf" : [ {
