@@ -36,6 +36,9 @@ Jsonix.Util.Type = {
 	isRegExp : function(value) {
 		return !!(value && value.test && value.exec && (value.ignoreCase || value.ignoreCase === false));
 	},
+	isNode : function(value) {
+		return (typeof Node === "object" || typeof Node === "function") ? (value instanceof Node) : (value && (typeof value === "object") && (typeof value.nodeType === "number") && (typeof value.nodeName==="string"));
+	},
 	isEqual : function(a, b, report) {
 		var doReport = Jsonix.Util.Type.isFunction(report);
 		// TODO rework
@@ -109,12 +112,33 @@ Jsonix.Util.Type = {
 		if (Jsonix.Util.Type.isRegExp(a) && Jsonix.Util.Type.isRegExp(b)) {
 			return a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline;
 		}
+		
+		if (Jsonix.Util.Type.isNode(a) && Jsonix.Util.Type.isNode(b))
+		{
+			var aSerialized = Jsonix.DOM.serialize(a);
+			var bSerialized = Jsonix.DOM.serialize(b);
+			if (aSerialized !== bSerialized)
+			{
+				if (doReport)
+				{
+					report('Nodes differ.');
+					report('A=' + aSerialized);
+					report('B=' + bSerialized);
+				}
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		
 		// If a is not an object by this point, we can't handle it.
 		if (atype !== 'object') {
 			return false;
 		}
 		// Check for different array lengths before comparing contents.
-		if (a.length && (a.length !== b.length)) {
+		if (Jsonix.Util.Type.isArray(a) && (a.length !== b.length)) {
 			if (doReport) {
 					report('Lengths differ.');
 					report('A.length=' + a.length);
@@ -126,7 +150,7 @@ Jsonix.Util.Type = {
 		var aKeys = _keys(a);
 		var bKeys = _keys(b);
 		// Different object sizes?
-		if (aKeys.length != bKeys.length) {
+		if (aKeys.length !== bKeys.length) {
 			if (doReport) {
 				report('Different number of properties [' + aKeys.length + '], [' + bKeys.length + '].');
 			}

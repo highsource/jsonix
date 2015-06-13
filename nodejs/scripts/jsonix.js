@@ -370,6 +370,9 @@ Jsonix.Util.Type = {
 	isRegExp : function(value) {
 		return !!(value && value.test && value.exec && (value.ignoreCase || value.ignoreCase === false));
 	},
+	isNode : function(value) {
+		return (typeof Node === "object" || typeof Node === "function") ? (value instanceof Node) : (value && (typeof value === "object") && (typeof value.nodeType === "number") && (typeof value.nodeName==="string"));
+	},
 	isEqual : function(a, b, report) {
 		var doReport = Jsonix.Util.Type.isFunction(report);
 		// TODO rework
@@ -443,12 +446,33 @@ Jsonix.Util.Type = {
 		if (Jsonix.Util.Type.isRegExp(a) && Jsonix.Util.Type.isRegExp(b)) {
 			return a.source === b.source && a.global === b.global && a.ignoreCase === b.ignoreCase && a.multiline === b.multiline;
 		}
+		
+		if (Jsonix.Util.Type.isNode(a) && Jsonix.Util.Type.isNode(b))
+		{
+			var aSerialized = Jsonix.DOM.serialize(a);
+			var bSerialized = Jsonix.DOM.serialize(b);
+			if (aSerialized !== bSerialized)
+			{
+				if (doReport)
+				{
+					report('Nodes differ.');
+					report('A=' + aSerialized);
+					report('B=' + bSerialized);
+				}
+				return false;
+			}
+			else
+			{
+				return true;
+			}
+		}
+		
 		// If a is not an object by this point, we can't handle it.
 		if (atype !== 'object') {
 			return false;
 		}
 		// Check for different array lengths before comparing contents.
-		if (a.length && (a.length !== b.length)) {
+		if (Jsonix.Util.Type.isArray(a) && (a.length !== b.length)) {
 			if (doReport) {
 					report('Lengths differ.');
 					report('A.length=' + a.length);
@@ -460,7 +484,7 @@ Jsonix.Util.Type = {
 		var aKeys = _keys(a);
 		var bKeys = _keys(b);
 		// Different object sizes?
-		if (aKeys.length != bKeys.length) {
+		if (aKeys.length !== bKeys.length) {
 			if (doReport) {
 				report('Different number of properties [' + aKeys.length + '], [' + bKeys.length + '].');
 			}
@@ -4832,13 +4856,15 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	},
 	
 	parseSignedYear : function(xmlYear) {
-		// TODO: validattion -> parseYear()...
+		// TODO: validation -> parseYear()...
 		var year = parseInt(xmlYear, 10);
 		
 		return year;
 	},
       
       // TODO: possible improvement xmlCalenderObject as arg
+      // REVIEW AV: Definitely. First parse to object and then convert
+      // the object to the date.
       xmlCalendarToDate: function (year, month, day, hours, minutes, seconds, timezone) {
           var initialDate = new Date(0);
           initialDate.setUTCFullYear(this.parseSignedYear(year));
@@ -4854,11 +4880,12 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
       },
 
 	
-     printSignedYear : function(value) {
+	printSignedYear : function(value) {
+		// REVIEW AV: Validation should be carried out before this
+		// method is called, in the outmost user-facing method.
 		if (value === 0) {
 			throw new Error("Year must not be 0");
 		}
-
 		return value < 0 ? ("-" + this.printYear(value * -1)) : (this.printYear(value));
 	},
 
@@ -5057,6 +5084,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			return '';
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value);
+
 			var sign = value < 0 ? -1 : (value > 0 ? 1 : 0);
 			var data = value * sign;
 			var minute = data % 60;
@@ -5632,18 +5660,17 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	},
 	print : function(value) {
 		Jsonix.Util.Ensure.ensureObject(value);
+		// TODO we have to validate the value HERE
 		//date might be an optional argument 
 		// see documentation pdf site 3
 		if (value instanceof Date) {
+			//this must be fixed (timeZoneOffset is *-1)
 			return this.printSignedYear(value.getFullYear()) + this.printTimeZoneString(value.getTimezoneOffset());
 		}
 		//TODO
 		//possible less reduntant sollution ensure.isDate() || ensure.isXmlGregorianDate() validation else -> error
 		Jsonix.Util.Ensure.ensureInteger(value.year);
-		//review duschata  timezone is optional and might be undefined or null
-		// if (Jsonix.Util.NumberUtils.isInteger(value.timezone)) {
 		return this.printSignedYear(value.year) + this.printTimeZoneString(value.timezone);
-		// }
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.GYear'
 });
