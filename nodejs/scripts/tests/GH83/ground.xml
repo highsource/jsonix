@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Root
+    xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="./ground.xsd">
+    <House>
+        <id>1</id>
+        <localisation>
+            <name xmlns="urban">Kleber</name>
+            <oldName xmlns="urban">Kleb</oldName>
+            <street xmlns="urban">MainStreet</street>
+        </localisation>
+    </House>
+    <Garden>
+        <id>2</id>
+        <localisation>
+            <name xmlns="rural">Versailles</name>
+            <swingCount xmlns="rural">3</swingCount>
+            <kennelCount xmlns="rural">5</kennelCount>
+        </localisation>
+    </Garden>
+</Root>

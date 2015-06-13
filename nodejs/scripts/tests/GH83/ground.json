@@ -1,0 +1,32 @@
+{
+  "name": {
+    "namespaceURI": "",
+    "localPart": "Root",
+    "prefix": "",
+    "key": "Root",
+    "string": "Root"
+  },
+  "value": {
+    "TYPE_NAME": "ground.Root",
+    "house": {
+      "TYPE_NAME": "ground.Root.House",
+      "id": 1,
+      "localisation": {
+        "name": "Kleber",
+        "oldName": "Kleb",
+        "street": "MainStreet",
+        "TYPE_NAME": "ground.LocaType"
+      }
+    },
+    "garden": {
+      "TYPE_NAME": "ground.Root.Garden",
+      "id": 2,
+      "localisation": {
+        "name": "Versailles",
+        "swingCount": "3",
+        "kennelCount": "5",
+        "TYPE_NAME": "ground.LocaType"
+      }
+    }
+  }
+}
