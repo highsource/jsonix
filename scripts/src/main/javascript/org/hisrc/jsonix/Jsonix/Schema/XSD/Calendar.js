@@ -213,13 +213,12 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
       },
 
 	
-     printSignedYear : function(value) {
-     	// REVIEW AV: Validation should be carried out before this
-     	// method is called, in the outmost user-facing method.
+	printSignedYear : function(value) {
+		// REVIEW AV: Validation should be carried out before this
+		// method is called, in the outmost user-facing method.
 		if (value === 0) {
 			throw new Error("Year must not be 0");
 		}
-
 		return value < 0 ? ("-" + this.printYear(value * -1)) : (this.printYear(value));
 	},
 
