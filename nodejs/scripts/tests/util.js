@@ -37,5 +37,15 @@ module.exports = {
 		test.equal('a b c', Jsonix.Util.StringUtils.trim('  a b c  '));
 		test.equal(true, Jsonix.Util.StringUtils.isEmpty('    '));
 		test.done();
+	},
+	"IsEqual" : {
+		"Node" : function(test) {
+			var a0 = Jsonix.DOM.parse("<a b='c'/>");
+			var a1 = Jsonix.DOM.parse("<a b='c'/>");
+			test.ok(Jsonix.Util.Type.isNode(a0));
+			test.ok(Jsonix.Util.Type.isNode(a1));
+			test.ok(Jsonix.Util.Type.isEqual(a0, a1, function(text) { console.log(text); } ));
+			test.done();
+		}
 	}
 };
