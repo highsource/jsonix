@@ -2,11 +2,16 @@ var Jsonix = require("../../jsonix").Jsonix;
 var roundtrips = require("../roundtrip").roundtrips;
 var comparisons = require("../comparison").comparisons;
 
-var ground = require("./Mappings.js").ground;
+var ground = require("./ground.js");
 
-var mappings = [ground];
+var mappings = [ground.generated, ground.urban, ground.rural];
 
-var context = new Jsonix.Context(mappings);
+var context = new Jsonix.Context(mappings, {
+	namespacePrefixes : {
+		"urban" : "urban",
+		"rural" : "rural"
+	}
+});
 
 module.exports = {
 	"Standard" : {

@@ -7,25 +7,25 @@
     "string": "Root"
   },
   "value": {
-    "TYPE_NAME": "ground.Root",
+    "TYPE_NAME": "generated.Root",
     "house": {
-      "TYPE_NAME": "ground.Root.House",
+      "TYPE_NAME": "generated.Root.House",
       "id": 1,
       "localisation": {
         "name": "Kleber",
         "oldName": "Kleb",
-        "street": "MainStreet",
-        "TYPE_NAME": "ground.LocaType"
+        "streetName": "MainStreet",
+        "TYPE_NAME": "urban.LocaType"
       }
     },
     "garden": {
-      "TYPE_NAME": "ground.Root.Garden",
+      "TYPE_NAME": "generated.Root.Garden",
       "id": 2,
       "localisation": {
         "name": "Versailles",
-        "swingCount": "3",
-        "kennelCount": "5",
-        "TYPE_NAME": "ground.LocaType"
+        "swingCount": 3,
+        "kennelCount": 5,
+        "TYPE_NAME": "rural.LocaType"
       }
     }
   }
