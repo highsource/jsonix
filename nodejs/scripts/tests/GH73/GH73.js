@@ -1,13 +1,14 @@
 module.exports = {
 	"Issues" : {
-		
+
 		"GH73Core" : require('./GH73Core'),
-		"GH73DateObject" : require('./GH73DateObject'),
-		"GH73Functions" : require('./GH73Functions'),
-		"GH73PrintGYear" : require('./GH73PrintGYear'),
-		"GH73PrintGMonth" : require('./GH73PrintGMonth'),
-		"GH73Regex" : require('./GH73Regex')
 		
+		// runs only standalone
+		// "GH73DateTimezoneOffset" : require('./GH73DateTimezoneOffset'),
+		"GH73Calendar" : require('./GH73Calendar'),
+		"GH73GYear" : require('./GH73GYear'),
+		"GH73GMonth" : require('./GH73GMonth'),
+		"GH73Regex" : require('./GH73Regex')
+
 	}
 };
-
