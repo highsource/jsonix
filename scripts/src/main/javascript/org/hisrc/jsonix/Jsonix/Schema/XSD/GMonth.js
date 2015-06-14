@@ -8,13 +8,13 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		var results = value.match(gMonthExpression);
 
 		if (results !== null) {
-			var splitedGMonth = {
+			var gMonth = {
 				month : parseInt(results[2], 10),
 				// TODO: validation_issue (parseTimeZoneString is redundant)
 				timezone : this.parseTimeZoneString(results[3]),
 				date : this.xmlCalendarToDate("1970", results[2], "01", "00", "00", "00", results[3])
 			};
-			return splitedGMonth;
+			return gMonth;
 		}
 		throw new Error('Value [' + value + '] does not match the gMonth pattern.');
 	},
