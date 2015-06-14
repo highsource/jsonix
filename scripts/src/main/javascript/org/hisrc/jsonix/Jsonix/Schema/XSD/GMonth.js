@@ -10,6 +10,7 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (results !== null) {
 			var splitedGMonth = {
 				month : parseInt(results[2], 10),
+				// TODO: validation_issue (parseTimeZoneString is redundant)
 				timezone : this.parseTimeZoneString(results[3]),
 				date : this.xmlCalendarToDate("1970", results[2], "01", "00", "00", "00", results[3])
 			};
@@ -32,14 +33,10 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			timezone = value.timezone;
 		}
 		// TODO: validation_issue (month range)
-		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
-			throw new Error('Month must not be < 1 or > 12');
-		}
+		this.validateMonthRange(month);
 
 		// TODO: validation_issue (timezone range)
-		if (parseInt(timezone, 10) < -14 * 60 || parseInt(timezone, 10) > 14 * 60) {
-			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
-		}
+		this.validateTimeZoneRange(timezone);
 
 		return "--" + this.printMonth(month) + this.printTimeZoneString(timezone);
 	}

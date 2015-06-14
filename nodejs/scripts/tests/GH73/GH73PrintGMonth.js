@@ -10,22 +10,13 @@ module.exports = {
 			test.equal('--01', g.print({month:1}));
 			test.equal('--12', g.print({month:12}));
 			test.throws(function(){g.print(13);});
+			test.throws(function(){g.print(-7);});
+			test.throws(function(){g.print(0);});
 
-//			test.equal('1010', g.print({year:1010}));
-//			test.equal('-1234567', g.print({year:-1234567}));
-//			test.equal('1234567', g.print({year:1234567}));
-//			test.equal('2013-05:00', g.print({year:2013,timezone:-300}));
-//			test.equal('-2013+05:00', g.print({year:-2013,timezone:300}));
-//
-//			test.throws(function(){g.print(2013);});
-//			test.throws(function(){g.print({});});
-//			//quickfix
-//			//TODO -> validation in printYear
-//			test.throws(function(){g.print({year:0});});
-//			test.throws(function(){g.print({year:'2013'});});
-//			test.throws(function(){g.print({year:2013, timezone:'-05:00'});});
-//			test.throws(function(){g.print({year:2013, timezone:100000});});
-
+			test.equal('--01-05:00', g.print({month:1,timezone:-300}));
+			test.equal('--12+05:00', g.print({month:12,timezone:300}));
+			test.equal('--12Z', g.print({month:12,timezone:0}));
+			test.throws(function(){g.print({month:12, timezone:100000});});
 			test.done();
 		}
 		

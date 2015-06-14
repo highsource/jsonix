@@ -188,12 +188,29 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 	},
 
+	// TODO: validation_issue (negative value is allowed)
 	parseSignedYear : function(xmlYear) {
-		// TODO: validation -> parseYear()...
 		var year = parseInt(xmlYear, 10);
-
+		if (year === 0) {
+			throw new Error('Year must not be 0');
+		}
 		return year;
 	},
+	
+	// TODO: validation_issue (timezone range)
+	validateTimeZoneRange: function(timezone){
+		if (parseInt(timezone,10) < -14 * 60 || parseInt(timezone,10) > 14 * 60) {
+			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
+		}
+	},
+	
+	// TODO: validation_issue (month range)
+	validateMonthRange: function(month){
+		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
+			throw new Error('Month must not be < 1 or > 12');
+		}
+	},
+	
 
 	// TODO: possible improvement xmlCalenderObject as arg
 	// REVIEW AV: Definitely. First parse to object and then convert
