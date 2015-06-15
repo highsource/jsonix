@@ -51,6 +51,16 @@ module.exports = {
 
 			test.done();
 		},
+		
+		"ParseYearGetDate" : function(test) {
+			var g = Jsonix.Schema.XSD.GYear.INSTANCE;
+
+			test.equal(1967, g.parse('1967').date.getFullYear());
+			test.equal(1967, g.parse('1967Z').date.getFullYear());
+			test.equal(-1967, g.parse('-1967Z').date.getFullYear());
+			
+			test.done();
+		}
 
 
 };

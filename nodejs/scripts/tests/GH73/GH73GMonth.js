@@ -65,12 +65,6 @@ module.exports = {
 
 		test.equal(0, g.parse('--01').date.getMonth());
 		test.equal(11, g.parse('--12Z').date.getMonth());
-
-		// test.equal(12, unmarshaller.unmarshalString('<GDateTypes
-		// month="--12-05:00"/>').value.month.month);
-		// test.equal(-300, unmarshaller.unmarshalString('<GDateTypes
-		// month="--12-05:00"/>').value.month.timezone);
-
 		test.done();
 	}
 };

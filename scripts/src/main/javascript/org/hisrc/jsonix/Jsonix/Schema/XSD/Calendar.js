@@ -210,6 +210,15 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			throw new Error('Month must not be < 1 or > 12');
 		}
 	},
+	
+	// TODO: validation_issue (day range)
+	validateDayRange : function(day) {
+		if (parseInt(day, 10) < 1 || parseInt(day, 10) > 31) {
+			throw new Error('Day must not be < 1 or > 31');
+		}
+	},
+	
+	
 
 	// TODO: possible improvement xmlCalenderObject as arg
 	// REVIEW AV: Definitely. First parse to object and then convert
