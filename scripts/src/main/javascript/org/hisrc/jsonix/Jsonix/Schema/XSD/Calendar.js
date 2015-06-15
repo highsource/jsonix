@@ -196,21 +196,20 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		return year;
 	},
-	
+
 	// TODO: validation_issue (timezone range)
-	validateTimeZoneRange: function(timezone){
-		if (parseInt(timezone,10) < -14 * 60 || parseInt(timezone,10) > 14 * 60) {
+	validateTimeZoneRange : function(timezone) {
+		if (parseInt(timezone, 10) < -14 * 60 || parseInt(timezone, 10) > 14 * 60) {
 			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
 		}
 	},
-	
+
 	// TODO: validation_issue (month range)
-	validateMonthRange: function(month){
+	validateMonthRange : function(month) {
 		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
 			throw new Error('Month must not be < 1 or > 12');
 		}
 	},
-	
 
 	// TODO: possible improvement xmlCalenderObject as arg
 	// REVIEW AV: Definitely. First parse to object and then convert
@@ -224,6 +223,11 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		initialDate.setUTCMinutes(this.parseMinute(minutes));
 		initialDate.setUTCSeconds(this.parseSecond(seconds));
 		var timezoneOffset = this.parseTimeZoneString(timezone) * -60000;
+
+		// TODO: validation_issue (should be undefined )
+		if (isNaN(timezoneOffset)) {
+			timezoneOffset = 0;
+		}
 
 		return new Date(initialDate.getTime() + timezoneOffset);
 

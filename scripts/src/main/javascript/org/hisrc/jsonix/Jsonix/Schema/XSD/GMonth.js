@@ -14,6 +14,8 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				timezone : this.parseTimeZoneString(results[3]),
 				date : this.xmlCalendarToDate("1970", results[2], "01", "00", "00", "00", results[3])
 			};
+			
+			console.log("1970", results[2], "01", "00", "00", "00", results[3]);
 			return gMonth;
 		}
 		throw new Error('Value [' + value + '] does not match the gMonth pattern.');

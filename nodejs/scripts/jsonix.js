@@ -4839,21 +4839,20 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		return year;
 	},
-	
+
 	// TODO: validation_issue (timezone range)
-	validateTimeZoneRange: function(timezone){
-		if (parseInt(timezone,10) < -14 * 60 || parseInt(timezone,10) > 14 * 60) {
+	validateTimeZoneRange : function(timezone) {
+		if (parseInt(timezone, 10) < -14 * 60 || parseInt(timezone, 10) > 14 * 60) {
 			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
 		}
 	},
-	
+
 	// TODO: validation_issue (month range)
-	validateMonthRange: function(month){
+	validateMonthRange : function(month) {
 		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
 			throw new Error('Month must not be < 1 or > 12');
 		}
 	},
-	
 
 	// TODO: possible improvement xmlCalenderObject as arg
 	// REVIEW AV: Definitely. First parse to object and then convert
@@ -4867,6 +4866,11 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		initialDate.setUTCMinutes(this.parseMinute(minutes));
 		initialDate.setUTCSeconds(this.parseSecond(seconds));
 		var timezoneOffset = this.parseTimeZoneString(timezone) * -60000;
+
+		// TODO: validation_issue (should be undefined )
+		if (isNaN(timezoneOffset)) {
+			timezoneOffset = 0;
+		}
 
 		return new Date(initialDate.getTime() + timezoneOffset);
 
@@ -5645,6 +5649,7 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (results !== null) {
 			var splitedGYear = {
 				year : parseInt(results[1], 10),
+				// TODO: validation_issue (parseTimeZoneString is redundant)
 				timezone : this.parseTimeZoneString(results[5]),
 				date : this.xmlCalendarToDate(results[1], "01", "01", "00", "00", "00", results[5])
 			};
@@ -5740,37 +5745,24 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	CLASS_NAME : 'Jsonix.Schema.XSD.GDay',
 
 	parse : function(value, context, input, scope) {
-		var returnValue = this.splitGDay(value);
-		returnValue.toString = function() {
-			return "EmptyXMLElement. Call embedded 'day' or 'timezone' property";
-		};
-		return returnValue;
-	},
-
-	/**
-	 * @param {string}
-	 *            day datetype in ISO 8601 format
-	 * @returns {object} pair of dey, timestamp properties as a number
-	 * @throws {Error}
-	 *             if the datetype is not valid
-	 * 
-	 */
-	splitGDay : function(value) {
-
+		
 		var gDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GDAY_PATTERN + "$");
 		var results = value.match(gDayExpression);
-
 		if (results !== null) {
 			var splitedGYDay = {
 				day : parseInt(results[2], 10),
+				// TODO: validation_issue (parseTimeZoneString is redundant)
 				timezone : this.parseTimeZoneString(results[3])
 			};
-
 			return splitedGYDay;
 		}
-
 		throw new Error('Value [' + value + '] doesn\'t match the gDay pattern.');
+	},
+	
+	print : function(value, context, input, scope) {
+		
 	}
+
 });
 Jsonix.Schema.XSD.GDay.INSTANCE = new Jsonix.Schema.XSD.GDay();
 Jsonix.Schema.XSD.GDay.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GDay.INSTANCE);
@@ -5784,12 +5776,15 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		var results = value.match(gMonthExpression);
 
 		if (results !== null) {
-			var splitedGMonth = {
+			var gMonth = {
 				month : parseInt(results[2], 10),
+				// TODO: validation_issue (parseTimeZoneString is redundant)
 				timezone : this.parseTimeZoneString(results[3]),
 				date : this.xmlCalendarToDate("1970", results[2], "01", "00", "00", "00", results[3])
 			};
-			return splitedGMonth;
+			
+			console.log("1970", results[2], "01", "00", "00", "00", results[3]);
+			return gMonth;
 		}
 		throw new Error('Value [' + value + '] does not match the gMonth pattern.');
 	},
