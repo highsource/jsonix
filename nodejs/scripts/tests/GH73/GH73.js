@@ -9,6 +9,7 @@ module.exports = {
 		"GH73GYear" : require('./GH73GYear'),
 		"GH73GYearMonth" : require('./GH73GYearMonth'),
 		"GH73GMonth" : require('./GH73GMonth'),
+		"GH73GMonthDay" : require('./GH73GMonthDay'),
 		"GH73GDay" : require('./GH73GDay'),
 		"GH73Regex" : require('./GH73Regex')
 
