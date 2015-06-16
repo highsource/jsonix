@@ -1,12 +1,14 @@
 var Jsonix = require("../../jsonix").Jsonix;
 
-process.env.TZ = 'UTC';
+if (process.env.TZ === undefined) {
+	process.env.TZ = 'UTC';
+}
 
 module.exports = {
 
-	"PrintYearMonth" : function(test) {
+		"PrintYearMonth" : function(test) {
 		var g = Jsonix.Schema.XSD.GYearMonth.INSTANCE;
-
+	
 		test.equal('0001-01', g.print({ year : 1, month : 1 }));
 		test.equal('0010-10', g.print({ year : 10, month : 10 }));
 		test.equal('-1234567-01', g.print({ year : -1234567, month : 01 }));

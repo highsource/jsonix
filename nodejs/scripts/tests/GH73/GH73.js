@@ -1,9 +1,11 @@
+process.env.TZ = 'UTC';
+
 module.exports = {
 	"Issues" : {
 
 		"GH73Core" : require('./GH73Core'),
-		
-		// runs only standalone
+
+		// runs only standalone under linux
 		// "GH73DateTimezoneOffset" : require('./GH73DateTimezoneOffset'),
 		"GH73Calendar" : require('./GH73Calendar'),
 		"GH73GYear" : require('./GH73GYear'),

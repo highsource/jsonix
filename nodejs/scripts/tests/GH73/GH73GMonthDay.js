@@ -1,6 +1,8 @@
 var Jsonix = require("../../jsonix").Jsonix;
 
-process.env.TZ = 'UTC';
+if (process.env.TZ === undefined) {
+	process.env.TZ = 'UTC';
+}
 
 module.exports = {
 

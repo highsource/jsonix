@@ -5731,16 +5731,16 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				timezone : this.parseTimeZoneString(results[5]),
 				date : this.xmlCalendarToDate("1970", results[2], results[3], "00", "00", "00", results[5])
 			};
-			
+
 			// TODO: validation_issue (day range in month)
 			this.validateMonthDayRange(gMonthDay.month, gMonthDay.day);
-			
+
 			return gMonthDay;
 		}
 
 		throw new Error('Value [' + value + '] doesn\'t match the gMonthDay pattern.');
 	},
-	
+
 	print : function(value, context, input, scope) {
 		Jsonix.Util.Ensure.ensureObject(value);
 		var month = undefined;
@@ -5758,14 +5758,14 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			day = value.day;
 			timezone = value.timezone;
 		}
-		
+
 		// TODO: validation_issue (day range in month)
 		this.validateMonthDayRange(month, day);
 
 		// TODO: validation_issue (timezone range)
 		this.validateTimeZoneRange(timezone);
 
-		return "--" + this.printMonth(month) +"-" +this.printDay(day) +  this.printTimeZoneString(timezone);
+		return "--" + this.printMonth(month) + "-" + this.printDay(day) + this.printTimeZoneString(timezone);
 	}
 });
 Jsonix.Schema.XSD.GMonthDay.INSTANCE = new Jsonix.Schema.XSD.GMonthDay();
