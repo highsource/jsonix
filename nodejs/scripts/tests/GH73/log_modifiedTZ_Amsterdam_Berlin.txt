@@ -1,0 +1,187 @@
+
+[1mGH73.js[22m
+1970 01 01 00 00 00 undefined
+1970 12 01 00 00 00 -05:00
+1970 12 01 00 00 00 -05:00
+✔ Issues - GH73Core - EmptyElement
+✔ Issues - GH73Calendar - validateMonthDayRange
+✔ Issues - GH73GYear - PrintYear
+[31m✖ Issues - GH73GYear - PrintYearFromDate[39m
+
+AssertionError: '1970Z' == '1970+01:00'
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.PrintYearFromDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GYear.js:60:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+✔ Issues - GH73GYear - ReprintYear
+✔ Issues - GH73GYear - ParseYearGetDate
+✔ Issues - GH73GYearMonth - PrintYearMonth
+[31m✖ Issues - GH73GYearMonth - PrintYearMonthFromDate[39m
+
+AssertionError: '1970-01Z' == '1970-01+01:00'
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.PrintYearMonthFromDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GYearMonth.js:55:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+✔ Issues - GH73GYearMonth - ReprintYearMonth
+[31m✖ Issues - GH73GYearMonth - ParseYearMonthGetDate[39m
+
+AssertionError
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.ParseYearMonthGetDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GYearMonth.js:80:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+✔ Issues - GH73GMonth - PrintMonth
+[31m✖ Issues - GH73GMonth - PrintMonthFromDate[39m
+
+AssertionError: '--01Z' == '--01+01:00'
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.PrintMonthFromDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GMonth.js:38:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+1970 01 01 00 00 00 undefined
+1970 12 01 00 00 00 undefined
+1970 01 01 00 00 00 Z
+1970 12 01 00 00 00 -05:00
+✔ Issues - GH73GMonth - ReprintMonth
+1970 01 01 00 00 00 undefined
+1970 12 01 00 00 00 Z
+✔ Issues - GH73GMonth - ParseMonthGetDate
+✔ Issues - GH73GMonthDay - PrintMonthDay
+[31m✖ Issues - GH73GMonthDay - PrintMonthFromDate[39m
+
+AssertionError: '--01-01Z' == '--01-01+01:00'
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.PrintMonthFromDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GMonthDay.js:39:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+✔ Issues - GH73GMonthDay - ReprintMonth
+[31m✖ Issues - GH73GMonthDay - ParseMonthDayGetDate[39m
+
+AssertionError
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.ParseMonthDayGetDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GMonthDay.js:58:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+✔ Issues - GH73GDay - PrintDay
+[31m✖ Issues - GH73GDay - PrintDayFromDate[39m
+
+AssertionError: '---01Z' == '---01+01:00'
+    at Object.equal (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\types.js:83:39)
+    at Object.module.exports.PrintDayFromDate (C:\Users\tom\src\js\jsonix\nodejs\scripts\tests\GH73\GH73GDay.js:38:8)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at Object.<anonymous> (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:236:16
+    at Object.exports.runTest (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:70:9)
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\lib\core.js:118:25
+    at C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:513:13
+    at iterate (C:\Users\tom\AppData\Roaming\npm\node_modules\nodeunit\deps\async.js:123:13)
+
+✔ Issues - GH73GDay - ReprintDay
+✔ Issues - GH73GDay - ParseDayGetDate
+✔ Issues - GH73Regex - ValidateYear
+✔ Issues - GH73Regex - ValidateTimeZone
+✔ Issues - GH73Regex - ValidateGYear
+Splitted values for: GMonth
+0: --02+05:00
+1: --02
+2: 02
+3: +05:00
+4: 05:00
+5: 05:00
+6: 05
+7: undefined
+✔ Issues - GH73Regex - SplitGMonth
+✔ Issues - GH73Regex - ValidateMonth
+Splitted values for: undefined
+0: --12+14:00
+1: --12
+2: 12
+3: +14:00
+4: 14:00
+5: undefined
+6: undefined
+7: 14:00
+✔ Issues - GH73Regex - ValidateGMonth
+✔ Issues - GH73Regex - ValidateDay
+Splitted values for: undefined
+0: ---29+14:00
+1: ---29
+2: 29
+3: +14:00
+4: 14:00
+5: undefined
+6: undefined
+7: 14:00
+✔ Issues - GH73Regex - ValidateGDay
+Splitted values for: undefined
+0: -1984-11+05:00
+1: -1984
+2: undefined
+3: 1984
+4: undefined
+5: 11
+6: 11
+7: +05:00
+8: 05:00
+9: 05:00
+10: 05
+11: undefined
+✔ Issues - GH73Regex - ValidateGMonthDay
+Splitted values for: undefined
+0: --12-31+05:00
+1: --12
+2: 12
+3: 31
+4: 31
+5: +05:00
+6: 05:00
+7: 05:00
+8: 05
+9: undefined
+✔ Issues - GH73Regex - GMonthDay
+
+[1m[31mFAILURES: [39m[22m7/194 assertions failed (78ms)
