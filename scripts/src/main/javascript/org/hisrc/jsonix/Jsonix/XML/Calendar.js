@@ -7,6 +7,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 	second : NaN,
 	fractionalSecond : NaN,
 	timezone : NaN,
+	date : null,
 	initialize : function(data) {
 		Jsonix.Util.Ensure.ensureObject(data);
 		// Year
@@ -83,6 +84,17 @@ Jsonix.XML.Calendar = Jsonix.Class({
 		} else {
 			this.timezone = NaN;
 		}
+
+		var initialDate = new Date(0);
+		initialDate.setUTCFullYear(this.year || 1970);
+		initialDate.setUTCMonth(this.month - 1 || 0);
+		initialDate.setUTCDate(this.day || 1);
+		initialDate.setUTCHours(this.hour || 0);
+		initialDate.setUTCMinutes(this.minute || 0);
+		initialDate.setUTCSeconds(this.second || 0);
+		initialDate.setUTCMilliseconds((this.fractionalSecond || 0) * 1000);
+		var timezoneOffset = -60000 * (this.timezoneOffset || 0);
+		this.date = new Date(initialDate.getTime() + timezoneOffset);
 	},
 	CLASS_NAME : "Jsonix.XML.Calendar"
 });

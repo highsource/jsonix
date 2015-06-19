@@ -188,6 +188,11 @@ module.exports =
 			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:11, day:30}); });
 			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:12, day:31}); });
 			test.done();
+		},
+		"Date" : function(test) {
+			test.equal(0, new Jsonix.XML.Calendar({}).date.getTime());
+			test.equal(34401906700, new Jsonix.XML.Calendar({year:1971,month:2,day:3,hour:4,minute:5,second:6,fractionalSecond:.7,timezone:480}).date.getTime());
+			test.done();
 		}
 	}
 };
