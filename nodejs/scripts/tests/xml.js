@@ -151,5 +151,43 @@ module.exports =
 			test.equal("Literal", input.getAttributeValueNS("http://www.w3.org/2001/XMLSchema-instance", "type"));
 			test.done();
 		}
+	},
+	"Calendar" : {
+		"Validation" : function(test) {
+			test.throws(function() { new Jsonix.XML.Calendar(); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({}); });
+			test.throws(function() { new Jsonix.XML.Calendar({year:0}); });
+
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({year:10000}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({year:-10000}); });
+
+			test.throws(function() { new Jsonix.XML.Calendar({month:0}); });
+			test.throws(function() { new Jsonix.XML.Calendar({month:13}); });
+
+			test.throws(function() { new Jsonix.XML.Calendar({day:0}); });
+			test.throws(function() { new Jsonix.XML.Calendar({day:32}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({day:1}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({day:31}); });
+
+			test.throws(function() { new Jsonix.XML.Calendar({month:2, day:30}); });
+			test.throws(function() { new Jsonix.XML.Calendar({month:4, day:31}); });
+			test.throws(function() { new Jsonix.XML.Calendar({month:6, day:31}); });
+			test.throws(function() { new Jsonix.XML.Calendar({month:9, day:31}); });
+			test.throws(function() { new Jsonix.XML.Calendar({month:11, day:31}); });
+
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:1, day:31}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:2, day:29}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:3, day:31}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:4, day:30}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:5, day:31}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:6, day:30}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:7, day:31}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:8, day:31}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:9, day:30}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:10, day:31}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:11, day:30}); });
+			test.doesNotThrow(function() { new Jsonix.XML.Calendar({month:12, day:31}); });
+			test.done();
+		}
 	}
 };

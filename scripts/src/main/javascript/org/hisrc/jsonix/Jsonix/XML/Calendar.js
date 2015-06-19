@@ -12,84 +12,62 @@ Jsonix.XML.Calendar = Jsonix.Class({
 		// Year
 		if (Jsonix.Util.Type.exists(data.year)) {
 			Jsonix.Util.Ensure.ensureInteger(data.year);
-			if (data.year >= -9999 && data.year <= 9999) {
-				this.year = data.year;
-			} else {
-				throw new Error('Invalid year [' + data.year + '].');
-			}
-
+			Jsonix.XML.Calendar.validateYear(data.year);
+			this.year = data.year;
 		} else {
 			this.year = NaN;
 		}
 		// Month
 		if (Jsonix.Util.Type.exists(data.month)) {
 			Jsonix.Util.Ensure.ensureInteger(data.month);
-			if (data.month >= 1 && data.month <= 12) {
-				this.month = data.month;
-			} else {
-				throw new Error('Invalid month [' + data.month + '].');
-			}
-
+			Jsonix.XML.Calendar.validateMonth(data.month);
+			this.month = data.month;
 		} else {
 			this.month = NaN;
 		}
 		// Day
 		if (Jsonix.Util.Type.exists(data.day)) {
 			Jsonix.Util.Ensure.ensureInteger(data.day);
-			if (data.day >= 1 && data.day <= 31) {
-				this.day = data.day;
+			if (Jsonix.Util.NumberUtils.isInteger(data.year) && Jsonix.Util.NumberUtils.isInteger(data.month)) {
+				Jsonix.XML.Calendar.validateYearMonthDay(data.year, data.month, data.day);
+			} else if (Jsonix.Util.NumberUtils.isInteger(data.month)) {
+				Jsonix.XML.Calendar.validateMonthDay(data.month, data.day);
 			} else {
-				throw new Error('Invalid day [' + data.day + '].');
+				Jsonix.XML.Calendar.validateDay(data.day);
 			}
-
+			this.day = data.day;
 		} else {
 			this.day = NaN;
 		}
 		// Hour
 		if (Jsonix.Util.Type.exists(data.hour)) {
 			Jsonix.Util.Ensure.ensureInteger(data.hour);
-			if (data.hour >= 0 && data.hour <= 23) {
-				this.hour = data.hour;
-			} else {
-				throw new Error('Invalid hour [' + data.hour + '].');
-			}
-
+			Jsonix.XML.Calendar.validateHour(data.hour);
+			this.hour = data.hour;
 		} else {
 			this.hour = NaN;
 		}
 		// Minute
 		if (Jsonix.Util.Type.exists(data.minute)) {
 			Jsonix.Util.Ensure.ensureInteger(data.minute);
-			if (data.minute >= 0 && data.minute <= 59) {
-				this.minute = data.minute;
-			} else {
-				throw new Error('Invalid minute [' + data.minute + '].');
-			}
-
+			Jsonix.XML.Calendar.validateMinute(data.minute);
+			this.minute = data.minute;
 		} else {
 			this.minute = NaN;
 		}
 		// Second
 		if (Jsonix.Util.Type.exists(data.second)) {
 			Jsonix.Util.Ensure.ensureInteger(data.second);
-			if (data.second >= 0 && data.second <= 59) {
-				this.second = data.second;
-			} else {
-				throw new Error('Invalid second [' + data.second + '].');
-			}
-
+			Jsonix.XML.Calendar.validateSecond(data.second);
+			this.second = data.second;
 		} else {
 			this.second = NaN;
 		}
 		// Fractional second
 		if (Jsonix.Util.Type.exists(data.fractionalSecond)) {
 			Jsonix.Util.Ensure.ensureNumber(data.fractionalSecond);
-			if (data.fractionalSecond >= 0 && data.fractionalSecond < 1) {
-				this.fractionalSecond = data.fractionalSecond;
-			} else {
-				throw new Error('Invalid fractional second [' + data.fractionalSecond + '].');
-			}
-
+			Jsonix.XML.Calendar.validateFractionalSecond(data.fractionalSecond);
+			this.fractionalSecond = data.fractionalSecond;
 		} else {
 			this.fractionalSecond = NaN;
 		}
@@ -99,11 +77,8 @@ Jsonix.XML.Calendar = Jsonix.Class({
 				this.timezone = NaN;
 			} else {
 				Jsonix.Util.Ensure.ensureInteger(data.timezone);
-				if (data.timezone >= -1440 && data.timezone < 1440) {
-					this.timezone = data.timezone;
-				} else {
-					throw new Error('Invalid timezone [' + data.timezone + '].');
-				}
+				Jsonix.XML.Calendar.validateTimezone(data.timezone);
+				this.timezone = data.timezone;
 			}
 		} else {
 			this.timezone = NaN;
@@ -111,10 +86,65 @@ Jsonix.XML.Calendar = Jsonix.Class({
 	},
 	CLASS_NAME : "Jsonix.XML.Calendar"
 });
+Jsonix.XML.Calendar.MIN_TIMEZONE = -14 * 60;
+Jsonix.XML.Calendar.MAX_TIMEZONE = 14 * 60;
+Jsonix.XML.Calendar.DAYS_IN_MONTH = [ 31, 29, 31, 30, 31, 30, 31, 31, 30, 31, 30, 31 ];
 Jsonix.XML.Calendar.fromObject = function(object) {
 	Jsonix.Util.Ensure.ensureObject(object);
 	if (Jsonix.Util.Type.isString(object.CLASS_NAME) && object.CLASS_NAME === 'Jsonix.XML.Calendar') {
 		return object;
 	}
 	return new Jsonix.XML.Calendar(object);
+};
+Jsonix.XML.Calendar.validateYear = function(year) {
+	if (year === 0) {
+		throw new Error('Invalid year [' + year + ']. Year must not be [0].');
+	}
+};
+Jsonix.XML.Calendar.validateMonth = function(month) {
+	if (month < 1 || month > 12) {
+		throw new Error('Invalid month [' + month + ']. Month must be in range [1, 12].');
+	}
+};
+Jsonix.XML.Calendar.validateDay = function(day) {
+	if (day < 1 || day > 31) {
+		throw new Error('Invalid day [' + day + ']. Day must be in range [1, 31].');
+	}
+};
+Jsonix.XML.Calendar.validateMonthDay = function(month, day) {
+	Jsonix.XML.Calendar.validateMonth(month);
+	var maxDaysInMonth = Jsonix.XML.Calendar.DAYS_IN_MONTH[month - 1];
+	if (day < 1 || day > Jsonix.XML.Calendar.DAYS_IN_MONTH[month - 1]) {
+		throw new Error('Invalid day [' + day + ']. Day must be in range [1, ' + maxDaysInMonth + '].');
+	}
+};
+Jsonix.XML.Calendar.validateYearMonthDay = function(year, month, day) {
+	// #93 TODO proper validation of 28/29 02
+	Jsonix.XML.Calendar.validateYear(year);
+	Jsonix.XML.Calendar.validateMonthDay(month, day);
+};
+Jsonix.XML.Calendar.validateHour = function(hour) {
+	if (hour < 0 || hour > 23) {
+		throw new Error('Invalid hour [' + hour + ']. Hour must be in range [0, 23].');
+	}
+};
+Jsonix.XML.Calendar.validateMinute = function(minute) {
+	if (minute < 0 || minute > 59) {
+		throw new Error('Invalid minute [' + minute + ']. Minute must be in range [0, 59].');
+	}
+};
+Jsonix.XML.Calendar.validateSecond = function(second) {
+	if (second < 0 || second > 59) {
+		throw new Error('Invalid second [' + second + ']. Second must be in range [0, 59].');
+	}
+};
+Jsonix.XML.Calendar.validateFractionalSecond = function(fractionalSecond) {
+	if (fractionalSecond < 0 || fractionalSecond > 59) {
+		throw new Error('Invalid fractional second [' + fractionalSecond + ']. Fractional second must be in range [0, 1).');
+	}
+};
+Jsonix.XML.Calendar.validateTimezone = function(timezone) {
+	if (timezone < Jsonix.XML.Calendar.MIN_TIMEZONE || timezone > Jsonix.XML.Calendar.MAX_TIMEZONE) {
+		throw new Error('Invalid timezone [' + timezone + ']. Timezone must not be in range [' + Jsonix.XML.Calendar.MIN_TIMEZONE + ', ' + Jsonix.XML.Calendar.MAX_TIMEZONE + '].');
+	}
 };
