@@ -304,23 +304,23 @@ function testSchemaXSDDate() {
 	// assertEquals('1970-01-01+01:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d4));
 	assertEquals(-3600000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d4)).getTime());
 
-	var d5 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01+15:00');
-	assertEquals(-54000000, d5.getTime());
+	var d5 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01+14:00');
+	assertEquals(-50400000, d5.getTime());
 	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d5));
-	assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d5));
-	assertEquals(-54000000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d5)).getTime());
+	assertEquals('1970-01-01+14:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d5));
+	assertEquals(-50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d5)).getTime());
 	delete d5.originalTimezone;
 	// assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d5));
-	assertEquals(-54000000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d5)).getTime());
+	assertEquals(-50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d5)).getTime());
 
-	var d6 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01-15:00');
-	assertEquals(54000000, d6.getTime());
+	var d6 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01-14:00');
+	assertEquals(50400000, d6.getTime());
 	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d6));
-	assertEquals('1970-01-01-15:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d6));
-	assertEquals(54000000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d6)).getTime());
+	assertEquals('1970-01-01-14:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d6));
+	assertEquals(50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d6)).getTime());
 	delete d6.originalTimezone;
 	// assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d6));
-	assertEquals(54000000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d6)).getTime());
+	assertEquals(50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d6)).getTime());
 
 	assertEquals('2001-12-31', Jsonix.Schema.XSD.Date.INSTANCE.print(new Date(2001, 11, 31)));
 	assertEquals('2001-12-31', Jsonix.Schema.XSD.Date.INSTANCE.print(Jsonix.Schema.XSD.Date.INSTANCE.parse('2001-12-31')));
