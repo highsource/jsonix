@@ -4,9 +4,9 @@ module.exports = {
 	"Issues" : {
 
 		"GH73Core" : require('./GH73Core'),
-
+		// TODO
 		// runs only standalone under linux
-		// "GH73DateTimezoneOffset" : require('./GH73DateTimezoneOffset'),
+//		"GH73DateTimezoneOffset" : require('./GH73DateTimezoneOffset'),
 		"GH73Calendar" : require('./GH73Calendar'),
 		"GH73GYear" : require('./GH73GYear'),
 		"GH73GYearMonth" : require('./GH73GYearMonth'),
