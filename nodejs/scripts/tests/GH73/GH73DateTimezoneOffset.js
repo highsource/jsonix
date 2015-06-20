@@ -33,9 +33,11 @@ module.exports = {
 
 		var gMonth = Jsonix.Schema.XSD.GMonth.INSTANCE;
 
-		var parsedMonth = gMonth.parse(testMonth, null, null, null);
+		var parsedMonth = gMonth.parse(testMonth);
 
-		test.equal("Fri May 01 1970 00:00:00 GMT+0500 (PKT)", parsedMonth.date);
+		test.equal(10350000000, parsedMonth.date.getTime());
+		test.equal(300, parsedMonth.timezone);
+		test.equal(5, parsedMonth.month);
 
 		test.done();
 	},
@@ -52,6 +54,7 @@ module.exports = {
 		gDateType.value.month = new Date(0);
 		gDateType.value.month.setMonth(1);
 
+		// #92
 		test.equal("<GDateTypes month=\"--02+05:00\"/>", marshaller.marshalString(gDateType));
 
 		test.done();
