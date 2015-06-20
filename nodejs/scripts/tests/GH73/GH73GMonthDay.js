@@ -16,17 +16,18 @@ module.exports = {
 		test.equal('--12-01Z', g.print({ month : 12, day: 1, timezone : 0 }));
 
 		test.throws(function() {
-			g.print(13);
+			g.print({ month: 13, day: 1 });
 		});
 		test.throws(function() {
-			g.print(-7);
+			g.print({ month: -7, day: 1 });
 		});
 		test.throws(function() {
-			g.print(0);
+			g.print({month: 0, day: 1});
 		});
 		test.throws(function() {
 			g.print({
 				month : 12,
+				day : 31,
 				timezone : 100000
 			});
 		});
