@@ -18,8 +18,9 @@ module.exports = {
         test.equal(-300, unmarshaller.unmarshalString('<GDateTypes year="2013-05:00"/>').value.year.timezone);
         test.equal(-2013, unmarshaller.unmarshalString('<GDateTypes year="-2013+05:00"/>').value.year.year);
         test.equal(300, unmarshaller.unmarshalString('<GDateTypes year="-2013+05:00"/>').value.year.timezone);
-
-        test.equal("1969-12-31T23:00:00.000Z", unmarshaller.unmarshalString('<GDateTypes year="1970+01:00"/>').value.year.date.toISOString());
+		// TODO depends on the time zone
+		// This fails at the moment
+        test.equal("1970-01-01T00:00:00.000+01:00", unmarshaller.unmarshalString('<GDateTypes year="1970+01:00"/>').value.year.date.toISOString());
 
         test.throws(function() {
             unmarshaller.unmarshalString('<GDateTypes year="0000"/>');
