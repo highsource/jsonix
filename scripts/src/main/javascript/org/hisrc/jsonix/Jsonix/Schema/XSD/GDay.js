@@ -4,19 +4,16 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	CLASS_NAME : 'Jsonix.Schema.XSD.GDay',
 
 	parse : function(value, context, input, scope) {
-
 		var gDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GDAY_PATTERN + "$");
 		var results = value.match(gDayExpression);
 		if (results !== null) {
-			var gDay = {
+			var data = {
 				day : parseInt(results[2], 10),
-				// TODO: validation_issue (parseTimeZoneString is redundant)
-				timezone : this.parseTimeZoneString(results[3]),
-				date : this.xmlCalendarToDate("1970", "01", results[2], "00", "00", "00", results[3])
+				timezone : this.parseTimeZoneString(results[3])
 			};
-			return gDay;
+			return new Jsonix.XML.Calendar(data);
 		}
-		throw new Error('Value [' + value + '] doesn\'t match the gDay pattern.');
+		throw new Error('Value [' + value + '] does not match the xs:gDay pattern.');
 	},
 
 	print : function(value, context, input, scope) {
@@ -32,12 +29,8 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			day = value.day;
 			timezone = value.timezone;
 		}
-		// TODO: validation_issue (day range)
-		this.validateDayRange(day);
-
-		// TODO: validation_issue (timezone range)
-		this.validateTimeZoneRange(timezone);
-
+		Jsonix.XML.Calendar.validateDay(day);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
 		return "---" + this.printDay(day) + this.printTimeZoneString(timezone);
 	}
 

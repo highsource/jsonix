@@ -7,15 +7,14 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		var gYearMonthExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN + "$");
 		var results = value.match(gYearMonthExpression);
 		if (results !== null) {
-			var gYearMonth = {
+			var data = {
 				year : parseInt(results[1], 10),
 				month : parseInt(results[5], 10),
-				timezone : this.parseTimeZoneString(results[7]),
-				date : this.xmlCalendarToDate(results[1], results[5], "01", "00", "00", "00", results[7])
+				timezone : this.parseTimeZoneString(results[7])
 			};
-			return gYearMonth;
+			return new Jsonix.XML.Calendar(data);
 		}
-		throw new Error('Value [' + value + '] doesn\'t match the gYearMonth pattern.');
+		throw new Error('Value [' + value + '] does not match the xs:gYearMonth pattern.');
 	},
 
 	print : function(value, context, input, scope) {
@@ -34,14 +33,9 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			month = value.month;
 			timezone = value.timezone;
 		}
-
-		// TODO: validation_issue (month range)
-		this.validateMonthRange(month);
-
-		// TODO: validation_issue (timezone range)
-		this.validateTimeZoneRange(timezone);
-
-		// TODO: validation_issue (signedYear)
+		Jsonix.XML.Calendar.validateYear(year);
+		Jsonix.XML.Calendar.validateMonth(month);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
 		return this.printSignedYear(year) + "-" + this.printMonth(month) + this.printTimeZoneString(timezone);
 	}
 
