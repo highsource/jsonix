@@ -7,7 +7,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		var sign = negative ? -1 : 1;
 		var data = negative ? text.substring(1) : text;
 
-		// Detect pattern
+		// TODO Detect pattern via RegExps
 
 		var result;
 		if (data.length >= 19 && data.charAt(4) === '-' && data.charAt(7) === '-' && data.charAt(10) === 'T' && data.charAt(13) === ':' && data.charAt(16) === ':') {
@@ -20,6 +20,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			throw new Error('Value [' + text + '] does not match dateTime, date or time patterns.');
 		}
 	},
+	// Via RegExp
 	parseDateTime : function(text) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var negative = (text.charAt(0) === '-');
@@ -70,6 +71,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		});
 
 	},
+	// Via RegExp
 	parseDate : function(text) {
 		Jsonix.Util.Ensure.ensureString(text);
 
@@ -110,6 +112,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		});
 
 	},
+	// Via RegExp
 	parseTime : function(text) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var timeZoneIndex;
@@ -146,6 +149,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		});
 
 	},
+	// Via RegExp
 	parseDateString : function(text) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text.length !== 10) {
@@ -166,6 +170,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			day : day
 		};
 	},
+	// Via RegExp
 	parseTimeString : function(timeString) {
 		Jsonix.Util.Ensure.ensureString(timeString);
 		if (timeString.length < 8 || timeString.charAt(2) !== ':' || timeString.charAt(5) !== ':') {
@@ -187,7 +192,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		};
 
 	},
-
+	// TODO not as string 
 	// TODO: validation_issue (negative value is allowed)
 	parseSignedYear : function(xmlYear) {
 		var year = parseInt(xmlYear, 10);
@@ -196,28 +201,27 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		return year;
 	},
-
+	// TODO not as string 
 	// TODO: validation_issue (timezone range)
 	validateTimeZoneRange : function(timezone) {
 		if (parseInt(timezone, 10) < -14 * 60 || parseInt(timezone, 10) > 14 * 60) {
 			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
 		}
 	},
-
+	// TODO not as string 
 	// TODO: validation_issue (month range)
 	validateMonthRange : function(month) {
 		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
 			throw new Error('Month must not be < 1 or > 12');
 		}
 	},
-
+	// TODO not as string 
 	// TODO: validation_issue (day range)
 	validateDayRange : function(day) {
 		if (parseInt(day, 10) < 1 || parseInt(day, 10) > 31) {
 			throw new Error('Day must not be < 1 or > 31');
 		}
 	},
-
 	// TODO: validation_issue (day range in month)
 	validateMonthDayRange : function(month, day) {
 		var shortMonths = [ 4, 6, 9, 11 ];
