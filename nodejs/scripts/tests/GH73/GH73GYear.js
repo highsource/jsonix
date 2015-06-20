@@ -24,8 +24,6 @@ module.exports = {
 		test.throws(function() {
 			g.print({});
 		});
-		// quickfix
-		// TODO -> validation in printYear
 		test.throws(function() {
 			g.print({
 				year : 0
