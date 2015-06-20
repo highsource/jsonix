@@ -16,8 +16,13 @@ module.exports = {
 		test.throws(function() {
 			gMonthDay.validateMonthDayRange(04, 31);
 		}, "Error");
+
 		test.throws(function() {
 			gMonthDay.validateMonthDayRange(11, 31);
+		}, "Error");
+
+		test.doesNotThrow(function() {
+			gMonthDay.validateMonthDayRange(12, 31);
 		}, "Error");
 
 		test.done();
