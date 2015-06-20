@@ -31,10 +31,10 @@ module.exports = {
 	"UnmarshallsDateTimeAsTimestamp" : function(test) {
 		var context = new Jsonix.Context([ Mapping ]);
 		var unmarshaller = context.createUnmarshaller();
-		var text = '<dateTime>2015-01-01T12:34:56</dateTime>';
+		var text = '<dateTime>2015-01-01T12:34:56Z</dateTime>';
 		var result = unmarshaller.unmarshalString(text);
 		console.log(result);
-		test.equal(1420112096000, result.value);
+		test.equal(1420115696000, result.value);
 		test.done();
 	}
 }
