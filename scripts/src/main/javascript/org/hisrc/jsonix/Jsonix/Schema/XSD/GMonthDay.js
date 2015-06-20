@@ -10,7 +10,7 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			var data = {
 				month : parseInt(results[2], 10),
 				day : parseInt(results[3], 10),
-				timezone : this.parseTimeZoneString(results[5])
+				timezone : this.parseTimezoneString(results[5])
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
@@ -37,7 +37,7 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		Jsonix.XML.Calendar.validateMonthDay(month, day);
 		Jsonix.XML.Calendar.validateTimezone(timezone);
-		return "--" + this.printMonth(month) + "-" + this.printDay(day) + this.printTimeZoneString(timezone);
+		return "--" + this.printMonth(month) + "-" + this.printDay(day) + this.printTimezoneString(timezone);
 	}
 });
 Jsonix.Schema.XSD.GMonthDay.INSTANCE = new Jsonix.Schema.XSD.GMonthDay();

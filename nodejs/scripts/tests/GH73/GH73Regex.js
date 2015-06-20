@@ -72,43 +72,43 @@ module.exports = {
 
 	},
 
-	"ValidateTimeZone" : function(test) {
-		var timeZoneRegEx = "^" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + "$";
+	"ValidateTimezone" : function(test) {
+		var timezoneRegEx = "^" + Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN + "$";
 
 		test.doesNotThrow(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "Z");
+			GH73.Regex.checkExpression(timezoneRegEx, "Z");
 		});
 		test.doesNotThrow(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "+02:00");
+			GH73.Regex.checkExpression(timezoneRegEx, "+02:00");
 		});
 		test.doesNotThrow(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "-02:00");
+			GH73.Regex.checkExpression(timezoneRegEx, "-02:00");
 		});
 		test.doesNotThrow(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "-13:00");
+			GH73.Regex.checkExpression(timezoneRegEx, "-13:00");
 		});
 		test.doesNotThrow(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "+14:00");
+			GH73.Regex.checkExpression(timezoneRegEx, "+14:00");
 		});
 
 		test.throws(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "+15:00");
+			GH73.Regex.checkExpression(timezoneRegEx, "+15:00");
 		}, "Error");
 		test.throws(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "+14:42");
+			GH73.Regex.checkExpression(timezoneRegEx, "+14:42");
 		}, "Error");
 
 		test.throws(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "z");
+			GH73.Regex.checkExpression(timezoneRegEx, "z");
 		}, "Error");
 		test.throws(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "00:00");
+			GH73.Regex.checkExpression(timezoneRegEx, "00:00");
 		}, "Error");
 		test.throws(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "00");
+			GH73.Regex.checkExpression(timezoneRegEx, "00");
 		}, "Error");
 		test.throws(function() {
-			GH73.Regex.checkExpression(timeZoneRegEx, "+00:69");
+			GH73.Regex.checkExpression(timezoneRegEx, "+00:69");
 		}, "Error");
 
 		test.done();

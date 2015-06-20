@@ -10,7 +10,7 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 			var data = {
 				year : parseInt(results[1], 10),
 				month : parseInt(results[5], 10),
-				timezone : this.parseTimeZoneString(results[7])
+				timezone : this.parseTimezoneString(results[7])
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
@@ -36,7 +36,7 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		Jsonix.XML.Calendar.validateYear(year);
 		Jsonix.XML.Calendar.validateMonth(month);
 		Jsonix.XML.Calendar.validateTimezone(timezone);
-		return this.printSignedYear(year) + "-" + this.printMonth(month) + this.printTimeZoneString(timezone);
+		return this.printSignedYear(year) + "-" + this.printMonth(month) + this.printTimezoneString(timezone);
 	}
 
 });

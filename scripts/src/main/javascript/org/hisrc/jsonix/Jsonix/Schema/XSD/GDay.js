@@ -9,7 +9,7 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (results !== null) {
 			var data = {
 				day : parseInt(results[2], 10),
-				timezone : this.parseTimeZoneString(results[3])
+				timezone : this.parseTimezoneString(results[3])
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
@@ -31,7 +31,7 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		Jsonix.XML.Calendar.validateDay(day);
 		Jsonix.XML.Calendar.validateTimezone(timezone);
-		return "---" + this.printDay(day) + this.printTimeZoneString(timezone);
+		return "---" + this.printDay(day) + this.printTimezoneString(timezone);
 	}
 
 });

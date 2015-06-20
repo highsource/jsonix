@@ -26,38 +26,38 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		var negative = (text.charAt(0) === '-');
 		var sign = negative ? -1 : 1;
 
-		var dateTimeWithTimeZone = negative ? text.substring(1) : text;
+		var dateTimeWithTimezone = negative ? text.substring(1) : text;
 
-		if (dateTimeWithTimeZone.length < 19 || dateTimeWithTimeZone.charAt(4) !== '-' || dateTimeWithTimeZone.charAt(7) !== '-' || dateTimeWithTimeZone.charAt(10) !== 'T' || dateTimeWithTimeZone.charAt(13) !== ':' || dateTimeWithTimeZone.charAt(16) !== ':') {
-			throw new Error('Date time string [' + dateTimeWithTimeZone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].');
+		if (dateTimeWithTimezone.length < 19 || dateTimeWithTimezone.charAt(4) !== '-' || dateTimeWithTimezone.charAt(7) !== '-' || dateTimeWithTimezone.charAt(10) !== 'T' || dateTimeWithTimezone.charAt(13) !== ':' || dateTimeWithTimezone.charAt(16) !== ':') {
+			throw new Error('Date time string [' + dateTimeWithTimezone + '] must be a string in format [\'-\'? yyyy \'-\' mm \'-\' dd \'T\' hh \':\' mm \':\' ss (\'.\' s+)? (zzzzzz)?].');
 		}
 
-		var timeZoneIndex;
-		var plusIndex = dateTimeWithTimeZone.indexOf('+', 19);
+		var timezoneIndex;
+		var plusIndex = dateTimeWithTimezone.indexOf('+', 19);
 		if (plusIndex >= 0) {
-			timeZoneIndex = plusIndex;
+			timezoneIndex = plusIndex;
 		} else {
-			var minusIndex = dateTimeWithTimeZone.indexOf('-', 19);
+			var minusIndex = dateTimeWithTimezone.indexOf('-', 19);
 			if (minusIndex >= 0) {
-				timeZoneIndex = minusIndex;
+				timezoneIndex = minusIndex;
 			} else {
-				var zIndex = dateTimeWithTimeZone.indexOf('Z', 19);
+				var zIndex = dateTimeWithTimezone.indexOf('Z', 19);
 				if (zIndex >= 0) {
-					timeZoneIndex = zIndex;
+					timezoneIndex = zIndex;
 				} else {
-					timeZoneIndex = dateTimeWithTimeZone.length;
+					timezoneIndex = dateTimeWithTimezone.length;
 				}
 			}
 		}
 
-		var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < dateTimeWithTimeZone.length;
+		var validTimezoneIndex = timezoneIndex > 0 && timezoneIndex < dateTimeWithTimezone.length;
 
-		var dateString = dateTimeWithTimeZone.substring(0, 10);
-		var timeString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(11, timeZoneIndex) : dateTimeWithTimeZone.substring(11);
-		var timeZoneString = validTimeZoneIndex ? dateTimeWithTimeZone.substring(timeZoneIndex) : '';
+		var dateString = dateTimeWithTimezone.substring(0, 10);
+		var timeString = validTimezoneIndex ? dateTimeWithTimezone.substring(11, timezoneIndex) : dateTimeWithTimezone.substring(11);
+		var timezoneString = validTimezoneIndex ? dateTimeWithTimezone.substring(timezoneIndex) : '';
 		var date = this.parseDateString(dateString);
 		var time = this.parseTimeString(timeString);
-		var timezone = this.parseTimeZoneString(timeZoneString);
+		var timezone = this.parseTimezoneString(timezoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			year : sign * date.year,
@@ -78,31 +78,31 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		var negative = (text.charAt(0) === '-');
 		var sign = negative ? -1 : 1;
 
-		var dateWithTimeZone = negative ? text.substring(1) : text;
+		var dateWithTimezone = negative ? text.substring(1) : text;
 
-		var timeZoneIndex;
-		var plusIndex = dateWithTimeZone.indexOf('+', 10);
+		var timezoneIndex;
+		var plusIndex = dateWithTimezone.indexOf('+', 10);
 		if (plusIndex >= 0) {
-			timeZoneIndex = plusIndex;
+			timezoneIndex = plusIndex;
 		} else {
-			var minusIndex = dateWithTimeZone.indexOf('-', 10);
+			var minusIndex = dateWithTimezone.indexOf('-', 10);
 			if (minusIndex >= 0) {
-				timeZoneIndex = minusIndex;
+				timezoneIndex = minusIndex;
 			} else {
-				var zIndex = dateWithTimeZone.indexOf('Z', 10);
+				var zIndex = dateWithTimezone.indexOf('Z', 10);
 				if (zIndex >= 0) {
-					timeZoneIndex = zIndex;
+					timezoneIndex = zIndex;
 				} else {
-					timeZoneIndex = dateWithTimeZone.length;
+					timezoneIndex = dateWithTimezone.length;
 				}
 			}
 		}
-		var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < dateWithTimeZone.length;
-		var dateString = validTimeZoneIndex ? dateWithTimeZone.substring(0, timeZoneIndex) : dateWithTimeZone;
+		var validTimezoneIndex = timezoneIndex > 0 && timezoneIndex < dateWithTimezone.length;
+		var dateString = validTimezoneIndex ? dateWithTimezone.substring(0, timezoneIndex) : dateWithTimezone;
 
 		var date = this.parseDateString(dateString);
-		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-		var timezone = this.parseTimeZoneString(timeZoneString);
+		var timezoneString = validTimezoneIndex ? text.substring(timezoneIndex) : '';
+		var timezone = this.parseTimezoneString(timezoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			year : sign * date.year,
@@ -115,30 +115,30 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	// Via RegExp
 	parseTime : function(text) {
 		Jsonix.Util.Ensure.ensureString(text);
-		var timeZoneIndex;
+		var timezoneIndex;
 		var plusIndex = text.indexOf('+', 7);
 		if (plusIndex >= 0) {
-			timeZoneIndex = plusIndex;
+			timezoneIndex = plusIndex;
 		} else {
 			var minusIndex = text.indexOf('-', 7);
 			if (minusIndex >= 0) {
-				timeZoneIndex = minusIndex;
+				timezoneIndex = minusIndex;
 			} else {
 				var zIndex = text.indexOf('Z', 7);
 				if (zIndex >= 0) {
-					timeZoneIndex = zIndex;
+					timezoneIndex = zIndex;
 				} else {
-					timeZoneIndex = text.length;
+					timezoneIndex = text.length;
 				}
 			}
 		}
 
-		var validTimeZoneIndex = timeZoneIndex > 0 && timeZoneIndex < text.length;
-		var timeString = validTimeZoneIndex ? text.substring(0, timeZoneIndex) : text;
+		var validTimezoneIndex = timezoneIndex > 0 && timezoneIndex < text.length;
+		var timeString = validTimezoneIndex ? text.substring(0, timezoneIndex) : text;
 
 		var time = this.parseTimeString(timeString);
-		var timeZoneString = validTimeZoneIndex ? text.substring(timeZoneIndex) : '';
-		var timezone = this.parseTimeZoneString(timeZoneString);
+		var timezoneString = validTimezoneIndex ? text.substring(timezoneIndex) : '';
+		var timezone = this.parseTimezoneString(timezoneString);
 
 		return Jsonix.XML.Calendar.fromObject({
 			hour : time.hour,
@@ -201,69 +201,6 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		return year;
 	},
-	// TODO not as string 
-	// TODO: validation_issue (timezone range)
-	validateTimeZoneRange : function(timezone) {
-		if (parseInt(timezone, 10) < -14 * 60 || parseInt(timezone, 10) > 14 * 60) {
-			throw new Error('Timezone must not be <> -/+ ' + (14 * 60));
-		}
-	},
-	// TODO not as string 
-	// TODO: validation_issue (month range)
-	validateMonthRange : function(month) {
-		if (parseInt(month, 10) < 1 || parseInt(month, 10) > 12) {
-			throw new Error('Month must not be < 1 or > 12');
-		}
-	},
-	// TODO not as string 
-	// TODO: validation_issue (day range)
-	validateDayRange : function(day) {
-		if (parseInt(day, 10) < 1 || parseInt(day, 10) > 31) {
-			throw new Error('Day must not be < 1 or > 31');
-		}
-	},
-	// TODO: validation_issue (day range in month)
-	validateMonthDayRange : function(month, day) {
-		var shortMonths = [ 4, 6, 9, 11 ];
-		var validationFailed = false;
-
-		if (month === 2 && day > 29) {
-			validationFailed = true;
-		} else {
-			for ( var shortMonth in shortMonths) {
-				if (month === shortMonths[shortMonth] && day > 30) {
-					validationFailed = true;
-					break;
-				}
-			}
-		}
-		if (validationFailed === true) {
-			throw new Error('Day ' + day + ' can not be valid in month ' + month);
-		}
-	},
-
-	// TODO: possible improvement xmlCalenderObject as arg
-	// REVIEW AV: Definitely. First parse to object and then convert
-	// the object to the date.
-	xmlCalendarToDate : function(year, month, day, hours, minutes, seconds, timezone) {
-		var initialDate = new Date(0);
-		initialDate.setUTCFullYear(this.parseSignedYear(year));
-		initialDate.setUTCMonth(this.parseMonth(month) - 1);
-		initialDate.setUTCDate(this.parseDay(day));
-		initialDate.setUTCHours(this.parseHour(hours));
-		initialDate.setUTCMinutes(this.parseMinute(minutes));
-		initialDate.setUTCSeconds(this.parseSecond(seconds));
-		var timezoneOffset = this.parseTimeZoneString(timezone) * -60000;
-
-		// TODO: validation_issue (should be undefined )
-		if (isNaN(timezoneOffset)) {
-			timezoneOffset = 0;
-		}
-
-		return new Date(initialDate.getTime() + timezoneOffset);
-
-	},
-
 
 	printSignedYear : function(value) {
 		// REVIEW AV: Validation should be carried out before this
@@ -274,7 +211,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		return value < 0 ? ("-" + this.printYear(value * -1)) : (this.printYear(value));
 	},
 
-	parseTimeZoneString : function(text) {
+	parseTimezoneString : function(text) {
 		// (('+' | '-') hh ':' mm) | 'Z'
 		if (!Jsonix.Util.Type.isString(text)) {
 			return NaN;
@@ -402,7 +339,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		result = result + 'T';
 		result = result + this.printTimeString(value);
 		if (Jsonix.Util.Type.exists(value.timezone)) {
-			result = result + this.printTimeZoneString(value.timezone);
+			result = result + this.printTimezoneString(value.timezone);
 		}
 		return result;
 	},
@@ -416,7 +353,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		var result = this.printDateString(value);
 		if (Jsonix.Util.Type.exists(value.timezone)) {
-			result = result + this.printTimeZoneString(value.timezone);
+			result = result + this.printTimezoneString(value.timezone);
 		}
 		return result;
 	},
@@ -434,7 +371,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 		var result = this.printTimeString(value);
 		if (Jsonix.Util.Type.exists(value.timezone)) {
-			result = result + this.printTimeZoneString(value.timezone);
+			result = result + this.printTimezoneString(value.timezone);
 		}
 		return result;
 	},
@@ -463,7 +400,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		return result;
 	},
-	printTimeZoneString : function(value) {
+	printTimezoneString : function(value) {
 		if (!Jsonix.Util.Type.exists(value) || Jsonix.Util.Type.isNaN(value)) {
 			return '';
 		} else {

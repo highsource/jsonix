@@ -9,7 +9,7 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (results !== null) {
 			var data = {
 				year : parseInt(results[1], 10),
-				timezone : this.parseTimeZoneString(results[5])
+				timezone : this.parseTimezoneString(results[5])
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
@@ -31,7 +31,7 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		}
 		Jsonix.XML.Calendar.validateYear(year);
 		Jsonix.XML.Calendar.validateTimezone(timezone);
-		return this.printSignedYear(year) + this.printTimeZoneString(timezone);
+		return this.printSignedYear(year) + this.printTimezoneString(timezone);
 	}
 });
 Jsonix.Schema.XSD.GYear.INSTANCE = new Jsonix.Schema.XSD.GYear();
