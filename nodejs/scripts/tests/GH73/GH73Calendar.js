@@ -2,7 +2,7 @@ var Jsonix = require("../../jsonix").Jsonix;
 
 module.exports = {
 
-	"validateMonthDay" : function(test) {
+	"ValidateMonthDay" : function(test) {
 		var gMonthDay = Jsonix.Schema.XSD.Calendar.INSTANCE;
 
 		test.doesNotThrow(function() {
@@ -26,5 +26,5 @@ module.exports = {
 		}, "Error");
 
 		test.done();
-	},
+	}
 }
