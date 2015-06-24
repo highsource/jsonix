@@ -23,7 +23,6 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 
 		if (value instanceof Date) {
 			day = value.getDate();
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.day);
 			day = value.day;

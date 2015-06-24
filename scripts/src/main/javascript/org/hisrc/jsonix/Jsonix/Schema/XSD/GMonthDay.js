@@ -27,7 +27,6 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (value instanceof Date) {
 			month = value.getMonth() + 1;
 			day = value.getDate();
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.month);
 			Jsonix.Util.Ensure.ensureInteger(value.day);

@@ -23,7 +23,6 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 
 		if (value instanceof Date) {
 			year = value.getFullYear();
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.year);
 			year = value.year;
