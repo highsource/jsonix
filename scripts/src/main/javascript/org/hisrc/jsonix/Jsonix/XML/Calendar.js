@@ -93,7 +93,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 		initialDate.setUTCMinutes(this.minute || 0);
 		initialDate.setUTCSeconds(this.second || 0);
 		initialDate.setUTCMilliseconds((this.fractionalSecond || 0) * 1000);
-		var timezoneOffset = -60000 * (this.timezoneOffset || 0);
+		var timezoneOffset = -60000 * (this.timezone || 0);
 		this.date = new Date(initialDate.getTime() + timezoneOffset);
 	},
 	CLASS_NAME : "Jsonix.XML.Calendar"
