@@ -49,7 +49,7 @@ module.exports = {
 		var g = Jsonix.Schema.XSD.GDay.INSTANCE;
 		var gDateType = new Date();
 		gDateType.setDate(1);
-		test.equal("---01Z", g.print(gDateType));
+		test.equal("---01", g.print(gDateType));
 		test.done();
 	},
 

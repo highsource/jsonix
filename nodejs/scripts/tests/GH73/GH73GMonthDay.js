@@ -39,7 +39,7 @@ module.exports = {
 		var gDateType = new Date();
 		gDateType.setMonth(0);
 		gDateType.setDate(1);
-		test.equal("--01-01Z", g.print(gDateType));
+		test.equal("--01-01", g.print(gDateType));
 		test.done();
 	},
 
@@ -58,7 +58,7 @@ module.exports = {
 
 		test.equal(0, g.parse('--01-01').date.getMonth());
 		test.equal(1, g.parse('--01-01').date.getDate());
-		test.equal(0, g.parse('--01-01+05:00').date.getTimezoneOffset());
+		test.equal(-300 * 60000, g.parse('--01-01+05:00').date.getTime());
 		test.done();
 	}
 };

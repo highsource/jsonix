@@ -37,7 +37,7 @@ module.exports = {
 		var g = Jsonix.Schema.XSD.GMonth.INSTANCE;
 		var gDateType = new Date();
 		gDateType.setMonth(0);
-		test.equal("--01Z", g.print(gDateType));
+		test.equal("--01", g.print(gDateType));
 		test.done();
 	},
 

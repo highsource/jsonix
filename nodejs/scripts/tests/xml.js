@@ -191,7 +191,7 @@ module.exports =
 		},
 		"Date" : function(test) {
 			test.equal(0, new Jsonix.XML.Calendar({}).date.getTime());
-			test.equal(34401906700, new Jsonix.XML.Calendar({year:1971,month:2,day:3,hour:4,minute:5,second:6,fractionalSecond:.7,timezone:480}).date.getTime());
+			test.equal(34401906700 - 480 * 60000, new Jsonix.XML.Calendar({year:1971,month:2,day:3,hour:4,minute:5,second:6,fractionalSecond:.7,timezone:480}).date.getTime());
 			test.done();
 		}
 	}

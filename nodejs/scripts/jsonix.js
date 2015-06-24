@@ -1010,7 +1010,6 @@ Jsonix.XML.Calendar = Jsonix.Class({
 		} else {
 			this.timezone = NaN;
 		}
-
 		var initialDate = new Date(0);
 		initialDate.setUTCFullYear(this.year || 1970);
 		initialDate.setUTCMonth(this.month - 1 || 0);
@@ -1019,7 +1018,7 @@ Jsonix.XML.Calendar = Jsonix.Class({
 		initialDate.setUTCMinutes(this.minute || 0);
 		initialDate.setUTCSeconds(this.second || 0);
 		initialDate.setUTCMilliseconds((this.fractionalSecond || 0) * 1000);
-		var timezoneOffset = -60000 * (this.timezoneOffset || 0);
+		var timezoneOffset = -60000 * (this.timezone || 0);
 		this.date = new Date(initialDate.getTime() + timezoneOffset);
 	},
 	CLASS_NAME : "Jsonix.XML.Calendar"
@@ -5447,7 +5446,6 @@ Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (value instanceof Date) {
 			year = value.getFullYear();
 			month = value.getMonth() + 1;
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.year);
 			year = value.year;
@@ -5488,7 +5486,6 @@ Jsonix.Schema.XSD.GYear = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 
 		if (value instanceof Date) {
 			year = value.getFullYear();
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.year);
 			year = value.year;
@@ -5530,7 +5527,6 @@ Jsonix.Schema.XSD.GMonthDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 		if (value instanceof Date) {
 			month = value.getMonth() + 1;
 			day = value.getDate();
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.month);
 			Jsonix.Util.Ensure.ensureInteger(value.day);
@@ -5570,7 +5566,6 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 
 		if (value instanceof Date) {
 			day = value.getDate();
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.day);
 			day = value.day;
@@ -5609,7 +5604,6 @@ Jsonix.Schema.XSD.GMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 
 		if (value instanceof Date) {
 			month = value.getMonth() + 1;
-			timezone = value.getTimezoneOffset() * -1;
 		} else {
 			Jsonix.Util.Ensure.ensureInteger(value.month);
 			month = value.month;
