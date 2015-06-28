@@ -133,58 +133,66 @@ Jsonix.Util.Type={exists:function(b){return(typeof b!=="undefined"&&b!==null)
 },isArray:function(b){return !!(b&&b.concat&&b.unshift&&!b.callee)
 },isDate:function(b){return !!(b&&b.getTimezoneOffset&&b.setUTCFullYear)
 },isRegExp:function(b){return !!(b&&b.test&&b.exec&&(b.ignoreCase||b.ignoreCase===false))
-},isEqual:function(r,t,w){var a=Jsonix.Util.Type.isFunction(w);
-var v=function(g,i,d){var k=slice.call(arguments);
-var j=k.length<=1;
-var f=j?0:k[0];
-var h=j?k[0]:k[1];
-var l=k[2]||1;
-var m=Math.max(Math.ceil((h-f)/l),0);
-var e=0;
-var c=new Array(m);
-while(e<m){c[e++]=f;
-f+=l
-}return c
+},isNode:function(b){return(typeof Node==="object"||typeof Node==="function")?(b instanceof Node):(b&&(typeof b==="object")&&(typeof b.nodeType==="number")&&(typeof b.nodeName==="string"))
+},isEqual:function(u,w,A){var a=Jsonix.Util.Type.isFunction(A);
+var y=function(g,e,m){var i=slice.call(arguments);
+var h=i.length<=1;
+var f=h?0:i[0];
+var d=h?i[0]:i[1];
+var j=i[2]||1;
+var k=Math.max(Math.ceil((d-f)/j),0);
+var c=0;
+var l=new Array(k);
+while(c<k){l[c++]=f;
+f+=j
+}return l
 };
-var u=Object.keys||function(e){if(Jsonix.Util.Type.isArray(e)){return v(0,e.length)
+var x=Object.keys||function(e){if(Jsonix.Util.Type.isArray(e)){return y(0,e.length)
 }var c=[];
 for(var d in e){if(e.hasOwnProperty(d)){c[c.length]=d
 }}return c
 };
-if(r===t){return true
-}if(Jsonix.Util.Type.isNaN(r)&&Jsonix.Util.Type.isNaN(t)){return true
-}var y=typeof r;
-var A=typeof t;
-if(y!=A){if(a){w("Types differ ["+y+"], ["+A+"].")
+if(u===w){return true
+}if(Jsonix.Util.Type.isNaN(u)&&Jsonix.Util.Type.isNaN(w)){return true
+}var C=typeof u;
+var E=typeof w;
+if(C!=E){if(a){A("Types differ ["+C+"], ["+E+"].")
 }return false
-}if(r==t){return true
-}if((!r&&t)||(r&&!t)){if(a){w("One is falsy, the other is truthy.")
+}if(u==w){return true
+}if((!u&&w)||(u&&!w)){if(a){A("One is falsy, the other is truthy.")
 }return false
-}if(Jsonix.Util.Type.isDate(r)&&Jsonix.Util.Type.isDate(t)){return r.getTime()===t.getTime()
-}if(Jsonix.Util.Type.isNaN(r)&&Jsonix.Util.Type.isNaN(t)){return false
-}if(Jsonix.Util.Type.isRegExp(r)&&Jsonix.Util.Type.isRegExp(t)){return r.source===t.source&&r.global===t.global&&r.ignoreCase===t.ignoreCase&&r.multiline===t.multiline
-}if(y!=="object"){return false
-}if(r.length&&(r.length!==t.length)){if(a){w("Lengths differ.");
-w("A.length="+r.length);
-w("B.length="+t.length)
+}if(Jsonix.Util.Type.isDate(u)&&Jsonix.Util.Type.isDate(w)){return u.getTime()===w.getTime()
+}if(Jsonix.Util.Type.isNaN(u)&&Jsonix.Util.Type.isNaN(w)){return false
+}if(Jsonix.Util.Type.isRegExp(u)&&Jsonix.Util.Type.isRegExp(w)){return u.source===w.source&&u.global===w.global&&u.ignoreCase===w.ignoreCase&&u.multiline===w.multiline
+}if(Jsonix.Util.Type.isNode(u)&&Jsonix.Util.Type.isNode(w)){var b=Jsonix.DOM.serialize(u);
+var z=Jsonix.DOM.serialize(w);
+if(b!==z){if(a){A("Nodes differ.");
+A("A="+b);
+A("B="+z)
 }return false
-}var b=u(r);
-var s=u(t);
-if(b.length!=s.length){if(a){w("Different number of properties ["+b.length+"], ["+s.length+"].")
-}for(var z=0;
-z<b.length;
-z++){if(a){w("A ["+b[z]+"]="+r[b[z]])
-}}for(var B=0;
-B<s.length;
-B++){if(a){w("B ["+s[B]+"]="+t[s[B]])
+}else{return true
+}}if(C!=="object"){return false
+}if(Jsonix.Util.Type.isArray(u)&&(u.length!==w.length)){if(a){A("Lengths differ.");
+A("A.length="+u.length);
+A("B.length="+w.length)
+}return false
+}var s=x(u);
+var v=x(w);
+if(s.length!==v.length){if(a){A("Different number of properties ["+s.length+"], ["+v.length+"].")
+}for(var D=0;
+D<s.length;
+D++){if(a){A("A ["+s[D]+"]="+u[s[D]])
+}}for(var F=0;
+F<v.length;
+F++){if(a){A("B ["+v[F]+"]="+w[v[F]])
 }}return false
-}for(var x=0;
-x<b.length;
-x++){var q=b[x];
-if(!(q in t)||!Jsonix.Util.Type.isEqual(r[q],t[q],w)){if(a){w("One of the properties differ.");
-w("Key: ["+q+"].");
-w("Left: ["+r[q]+"].");
-w("Right: ["+t[q]+"].")
+}for(var B=0;
+B<s.length;
+B++){var t=s[B];
+if(!(t in w)||!Jsonix.Util.Type.isEqual(u[t],w[t],A)){if(a){A("One of the properties differ.");
+A("Key: ["+t+"].");
+A("Left: ["+u[t]+"].");
+A("Right: ["+w[t]+"].")
 }return false
 }}return true
 },cloneObject:function(e,f){f=f||{};
@@ -329,45 +337,83 @@ if(d>0&&d<e.length){localName=e.substring(d+1)
 }return"{"+f+"}"+localName
 }else{return e
 }};
-Jsonix.XML.Calendar=Jsonix.Class({year:NaN,month:NaN,day:NaN,hour:NaN,minute:NaN,second:NaN,fractionalSecond:NaN,timezone:NaN,initialize:function(b){Jsonix.Util.Ensure.ensureObject(b);
-if(Jsonix.Util.Type.exists(b.year)){Jsonix.Util.Ensure.ensureInteger(b.year);
-if(b.year>=-9999&&b.year<=9999){this.year=b.year
-}else{throw new Error("Invalid year ["+b.year+"].")
-}}else{this.year=NaN
-}if(Jsonix.Util.Type.exists(b.month)){Jsonix.Util.Ensure.ensureInteger(b.month);
-if(b.month>=1&&b.month<=12){this.month=b.month
-}else{throw new Error("Invalid month ["+b.month+"].")
-}}else{this.month=NaN
-}if(Jsonix.Util.Type.exists(b.day)){Jsonix.Util.Ensure.ensureInteger(b.day);
-if(b.day>=1&&b.day<=31){this.day=b.day
-}else{throw new Error("Invalid day ["+b.day+"].")
-}}else{this.day=NaN
-}if(Jsonix.Util.Type.exists(b.hour)){Jsonix.Util.Ensure.ensureInteger(b.hour);
-if(b.hour>=0&&b.hour<=23){this.hour=b.hour
-}else{throw new Error("Invalid hour ["+b.hour+"].")
-}}else{this.hour=NaN
-}if(Jsonix.Util.Type.exists(b.minute)){Jsonix.Util.Ensure.ensureInteger(b.minute);
-if(b.minute>=0&&b.minute<=59){this.minute=b.minute
-}else{throw new Error("Invalid minute ["+b.minute+"].")
-}}else{this.minute=NaN
-}if(Jsonix.Util.Type.exists(b.second)){Jsonix.Util.Ensure.ensureInteger(b.second);
-if(b.second>=0&&b.second<=59){this.second=b.second
-}else{throw new Error("Invalid second ["+b.second+"].")
-}}else{this.second=NaN
-}if(Jsonix.Util.Type.exists(b.fractionalSecond)){Jsonix.Util.Ensure.ensureNumber(b.fractionalSecond);
-if(b.fractionalSecond>=0&&b.fractionalSecond<1){this.fractionalSecond=b.fractionalSecond
-}else{throw new Error("Invalid fractional second ["+b.fractionalSecond+"].")
-}}else{this.fractionalSecond=NaN
-}if(Jsonix.Util.Type.exists(b.timezone)){if(Jsonix.Util.Type.isNaN(b.timezone)){this.timezone=NaN
-}else{Jsonix.Util.Ensure.ensureInteger(b.timezone);
-if(b.timezone>=-1440&&b.timezone<1440){this.timezone=b.timezone
-}else{throw new Error("Invalid timezone ["+b.timezone+"].")
-}}}else{this.timezone=NaN
-}},CLASS_NAME:"Jsonix.XML.Calendar"});
+Jsonix.XML.Calendar=Jsonix.Class({year:NaN,month:NaN,day:NaN,hour:NaN,minute:NaN,second:NaN,fractionalSecond:NaN,timezone:NaN,date:null,initialize:function(f){Jsonix.Util.Ensure.ensureObject(f);
+if(Jsonix.Util.Type.exists(f.year)){Jsonix.Util.Ensure.ensureInteger(f.year);
+Jsonix.XML.Calendar.validateYear(f.year);
+this.year=f.year
+}else{this.year=NaN
+}if(Jsonix.Util.Type.exists(f.month)){Jsonix.Util.Ensure.ensureInteger(f.month);
+Jsonix.XML.Calendar.validateMonth(f.month);
+this.month=f.month
+}else{this.month=NaN
+}if(Jsonix.Util.Type.exists(f.day)){Jsonix.Util.Ensure.ensureInteger(f.day);
+if(Jsonix.Util.NumberUtils.isInteger(f.year)&&Jsonix.Util.NumberUtils.isInteger(f.month)){Jsonix.XML.Calendar.validateYearMonthDay(f.year,f.month,f.day)
+}else{if(Jsonix.Util.NumberUtils.isInteger(f.month)){Jsonix.XML.Calendar.validateMonthDay(f.month,f.day)
+}else{Jsonix.XML.Calendar.validateDay(f.day)
+}}this.day=f.day
+}else{this.day=NaN
+}if(Jsonix.Util.Type.exists(f.hour)){Jsonix.Util.Ensure.ensureInteger(f.hour);
+Jsonix.XML.Calendar.validateHour(f.hour);
+this.hour=f.hour
+}else{this.hour=NaN
+}if(Jsonix.Util.Type.exists(f.minute)){Jsonix.Util.Ensure.ensureInteger(f.minute);
+Jsonix.XML.Calendar.validateMinute(f.minute);
+this.minute=f.minute
+}else{this.minute=NaN
+}if(Jsonix.Util.Type.exists(f.second)){Jsonix.Util.Ensure.ensureInteger(f.second);
+Jsonix.XML.Calendar.validateSecond(f.second);
+this.second=f.second
+}else{this.second=NaN
+}if(Jsonix.Util.Type.exists(f.fractionalSecond)){Jsonix.Util.Ensure.ensureNumber(f.fractionalSecond);
+Jsonix.XML.Calendar.validateFractionalSecond(f.fractionalSecond);
+this.fractionalSecond=f.fractionalSecond
+}else{this.fractionalSecond=NaN
+}if(Jsonix.Util.Type.exists(f.timezone)){if(Jsonix.Util.Type.isNaN(f.timezone)){this.timezone=NaN
+}else{Jsonix.Util.Ensure.ensureInteger(f.timezone);
+Jsonix.XML.Calendar.validateTimezone(f.timezone);
+this.timezone=f.timezone
+}}else{this.timezone=NaN
+}var d=new Date(0);
+d.setUTCFullYear(this.year||1970);
+d.setUTCMonth(this.month-1||0);
+d.setUTCDate(this.day||1);
+d.setUTCHours(this.hour||0);
+d.setUTCMinutes(this.minute||0);
+d.setUTCSeconds(this.second||0);
+d.setUTCMilliseconds((this.fractionalSecond||0)*1000);
+var e=-60000*(this.timezone||0);
+this.date=new Date(d.getTime()+e)
+},CLASS_NAME:"Jsonix.XML.Calendar"});
+Jsonix.XML.Calendar.MIN_TIMEZONE=-14*60;
+Jsonix.XML.Calendar.MAX_TIMEZONE=14*60;
+Jsonix.XML.Calendar.DAYS_IN_MONTH=[31,29,31,30,31,30,31,31,30,31,30,31];
 Jsonix.XML.Calendar.fromObject=function(b){Jsonix.Util.Ensure.ensureObject(b);
 if(Jsonix.Util.Type.isString(b.CLASS_NAME)&&b.CLASS_NAME==="Jsonix.XML.Calendar"){return b
 }return new Jsonix.XML.Calendar(b)
 };
+Jsonix.XML.Calendar.validateYear=function(b){if(b===0){throw new Error("Invalid year ["+b+"]. Year must not be [0].")
+}};
+Jsonix.XML.Calendar.validateMonth=function(b){if(b<1||b>12){throw new Error("Invalid month ["+b+"]. Month must be in range [1, 12].")
+}};
+Jsonix.XML.Calendar.validateDay=function(b){if(b<1||b>31){throw new Error("Invalid day ["+b+"]. Day must be in range [1, 31].")
+}};
+Jsonix.XML.Calendar.validateMonthDay=function(f,d){Jsonix.XML.Calendar.validateMonth(f);
+var e=Jsonix.XML.Calendar.DAYS_IN_MONTH[f-1];
+if(d<1||d>Jsonix.XML.Calendar.DAYS_IN_MONTH[f-1]){throw new Error("Invalid day ["+d+"]. Day must be in range [1, "+e+"].")
+}};
+Jsonix.XML.Calendar.validateYearMonthDay=function(d,f,e){Jsonix.XML.Calendar.validateYear(d);
+Jsonix.XML.Calendar.validateMonthDay(f,e)
+};
+Jsonix.XML.Calendar.validateHour=function(b){if(b<0||b>23){throw new Error("Invalid hour ["+b+"]. Hour must be in range [0, 23].")
+}};
+Jsonix.XML.Calendar.validateMinute=function(b){if(b<0||b>59){throw new Error("Invalid minute ["+b+"]. Minute must be in range [0, 59].")
+}};
+Jsonix.XML.Calendar.validateSecond=function(b){if(b<0||b>59){throw new Error("Invalid second ["+b+"]. Second must be in range [0, 59].")
+}};
+Jsonix.XML.Calendar.validateFractionalSecond=function(b){if(b<0||b>59){throw new Error("Invalid fractional second ["+b+"]. Fractional second must be in range [0, 1).")
+}};
+Jsonix.XML.Calendar.validateTimezone=function(b){if(b<Jsonix.XML.Calendar.MIN_TIMEZONE||b>Jsonix.XML.Calendar.MAX_TIMEZONE){throw new Error("Invalid timezone ["+b+"]. Timezone must not be in range ["+Jsonix.XML.Calendar.MIN_TIMEZONE+", "+Jsonix.XML.Calendar.MAX_TIMEZONE+"].")
+}};
 Jsonix.XML.Input=Jsonix.Class({root:null,node:null,attributes:null,eventType:null,pns:null,initialize:function(c){Jsonix.Util.Ensure.ensureExists(c);
 this.root=c;
 var d={"":""};
@@ -733,11 +779,13 @@ Jsonix.Binding.Unmarshalls.Element=Jsonix.Class({allowTypedObject:true,allowDom:
 }var k=this.getTypeInfoByInputElement(q,o,j);
 var r=o.getName();
 var p;
-if(this.allowTypedObject&&Jsonix.Util.Type.exists(k)){var n=k.unmarshal(q,o,j);
+if(this.allowTypedObject){if(Jsonix.Util.Type.exists(k)){var n=k.unmarshal(q,o,j);
 var m={name:r,value:n,typeInfo:k};
 p=this.convertFromTypedNamedValue(m,q,o,j)
 }else{if(this.allowDom){p=o.getElement()
-}else{throw new Error("Element ["+r.toString()+"] is not known in this context and property does not allow DOM.")
+}else{throw new Error("Element ["+r.toString()+"] could not be unmarshalled as is not known in this context and the property does not allow DOM content.")
+}}}else{if(this.allowDom){p=o.getElement()
+}else{throw new Error("Element ["+r.toString()+"] could not be unmarshalled as the property neither allows typed objects nor DOM as content. This is a sign of invalid mappings, do not use [allowTypedObject : false] and [allowDom : false] at the same time.")
 }}l(p)
 },getTypeInfoByInputElement:function(n,p,m){var i=null;
 if(n.supportXsiType){var j=p.getAttributeValueNS(Jsonix.Schema.XSI.NAMESPACE_URI,Jsonix.Schema.XSI.TYPE);
@@ -1808,140 +1856,82 @@ if(Jsonix.Util.Type.isString(q)){return new Jsonix.XML.QName(q,n,m)
 },CLASS_NAME:"Jsonix.Schema.XSD.QName"});
 Jsonix.Schema.XSD.QName.INSTANCE=new Jsonix.Schema.XSD.QName();
 Jsonix.Schema.XSD.QName.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.QName.INSTANCE);
-Jsonix.Schema.XSD.Calendar=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"Calendar",typeName:Jsonix.Schema.XSD.qname("calendar"),parse:function(k,n,p,m){Jsonix.Util.Ensure.ensureString(k);
-var o=(k.charAt(0)==="-");
-var i=o?-1:1;
-var l=o?k.substring(1):k;
-var j;
-if(l.length>=19&&l.charAt(4)==="-"&&l.charAt(7)==="-"&&l.charAt(10)==="T"&&l.charAt(13)===":"&&l.charAt(16)===":"){return this.parseDateTime(k)
-}else{if(l.length>=10&&l.charAt(4)==="-"&&l.charAt(7)==="-"){return this.parseDate(k)
-}else{if(l.length>=8&&l.charAt(2)===":"&&l.charAt(5)===":"){return this.parseTime(k)
-}else{throw new Error("Value ["+k+"] does not match dateTime, date or time patterns.")
-}}}},parseDateTime:function(p){Jsonix.Util.Ensure.ensureString(p);
-var w=(p.charAt(0)==="-");
-var B=w?-1:1;
-var v=w?p.substring(1):p;
-if(v.length<19||v.charAt(4)!=="-"||v.charAt(7)!=="-"||v.charAt(10)!=="T"||v.charAt(13)!==":"||v.charAt(16)!==":"){throw new Error("Date time string ["+v+"] must be a string in format ['-'? yyyy '-' mm '-' dd 'T' hh ':' mm ':' ss ('.' s+)? (zzzzzz)?].")
-}var x;
-var A=v.indexOf("+",19);
-if(A>=0){x=A
-}else{var u=v.indexOf("-",19);
-if(u>=0){x=u
-}else{var s=v.indexOf("Z",19);
-if(s>=0){x=s
-}else{x=v.length
-}}}var C=x>0&&x<v.length;
-var r=v.substring(0,10);
-var D=C?v.substring(11,x):v.substring(11);
-var q=C?v.substring(x):"";
-var y=this.parseDateString(r);
-var z=this.parseTimeString(D);
-var t=this.parseTimeZoneString(q);
-return Jsonix.XML.Calendar.fromObject({year:B*y.year,month:y.month,day:y.day,hour:z.hour,minute:z.minute,second:z.second,fractionalSecond:z.fractionalSecond,timezone:t})
-},parseDate:function(n){Jsonix.Util.Ensure.ensureString(n);
-var u=(n.charAt(0)==="-");
-var y=u?-1:1;
-var r=u?n.substring(1):n;
-var v;
-var x=r.indexOf("+",10);
-if(x>=0){v=x
-}else{var t=r.indexOf("-",10);
-if(t>=0){v=t
-}else{var q=r.indexOf("Z",10);
-if(q>=0){v=q
-}else{v=r.length
-}}}var z=v>0&&v<r.length;
-var p=z?r.substring(0,v):r;
-var w=this.parseDateString(p);
-var o=z?n.substring(v):"";
-var s=this.parseTimeZoneString(o);
-return Jsonix.XML.Calendar.fromObject({year:y*w.year,month:w.month,day:w.day,timezone:s})
-},parseTime:function(k){Jsonix.Util.Ensure.ensureString(k);
-var p;
-var r=k.indexOf("+",7);
-if(r>=0){p=r
-}else{var o=k.indexOf("-",7);
-if(o>=0){p=o
-}else{var m=k.indexOf("Z",7);
-if(m>=0){p=m
-}else{p=k.length
-}}}var s=p>0&&p<k.length;
-var t=s?k.substring(0,p):k;
-var q=this.parseTimeString(t);
-var l=s?k.substring(p):"";
-var n=this.parseTimeZoneString(l);
-return Jsonix.XML.Calendar.fromObject({hour:q.hour,minute:q.minute,second:q.second,fractionalSecond:q.fractionalSecond,timezone:n})
-},parseDateString:function(g){Jsonix.Util.Ensure.ensureString(g);
-if(g.length!==10){throw new Error("Date string ["+g+"] must be 10 characters long.")
-}if(g.charAt(4)!=="-"||g.charAt(7)!=="-"){throw new Error("Date string ["+g+"] must be a string in format [yyyy '-' mm '-' ss ].")
-}var e=this.parseYear(g.substring(0,4));
-var h=this.parseMonth(g.substring(5,7));
-var f=this.parseDay(g.substring(8,10));
-return{year:e,month:h,day:f}
-},parseTimeString:function(r){Jsonix.Util.Ensure.ensureString(r);
-if(r.length<8||r.charAt(2)!==":"||r.charAt(5)!==":"){throw new Error("Time string ["+r+"] must be a string in format [hh ':' mm ':' ss ('.' s+)?].")
-}var n=r.substring(0,2);
-var k=r.substring(3,5);
-var p=r.substring(6,8);
-var j=r.length>=9?r.substring(8):"";
-var m=this.parseHour(n);
-var o=this.parseHour(k);
-var q=this.parseSecond(p);
-var l=this.parseFractionalSecond(j);
-return{hour:m,minute:o,second:q,fractionalSecond:l}
-},parseTimeZoneString:function(i){Jsonix.Util.Ensure.ensureString(i);
-if(i===""){return NaN
+Jsonix.Schema.XSD.Calendar=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"Calendar",typeName:Jsonix.Schema.XSD.qname("calendar"),parse:function(g,e,f,h){Jsonix.Util.Ensure.ensureString(g);
+if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.DATETIME_PATTERN+"$"))){return this.parseDateTime(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.DATE_PATTERN+"$"))){return this.parseDate(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.TIME_PATTERN+"$"))){return this.parseTime(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN+"$"))){return this.parseGYearMonth(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN+"$"))){return this.parseGYear(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN+"$"))){return this.parseGMonthDay(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN+"$"))){return this.parseGMonth(g,e,f,h)
+}else{if(g.match(new RegExp("^"+Jsonix.Schema.XSD.Calendar.GDAY_PATTERN+"$"))){return this.parseGDay(g,e,f,h)
+}else{throw new Error("Value ["+g+"] does not match xs:dateTime, xs:date, xs:time, xs:gYearMonth, xs:gYear, xs:gMonthDay, xs:gMonth or xs:gDay patterns.")
+}}}}}}}}},parseGYearMonth:function(j,n,i,m){var l=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN+"$");
+var h=j.match(l);
+if(h!==null){var k={year:parseInt(h[1],10),month:parseInt(h[5],10),timezone:this.parseTimezoneString(h[7])};
+return new Jsonix.XML.Calendar(k)
+}throw new Error("Value ["+j+"] does not match the xs:gYearMonth pattern.")
+},parseGYear:function(j,n,i,m){var l=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN+"$");
+var h=j.match(l);
+if(h!==null){var k={year:parseInt(h[1],10),timezone:this.parseTimezoneString(h[5])};
+return new Jsonix.XML.Calendar(k)
+}throw new Error("Value ["+j+"] does not match the xs:gYear pattern.")
+},parseGMonthDay:function(j,n,i,m){var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN+"$");
+var h=j.match(k);
+if(h!==null){var l={month:parseInt(h[2],10),day:parseInt(h[3],10),timezone:this.parseTimezoneString(h[5])};
+return new Jsonix.XML.Calendar(l)
+}throw new Error("Value ["+j+"] does not match the xs:gMonthDay pattern.")
+},parseGMonth:function(k,n,i,m){var j=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN+"$");
+var h=k.match(j);
+if(h!==null){var l={month:parseInt(h[2],10),timezone:this.parseTimezoneString(h[3])};
+return new Jsonix.XML.Calendar(l)
+}throw new Error("Value ["+k+"] does not match the xs:gMonth pattern.")
+},parseGDay:function(j,n,i,m){var l=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GDAY_PATTERN+"$");
+var h=j.match(l);
+if(h!==null){var k={day:parseInt(h[2],10),timezone:this.parseTimezoneString(h[3])};
+return new Jsonix.XML.Calendar(k)
+}throw new Error("Value ["+j+"] does not match the xs:gDay pattern.")
+},parseDateTime:function(j,n,i,m){Jsonix.Util.Ensure.ensureString(j);
+var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.DATETIME_PATTERN+"$");
+var h=j.match(k);
+if(h!==null){var l={year:parseInt(h[1],10),month:parseInt(h[5],10),day:parseInt(h[7],10),hour:parseInt(h[9],10),minute:parseInt(h[10],10),second:parseInt(h[11],10),fractionalSecond:(h[12]?parseFloat(h[12]):0),timezone:this.parseTimezoneString(h[14])};
+return new Jsonix.XML.Calendar(l)
+}throw new Error("Value ["+value+"] does not match the xs:date pattern.")
+},parseDate:function(j,n,i,m){Jsonix.Util.Ensure.ensureString(j);
+var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.DATE_PATTERN+"$");
+var h=j.match(k);
+if(h!==null){var l={year:parseInt(h[1],10),month:parseInt(h[5],10),day:parseInt(h[7],10),timezone:this.parseTimezoneString(h[9])};
+return new Jsonix.XML.Calendar(l)
+}throw new Error("Value ["+value+"] does not match the xs:date pattern.")
+},parseTime:function(j,n,i,m){Jsonix.Util.Ensure.ensureString(j);
+var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.TIME_PATTERN+"$");
+var h=j.match(k);
+if(h!==null){var l={hour:parseInt(h[1],10),minute:parseInt(h[2],10),second:parseInt(h[3],10),fractionalSecond:(h[4]?parseFloat(h[4]):0),timezone:this.parseTimezoneString(h[6])};
+return new Jsonix.XML.Calendar(l)
+}throw new Error("Value ["+value+"] does not match the xs:time pattern.")
+},parseTimezoneString:function(i){if(!Jsonix.Util.Type.isString(i)){return NaN
+}else{if(i===""){return NaN
 }else{if(i==="Z"){return 0
-}else{if(i.length!==6){throw new Error("Time zone must be an empty string, 'Z' or a string in format [('+' | '-') hh ':' mm].")
-}var h=i.charAt(0);
-var f;
-if(h==="+"){f=1
-}else{if(h==="-"){f=-1
-}else{throw new Error("First character of the time zone ["+i+"] must be '+' or '-'.")
-}}var g=this.parseHour(i.substring(1,3));
-var j=this.parseMinute(i.substring(4,6));
-return -1*f*(g*60+j)
-}}},parseYear:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c.length!==4){throw new Error("Year ["+c+"] must be a four-digit number.")
-}var d=Number(c);
-Jsonix.Util.Ensure.ensureInteger(d);
-return d
-},parseMonth:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c.length!==2){throw new Error("Month ["+c+"] must be a two-digit number.")
-}var d=Number(c);
-Jsonix.Util.Ensure.ensureInteger(d);
-return d
-},parseDay:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c.length!==2){throw new Error("Day ["+c+"] must be a two-digit number.")
-}var d=Number(c);
-Jsonix.Util.Ensure.ensureInteger(d);
-return d
-},parseHour:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c.length!==2){throw new Error("Hour ["+c+"] must be a two-digit number.")
-}var d=Number(c);
-Jsonix.Util.Ensure.ensureInteger(d);
-return d
-},parseMinute:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c.length!==2){throw new Error("Minute ["+c+"] must be a two-digit number.")
-}var d=Number(c);
-Jsonix.Util.Ensure.ensureInteger(d);
-return d
-},parseSecond:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c.length!==2){throw new Error("Second ["+c+"] must be a two-digit number.")
-}var d=Number(c);
-Jsonix.Util.Ensure.ensureNumber(d);
-return d
-},parseFractionalSecond:function(c){Jsonix.Util.Ensure.ensureString(c);
-if(c===""){return 0
-}else{var d=Number(c);
-Jsonix.Util.Ensure.ensureNumber(d);
-return d
-}},print:function(g,e,f,h){Jsonix.Util.Ensure.ensureObject(g);
+}else{if(i==="+14:00"){return 14*60
+}else{if(i==="-14:00"){return -14*60
+}else{var j=new RegExp("^"+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+"$");
+var l=i.match(j);
+if(l!==null){var g=l[1]==="+"?1:-1;
+var h=parseInt(l[4],10);
+var k=parseInt(l[5],10);
+return g*(h*60+k)
+}throw new Error("Value ["+value+"] does not match the timezone pattern.")
+}}}}}},print:function(g,e,f,h){Jsonix.Util.Ensure.ensureObject(g);
 if(Jsonix.Util.NumberUtils.isInteger(g.year)&&Jsonix.Util.NumberUtils.isInteger(g.month)&&Jsonix.Util.NumberUtils.isInteger(g.day)&&Jsonix.Util.NumberUtils.isInteger(g.hour)&&Jsonix.Util.NumberUtils.isInteger(g.minute)&&Jsonix.Util.NumberUtils.isInteger(g.second)){return this.printDateTime(g)
 }else{if(Jsonix.Util.NumberUtils.isInteger(g.year)&&Jsonix.Util.NumberUtils.isInteger(g.month)&&Jsonix.Util.NumberUtils.isInteger(g.day)){return this.printDate(g)
 }else{if(Jsonix.Util.NumberUtils.isInteger(g.hour)&&Jsonix.Util.NumberUtils.isInteger(g.minute)&&Jsonix.Util.NumberUtils.isInteger(g.second)){return this.printTime(g)
+}else{if(Jsonix.Util.NumberUtils.isInteger(g.year)&&Jsonix.Util.NumberUtils.isInteger(g.month)){return this.printGYearMonth(g)
+}else{if(Jsonix.Util.NumberUtils.isInteger(g.month)&&Jsonix.Util.NumberUtils.isInteger(g.day)){return this.printGMonthDay(g)
+}else{if(Jsonix.Util.NumberUtils.isInteger(g.year)){return this.printGYear(g)
+}else{if(Jsonix.Util.NumberUtils.isInteger(g.month)){return this.printGMonth(g)
+}else{if(Jsonix.Util.NumberUtils.isInteger(g.day)){return this.printGDay(g)
 }else{throw new Error("Value ["+g+"] is not recognized as dateTime, date or time.")
-}}}},printDateTime:function(c){Jsonix.Util.Ensure.ensureObject(c);
+}}}}}}}}},printDateTime:function(c){Jsonix.Util.Ensure.ensureObject(c);
 Jsonix.Util.Ensure.ensureInteger(c.year);
 Jsonix.Util.Ensure.ensureInteger(c.month);
 Jsonix.Util.Ensure.ensureInteger(c.day);
@@ -1953,7 +1943,7 @@ if(Jsonix.Util.Type.exists(c.fractionalString)){Jsonix.Util.Ensure.ensureNumber(
 }var d=this.printDateString(c);
 d=d+"T";
 d=d+this.printTimeString(c);
-if(Jsonix.Util.Type.exists(c.timezone)){d=d+this.printTimeZoneString(c.timezone)
+if(Jsonix.Util.Type.exists(c.timezone)){d=d+this.printTimezoneString(c.timezone)
 }return d
 },printDate:function(c){Jsonix.Util.Ensure.ensureObject(c);
 Jsonix.Util.Ensure.ensureNumber(c.year);
@@ -1961,7 +1951,7 @@ Jsonix.Util.Ensure.ensureNumber(c.month);
 Jsonix.Util.Ensure.ensureNumber(c.day);
 if(Jsonix.Util.Type.exists(c.timezone)&&!Jsonix.Util.Type.isNaN(c.timezone)){Jsonix.Util.Ensure.ensureInteger(c.timezone)
 }var d=this.printDateString(c);
-if(Jsonix.Util.Type.exists(c.timezone)){d=d+this.printTimeZoneString(c.timezone)
+if(Jsonix.Util.Type.exists(c.timezone)){d=d+this.printTimezoneString(c.timezone)
 }return d
 },printTime:function(c){Jsonix.Util.Ensure.ensureObject(c);
 Jsonix.Util.Ensure.ensureNumber(c.hour);
@@ -1970,7 +1960,7 @@ Jsonix.Util.Ensure.ensureNumber(c.second);
 if(Jsonix.Util.Type.exists(c.fractionalString)){Jsonix.Util.Ensure.ensureNumber(c.fractionalString)
 }if(Jsonix.Util.Type.exists(c.timezone)&&!Jsonix.Util.Type.isNaN(c.timezone)){Jsonix.Util.Ensure.ensureInteger(c.timezone)
 }var d=this.printTimeString(c);
-if(Jsonix.Util.Type.exists(c.timezone)){d=d+this.printTimeZoneString(c.timezone)
+if(Jsonix.Util.Type.exists(c.timezone)){d=d+this.printTimezoneString(c.timezone)
 }return d
 },printDateString:function(b){Jsonix.Util.Ensure.ensureObject(b);
 Jsonix.Util.Ensure.ensureInteger(b.year);
@@ -1989,7 +1979,7 @@ d=d+":";
 d=d+this.printSecond(c.second);
 if(Jsonix.Util.Type.exists(c.fractionalSecond)){d=d+this.printFractionalSecond(c.fractionalSecond)
 }return d
-},printTimeZoneString:function(j){if(!Jsonix.Util.Type.exists(j)||Jsonix.Util.Type.isNaN(j)){return""
+},printTimezoneString:function(j){if(!Jsonix.Util.Type.exists(j)||Jsonix.Util.Type.isNaN(j)){return""
 }else{Jsonix.Util.Ensure.ensureInteger(j);
 var l=j<0?-1:(j>0?1:0);
 var k=j*l;
@@ -1997,13 +1987,72 @@ var i=k%60;
 var g=Math.floor(k/60);
 var h;
 if(l===0){return"Z"
-}else{if(l>0){h="-"
-}else{if(l<0){h="+"
+}else{if(l>0){h="+"
+}else{if(l<0){h="-"
 }}h=h+this.printHour(g);
 h=h+":";
 h=h+this.printMinute(i);
 return h
-}}},printYear:function(b){return this.printInteger(b,4)
+}}},printGDay:function(i,l,g,k){Jsonix.Util.Ensure.ensureObject(i);
+var h=undefined;
+var j=undefined;
+if(i instanceof Date){h=i.getDate()
+}else{Jsonix.Util.Ensure.ensureInteger(i.day);
+h=i.day;
+j=i.timezone
+}Jsonix.XML.Calendar.validateDay(h);
+Jsonix.XML.Calendar.validateTimezone(j);
+return"---"+this.printDay(h)+this.printTimezoneString(j)
+},printGMonth:function(j,g,h,l){Jsonix.Util.Ensure.ensureObject(j);
+var i=undefined;
+var k=undefined;
+if(j instanceof Date){i=j.getMonth()+1
+}else{Jsonix.Util.Ensure.ensureInteger(j.month);
+i=j.month;
+k=j.timezone
+}Jsonix.XML.Calendar.validateMonth(i);
+Jsonix.XML.Calendar.validateTimezone(k);
+return"--"+this.printMonth(i)+this.printTimezoneString(k)
+},printGMonthDay:function(k,n,h,m){Jsonix.Util.Ensure.ensureObject(k);
+var j=undefined;
+var i=undefined;
+var l=undefined;
+if(k instanceof Date){j=k.getMonth()+1;
+i=k.getDate()
+}else{Jsonix.Util.Ensure.ensureInteger(k.month);
+Jsonix.Util.Ensure.ensureInteger(k.day);
+j=k.month;
+i=k.day;
+l=k.timezone
+}Jsonix.XML.Calendar.validateMonthDay(j,i);
+Jsonix.XML.Calendar.validateTimezone(l);
+return"--"+this.printMonth(j)+"-"+this.printDay(i)+this.printTimezoneString(l)
+},printGYear:function(i,g,h,k){Jsonix.Util.Ensure.ensureObject(i);
+var l=undefined;
+var j=undefined;
+if(i instanceof Date){l=i.getFullYear()
+}else{Jsonix.Util.Ensure.ensureInteger(i.year);
+l=i.year;
+j=i.timezone
+}Jsonix.XML.Calendar.validateYear(l);
+Jsonix.XML.Calendar.validateTimezone(j);
+return this.printSignedYear(l)+this.printTimezoneString(j)
+},printGYearMonth:function(k,h,i,m){Jsonix.Util.Ensure.ensureObject(k);
+var n=undefined;
+var j=undefined;
+var l=undefined;
+if(k instanceof Date){n=k.getFullYear();
+j=k.getMonth()+1
+}else{Jsonix.Util.Ensure.ensureInteger(k.year);
+n=k.year;
+j=k.month;
+l=k.timezone
+}Jsonix.XML.Calendar.validateYear(n);
+Jsonix.XML.Calendar.validateMonth(j);
+Jsonix.XML.Calendar.validateTimezone(l);
+return this.printSignedYear(n)+"-"+this.printMonth(j)+this.printTimezoneString(l)
+},printSignedYear:function(b){return b<0?("-"+this.printYear(b*-1)):(this.printYear(b))
+},printYear:function(b){return this.printInteger(b,4)
 },printMonth:function(b){return this.printInteger(b,2)
 },printDay:function(b){return this.printInteger(b,2)
 },printHour:function(b){return this.printInteger(b,2)
@@ -2020,7 +2069,6 @@ if(d<0){return""
 Jsonix.Util.Ensure.ensureInteger(h);
 if(h<=0){throw new Error("Length ["+g+"] must be positive.")
 }if(g<0){throw new Error("Value ["+g+"] must not be negative.")
-}if(g>=Math.pow(10,h)){throw new Error("Value ["+g+"] must be less than ["+Math.pow(10,h)+"].")
 }var f=String(g);
 for(var e=f.length;
 e<h;
@@ -2029,14 +2077,78 @@ e++){f="0"+f
 },isInstance:function(f,e,d){return Jsonix.Util.Type.isObject(f)&&((Jsonix.Util.NumberUtils.isInteger(f.year)&&Jsonix.Util.NumberUtils.isInteger(f.month)&&Jsonix.Util.NumberUtils.isInteger(f.day))||(Jsonix.Util.NumberUtils.isInteger(f.hour)&&Jsonix.Util.NumberUtils.isInteger(f.minute)&&Jsonix.Util.NumberUtils.isInteger(f.second)))
 },CLASS_NAME:"Jsonix.Schema.XSD.Calendar"});
 Jsonix.Schema.XSD.Calendar.YEAR_PATTERN="-?([1-9][0-9]*)?((?!(0000))[0-9]{4})";
-Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN="Z|[\\-\\+][0-9][0-9]:[0-5][0-9]";
+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN="Z|([\\-\\+])(((0[0-9]|1[0-3]):([0-5][0-9]))|(14:00))";
+Jsonix.Schema.XSD.Calendar.MONTH_PATTERN="(0[1-9]|1[0-2])";
+Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN="\\-\\-"+Jsonix.Schema.XSD.Calendar.MONTH_PATTERN;
+Jsonix.Schema.XSD.Calendar.DAY_PATTERN="(0[1-9]|[12][0-9]|3[01])";
+Jsonix.Schema.XSD.Calendar.SINGLE_DAY_PATTERN="\\-\\-\\-"+Jsonix.Schema.XSD.Calendar.DAY_PATTERN;
 Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN="("+Jsonix.Schema.XSD.Calendar.YEAR_PATTERN+")("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN="("+Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN+")("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.GDAY_PATTERN="("+Jsonix.Schema.XSD.Calendar.SINGLE_DAY_PATTERN+")("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN="("+Jsonix.Schema.XSD.Calendar.YEAR_PATTERN+")-("+Jsonix.Schema.XSD.Calendar.DAY_PATTERN+")("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN="("+Jsonix.Schema.XSD.Calendar.SINGLE_MONTH_PATTERN+")-("+Jsonix.Schema.XSD.Calendar.DAY_PATTERN+")("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.DATE_PART_PATTERN="("+Jsonix.Schema.XSD.Calendar.YEAR_PATTERN+")-("+Jsonix.Schema.XSD.Calendar.MONTH_PATTERN+")-("+Jsonix.Schema.XSD.Calendar.DAY_PATTERN+")";
+Jsonix.Schema.XSD.Calendar.TIME_PART_PATTERN="([0-1][0-9]|2[0-3]):([0-5][0-9]):([0-5][0-9])(\\.([0-9]+))?";
+Jsonix.Schema.XSD.Calendar.TIME_PATTERN=Jsonix.Schema.XSD.Calendar.TIME_PART_PATTERN+"("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.DATE_PATTERN=Jsonix.Schema.XSD.Calendar.DATE_PART_PATTERN+"("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
+Jsonix.Schema.XSD.Calendar.DATETIME_PATTERN=Jsonix.Schema.XSD.Calendar.DATE_PART_PATTERN+"T"+Jsonix.Schema.XSD.Calendar.TIME_PART_PATTERN+"("+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+")?";
 Jsonix.Schema.XSD.Calendar.INSTANCE=new Jsonix.Schema.XSD.Calendar();
 Jsonix.Schema.XSD.Calendar.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Calendar.INSTANCE);
-Jsonix.Schema.XSD.Duration=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"Duration",typeName:Jsonix.Schema.XSD.qname("duration"),CLASS_NAME:"Jsonix.Schema.XSD.Duration"});
+Jsonix.Schema.XSD.Duration=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"Duration",typeName:Jsonix.Schema.XSD.qname("duration"),isInstance:function(f,e,d){return Jsonix.Util.Type.isObject(f)&&((Jsonix.Util.Type.exists(f.sign)?(f.sign===-1||f.sign===1):true)(Jsonix.Util.NumberUtils.isInteger(f.years)&&f.years>=0)||(Jsonix.Util.NumberUtils.isInteger(f.months)&&f.months>=0)||(Jsonix.Util.NumberUtils.isInteger(f.days)&&f.days>=0)||(Jsonix.Util.NumberUtils.isInteger(f.hours)&&f.hours>=0)||(Jsonix.Util.NumberUtils.isInteger(f.minutes)&&f.minutes>=0)||(Jsonix.Util.Type.isNumber(f.seconds)&&f.seconds>=0))
+},validate:function(h){Jsonix.Util.Ensure.ensureObject(h);
+if(Jsonix.Util.Type.exists(h.sign)){if(!(h.sign===1||h.sign===-1)){throw new Error("Sign of the duration ["+h.sign+"] must be either [1] or [-1].")
+}}var e=true;
+var g=function(b,a){if(Jsonix.Util.Type.exists(b)){if(!(Jsonix.Util.NumberUtils.isInteger(b)&&b>=0)){throw new Error(a.replace("{0}",b))
+}else{return true
+}}else{return false
+}};
+var f=function(b,a){if(Jsonix.Util.Type.exists(b)){if(!(Jsonix.Util.Type.isNumber(b)&&b>=0)){throw new Error(a.replace("{0}",b))
+}else{return true
+}}else{return false
+}};
+e=e&&!g(h.years,"Number of years [{0}] must be an unsigned integer.");
+e=e&&!g(h.months,"Number of months [{0}] must be an unsigned integer.");
+e=e&&!g(h.days,"Number of days [{0}] must be an unsigned integer.");
+e=e&&!g(h.hours,"Number of hours [{0}] must be an unsigned integer.");
+e=e&&!g(h.minutes,"Number of minutes [{0}] must be an unsigned integer.");
+e=e&&!f(h.seconds,"Number of seconds [{0}] must be an unsigned number.");
+if(e){throw new Error("At least one of the components (years, months, days, hours, minutes, seconds) must be set.")
+}},print:function(h,j,f,i){this.validate(h);
+var g="";
+if(h.sign===-1){g+="-"
+}g+="P";
+if(h.years){g+=(h.years+"Y")
+}if(h.months){g+=(h.months+"M")
+}if(h.days){g+=(h.days+"D")
+}if(h.hours||h.minutes||h.seconds){g+="T";
+if(h.hours){g+=(h.hours+"H")
+}if(h.minutes){g+=(h.minutes+"M")
+}if(h.seconds){g+=(h.seconds+"S")
+}}return g
+},parse:function(m,p,j,o){var k=new RegExp("^"+Jsonix.Schema.XSD.Duration.PATTERN+"$");
+var i=m.match(k);
+if(i!==null){var n=true;
+var l={};
+if(i[1]){l.sign=-1
+}if(i[3]){l.years=parseInt(i[3],10);
+n=false
+}if(i[5]){l.months=parseInt(i[5],10);
+n=false
+}if(i[7]){l.days=parseInt(i[7],10);
+n=false
+}if(i[10]){l.hours=parseInt(i[10],10);
+n=false
+}if(i[12]){l.minutes=parseInt(i[12],10);
+n=false
+}if(i[14]){l.seconds=Number(i[14]);
+n=false
+}return l
+}else{throw new Error("Value ["+m+"] does not match the duration pattern.")
+}},CLASS_NAME:"Jsonix.Schema.XSD.Duration"});
+Jsonix.Schema.XSD.Duration.PATTERN="(-)?P(([0-9]+)Y)?(([0-9]+)M)?(([0-9]+)D)?(T(([0-9]+)H)?(([0-9]+)M)?(([0-9]+(\\.[0-9]+)?)S)?)?";
 Jsonix.Schema.XSD.Duration.INSTANCE=new Jsonix.Schema.XSD.Duration();
 Jsonix.Schema.XSD.Duration.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Duration.INSTANCE);
-Jsonix.Schema.XSD.DateTime=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"DateTime",typeName:Jsonix.Schema.XSD.qname("dateTime"),parse:function(o,t,p,l){var q=this.parseDateTime(o);
+Jsonix.Schema.XSD.DateTime=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"DateTime",typeName:Jsonix.Schema.XSD.qname("dateTime"),parse:function(n,t,o,l){var q=this.parseDateTime(n);
 var s=new Date();
 s.setFullYear(q.year);
 s.setMonth(q.month-1);
@@ -2045,32 +2157,33 @@ s.setHours(q.hour);
 s.setMinutes(q.minute);
 s.setSeconds(q.second);
 if(Jsonix.Util.Type.isNumber(q.fractionalSecond)){s.setMilliseconds(Math.floor(1000*q.fractionalSecond))
-}var n;
+}var p;
 var r;
-var m=s.getTimezoneOffset();
-if(Jsonix.Util.NumberUtils.isInteger(q.timezone)){n=q.timezone;
+var m=-s.getTimezoneOffset();
+if(Jsonix.Util.NumberUtils.isInteger(q.timezone)){p=q.timezone;
 r=false
-}else{n=m;
+}else{p=m;
 r=true
-}var k=new Date(s.getTime()+(60000*(n-m)));
+}var k=new Date(s.getTime()+(60000*(-p+m)));
 if(r){k.originalTimezone=null
-}else{k.originalTimezone=n
+}else{k.originalTimezone=q.timezone
 }return k
-},print:function(k,n,i,m){Jsonix.Util.Ensure.ensureDate(k);
-var l;
-var j=k.getTimezoneOffset();
-var h;
+},print:function(k,o,i,n){Jsonix.Util.Ensure.ensureDate(k);
+var m;
+var l=-k.getTimezoneOffset();
+var p;
 if(k.originalTimezone===null){return this.printDateTime(new Jsonix.XML.Calendar({year:k.getFullYear(),month:k.getMonth()+1,day:k.getDate(),hour:k.getHours(),minute:k.getMinutes(),second:k.getSeconds(),fractionalSecond:(k.getMilliseconds()/1000)}))
-}else{if(Jsonix.Util.NumberUtils.isInteger(k.originalTimezone)){l=k.originalTimezone;
-h=new Date(k.getTime()-(60000*(l-j)))
-}else{l=j;
-h=k
-}return this.printDateTime(new Jsonix.XML.Calendar({year:h.getFullYear(),month:h.getMonth()+1,day:h.getDate(),hour:h.getHours(),minute:h.getMinutes(),second:h.getSeconds(),fractionalSecond:(h.getMilliseconds()/1000),timezone:l}))
+}else{if(Jsonix.Util.NumberUtils.isInteger(k.originalTimezone)){m=k.originalTimezone;
+p=new Date(k.getTime()-(60000*(-m+l)))
+}else{m=l;
+p=k
+}var j=this.printDateTime(new Jsonix.XML.Calendar({year:p.getFullYear(),month:p.getMonth()+1,day:p.getDate(),hour:p.getHours(),minute:p.getMinutes(),second:p.getSeconds(),fractionalSecond:(p.getMilliseconds()/1000),timezone:m}));
+return j
 }},isInstance:function(f,e,d){return Jsonix.Util.Type.isDate(f)
 },CLASS_NAME:"Jsonix.Schema.XSD.DateTime"});
 Jsonix.Schema.XSD.DateTime.INSTANCE=new Jsonix.Schema.XSD.DateTime();
 Jsonix.Schema.XSD.DateTime.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
-Jsonix.Schema.XSD.Time=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Time",typeName:Jsonix.Schema.XSD.qname("time"),parse:function(o,t,p,l){var q=this.parseTime(o);
+Jsonix.Schema.XSD.Time=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Time",typeName:Jsonix.Schema.XSD.qname("time"),parse:function(n,t,o,l){var q=this.parseTime(n);
 var s=new Date();
 s.setFullYear(1970);
 s.setMonth(0);
@@ -2079,37 +2192,37 @@ s.setHours(q.hour);
 s.setMinutes(q.minute);
 s.setSeconds(q.second);
 if(Jsonix.Util.Type.isNumber(q.fractionalSecond)){s.setMilliseconds(Math.floor(1000*q.fractionalSecond))
-}var n;
+}var p;
 var r;
-var m=s.getTimezoneOffset();
-if(Jsonix.Util.NumberUtils.isInteger(q.timezone)){n=q.timezone;
+var m=-s.getTimezoneOffset();
+if(Jsonix.Util.NumberUtils.isInteger(q.timezone)){p=q.timezone;
 r=false
-}else{n=m;
+}else{p=m;
 r=true
-}var k=new Date(s.getTime()+(60000*(n-m)));
+}var k=new Date(s.getTime()+(60000*(-p+m)));
 if(r){k.originalTimezone=null
-}else{k.originalTimezone=n
+}else{k.originalTimezone=p
 }return k
-},print:function(n,t,r,k){Jsonix.Util.Ensure.ensureDate(n);
-var q=n.getTime();
-if(q<=-86400000&&q>=86400000){throw new Error("Invalid time ["+n+"].")
-}if(n.originalTimezone===null){return this.printTime(new Jsonix.XML.Calendar({hour:n.getHours(),minute:n.getMinutes(),second:n.getSeconds(),fractionalSecond:(n.getMilliseconds()/1000)}))
+},print:function(m,t,r,k){Jsonix.Util.Ensure.ensureDate(m);
+var q=m.getTime();
+if(q<=-86400000&&q>=86400000){throw new Error("Invalid time ["+m+"].")
+}if(m.originalTimezone===null){return this.printTime(new Jsonix.XML.Calendar({hour:m.getHours(),minute:m.getMinutes(),second:m.getSeconds(),fractionalSecond:(m.getMilliseconds()/1000)}))
 }else{var s;
-var m;
-var l=n.getTimezoneOffset();
-if(Jsonix.Util.NumberUtils.isInteger(n.originalTimezone)){m=n.originalTimezone;
-s=new Date(n.getTime()-(60000*(m-l)))
-}else{m=l;
-s=n
-}var o=s.getTime();
-if(o>=0){return this.printTime(new Jsonix.XML.Calendar({hour:s.getHours(),minute:s.getMinutes(),second:s.getSeconds(),fractionalSecond:(s.getMilliseconds()/1000),timezone:m}))
-}else{var p=Math.ceil(-o/3600000);
-return this.printTime(new Jsonix.XML.Calendar({hour:(s.getHours()+p+m/60)%24,minute:s.getMinutes(),second:s.getSeconds(),fractionalSecond:(s.getMilliseconds()/1000),timezone:-p*60}))
+var o;
+var l=-m.getTimezoneOffset();
+if(Jsonix.Util.NumberUtils.isInteger(m.originalTimezone)){o=m.originalTimezone;
+s=new Date(m.getTime()-(60000*(-o+l)))
+}else{o=l;
+s=m
+}var n=s.getTime();
+if(n>=0){return this.printTime(new Jsonix.XML.Calendar({hour:s.getHours(),minute:s.getMinutes(),second:s.getSeconds(),fractionalSecond:(s.getMilliseconds()/1000),timezone:o}))
+}else{var p=Math.ceil(-n/3600000);
+return this.printTime(new Jsonix.XML.Calendar({hour:(s.getHours()+p-o/60)%24,minute:s.getMinutes(),second:s.getSeconds(),fractionalSecond:(s.getMilliseconds()/1000),timezone:p*60}))
 }}},isInstance:function(f,e,d){return Jsonix.Util.Type.isDate(f)&&f.getTime()>-86400000&&f.getTime()<86400000
 },CLASS_NAME:"Jsonix.Schema.XSD.Time"});
 Jsonix.Schema.XSD.Time.INSTANCE=new Jsonix.Schema.XSD.Time();
 Jsonix.Schema.XSD.Time.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Time.INSTANCE);
-Jsonix.Schema.XSD.Date=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Date",typeName:Jsonix.Schema.XSD.qname("date"),parse:function(o,t,p,l){var q=this.parseDate(o);
+Jsonix.Schema.XSD.Date=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Date",typeName:Jsonix.Schema.XSD.qname("date"),parse:function(n,t,o,l){var q=this.parseDate(n);
 var s=new Date();
 s.setFullYear(q.year);
 s.setMonth(q.month-1);
@@ -2119,67 +2232,59 @@ s.setMinutes(0);
 s.setSeconds(0);
 s.setMilliseconds(0);
 if(Jsonix.Util.Type.isNumber(q.fractionalSecond)){s.setMilliseconds(Math.floor(1000*q.fractionalSecond))
-}var n;
+}var p;
 var r;
-var m=s.getTimezoneOffset();
-if(Jsonix.Util.NumberUtils.isInteger(q.timezone)){n=q.timezone;
+var m=-s.getTimezoneOffset();
+if(Jsonix.Util.NumberUtils.isInteger(q.timezone)){p=q.timezone;
 r=false
-}else{n=m;
+}else{p=m;
 r=true
-}var k=new Date(s.getTime()+(60000*(n-m)));
+}var k=new Date(s.getTime()+(60000*(-p+m)));
 if(r){k.originalTimezone=null
-}else{k.originalTimezone=n
+}else{k.originalTimezone=p
 }return k
-},print:function(m,r,p,j){Jsonix.Util.Ensure.ensureDate(m);
-var o=new Date(m.getTime());
+},print:function(l,r,p,j){Jsonix.Util.Ensure.ensureDate(l);
+var o=new Date(l.getTime());
 o.setHours(0);
 o.setMinutes(0);
 o.setSeconds(0);
 o.setMilliseconds(0);
-if(m.originalTimezone===null){return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate()}))
-}else{if(Jsonix.Util.NumberUtils.isInteger(m.originalTimezone)){var q=new Date(m.getTime()-(60000*(m.originalTimezone-m.getTimezoneOffset())));
-return this.printDate(new Jsonix.XML.Calendar({year:q.getFullYear(),month:q.getMonth()+1,day:q.getDate(),timezone:m.originalTimezone}))
-}else{var k=m.getTime()-o.getTime();
-if(k===0){return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate()}))
-}else{var l=k+(60000*m.getTimezoneOffset());
-if(l<=43200000){return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate(),timezone:Math.floor(l/60000)}))
-}else{var n=new Date(m.getTime()+86400000);
-return this.printDate(new Jsonix.XML.Calendar({year:n.getFullYear(),month:n.getMonth()+1,day:n.getDate(),timezone:(Math.floor(l/60000)-1440)}))
+if(l.originalTimezone===null){return this.printDate(new Jsonix.XML.Calendar({year:l.getFullYear(),month:l.getMonth()+1,day:l.getDate()}))
+}else{if(Jsonix.Util.NumberUtils.isInteger(l.originalTimezone)){var q=new Date(l.getTime()-(60000*(-l.originalTimezone-l.getTimezoneOffset())));
+return this.printDate(new Jsonix.XML.Calendar({year:q.getFullYear(),month:q.getMonth()+1,day:q.getDate(),timezone:l.originalTimezone}))
+}else{var k=-l.getTime()+o.getTime();
+if(k===0){return this.printDate(new Jsonix.XML.Calendar({year:l.getFullYear(),month:l.getMonth()+1,day:l.getDate()}))
+}else{var n=k-(60000*l.getTimezoneOffset());
+if(n>=-43200000){return this.printDate(new Jsonix.XML.Calendar({year:l.getFullYear(),month:l.getMonth()+1,day:l.getDate(),timezone:Math.floor(n/60000)}))
+}else{var m=new Date(l.getTime()+86400000);
+return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate(),timezone:(Math.floor(n/60000)+1440)}))
 }}}}},isInstance:function(f,e,d){return Jsonix.Util.Type.isDate(f)
 },CLASS_NAME:"Jsonix.Schema.XSD.Date"});
 Jsonix.Schema.XSD.Date.INSTANCE=new Jsonix.Schema.XSD.Date();
 Jsonix.Schema.XSD.Date.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Date.INSTANCE);
-Jsonix.Schema.XSD.GYearMonth=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"GYearMonth",typeName:Jsonix.Schema.XSD.qname("gYearMonth"),CLASS_NAME:"Jsonix.Schema.XSD.GYearMonth"});
+Jsonix.Schema.XSD.GYearMonth=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GYearMonth",typeName:Jsonix.Schema.XSD.qname("gYearMonth"),CLASS_NAME:"Jsonix.Schema.XSD.GYearMonth",parse:function(g,e,f,h){return this.parseGYearMonth(g,e,f,h)
+},print:function(g,e,f,h){return this.printGYearMonth(g,e,f,h)
+}});
 Jsonix.Schema.XSD.GYearMonth.INSTANCE=new Jsonix.Schema.XSD.GYearMonth();
 Jsonix.Schema.XSD.GYearMonth.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GYearMonth.INSTANCE);
-Jsonix.Schema.XSD.GYear=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GYear",typeName:Jsonix.Schema.XSD.qname("gYear"),parse:function(h,f,g,i){var j=this.splitGYear(h);
-j.toString=function(){return"EmptyXMLElement. Call embedded 'year' or 'timezone' property"
-};
-return j
-},splitGYear:function(g){var h=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN+"$");
-var f=g.match(h);
-if(f!==null){var e={year:parseInt(f[1],10),_timezone:f[5],timezone:this.parseTimeZoneString(f[5])};
-return e
-}throw new Error("Value ["+g+"] doesn't match the gYear pattern.")
-},parseTimeZoneString:function(c){if(c==="Z"||!Jsonix.Util.Type.exists(c)){return 0
-}var d=c.split(":");
-return -(parseInt(d[0],10)*60+parseInt(d[1],10))
-},_validateGYear:function(c){var d=new RegExp("^"+Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN+"$");
-if(!d.test(c)){throw new Error("Value ["+c+"] doesn't match the gYear pattern.")
-}},_validateYear:function(d){var c=new RegExp("^"+Jsonix.Schema.XSD.Calendar.YEAR_PATTERN+"$");
-if(!c.test(d)){throw new Error("Value ["+d+"] doesn't match the year pattern.")
-}},_validateTimeZone:function(c){var d=new RegExp("^"+Jsonix.Schema.XSD.Calendar.TIMEZONE_PATTERN+"$");
-if(!d.test(c)){throw new Error("Value ["+c+"] doesn't match the time zone pattern.")
-}},CLASS_NAME:"Jsonix.Schema.XSD.GYear"});
+Jsonix.Schema.XSD.GYear=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GYear",typeName:Jsonix.Schema.XSD.qname("gYear"),CLASS_NAME:"Jsonix.Schema.XSD.GYear",parse:function(g,e,f,h){return this.parseGYear(g,e,f,h)
+},print:function(g,e,f,h){return this.printGYear(g,e,f,h)
+}});
 Jsonix.Schema.XSD.GYear.INSTANCE=new Jsonix.Schema.XSD.GYear();
 Jsonix.Schema.XSD.GYear.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GYear.INSTANCE);
-Jsonix.Schema.XSD.GMonthDay=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"GMonthDay",typeName:Jsonix.Schema.XSD.qname("gMonthDay"),CLASS_NAME:"Jsonix.Schema.XSD.GMonthDay"});
+Jsonix.Schema.XSD.GMonthDay=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GMonthDay",typeName:Jsonix.Schema.XSD.qname("gMonthDay"),CLASS_NAME:"Jsonix.Schema.XSD.GMonthDay",parse:function(g,e,f,h){return this.parseGMonthDay(g,e,f,h)
+},print:function(g,e,f,h){return this.printGMonthDay(g,e,f,h)
+}});
 Jsonix.Schema.XSD.GMonthDay.INSTANCE=new Jsonix.Schema.XSD.GMonthDay();
 Jsonix.Schema.XSD.GMonthDay.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GMonthDay.INSTANCE);
-Jsonix.Schema.XSD.GDay=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"GDay",typeName:Jsonix.Schema.XSD.qname("gDay"),CLASS_NAME:"Jsonix.Schema.XSD.GDay"});
+Jsonix.Schema.XSD.GDay=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GDay",typeName:Jsonix.Schema.XSD.qname("gDay"),CLASS_NAME:"Jsonix.Schema.XSD.GDay",parse:function(g,e,f,h){return this.parseGDay(g,e,f,h)
+},print:function(g,e,f,h){return this.printGDay(g,e,f,h)
+}});
 Jsonix.Schema.XSD.GDay.INSTANCE=new Jsonix.Schema.XSD.GDay();
 Jsonix.Schema.XSD.GDay.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GDay.INSTANCE);
-Jsonix.Schema.XSD.GMonth=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:"GMonth",typeName:Jsonix.Schema.XSD.qname("gMonth"),CLASS_NAME:"Jsonix.Schema.XSD.GMonth"});
+Jsonix.Schema.XSD.GMonth=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GMonth",typeName:Jsonix.Schema.XSD.qname("gMonth"),CLASS_NAME:"Jsonix.Schema.XSD.GMonth",parse:function(g,e,f,h){return this.parseGMonth(g,e,f,h)
+},print:function(g,e,f,h){return this.printGMonth(g,e,f,h)
+}});
 Jsonix.Schema.XSD.GMonth.INSTANCE=new Jsonix.Schema.XSD.GMonth();
 Jsonix.Schema.XSD.GMonth.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.GMonth.INSTANCE);
 Jsonix.Schema.XSD.ID=Jsonix.Class(Jsonix.Schema.XSD.String,{name:"ID",typeName:Jsonix.Schema.XSD.qname("ID"),CLASS_NAME:"Jsonix.Schema.XSD.ID"});
