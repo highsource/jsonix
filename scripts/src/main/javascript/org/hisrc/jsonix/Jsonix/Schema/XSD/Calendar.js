@@ -4,16 +4,88 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 	parse : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.DATETIME_PATTERN + "$"))) {
-			return this.parseDateTime(text);
+			return this.parseDateTime(text, context, input, scope);
 		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.DATE_PATTERN + "$"))) {
-			return this.parseDate(text);
+			return this.parseDate(text, context, input, scope);
 		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.TIME_PATTERN + "$"))) {
-			return this.parseTime(text);
+			return this.parseTime(text, context, input, scope);
+		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN + "$"))) {
+			return this.parseGYearMonth(text, context, input, scope);
+		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN + "$"))) {
+			return this.parseGYear(text, context, input, scope);
+		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN + "$"))) {
+			return this.parseGMonthDay(text, context, input, scope);
+		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN + "$"))) {
+			return this.parseGMonth(text, context, input, scope);
+		} else if (text.match(new RegExp("^" + Jsonix.Schema.XSD.Calendar.GDAY_PATTERN + "$"))) {
+			return this.parseGDay(text, context, input, scope);
 		} else {
-			throw new Error('Value [' + text + '] does not match xs:dateTime, xs:date or xs:time patterns.');
+			throw new Error('Value [' + text + '] does not match xs:dateTime, xs:date, xs:time, xs:gYearMonth, xs:gYear, xs:gMonthDay, xs:gMonth or xs:gDay patterns.');
 		}
 	},
-	parseDateTime : function(text) {
+	parseGYearMonth : function(value, context, input, scope) {
+		var gYearMonthExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_MONTH_PATTERN + "$");
+		var results = value.match(gYearMonthExpression);
+		if (results !== null) {
+			var data = {
+				year : parseInt(results[1], 10),
+				month : parseInt(results[5], 10),
+				timezone : this.parseTimezoneString(results[7])
+			};
+			return new Jsonix.XML.Calendar(data);
+		}
+		throw new Error('Value [' + value + '] does not match the xs:gYearMonth pattern.');
+	},
+	parseGYear : function(value, context, input, scope) {
+		var gYearExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GYEAR_PATTERN + "$");
+		var results = value.match(gYearExpression);
+		if (results !== null) {
+			var data = {
+				year : parseInt(results[1], 10),
+				timezone : this.parseTimezoneString(results[5])
+			};
+			return new Jsonix.XML.Calendar(data);
+		}
+		throw new Error('Value [' + value + '] does not match the xs:gYear pattern.');
+	},
+	parseGMonthDay : function(value, context, input, scope) {
+		var gMonthDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_DAY_PATTERN + "$");
+		var results = value.match(gMonthDayExpression);
+		if (results !== null) {
+			var data = {
+				month : parseInt(results[2], 10),
+				day : parseInt(results[3], 10),
+				timezone : this.parseTimezoneString(results[5])
+			};
+			return new Jsonix.XML.Calendar(data);
+		}
+		throw new Error('Value [' + value + '] does not match the xs:gMonthDay pattern.');
+	},
+	parseGMonth : function(value, context, input, scope) {
+		var gMonthExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GMONTH_PATTERN + "$");
+		var results = value.match(gMonthExpression);
+		if (results !== null) {
+			var data = {
+				month : parseInt(results[2], 10),
+				timezone : this.parseTimezoneString(results[3])
+			};
+			return new Jsonix.XML.Calendar(data);
+		}
+		throw new Error('Value [' + value + '] does not match the xs:gMonth pattern.');
+	},
+	parseGDay : function(value, context, input, scope) {
+		var gDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GDAY_PATTERN + "$");
+		var results = value.match(gDayExpression);
+		if (results !== null) {
+			var data = {
+				day : parseInt(results[2], 10),
+				timezone : this.parseTimezoneString(results[3])
+			};
+			return new Jsonix.XML.Calendar(data);
+		}
+		throw new Error('Value [' + value + '] does not match the xs:gDay pattern.');
+	},
+	parseDateTime : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var expression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.DATETIME_PATTERN + "$");
 		var results = text.match(expression);
@@ -32,7 +104,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		throw new Error('Value [' + value + '] does not match the xs:date pattern.');
 	},
-	parseDate : function(text) {
+	parseDate : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var expression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.DATE_PATTERN + "$");
 		var results = text.match(expression);
@@ -47,7 +119,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		}
 		throw new Error('Value [' + value + '] does not match the xs:date pattern.');
 	},
-	parseTime : function(text) {
+	parseTime : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
 		var expression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.TIME_PATTERN + "$");
 		var results = text.match(expression);
@@ -71,7 +143,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			return NaN;
 		} else if (text === 'Z') {
 			return 0;
-		}else if (text === '+14:00') {
+		} else if (text === '+14:00') {
 			return 14 * 60;
 		} else if (text === '-14:00') {
 			return -14 * 60;
@@ -95,6 +167,16 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			return this.printDate(value);
 		} else if (Jsonix.Util.NumberUtils.isInteger(value.hour) && Jsonix.Util.NumberUtils.isInteger(value.minute) && Jsonix.Util.NumberUtils.isInteger(value.second)) {
 			return this.printTime(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.year) && Jsonix.Util.NumberUtils.isInteger(value.month)) {
+			return this.printGYearMonth(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.month) && Jsonix.Util.NumberUtils.isInteger(value.day)) {
+			return this.printGMonthDay(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.year)) {
+			return this.printGYear(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.month)) {
+			return this.printGMonth(value);
+		} else if (Jsonix.Util.NumberUtils.isInteger(value.day)) {
+			return this.printGDay(value);
 		} else {
 			throw new Error('Value [' + value + '] is not recognized as dateTime, date or time.');
 		}
@@ -205,6 +287,94 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			}
 		}
 	},
+	printGDay : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var day = undefined;
+		var timezone = undefined;
+
+		if (value instanceof Date) {
+			day = value.getDate();
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value.day);
+			day = value.day;
+			timezone = value.timezone;
+		}
+		Jsonix.XML.Calendar.validateDay(day);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
+		return "---" + this.printDay(day) + this.printTimezoneString(timezone);
+	},
+	printGMonth : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var month = undefined;
+		var timezone = undefined;
+
+		if (value instanceof Date) {
+			month = value.getMonth() + 1;
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value.month);
+			month = value.month;
+			timezone = value.timezone;
+		}
+		Jsonix.XML.Calendar.validateMonth(month);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
+		return "--" + this.printMonth(month) + this.printTimezoneString(timezone);
+	},
+	printGMonthDay : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var month = undefined;
+		var day = undefined;
+		var timezone = undefined;
+
+		if (value instanceof Date) {
+			month = value.getMonth() + 1;
+			day = value.getDate();
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value.month);
+			Jsonix.Util.Ensure.ensureInteger(value.day);
+			month = value.month;
+			day = value.day;
+			timezone = value.timezone;
+		}
+		Jsonix.XML.Calendar.validateMonthDay(month, day);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
+		return "--" + this.printMonth(month) + "-" + this.printDay(day) + this.printTimezoneString(timezone);
+	},
+	printGYear : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var year = undefined;
+		var timezone = undefined;
+
+		if (value instanceof Date) {
+			year = value.getFullYear();
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value.year);
+			year = value.year;
+			timezone = value.timezone;
+		}
+		Jsonix.XML.Calendar.validateYear(year);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
+		return this.printSignedYear(year) + this.printTimezoneString(timezone);
+	},
+	printGYearMonth : function(value, context, output, scope) {
+		Jsonix.Util.Ensure.ensureObject(value);
+		var year = undefined;
+		var month = undefined;
+		var timezone = undefined;
+
+		if (value instanceof Date) {
+			year = value.getFullYear();
+			month = value.getMonth() + 1;
+		} else {
+			Jsonix.Util.Ensure.ensureInteger(value.year);
+			year = value.year;
+			month = value.month;
+			timezone = value.timezone;
+		}
+		Jsonix.XML.Calendar.validateYear(year);
+		Jsonix.XML.Calendar.validateMonth(month);
+		Jsonix.XML.Calendar.validateTimezone(timezone);
+		return this.printSignedYear(year) + "-" + this.printMonth(month) + this.printTimezoneString(timezone);
+	},
 	printSignedYear : function(value) {
 		return value < 0 ? ("-" + this.printYear(value * -1)) : (this.printYear(value));
 	},
@@ -251,10 +421,6 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 		if (value < 0) {
 			throw new Error('Value [' + value + '] must not be negative.');
 		}
-		// if (value >= Math.pow(10, length)) {
-		// throw new Error('Value [' + value + '] must be less than [' +
-		// Math.pow(10, length) + '].');
-		// }
 		var result = String(value);
 		for (var i = result.length; i < length; i++) {
 			result = '0' + result;

@@ -56,18 +56,9 @@
 			</modules>
 		</profile>
 	</profiles>
-	<mailingLists>
-		<mailingList>
-			<name>User List</name>
-			<subscribe>jsonix-users-request@lists.sourceforge.net</subscribe>
-			<unsubscribe>jsonix-users-request@lists.sourceforge.net</unsubscribe>
-			<post>jsonix-users@lists.sourceforge.net</post>
-			<archive>http://sourceforge.net/mailarchive/forum.php?forum_name=jsonix-users</archive>
-		</mailingList>
-	</mailingLists>
 	<properties> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-		<jsonix-schema-compiler.version>2.3.4</jsonix-schema-compiler.version>
+		<jsonix-schema-compiler.version>2.3.6</jsonix-schema-compiler.version>
 		<jaxb.version>2.2.11</jaxb.version>
 	</properties> 
 	<dependencies>

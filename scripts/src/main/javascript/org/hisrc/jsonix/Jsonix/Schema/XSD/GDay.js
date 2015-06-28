@@ -4,33 +4,11 @@ Jsonix.Schema.XSD.GDay = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	CLASS_NAME : 'Jsonix.Schema.XSD.GDay',
 
 	parse : function(value, context, input, scope) {
-		var gDayExpression = new RegExp("^" + Jsonix.Schema.XSD.Calendar.GDAY_PATTERN + "$");
-		var results = value.match(gDayExpression);
-		if (results !== null) {
-			var data = {
-				day : parseInt(results[2], 10),
-				timezone : this.parseTimezoneString(results[3])
-			};
-			return new Jsonix.XML.Calendar(data);
-		}
-		throw new Error('Value [' + value + '] does not match the xs:gDay pattern.');
+		return this.parseGDay(value, context, input, scope);
 	},
 
-	print : function(value, context, input, scope) {
-		Jsonix.Util.Ensure.ensureObject(value);
-		var day = undefined;
-		var timezone = undefined;
-
-		if (value instanceof Date) {
-			day = value.getDate();
-		} else {
-			Jsonix.Util.Ensure.ensureInteger(value.day);
-			day = value.day;
-			timezone = value.timezone;
-		}
-		Jsonix.XML.Calendar.validateDay(day);
-		Jsonix.XML.Calendar.validateTimezone(timezone);
-		return "---" + this.printDay(day) + this.printTimezoneString(timezone);
+	print : function(value, context, output, scope) {
+		return this.printGDay(value, context, output, scope);
 	}
 
 });

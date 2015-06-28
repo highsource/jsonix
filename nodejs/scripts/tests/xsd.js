@@ -195,6 +195,33 @@ module.exports =
 		test.equal(-733, dt1.timezone);
 		test.equal('-1234-05-06T07:08:09.1011-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(dt1));
 
+		var gym = Jsonix.Schema.XSD.Calendar.INSTANCE.parse('-1234-05-12:13');
+		test.equal(-1234, gym.year);
+		test.equal(5, gym.month);
+		test.equal(-733, gym.timezone);
+		test.equal('-1234-05-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(gym));
+
+		var gy = Jsonix.Schema.XSD.Calendar.INSTANCE.parse('-1234-12:13');
+		test.equal(-1234, gy.year);
+		test.equal(-733, gy.timezone);
+		test.equal('-1234-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(gy));
+
+		var gm = Jsonix.Schema.XSD.Calendar.INSTANCE.parse('--05-12:13');
+		test.equal(5, gm.month);
+		test.equal(-733, gm.timezone);
+		test.equal('--05-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(gm));
+
+		var gmd = Jsonix.Schema.XSD.Calendar.INSTANCE.parse('--05-06-12:13');
+		test.equal(5, gmd.month);
+		test.equal(6, gmd.day);
+		test.equal(-733, gmd.timezone);
+		test.equal('--05-06-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(gmd));
+
+		var gd = Jsonix.Schema.XSD.Calendar.INSTANCE.parse('---06-12:13');
+		test.equal(6, gd.day);
+		test.equal(-733, gd.timezone);
+		test.equal('---06-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(gd));
+
 		test.done();
 	},
 
