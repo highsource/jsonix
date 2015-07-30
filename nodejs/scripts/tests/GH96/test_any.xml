@@ -1,0 +1,6 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<testany:TESTANY xmlns:testany="test:any" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="test:any test_any.xsd">
+    <en>
+        <INCLUDED xsi:type="testany:INCLUDED" majorVersion="1"/>
+    </en>
+</testany:TESTANY>

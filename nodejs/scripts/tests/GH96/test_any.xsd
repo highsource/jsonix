@@ -1,0 +1,20 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<xs:schema targetNamespace="test:any" xmlns:testany="test:any" xml:lang="fr" elementFormDefault="unqualified" attributeFormDefault="unqualified" xmlns:xs="http://www.w3.org/2001/XMLSchema">
+  <xs:complexType name="MixedAnyType" mixed="true">
+    <xs:choice minOccurs="0" maxOccurs="unbounded">
+      <xs:any namespace="##any" processContents="lax"/>
+    </xs:choice>
+  </xs:complexType>
+  <xs:complexType name="INCLUDED">
+    <xs:attribute name="majorVersion" type="xs:nonNegativeInteger" use="required">
+    </xs:attribute>
+  </xs:complexType>
+  <xs:element name="TESTANY">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="en"  type="testany:MixedAnyType">
+        </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
