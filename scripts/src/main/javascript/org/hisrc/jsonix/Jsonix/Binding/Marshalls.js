@@ -5,24 +5,29 @@ Jsonix.Binding.Marshalls.Element = Jsonix.Class({
 	marshalElement : function(value, context, output, scope) {
 		var elementValue = this.convertToTypedNamedValue(value, context, output, scope);
 		var declaredTypeInfo = elementValue.typeInfo;
-		var typeInfo = declaredTypeInfo;
-		if (Jsonix.Util.Type.exists(declaredTypeInfo)) {
+		var actualTypeInfo = undefined;
+		if (context.supportXsiType && Jsonix.Util.Type.exists(elementValue.value))
+		{
+			var typeInfoByValue = context.getTypeInfoByValue(elementValue.value);
+			if (typeInfoByValue && typeInfoByValue.typeName)
+			{
+				actualTypeInfo = typeInfoByValue;
+			}
+		}
+		var typeInfo = actualTypeInfo || declaredTypeInfo;
+		if (typeInfo) {
 			output.writeStartElement(elementValue.name);
+			if (actualTypeInfo && declaredTypeInfo !== actualTypeInfo) {
+				var xsiTypeName = actualTypeInfo.typeName;
+				var xsiType = Jsonix.Schema.XSD.QName.INSTANCE.print(xsiTypeName, context, output, scope);
+				output.writeAttribute(Jsonix.Schema.XSI.TYPE_QNAME, xsiType);
+			}
 			if (Jsonix.Util.Type.exists(elementValue.value)) {
-				if (context.supportXsiType) {
-					var actualTypeInfo = context.getTypeInfoByValue(elementValue.value);
-					if (actualTypeInfo && actualTypeInfo.typeName && declaredTypeInfo !== actualTypeInfo) {
-						typeInfo = actualTypeInfo;
-						var xsiTypeName = actualTypeInfo.typeName;
-						var xsiType = Jsonix.Schema.XSD.QName.INSTANCE.print(xsiTypeName, context, output, scope);
-						output.writeAttribute(Jsonix.Schema.XSI.TYPE_QNAME, xsiType);
-					}
-				}
 				typeInfo.marshal(elementValue.value, context, output, scope);
 			}
 			output.writeEndElement();
 		} else {
-			throw new Error("Element [" + elementValue.name.key + "] is not known in this context.");
+			throw new Error("Element [" + elementValue.name.key + "] is not known in this context, could not determine its type.");
 		}
 	},
 	getTypeInfoByElementName : function(name, context, scope) {

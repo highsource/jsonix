@@ -739,18 +739,19 @@ if(!c){throw new Error("Mapping style ["+d.mappingStyle+"] is not known.")
 }},CLASS_NAME:"Jsonix.Mapping.Styled"});
 Jsonix.Binding={};
 Jsonix.Binding.Marshalls={};
-Jsonix.Binding.Marshalls.Element=Jsonix.Class({marshalElement:function(n,s,r,k){var p=this.convertToTypedNamedValue(n,s,r,k);
-var o=p.typeInfo;
-var l=o;
-if(Jsonix.Util.Type.exists(o)){r.writeStartElement(p.name);
-if(Jsonix.Util.Type.exists(p.value)){if(s.supportXsiType){var t=s.getTypeInfoByValue(p.value);
-if(t&&t.typeName&&o!==t){l=t;
-var m=t.typeName;
-var q=Jsonix.Schema.XSD.QName.INSTANCE.print(m,s,r,k);
-r.writeAttribute(Jsonix.Schema.XSI.TYPE_QNAME,q)
-}}l.marshal(p.value,s,r,k)
-}r.writeEndElement()
-}else{throw new Error("Element ["+p.name.key+"] is not known in this context.")
+Jsonix.Binding.Marshalls.Element=Jsonix.Class({marshalElement:function(o,u,t,l){var q=this.convertToTypedNamedValue(o,u,t,l);
+var p=q.typeInfo;
+var v=undefined;
+if(u.supportXsiType&&Jsonix.Util.Type.exists(q.value)){var r=u.getTypeInfoByValue(q.value);
+if(r&&r.typeName){v=r
+}}var m=v||p;
+if(m){t.writeStartElement(q.name);
+if(v&&p!==v){var n=v.typeName;
+var s=Jsonix.Schema.XSD.QName.INSTANCE.print(n,u,t,l);
+t.writeAttribute(Jsonix.Schema.XSI.TYPE_QNAME,s)
+}if(Jsonix.Util.Type.exists(q.value)){m.marshal(q.value,u,t,l)
+}t.writeEndElement()
+}else{throw new Error("Element ["+q.name.key+"] is not known in this context, could not determine its type.")
 }},getTypeInfoByElementName:function(f,e,g){var h=e.getElementInfo(f,g);
 if(Jsonix.Util.Type.exists(h)){return h.typeInfo
 }else{return undefined
