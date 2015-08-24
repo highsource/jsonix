@@ -1,0 +1,30 @@
+{
+    "name": {
+        "namespaceURI": "test:any",
+        "localPart": "TESTANY",
+        "prefix": "testany",
+        "key": "{test:any}TESTANY",
+        "string": "{test:any}testany:TESTANY"
+    },
+    "value": {
+        "TYPE_NAME": "test_any.TESTANY",
+        "en": {
+            "TYPE_NAME": "test_any.MixedAnyType",
+            "content": [
+                {
+                    "name": {
+                        "namespaceURI": "",
+                        "localPart": "INCLUDED",
+                        "prefix": "",
+                        "key": "INCLUDED",
+                        "string": "INCLUDED"
+                    },
+                    "value": {
+                        "TYPE_NAME": "test_any.INCLUDED",
+                        "majorVersion": 1
+                    }
+                }
+            ]
+        }
+    }
+}
