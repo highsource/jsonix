@@ -321,11 +321,11 @@
 					},
 					"prefix" : {
 						"anyOf" : [ {
-								"$ref" : "#/definitions/NCName"
-							}, {
-								"type" : "string",
-								"enum" : [ "" ]
-							}
+							"$ref" : "#/definitions/NCName"
+						}, {
+							"type" : "string",
+							"enum" : [ "" ]
+						} ]
 					}
 				},
 				"required" : [ "localPart" ]

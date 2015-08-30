@@ -1,3 +1,5 @@
+var fs = require('fs');
+var Ajv = require('ajv');
 var Jsonix = require('jsonix').Jsonix;
 var PO = require('../mappings/PO').PO;
 
@@ -13,6 +15,7 @@ module.exports = {
 		// Unmarshal the XML file
 		unmarshaller.unmarshalFile( 'tests/po.xml',
 			function(poElement) {
+				console.log(JSON.stringify(poElement, null, 4));
 
 				var po = poElement.value;
 
@@ -30,5 +33,33 @@ module.exports = {
 				test.equal('US', po.billTo.country);
 				test.done();
 		});
-        }
+        },
+	"ValidateJson": function (test) {
+		// Load JSON Schemas
+		var XMLSchemaJsonSchema = JSON.parse(fs.readFileSync('./node_modules/jsonix/jsonschemas/w3c/2001/XMLSchema.jsonschema').toString());
+		var JsonixJsonSchema = JSON.parse(fs.readFileSync('./node_modules/jsonix/jsonschemas/Jsonix/Jsonix.jsonschema').toString());
+		var POJsonSchema = JSON.parse(fs.readFileSync('./mappings/PO.jsonschema').toString());
+
+		var ajv = new Ajv();
+		ajv.addSchema(XMLSchemaJsonSchema, 'http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema');
+		ajv.addSchema(JsonixJsonSchema, 'http://www.jsonix.org/jsonschemas/jsonix/Jsonix.jsonschema');
+		var validate = ajv.compile(POJsonSchema);
+
+		var po = JSON.parse(fs.readFileSync("tests/po.json").toString());
+
+		console.log('Validating.');
+		var valid = validate(po);
+		if (!valid) {
+			console.log('Validation failed.');
+			console.log('Validation errors:');
+			console.log(validate.errors);
+		}
+		test.ok(valid, 'Validation failed.');
+		var context = new Jsonix.Context([ PO ]);
+		var marshaller = context.createMarshaller();
+		var marshalled = marshaller.marshalString(po);
+		console.log('Marshalled XML:');
+		console.log(marshalled);		
+		test.done();
+	}
 };
