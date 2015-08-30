@@ -6,11 +6,11 @@
 				"type" : "object",
 				"properties" : {
 					"year" : {
-						"$ref" : "#/definitions/integer"
+						"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
 					},
 					"month" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/unsignedByte"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 1,
 							"exclusiveMinimum" : false,
@@ -20,7 +20,7 @@
 					},
 					"day" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/unsignedByte"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 1,
 							"exclusiveMinimum" : false,
@@ -30,7 +30,7 @@
 					},
 					"hour" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/unsignedByte"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 0,
 							"exclusiveMinimum" : false,
@@ -40,7 +40,7 @@
 					},
 					"minute" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/unsignedByte"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 0,
 							"exclusiveMinimum" : false,
@@ -50,7 +50,7 @@
 					},
 					"second" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/unsignedByte"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 0,
 							"exclusiveMinimum" : false,
@@ -60,7 +60,7 @@
 					},
 					"fractionalSecond" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/decimal"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/decimal"
 						}, {
 							"minimum" : 0,
 							"exclusiveMinimum" : false,
@@ -70,7 +70,7 @@
 					},
 					"timezone" : {
 						"allOf" : [ {
-							"$ref" : "#/definitions/integer"
+							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
 						}, {
 							"minimum" : -1440,
 							"exclusiveMinimum" : false,

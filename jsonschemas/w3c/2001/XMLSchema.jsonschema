@@ -309,13 +309,23 @@
 				"type" : "object",
 				"properties" : {
 					"namespaceURI" : {
-						"$ref" : "#/definitions/anyURI"
+						"anyOf" : [ {
+							"$ref" : "#/definitions/anyURI"
+						}, {
+							"type" : "string",
+							"enum" : [ "" ]
+						} ]
 					},
 					"localPart" : {
 						"$ref" : "#/definitions/NCName"
 					},
 					"prefix" : {
-						"$ref" : "#/definitions/NCName"
+						"anyOf" : [ {
+							"$ref" : "#/definitions/NCName"
+						}, {
+							"type" : "string",
+							"enum" : [ "" ]
+						} ]
 					}
 				},
 				"required" : [ "localPart" ]
