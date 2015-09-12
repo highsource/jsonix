@@ -3,25 +3,29 @@ var AR_Module_Factory = function () {
     name: 'AR',
     defaultElementNamespaceURI: 'urn:test',
     typeInfos: [{
-        localName: 'AccumulateResponse',
-        propertyInfos: [{
-            name: 'testCase',
-            collection: true,
-            elementName: 'TestCase',
-            typeInfo: '.AccumulateResponse.TestCase'
-          }]
-      }, {
         localName: 'AccumulateResponse.TestCase',
         typeName: null,
         propertyInfos: [{
             name: 'transactionId',
+            required: true,
             elementName: 'TransactionId'
           }, {
             name: 'transactionType',
+            required: true,
             elementName: 'TransactionType'
           }, {
             name: 'status',
+            required: true,
             elementName: 'Status'
+          }]
+      }, {
+        localName: 'AccumulateResponse',
+        propertyInfos: [{
+            name: 'testCase',
+            minOccurs: 0,
+            collection: true,
+            elementName: 'TestCase',
+            typeInfo: '.AccumulateResponse.TestCase'
           }]
       }],
     elementInfos: [{

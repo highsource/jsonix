@@ -5,6 +5,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			typeName : null,
 			instanceFactory : null,
 			properties : null,
+			propertiesMap : null,
 			structure : null,
 			targetNamespace : '',
 			defaultElementNamespaceURI : '',
@@ -59,11 +60,15 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 				
 				this.properties = [];
+				this.propertiesMap = {};
 				var ps = mapping.propertyInfos||mapping.ps||[];
 				Jsonix.Util.Ensure.ensureArray(ps);
 				for ( var index = 0; index < ps.length; index++) {
 					this.p(ps[index]);
 				}				
+			},
+			getPropertyInfoByName : function(name) {
+				return this.propertiesMap[name];
 			},
 			// Obsolete
 			destroy : function() {
@@ -369,6 +374,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			addProperty : function(property) {
 				this.properties.push(property);
+				this.propertiesMap[property.name] = property;
 				return this;
 			},
 			CLASS_NAME : 'Jsonix.Model.ClassInfo'

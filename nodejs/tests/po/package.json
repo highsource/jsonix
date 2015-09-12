@@ -6,15 +6,15 @@
 	],
 	"main": "jsonix-tests-po.js",
 	"dependencies": {
-		"jsonix": ">=2.3.0",
-		"jsonix-schema-compiler": ">=2.3.6",
+		"jsonix": ">=2.3.1",
+		"jsonix-schema-compiler": ">=2.3.7",
 		"ajv": ">=1.2.1"
 	},
 	"devDependencies" : {
 		"nodeunit" : "~0.x.x"
 	},
 	"scripts": {
-		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar -generateJsonSchema -compact -logLevel TRACE -d mappings purchaseorder.xsd -b bindings.xjb",
+		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar -generateJsonSchema -logLevel TRACE -d mappings purchaseorder.xsd -b bindings.xjb",
 		"test": "nodeunit tests/tests.js" 
 	}
 }

@@ -2124,6 +2124,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			typeName : null,
 			instanceFactory : null,
 			properties : null,
+			propertiesMap : null,
 			structure : null,
 			targetNamespace : '',
 			defaultElementNamespaceURI : '',
@@ -2178,11 +2179,15 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 				
 				this.properties = [];
+				this.propertiesMap = {};
 				var ps = mapping.propertyInfos||mapping.ps||[];
 				Jsonix.Util.Ensure.ensureArray(ps);
 				for ( var index = 0; index < ps.length; index++) {
 					this.p(ps[index]);
 				}				
+			},
+			getPropertyInfoByName : function(name) {
+				return this.propertiesMap[name];
 			},
 			// Obsolete
 			destroy : function() {
@@ -2488,6 +2493,7 @@ Jsonix.Model.ClassInfo = Jsonix
 			},
 			addProperty : function(property) {
 				this.properties.push(property);
+				this.propertiesMap[property.name] = property;
 				return this;
 			},
 			CLASS_NAME : 'Jsonix.Model.ClassInfo'
@@ -2732,6 +2738,32 @@ Jsonix.Model.PropertyInfo = Jsonix.Class({
 		this.defaultAttributeNamespaceURI = dans;
 		var col = mapping.collection || mapping.col || false;
 		this.collection = col;
+		var rq = mapping.required || mapping.rq || false;
+		this.required = rq;
+		if (this.collection) {
+			var mno;
+			if (Jsonix.Util.Type.isNumber(mapping.minOccurs)) {
+				mno = mapping.minOccurs;
+			}
+			else if (Jsonix.Util.Type.isNumber(mapping.mno)) {
+				mno = mapping.mno;
+			}
+			else {
+				mno = 1;
+			}
+			this.minOccurs = mno;
+			var mxo;
+			if (Jsonix.Util.Type.isNumber(mapping.maxOccurs)) {
+				mxo = mapping.maxOccurs;
+			}
+			else if (Jsonix.Util.Type.isNumber(mapping.mxo)) {
+				mxo = mapping.mxo;
+			}
+			else {
+				mxo = null;
+			}
+			this.maxOccurs = mxo;
+		}
 	},
 	build : function(context, module) {
 		if (!this.built) {

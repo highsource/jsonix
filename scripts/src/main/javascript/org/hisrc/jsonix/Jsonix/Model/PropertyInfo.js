@@ -18,6 +18,32 @@ Jsonix.Model.PropertyInfo = Jsonix.Class({
 		this.defaultAttributeNamespaceURI = dans;
 		var col = mapping.collection || mapping.col || false;
 		this.collection = col;
+		var rq = mapping.required || mapping.rq || false;
+		this.required = rq;
+		if (this.collection) {
+			var mno;
+			if (Jsonix.Util.Type.isNumber(mapping.minOccurs)) {
+				mno = mapping.minOccurs;
+			}
+			else if (Jsonix.Util.Type.isNumber(mapping.mno)) {
+				mno = mapping.mno;
+			}
+			else {
+				mno = 1;
+			}
+			this.minOccurs = mno;
+			var mxo;
+			if (Jsonix.Util.Type.isNumber(mapping.maxOccurs)) {
+				mxo = mapping.maxOccurs;
+			}
+			else if (Jsonix.Util.Type.isNumber(mapping.mxo)) {
+				mxo = mapping.mxo;
+			}
+			else {
+				mxo = null;
+			}
+			this.maxOccurs = mxo;
+		}
 	},
 	build : function(context, module) {
 		if (!this.built) {

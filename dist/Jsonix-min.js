@@ -854,7 +854,7 @@ while(d){if(c===d){return true
 }d=d.baseTypeInfo
 }return false
 },CLASS_NAME:"Jsonix.Model.TypeInfo"});
-Jsonix.Model.ClassInfo=Jsonix.Class(Jsonix.Model.TypeInfo,Jsonix.Mapping.Styled,{name:null,localName:null,typeName:null,instanceFactory:null,properties:null,structure:null,targetNamespace:"",defaultElementNamespaceURI:"",defaultAttributeNamespaceURI:"",built:false,initialize:function(w,m){Jsonix.Model.TypeInfo.prototype.initialize.apply(this,[]);
+Jsonix.Model.ClassInfo=Jsonix.Class(Jsonix.Model.TypeInfo,Jsonix.Mapping.Styled,{name:null,localName:null,typeName:null,instanceFactory:null,properties:null,propertiesMap:null,structure:null,targetNamespace:"",defaultElementNamespaceURI:"",defaultAttributeNamespaceURI:"",built:false,initialize:function(w,m){Jsonix.Model.TypeInfo.prototype.initialize.apply(this,[]);
 Jsonix.Mapping.Styled.prototype.initialize.apply(this,[m]);
 Jsonix.Util.Ensure.ensureObject(w);
 var v=w.name||w.n||undefined;
@@ -878,12 +878,14 @@ if(Jsonix.Util.Type.exists(o)){if(Jsonix.Util.Type.isString(o)){this.typeName=ne
 }else{this.typeName=Jsonix.XML.QName.fromObject(o)
 }}else{if(Jsonix.Util.Type.exists(q)){this.typeName=new Jsonix.XML.QName(n,q)
 }}this.properties=[];
+this.propertiesMap={};
 var x=w.propertyInfos||w.ps||[];
 Jsonix.Util.Ensure.ensureArray(x);
 for(var s=0;
 s<x.length;
 s++){this.p(x[s])
-}},destroy:function(){},build:function(i,j){if(!this.built){this.baseTypeInfo=i.resolveTypeInfo(this.baseTypeInfo,j);
+}},getPropertyInfoByName:function(b){return this.propertiesMap[b]
+},destroy:function(){},build:function(i,j){if(!this.built){this.baseTypeInfo=i.resolveTypeInfo(this.baseTypeInfo,j);
 if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.build(i,j)
 }for(var f=0;
 f<this.properties.length;
@@ -977,6 +979,7 @@ return this.addProperty(new this.mappingStyle.valuePropertyInfo(b,{mappingStyle:
 },addDefaultNamespaces:function(b){if(Jsonix.Util.Type.isObject(b)){if(!Jsonix.Util.Type.isString(b.defaultElementNamespaceURI)){b.defaultElementNamespaceURI=this.defaultElementNamespaceURI
 }if(!Jsonix.Util.Type.isString(b.defaultAttributeNamespaceURI)){b.defaultAttributeNamespaceURI=this.defaultAttributeNamespaceURI
 }}},addProperty:function(b){this.properties.push(b);
+this.propertiesMap[b.name]=b;
 return this
 },CLASS_NAME:"Jsonix.Model.ClassInfo"});
 Jsonix.Model.ClassInfo.prototype.propertyInfoCreators={aa:Jsonix.Model.ClassInfo.prototype.aa,anyAttribute:Jsonix.Model.ClassInfo.prototype.aa,ae:Jsonix.Model.ClassInfo.prototype.ae,anyElement:Jsonix.Model.ClassInfo.prototype.ae,a:Jsonix.Model.ClassInfo.prototype.a,attribute:Jsonix.Model.ClassInfo.prototype.a,em:Jsonix.Model.ClassInfo.prototype.em,elementMap:Jsonix.Model.ClassInfo.prototype.em,e:Jsonix.Model.ClassInfo.prototype.e,element:Jsonix.Model.ClassInfo.prototype.e,es:Jsonix.Model.ClassInfo.prototype.es,elements:Jsonix.Model.ClassInfo.prototype.es,er:Jsonix.Model.ClassInfo.prototype.er,elementRef:Jsonix.Model.ClassInfo.prototype.er,ers:Jsonix.Model.ClassInfo.prototype.ers,elementRefs:Jsonix.Model.ClassInfo.prototype.ers,v:Jsonix.Model.ClassInfo.prototype.v,value:Jsonix.Model.ClassInfo.prototype.v};
@@ -1059,19 +1062,31 @@ this.scope=i
 this.scope=c.resolveTypeInfo(this.scope,d);
 this.built=true
 }},CLASS_NAME:"Jsonix.Model.ElementInfo"});
-Jsonix.Model.PropertyInfo=Jsonix.Class({name:null,collection:false,targetNamespace:"",defaultElementNamespaceURI:"",defaultAttributeNamespaceURI:"",built:false,initialize:function(l){Jsonix.Util.Ensure.ensureObject(l);
-var i=l.name||l.n||undefined;
-Jsonix.Util.Ensure.ensureString(i);
-this.name=i;
-var k=l.defaultElementNamespaceURI||l.dens||l.targetNamespace||l.tns||"";
-this.defaultElementNamespaceURI=k;
-var g=l.targetNamespace||l.tns||l.defaultElementNamespaceURI||l.dens||this.defaultElementNamespaceURI;
-this.targetNamespace=g;
-var j=l.defaultAttributeNamespaceURI||l.dans||"";
-this.defaultAttributeNamespaceURI=j;
-var h=l.collection||l.col||false;
-this.collection=h
-},build:function(c,d){if(!this.built){this.doBuild(c,d);
+Jsonix.Model.PropertyInfo=Jsonix.Class({name:null,collection:false,targetNamespace:"",defaultElementNamespaceURI:"",defaultAttributeNamespaceURI:"",built:false,initialize:function(r){Jsonix.Util.Ensure.ensureObject(r);
+var p=r.name||r.n||undefined;
+Jsonix.Util.Ensure.ensureString(p);
+this.name=p;
+var m=r.defaultElementNamespaceURI||r.dens||r.targetNamespace||r.tns||"";
+this.defaultElementNamespaceURI=m;
+var j=r.targetNamespace||r.tns||r.defaultElementNamespaceURI||r.dens||this.defaultElementNamespaceURI;
+this.targetNamespace=j;
+var k=r.defaultAttributeNamespaceURI||r.dans||"";
+this.defaultAttributeNamespaceURI=k;
+var o=r.collection||r.col||false;
+this.collection=o;
+var n=r.required||r.rq||false;
+this.required=n;
+if(this.collection){var l;
+if(Jsonix.Util.Type.isNumber(r.minOccurs)){l=r.minOccurs
+}else{if(Jsonix.Util.Type.isNumber(r.mno)){l=r.mno
+}else{l=1
+}}this.minOccurs=l;
+var q;
+if(Jsonix.Util.Type.isNumber(r.maxOccurs)){q=r.maxOccurs
+}else{if(Jsonix.Util.Type.isNumber(r.mxo)){q=r.mxo
+}else{q=null
+}}this.maxOccurs=q
+}},build:function(c,d){if(!this.built){this.doBuild(c,d);
 this.built=true
 }},doBuild:function(c,d){throw new Error("Abstract method [doBuild].")
 },buildStructure:function(c,d){throw new Error("Abstract method [buildStructure].")

@@ -35,7 +35,7 @@
 
   <xsd:complexType name="Items">
     <xsd:sequence>
-      <xsd:element name="item" minOccurs="0" maxOccurs="unbounded">
+      <xsd:element name="item" minOccurs="0" maxOccurs="100">
         <xsd:complexType>
           <xsd:sequence>
             <xsd:element name="productName" type="xsd:string"/>

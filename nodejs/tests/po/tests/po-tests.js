@@ -4,6 +4,18 @@ var Jsonix = require('jsonix').Jsonix;
 var PO = require('../mappings/PO').PO;
 
 module.exports = {
+	"MinMaxOccurs": function(test) {
+
+		// Create Jsonix context
+		var context = new Jsonix.Context([ PO ]);
+
+		var itemsClassInfo = context.getTypeInfoByName("PO.Items");
+		var itemPropertyInfo = itemsClassInfo.getPropertyInfoByName("item");
+		test.equal(false, itemPropertyInfo.required);
+		test.equal(0, itemPropertyInfo.minOccurs);
+		test.equal(100, itemPropertyInfo.maxOccurs);
+		test.done();
+        },
 	"UnmarshalFile": function(test) {
 
 		// Create Jsonix context
