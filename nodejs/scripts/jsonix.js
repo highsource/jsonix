@@ -877,9 +877,16 @@ Jsonix.XML.QName.fromString = function(qNameAsString, namespaceContext, defaultN
 		localPart = prefixedName;
 	}
 	// If namespace URI was not set and we have a namespace context, try to find the namespace URI via this context
-	if (namespaceURI === null && namespaceContext)
+	if (namespaceURI === null)
 	{
-		namespaceURI = namespaceContext.getNamespaceURI(prefix);
+		if (prefix === '' && Jsonix.Util.Type.isString(defaultNamespaceURI))
+		{
+			namespaceURI = defaultNamespaceURI;
+		}
+		else if (namespaceContext)
+		{
+			namespaceURI = namespaceContext.getNamespaceURI(prefix);
+		}
 	}
 	// If we don't have a namespace URI, assume '' by default
 	// TODO document the assumption
