@@ -56,8 +56,8 @@ module.exports = {
 	"ParseMonthDayGetDate" : function(test) {
 		var g = Jsonix.Schema.XSD.GMonthDay.INSTANCE;
 
-		test.equal(0, g.parse('--01-01').date.getMonth());
-		test.equal(1, g.parse('--01-01').date.getDate());
+		test.equal(0, g.parse('--01-01').date.getUTCMonth());
+		test.equal(1, g.parse('--01-01').date.getUTCDate());
 		test.equal(-300 * 60000, g.parse('--01-01+05:00').date.getTime());
 		test.done();
 	}

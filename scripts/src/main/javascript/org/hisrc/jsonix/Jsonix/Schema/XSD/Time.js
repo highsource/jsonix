@@ -72,7 +72,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				correctedValue = value;
 			}
 			var correctedTime = correctedValue.getTime();
-			if (correctedTime >= 0) {
+			if (correctedTime >= (- localTimezone * 60000)) {
 				return this.printTime(new Jsonix.XML.Calendar({
 					hour : correctedValue.getHours(),
 					minute : correctedValue.getMinutes(),
@@ -82,10 +82,17 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				}));
 			} else {
 				var timezoneHours = Math.ceil(-correctedTime / 3600000);
+				
+				var correctedTimeInSeconds = correctedValue.getSeconds() +
+					correctedValue.getMinutes() * 60 +
+					correctedValue.getHours() * 3600 +
+					timezoneHours * 3600 -
+					timezone * 60;
+				
 				return this.printTime(new Jsonix.XML.Calendar({
-					hour : (correctedValue.getHours() + timezoneHours - timezone / 60 ) % 24,
-					minute : correctedValue.getMinutes(),
-					second : correctedValue.getSeconds(),
+					hour : correctedTimeInSeconds % 86400,
+					minute : correctedTimeInSeconds % 3600,
+					second : correctedTimeInSeconds % 60,
 					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
 					timezone : timezoneHours * 60
 				}));

@@ -75,9 +75,9 @@ module.exports = {
 	"ParseYearGetDate" : function(test) {
 		var g = Jsonix.Schema.XSD.GYear.INSTANCE;
 
-		test.equal(1967, g.parse('1967').date.getFullYear());
-		test.equal(1967, g.parse('1967Z').date.getFullYear());
-		test.equal(-1967, g.parse('-1967Z').date.getFullYear());
+		test.equal(1967, g.parse('1967').date.getUTCFullYear());
+		test.equal(1967, g.parse('1967Z').date.getUTCFullYear());
+		test.equal(-1967, g.parse('-1967Z').date.getUTCFullYear());
 
 		test.done();
 	}

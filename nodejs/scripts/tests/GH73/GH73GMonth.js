@@ -54,8 +54,8 @@ module.exports = {
 	"ParseMonthGetDate" : function(test) {
 		var g = Jsonix.Schema.XSD.GMonth.INSTANCE;
 
-		test.equal(0, g.parse('--01').date.getMonth());
-		test.equal(11, g.parse('--12Z').date.getMonth());
+		test.equal(0, g.parse('--01').date.getUTCMonth());
+		test.equal(11, g.parse('--12Z').date.getUTCMonth());
 		test.done();
 	}
 };

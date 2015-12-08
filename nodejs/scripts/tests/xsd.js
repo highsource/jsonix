@@ -245,6 +245,7 @@ module.exports =
 		test.equal(36000500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t1)).getTime());
 		delete t1.originalTimezone;
 	//	test.equal('10:00:00.5Z', Jsonix.Schema.XSD.Time.INSTANCE.print(t1));
+		console.log(Jsonix.Schema.XSD.Time.INSTANCE.print(t1));
 		test.equal(36000500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t1)).getTime());
 	
 		var t2 = Jsonix.Schema.XSD.Time.INSTANCE.parse('10:00:00.5+01:00');
@@ -288,6 +289,7 @@ module.exports =
 		test.equal(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t5)).getTime());
 		delete t5.originalTimezone;
 	//	test.equal('12:00:00.5+01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t5));
+		console.log(Jsonix.Schema.XSD.Time.INSTANCE.print(t5));
 		test.equal(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t5)).getTime());
 		test.done();
 		},

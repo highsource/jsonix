@@ -65,8 +65,8 @@ module.exports = {
 	"ParseDayGetDate" : function(test) {
 		var g = Jsonix.Schema.XSD.GDay.INSTANCE;
 
-		test.equal(1, g.parse('---01').date.getDate());
-		test.equal(1, g.parse('---01Z').date.getDate());
+		test.equal(1, g.parse('---01').date.getUTCDate());
+		test.equal(1, g.parse('---01Z').date.getUTCDate());
 
 		test.done();
 	}

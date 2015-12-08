@@ -75,10 +75,10 @@ module.exports = {
 	"ParseYearMonthGetDate" : function(test) {
 		var g = Jsonix.Schema.XSD.GYearMonth.INSTANCE;
 
-		test.equal(1967, g.parse('1967-11').date.getFullYear());
-		test.equal(10, g.parse('1967-11').date.getMonth());
-		test.equal(1967, g.parse('1967-11Z').date.getFullYear());
-		test.equal(10, g.parse('1967-11Z').date.getMonth());
+		test.equal(1967, g.parse('1967-11').date.getUTCFullYear());
+		test.equal(10, g.parse('1967-11').date.getUTCMonth());
+		test.equal(1967, g.parse('1967-11Z').date.getUTCFullYear());
+		test.equal(10, g.parse('1967-11Z').date.getUTCMonth());
 		test.equal(0, g.parse('1970-01').date.getTime());
 		test.equal(0, g.parse('1970-01Z').date.getTime());
 		test.equal(300, g.parse('1970-01+05:00').timezone);
