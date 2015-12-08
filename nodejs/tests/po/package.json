@@ -6,7 +6,7 @@
 	],
 	"main": "jsonix-tests-po.js",
 	"dependencies": {
-		"jsonix": ">=2.3.1",
+		"jsonix": ">=2.3.2",
 		"jsonix-schema-compiler": ">=2.3.7",
 		"ajv": ">=1.2.1"
 	},
