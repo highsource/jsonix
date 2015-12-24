@@ -112,3 +112,10 @@ You can also `marshalString`.
 
 * [Jsonix GitHub Project](https://github.com/highsource/jsonix)
 * [Jsonix Wiki](https://github.com/highsource/jsonix/wiki)
+
+## Credits
+
+![Logo WebStorm](images/logo_WebStorm.png)
+
+Jsonix is developed with [WebStorm](https://www.jetbrains.com/webstorm/), the smartest JavaScript IDE.  
+Many thanks to [JetBrains](https://www.jetbrains.com) for providing a free open-source license for Jsonix development.
