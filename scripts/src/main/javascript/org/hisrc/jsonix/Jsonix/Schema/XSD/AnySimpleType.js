@@ -8,7 +8,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		return value;
 	},
 	parse : function(text, context, input, scope) {
-		return text
+		return text;
 	},
 	isInstance : function(value, context, scope) {
 		return true;
