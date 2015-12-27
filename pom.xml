@@ -58,7 +58,7 @@
 	</profiles>
 	<properties> 
 		<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding> 
-		<jsonix-schema-compiler.version>2.3.7</jsonix-schema-compiler.version>
+		<jsonix-schema-compiler.version>2.3.8</jsonix-schema-compiler.version>
 		<jaxb.version>2.2.11</jaxb.version>
 	</properties> 
 	<dependencies>
