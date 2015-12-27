@@ -5,10 +5,13 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 	},	
 	print : function(value, context, output, scope) {
-		throw new Error('Abstract method [print].');
+		return value;
 	},
 	parse : function(text, context, input, scope) {
-		throw new Error('Abstract method [parse].');
+		return text
+	},
+	isInstance : function(value, context, scope) {
+		return true;
 	},
 	reprint : function(value, context, output, scope) {
 		// Only reprint when the value is a string but not an instance
@@ -42,3 +45,4 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnySimpleType'
 });
+Jsonix.Schema.XSD.AnySimpleType.INSTANCE = new Jsonix.Schema.XSD.AnySimpleType();
