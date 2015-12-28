@@ -1,6 +1,6 @@
 {
 	"name": "jsonix",
-	"version": "2.3.3-SNAPSHOT",
+	"version": "2.4.0",
 	"homepage": "https://github.com/highsource/jsonix",
 	"authors": [
 		"Alexey Valikov"

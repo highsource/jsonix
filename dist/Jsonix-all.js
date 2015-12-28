@@ -877,9 +877,16 @@ Jsonix.XML.QName.fromString = function(qNameAsString, namespaceContext, defaultN
 		localPart = prefixedName;
 	}
 	// If namespace URI was not set and we have a namespace context, try to find the namespace URI via this context
-	if (namespaceURI === null && namespaceContext)
+	if (namespaceURI === null)
 	{
-		namespaceURI = namespaceContext.getNamespaceURI(prefix);
+		if (prefix === '' && Jsonix.Util.Type.isString(defaultNamespaceURI))
+		{
+			namespaceURI = defaultNamespaceURI;
+		}
+		else if (namespaceContext)
+		{
+			namespaceURI = namespaceContext.getNamespaceURI(prefix);
+		}
 	}
 	// If we don't have a namespace URI, assume '' by default
 	// TODO document the assumption
@@ -4052,10 +4059,13 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 		Jsonix.Model.TypeInfo.prototype.initialize.apply(this, []);
 	},	
 	print : function(value, context, output, scope) {
-		throw new Error('Abstract method [print].');
+		return value;
 	},
 	parse : function(text, context, input, scope) {
-		throw new Error('Abstract method [parse].');
+		return text;
+	},
+	isInstance : function(value, context, scope) {
+		return true;
 	},
 	reprint : function(value, context, output, scope) {
 		// Only reprint when the value is a string but not an instance
@@ -4089,7 +4099,7 @@ Jsonix.Schema.XSD.AnySimpleType = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	},
 	CLASS_NAME : 'Jsonix.Schema.XSD.AnySimpleType'
 });
-
+Jsonix.Schema.XSD.AnySimpleType.INSTANCE = new Jsonix.Schema.XSD.AnySimpleType();
 Jsonix.Schema.XSD.List = Jsonix
 		.Class(
 				Jsonix.Schema.XSD.AnySimpleType,
@@ -5309,6 +5319,20 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'DateTime',
 	typeName : Jsonix.Schema.XSD.qname('dateTime'),
 	parse : function(value, context, input, scope) {
+		return this.parseDateTime(value);
+	},
+	print : function(value, context, output, scope) {
+		return this.printDateTime(value);
+	},
+	CLASS_NAME : 'Jsonix.Schema.XSD.DateTime'
+});
+Jsonix.Schema.XSD.DateTime.INSTANCE = new Jsonix.Schema.XSD.DateTime();
+Jsonix.Schema.XSD.DateTime.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
+
+Jsonix.Schema.XSD.DateTimeAsDate = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
+	name : 'DateTimeAsDate',
+	typeName : Jsonix.Schema.XSD.qname('dateTime'),
+	parse : function(value, context, input, scope) {
 		var calendar = this.parseDateTime(value);
 		var date = new Date();
 		date.setFullYear(calendar.year);
@@ -5396,13 +5420,26 @@ Jsonix.Schema.XSD.DateTime = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isDate(value);
 	},
-	CLASS_NAME : 'Jsonix.Schema.XSD.DateTime'
+	CLASS_NAME : 'Jsonix.Schema.XSD.DateTimeAsDate'
 });
-Jsonix.Schema.XSD.DateTime.INSTANCE = new Jsonix.Schema.XSD.DateTime();
-Jsonix.Schema.XSD.DateTime.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
+Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE = new Jsonix.Schema.XSD.DateTimeAsDate();
+Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE);
 
 Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Time',
+	typeName : Jsonix.Schema.XSD.qname('time'),
+	parse : function(value, context, input, scope) {
+		return this.parseTime(value);
+	},
+	print : function(value, context, output, scope) {
+		return this.printTime(value);
+	},
+	CLASS_NAME : 'Jsonix.Schema.XSD.Time'
+});
+Jsonix.Schema.XSD.Time.INSTANCE = new Jsonix.Schema.XSD.Time();
+Jsonix.Schema.XSD.Time.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Time.INSTANCE);
+Jsonix.Schema.XSD.TimeAsDate = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
+	name : 'TimeAsDate',
 	typeName : Jsonix.Schema.XSD.qname('time'),
 	parse : function(value, context, input, scope) {
 		var calendar = this.parseTime(value);
@@ -5475,7 +5512,7 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				correctedValue = value;
 			}
 			var correctedTime = correctedValue.getTime();
-			if (correctedTime >= 0) {
+			if (correctedTime >= (- localTimezone * 60000)) {
 				return this.printTime(new Jsonix.XML.Calendar({
 					hour : correctedValue.getHours(),
 					minute : correctedValue.getMinutes(),
@@ -5485,10 +5522,17 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 				}));
 			} else {
 				var timezoneHours = Math.ceil(-correctedTime / 3600000);
+				
+				var correctedTimeInSeconds = correctedValue.getSeconds() +
+					correctedValue.getMinutes() * 60 +
+					correctedValue.getHours() * 3600 +
+					timezoneHours * 3600 -
+					timezone * 60;
+				
 				return this.printTime(new Jsonix.XML.Calendar({
-					hour : (correctedValue.getHours() + timezoneHours - timezone / 60 ) % 24,
-					minute : correctedValue.getMinutes(),
-					second : correctedValue.getSeconds(),
+					hour : correctedTimeInSeconds % 86400,
+					minute : correctedTimeInSeconds % 3600,
+					second : correctedTimeInSeconds % 60,
 					fractionalSecond : (correctedValue.getMilliseconds() / 1000),
 					timezone : timezoneHours * 60
 				}));
@@ -5498,12 +5542,25 @@ Jsonix.Schema.XSD.Time = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isDate(value) && value.getTime() > -86400000 && value.getTime() < 86400000;
 	},
-	CLASS_NAME : 'Jsonix.Schema.XSD.Time'
+	CLASS_NAME : 'Jsonix.Schema.XSD.TimeAsDate'
 });
-Jsonix.Schema.XSD.Time.INSTANCE = new Jsonix.Schema.XSD.Time();
-Jsonix.Schema.XSD.Time.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Time.INSTANCE);
+Jsonix.Schema.XSD.TimeAsDate.INSTANCE = new Jsonix.Schema.XSD.TimeAsDate();
+Jsonix.Schema.XSD.TimeAsDate.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.TimeAsDate.INSTANCE);
 Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'Date',
+	typeName : Jsonix.Schema.XSD.qname('date'),
+	parse : function(value, context, input, scope) {
+		return this.parseDate(value);
+	},
+	print : function(value, context, output, scope) {
+		return this.printDate(value);
+	},
+	CLASS_NAME : 'Jsonix.Schema.XSD.Date'
+});
+Jsonix.Schema.XSD.Date.INSTANCE = new Jsonix.Schema.XSD.Date();
+Jsonix.Schema.XSD.Date.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Date.INSTANCE);
+Jsonix.Schema.XSD.DateAsDate = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
+	name : 'DateAsDate',
 	typeName : Jsonix.Schema.XSD.qname('date'),
 	parse : function(value, context, input, scope) {
 		var calendar = this.parseDate(value);
@@ -5613,10 +5670,10 @@ Jsonix.Schema.XSD.Date = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	isInstance : function(value, context, scope) {
 		return Jsonix.Util.Type.isDate(value);
 	},
-	CLASS_NAME : 'Jsonix.Schema.XSD.Date'
+	CLASS_NAME : 'Jsonix.Schema.XSD.DateAsDate'
 });
-Jsonix.Schema.XSD.Date.INSTANCE = new Jsonix.Schema.XSD.Date();
-Jsonix.Schema.XSD.Date.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Date.INSTANCE);
+Jsonix.Schema.XSD.DateAsDate.INSTANCE = new Jsonix.Schema.XSD.DateAsDate();
+Jsonix.Schema.XSD.DateAsDate.INSTANCE.LIST = new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateAsDate.INSTANCE);
 Jsonix.Schema.XSD.GYearMonth = Jsonix.Class(Jsonix.Schema.XSD.Calendar, {
 	name : 'GYearMonth',
 	typeName : Jsonix.Schema.XSD.qname('gYearMonth'),
@@ -5984,12 +6041,15 @@ Jsonix.Context = Jsonix
 			 */
 			builtinTypeInfos : [
 			        Jsonix.Schema.XSD.AnyType.INSTANCE,
+			        Jsonix.Schema.XSD.AnySimpleType.INSTANCE,
 					Jsonix.Schema.XSD.AnyURI.INSTANCE,
 					Jsonix.Schema.XSD.Base64Binary.INSTANCE,
 					Jsonix.Schema.XSD.Boolean.INSTANCE,
 					Jsonix.Schema.XSD.Byte.INSTANCE,
 					Jsonix.Schema.XSD.Calendar.INSTANCE,
+					Jsonix.Schema.XSD.DateAsDate.INSTANCE,
 					Jsonix.Schema.XSD.Date.INSTANCE,
+					Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE,
 					Jsonix.Schema.XSD.DateTime.INSTANCE,
 					Jsonix.Schema.XSD.Decimal.INSTANCE,
 					Jsonix.Schema.XSD.Double.INSTANCE,
@@ -6022,6 +6082,7 @@ Jsonix.Context = Jsonix
 					Jsonix.Schema.XSD.Short.INSTANCE,
 					Jsonix.Schema.XSD.String.INSTANCE,
 					Jsonix.Schema.XSD.Strings.INSTANCE,
+					Jsonix.Schema.XSD.TimeAsDate.INSTANCE,
 					Jsonix.Schema.XSD.Time.INSTANCE,
 					Jsonix.Schema.XSD.Token.INSTANCE,
 					Jsonix.Schema.XSD.UnsignedByte.INSTANCE,

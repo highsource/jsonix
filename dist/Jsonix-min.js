@@ -315,8 +315,9 @@ if(q>0&&q<k.length){o=k.substring(0,q);
 p=k.substring(q+1)
 }else{o="";
 p=k
-}if(s===null&&r){s=r.getNamespaceURI(o)
-}if(!Jsonix.Util.Type.isString(s)){s=m||""
+}if(s===null){if(o===""&&Jsonix.Util.Type.isString(m)){s=m
+}else{if(r){s=r.getNamespaceURI(o)
+}}}if(!Jsonix.Util.Type.isString(s)){s=m||""
 }return new Jsonix.XML.QName(s,p,o)
 };
 Jsonix.XML.QName.fromObject=function(h){Jsonix.Util.Ensure.ensureObject(h);
@@ -1573,8 +1574,9 @@ Jsonix.Schema.XSD.AnyType=Jsonix.Class(Jsonix.Model.ClassInfo,{typeName:Jsonix.S
 },CLASS_NAME:"Jsonix.Schema.XSD.AnyType"});
 Jsonix.Schema.XSD.AnyType.INSTANCE=new Jsonix.Schema.XSD.AnyType();
 Jsonix.Schema.XSD.AnySimpleType=Jsonix.Class(Jsonix.Model.TypeInfo,{name:"AnySimpleType",typeName:Jsonix.Schema.XSD.qname("anySimpleType"),initialize:function(){Jsonix.Model.TypeInfo.prototype.initialize.apply(this,[])
-},print:function(g,e,f,h){throw new Error("Abstract method [print].")
-},parse:function(g,e,f,h){throw new Error("Abstract method [parse].")
+},print:function(g,e,f,h){return g
+},parse:function(g,e,f,h){return g
+},isInstance:function(f,e,d){return true
 },reprint:function(g,e,f,h){if(Jsonix.Util.Type.isString(g)&&!this.isInstance(g,e,h)){return this.print(this.parse(g,e,null,h),e,f,h)
 }else{return this.print(g,e,f,h)
 }},unmarshal:function(e,f,h){var g=f.getElementText();
@@ -1582,6 +1584,7 @@ if(Jsonix.Util.StringUtils.isNotBlank(g)){return this.parse(g,e,f,h)
 }else{return null
 }},marshal:function(g,e,f,h){if(Jsonix.Util.Type.exists(g)){f.writeCharacters(this.reprint(g,e,f,h))
 }},build:function(c,d){},CLASS_NAME:"Jsonix.Schema.XSD.AnySimpleType"});
+Jsonix.Schema.XSD.AnySimpleType.INSTANCE=new Jsonix.Schema.XSD.AnySimpleType();
 Jsonix.Schema.XSD.List=Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType,{name:null,typeName:null,typeInfo:null,separator:" ",trimmedSeparator:Jsonix.Util.StringUtils.whitespaceCharacters,simpleType:true,built:false,initialize:function(e,f,h){Jsonix.Util.Ensure.ensureExists(e);
 this.typeInfo=e;
 if(!Jsonix.Util.Type.exists(this.name)){this.name=e.name+"*"
@@ -2164,7 +2167,12 @@ n=false
 Jsonix.Schema.XSD.Duration.PATTERN="(-)?P(([0-9]+)Y)?(([0-9]+)M)?(([0-9]+)D)?(T(([0-9]+)H)?(([0-9]+)M)?(([0-9]+(\\.[0-9]+)?)S)?)?";
 Jsonix.Schema.XSD.Duration.INSTANCE=new Jsonix.Schema.XSD.Duration();
 Jsonix.Schema.XSD.Duration.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Duration.INSTANCE);
-Jsonix.Schema.XSD.DateTime=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"DateTime",typeName:Jsonix.Schema.XSD.qname("dateTime"),parse:function(n,t,o,l){var q=this.parseDateTime(n);
+Jsonix.Schema.XSD.DateTime=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"DateTime",typeName:Jsonix.Schema.XSD.qname("dateTime"),parse:function(g,e,f,h){return this.parseDateTime(g)
+},print:function(g,e,f,h){return this.printDateTime(g)
+},CLASS_NAME:"Jsonix.Schema.XSD.DateTime"});
+Jsonix.Schema.XSD.DateTime.INSTANCE=new Jsonix.Schema.XSD.DateTime();
+Jsonix.Schema.XSD.DateTime.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
+Jsonix.Schema.XSD.DateTimeAsDate=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"DateTimeAsDate",typeName:Jsonix.Schema.XSD.qname("dateTime"),parse:function(n,t,o,l){var q=this.parseDateTime(n);
 var s=new Date();
 s.setFullYear(q.year);
 s.setMonth(q.month-1);
@@ -2196,10 +2204,15 @@ p=k
 }var j=this.printDateTime(new Jsonix.XML.Calendar({year:p.getFullYear(),month:p.getMonth()+1,day:p.getDate(),hour:p.getHours(),minute:p.getMinutes(),second:p.getSeconds(),fractionalSecond:(p.getMilliseconds()/1000),timezone:m}));
 return j
 }},isInstance:function(f,e,d){return Jsonix.Util.Type.isDate(f)
-},CLASS_NAME:"Jsonix.Schema.XSD.DateTime"});
-Jsonix.Schema.XSD.DateTime.INSTANCE=new Jsonix.Schema.XSD.DateTime();
-Jsonix.Schema.XSD.DateTime.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTime.INSTANCE);
-Jsonix.Schema.XSD.Time=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Time",typeName:Jsonix.Schema.XSD.qname("time"),parse:function(n,t,o,l){var q=this.parseTime(n);
+},CLASS_NAME:"Jsonix.Schema.XSD.DateTimeAsDate"});
+Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE=new Jsonix.Schema.XSD.DateTimeAsDate();
+Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE);
+Jsonix.Schema.XSD.Time=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Time",typeName:Jsonix.Schema.XSD.qname("time"),parse:function(g,e,f,h){return this.parseTime(g)
+},print:function(g,e,f,h){return this.printTime(g)
+},CLASS_NAME:"Jsonix.Schema.XSD.Time"});
+Jsonix.Schema.XSD.Time.INSTANCE=new Jsonix.Schema.XSD.Time();
+Jsonix.Schema.XSD.Time.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Time.INSTANCE);
+Jsonix.Schema.XSD.TimeAsDate=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"TimeAsDate",typeName:Jsonix.Schema.XSD.qname("time"),parse:function(n,t,o,l){var q=this.parseTime(n);
 var s=new Date();
 s.setFullYear(1970);
 s.setMonth(0);
@@ -2219,26 +2232,32 @@ r=true
 if(r){k.originalTimezone=null
 }else{k.originalTimezone=p
 }return k
-},print:function(m,t,r,k){Jsonix.Util.Ensure.ensureDate(m);
-var q=m.getTime();
-if(q<=-86400000&&q>=86400000){throw new Error("Invalid time ["+m+"].")
-}if(m.originalTimezone===null){return this.printTime(new Jsonix.XML.Calendar({hour:m.getHours(),minute:m.getMinutes(),second:m.getSeconds(),fractionalSecond:(m.getMilliseconds()/1000)}))
-}else{var s;
-var o;
-var l=-m.getTimezoneOffset();
-if(Jsonix.Util.NumberUtils.isInteger(m.originalTimezone)){o=m.originalTimezone;
-s=new Date(m.getTime()-(60000*(-o+l)))
-}else{o=l;
-s=m
-}var n=s.getTime();
-if(n>=0){return this.printTime(new Jsonix.XML.Calendar({hour:s.getHours(),minute:s.getMinutes(),second:s.getSeconds(),fractionalSecond:(s.getMilliseconds()/1000),timezone:o}))
-}else{var p=Math.ceil(-n/3600000);
-return this.printTime(new Jsonix.XML.Calendar({hour:(s.getHours()+p-o/60)%24,minute:s.getMinutes(),second:s.getSeconds(),fractionalSecond:(s.getMilliseconds()/1000),timezone:p*60}))
+},print:function(n,u,s,l){Jsonix.Util.Ensure.ensureDate(n);
+var r=n.getTime();
+if(r<=-86400000&&r>=86400000){throw new Error("Invalid time ["+n+"].")
+}if(n.originalTimezone===null){return this.printTime(new Jsonix.XML.Calendar({hour:n.getHours(),minute:n.getMinutes(),second:n.getSeconds(),fractionalSecond:(n.getMilliseconds()/1000)}))
+}else{var t;
+var p;
+var m=-n.getTimezoneOffset();
+if(Jsonix.Util.NumberUtils.isInteger(n.originalTimezone)){p=n.originalTimezone;
+t=new Date(n.getTime()-(60000*(-p+m)))
+}else{p=m;
+t=n
+}var o=t.getTime();
+if(o>=(-m*60000)){return this.printTime(new Jsonix.XML.Calendar({hour:t.getHours(),minute:t.getMinutes(),second:t.getSeconds(),fractionalSecond:(t.getMilliseconds()/1000),timezone:p}))
+}else{var q=Math.ceil(-o/3600000);
+var v=t.getSeconds()+t.getMinutes()*60+t.getHours()*3600+q*3600-p*60;
+return this.printTime(new Jsonix.XML.Calendar({hour:v%86400,minute:v%3600,second:v%60,fractionalSecond:(t.getMilliseconds()/1000),timezone:q*60}))
 }}},isInstance:function(f,e,d){return Jsonix.Util.Type.isDate(f)&&f.getTime()>-86400000&&f.getTime()<86400000
-},CLASS_NAME:"Jsonix.Schema.XSD.Time"});
-Jsonix.Schema.XSD.Time.INSTANCE=new Jsonix.Schema.XSD.Time();
-Jsonix.Schema.XSD.Time.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Time.INSTANCE);
-Jsonix.Schema.XSD.Date=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Date",typeName:Jsonix.Schema.XSD.qname("date"),parse:function(n,t,o,l){var q=this.parseDate(n);
+},CLASS_NAME:"Jsonix.Schema.XSD.TimeAsDate"});
+Jsonix.Schema.XSD.TimeAsDate.INSTANCE=new Jsonix.Schema.XSD.TimeAsDate();
+Jsonix.Schema.XSD.TimeAsDate.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.TimeAsDate.INSTANCE);
+Jsonix.Schema.XSD.Date=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"Date",typeName:Jsonix.Schema.XSD.qname("date"),parse:function(g,e,f,h){return this.parseDate(g)
+},print:function(g,e,f,h){return this.printDate(g)
+},CLASS_NAME:"Jsonix.Schema.XSD.Date"});
+Jsonix.Schema.XSD.Date.INSTANCE=new Jsonix.Schema.XSD.Date();
+Jsonix.Schema.XSD.Date.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Date.INSTANCE);
+Jsonix.Schema.XSD.DateAsDate=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"DateAsDate",typeName:Jsonix.Schema.XSD.qname("date"),parse:function(n,t,o,l){var q=this.parseDate(n);
 var s=new Date();
 s.setFullYear(q.year);
 s.setMonth(q.month-1);
@@ -2275,9 +2294,9 @@ if(n>=-43200000){return this.printDate(new Jsonix.XML.Calendar({year:l.getFullYe
 }else{var m=new Date(l.getTime()+86400000);
 return this.printDate(new Jsonix.XML.Calendar({year:m.getFullYear(),month:m.getMonth()+1,day:m.getDate(),timezone:(Math.floor(n/60000)+1440)}))
 }}}}},isInstance:function(f,e,d){return Jsonix.Util.Type.isDate(f)
-},CLASS_NAME:"Jsonix.Schema.XSD.Date"});
-Jsonix.Schema.XSD.Date.INSTANCE=new Jsonix.Schema.XSD.Date();
-Jsonix.Schema.XSD.Date.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.Date.INSTANCE);
+},CLASS_NAME:"Jsonix.Schema.XSD.DateAsDate"});
+Jsonix.Schema.XSD.DateAsDate.INSTANCE=new Jsonix.Schema.XSD.DateAsDate();
+Jsonix.Schema.XSD.DateAsDate.INSTANCE.LIST=new Jsonix.Schema.XSD.List(Jsonix.Schema.XSD.DateAsDate.INSTANCE);
 Jsonix.Schema.XSD.GYearMonth=Jsonix.Class(Jsonix.Schema.XSD.Calendar,{name:"GYearMonth",typeName:Jsonix.Schema.XSD.qname("gYearMonth"),CLASS_NAME:"Jsonix.Schema.XSD.GYearMonth",parse:function(g,e,f,h){return this.parseGYearMonth(g,e,f,h)
 },print:function(g,e,f,h){return this.printGYearMonth(g,e,f,h)
 }});
@@ -2430,7 +2449,7 @@ return this.prefixNamespaces[b]
 var f=this.namespacePrefixes[e];
 if(Jsonix.Util.Type.isString(f)){return f
 }else{return d
-}},builtinTypeInfos:[Jsonix.Schema.XSD.AnyType.INSTANCE,Jsonix.Schema.XSD.AnyURI.INSTANCE,Jsonix.Schema.XSD.Base64Binary.INSTANCE,Jsonix.Schema.XSD.Boolean.INSTANCE,Jsonix.Schema.XSD.Byte.INSTANCE,Jsonix.Schema.XSD.Calendar.INSTANCE,Jsonix.Schema.XSD.Date.INSTANCE,Jsonix.Schema.XSD.DateTime.INSTANCE,Jsonix.Schema.XSD.Decimal.INSTANCE,Jsonix.Schema.XSD.Double.INSTANCE,Jsonix.Schema.XSD.Duration.INSTANCE,Jsonix.Schema.XSD.Float.INSTANCE,Jsonix.Schema.XSD.GDay.INSTANCE,Jsonix.Schema.XSD.GMonth.INSTANCE,Jsonix.Schema.XSD.GMonthDay.INSTANCE,Jsonix.Schema.XSD.GYear.INSTANCE,Jsonix.Schema.XSD.GYearMonth.INSTANCE,Jsonix.Schema.XSD.HexBinary.INSTANCE,Jsonix.Schema.XSD.ID.INSTANCE,Jsonix.Schema.XSD.IDREF.INSTANCE,Jsonix.Schema.XSD.IDREFS.INSTANCE,Jsonix.Schema.XSD.Int.INSTANCE,Jsonix.Schema.XSD.Integer.INSTANCE,Jsonix.Schema.XSD.Language.INSTANCE,Jsonix.Schema.XSD.Long.INSTANCE,Jsonix.Schema.XSD.Name.INSTANCE,Jsonix.Schema.XSD.NCName.INSTANCE,Jsonix.Schema.XSD.NegativeInteger.INSTANCE,Jsonix.Schema.XSD.NMToken.INSTANCE,Jsonix.Schema.XSD.NMTokens.INSTANCE,Jsonix.Schema.XSD.NonNegativeInteger.INSTANCE,Jsonix.Schema.XSD.NonPositiveInteger.INSTANCE,Jsonix.Schema.XSD.NormalizedString.INSTANCE,Jsonix.Schema.XSD.Number.INSTANCE,Jsonix.Schema.XSD.PositiveInteger.INSTANCE,Jsonix.Schema.XSD.QName.INSTANCE,Jsonix.Schema.XSD.Short.INSTANCE,Jsonix.Schema.XSD.String.INSTANCE,Jsonix.Schema.XSD.Strings.INSTANCE,Jsonix.Schema.XSD.Time.INSTANCE,Jsonix.Schema.XSD.Token.INSTANCE,Jsonix.Schema.XSD.UnsignedByte.INSTANCE,Jsonix.Schema.XSD.UnsignedInt.INSTANCE,Jsonix.Schema.XSD.UnsignedLong.INSTANCE,Jsonix.Schema.XSD.UnsignedShort.INSTANCE],CLASS_NAME:"Jsonix.Context"});
+}},builtinTypeInfos:[Jsonix.Schema.XSD.AnyType.INSTANCE,Jsonix.Schema.XSD.AnySimpleType.INSTANCE,Jsonix.Schema.XSD.AnyURI.INSTANCE,Jsonix.Schema.XSD.Base64Binary.INSTANCE,Jsonix.Schema.XSD.Boolean.INSTANCE,Jsonix.Schema.XSD.Byte.INSTANCE,Jsonix.Schema.XSD.Calendar.INSTANCE,Jsonix.Schema.XSD.DateAsDate.INSTANCE,Jsonix.Schema.XSD.Date.INSTANCE,Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE,Jsonix.Schema.XSD.DateTime.INSTANCE,Jsonix.Schema.XSD.Decimal.INSTANCE,Jsonix.Schema.XSD.Double.INSTANCE,Jsonix.Schema.XSD.Duration.INSTANCE,Jsonix.Schema.XSD.Float.INSTANCE,Jsonix.Schema.XSD.GDay.INSTANCE,Jsonix.Schema.XSD.GMonth.INSTANCE,Jsonix.Schema.XSD.GMonthDay.INSTANCE,Jsonix.Schema.XSD.GYear.INSTANCE,Jsonix.Schema.XSD.GYearMonth.INSTANCE,Jsonix.Schema.XSD.HexBinary.INSTANCE,Jsonix.Schema.XSD.ID.INSTANCE,Jsonix.Schema.XSD.IDREF.INSTANCE,Jsonix.Schema.XSD.IDREFS.INSTANCE,Jsonix.Schema.XSD.Int.INSTANCE,Jsonix.Schema.XSD.Integer.INSTANCE,Jsonix.Schema.XSD.Language.INSTANCE,Jsonix.Schema.XSD.Long.INSTANCE,Jsonix.Schema.XSD.Name.INSTANCE,Jsonix.Schema.XSD.NCName.INSTANCE,Jsonix.Schema.XSD.NegativeInteger.INSTANCE,Jsonix.Schema.XSD.NMToken.INSTANCE,Jsonix.Schema.XSD.NMTokens.INSTANCE,Jsonix.Schema.XSD.NonNegativeInteger.INSTANCE,Jsonix.Schema.XSD.NonPositiveInteger.INSTANCE,Jsonix.Schema.XSD.NormalizedString.INSTANCE,Jsonix.Schema.XSD.Number.INSTANCE,Jsonix.Schema.XSD.PositiveInteger.INSTANCE,Jsonix.Schema.XSD.QName.INSTANCE,Jsonix.Schema.XSD.Short.INSTANCE,Jsonix.Schema.XSD.String.INSTANCE,Jsonix.Schema.XSD.Strings.INSTANCE,Jsonix.Schema.XSD.TimeAsDate.INSTANCE,Jsonix.Schema.XSD.Time.INSTANCE,Jsonix.Schema.XSD.Token.INSTANCE,Jsonix.Schema.XSD.UnsignedByte.INSTANCE,Jsonix.Schema.XSD.UnsignedInt.INSTANCE,Jsonix.Schema.XSD.UnsignedLong.INSTANCE,Jsonix.Schema.XSD.UnsignedShort.INSTANCE],CLASS_NAME:"Jsonix.Context"});
 	// Complete Jsonix script is included above
 	return { Jsonix: Jsonix };
 };
