@@ -216,7 +216,7 @@ One.SimpleTypesType.properties = [
 		//                                   
 		new Jsonix.Model.ElementPropertyInfo({
 			name : "date",
-			typeInfo : Jsonix.Schema.XSD.Date.INSTANCE
+			typeInfo : Jsonix.Schema.XSD.DateAsDate.INSTANCE
 		}),
 		new Jsonix.Model.ElementPropertyInfo({
 			name : "double",
@@ -233,7 +233,7 @@ One.SimpleTypesType.properties = [
 		//
 		new Jsonix.Model.ElementPropertyInfo({
 			name : "dates",
-			typeInfo : Jsonix.Schema.XSD.Date.INSTANCE.LIST
+			typeInfo : Jsonix.Schema.XSD.DateAsDate.INSTANCE.LIST
 		}),
 		new Jsonix.Model.ElementPropertyInfo({
 			name : "doubles",

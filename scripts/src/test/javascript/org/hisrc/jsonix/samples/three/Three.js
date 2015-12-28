@@ -235,7 +235,7 @@ Three = {
 		propertyInfos : [ {
 			type : 'element',
 			name : 'date',
-			typeInfo : 'Date'
+			typeInfo : 'DateAsDate'
 		}, {
 			type : 'element',
 			name : 'double',
@@ -253,7 +253,7 @@ Three = {
 			name : 'dates',
 			typeInfo : {
 				type : 'list',
-				typeInfo : 'Date'
+				typeInfo : 'DateAsDate'
 
 			}
 		}, {

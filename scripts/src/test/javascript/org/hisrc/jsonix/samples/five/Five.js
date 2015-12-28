@@ -202,7 +202,7 @@ Five = {
 		ln : 'SimpleTypesType',
 		ps : [ {
 			n : 'date',
-			ti : 'Date'
+			ti : 'DateAsDate'
 		}, {
 			n : 'double',
 			ti : 'Double'
@@ -215,7 +215,7 @@ Five = {
 			n : 'dates',
 			ti : {
 				t : 'l',
-				ti : 'Date'
+				ti : 'DateAsDate'
 
 			}
 		}, {

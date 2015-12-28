@@ -192,180 +192,180 @@ function testSchemaXSDCalendar() {
 }
 
 function testSchemaXSDTime() {
-	var t0 = Jsonix.Schema.XSD.Time.INSTANCE.parse('10:00:00.5');
+	var t0 = Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse('10:00:00.5');
 	var time0 = new Date(1970, 0, 1, 10, 0, 0);
 	time0.setMilliseconds(500);
 	assertEquals(time0.getTime(), t0.getTime());
-	assertTrue(Jsonix.Schema.XSD.Time.INSTANCE.isInstance(t0));
-	assertEquals('10:00:00.5', Jsonix.Schema.XSD.Time.INSTANCE.print(t0));
-	assertEquals(time0.getTime(), Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t0)).getTime());
+	assertTrue(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.isInstance(t0));
+	assertEquals('10:00:00.5', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t0));
+	assertEquals(time0.getTime(), Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t0)).getTime());
 	delete t0.originalTimezone;
-//	assertEquals('10:00:00.5', Jsonix.Schema.XSD.Time.INSTANCE.print(t0));
-	assertEquals(time0.getTime(), Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t0)).getTime());
+//	assertEquals('10:00:00.5', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t0));
+	assertEquals(time0.getTime(), Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t0)).getTime());
 
-	var t1 = Jsonix.Schema.XSD.Time.INSTANCE.parse('10:00:00.5Z');
+	var t1 = Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse('10:00:00.5Z');
 	assertEquals(36000500, t1.getTime());
 	assertEquals(0, t1.originalTimezone);
-	assertTrue(Jsonix.Schema.XSD.Time.INSTANCE.isInstance(t1));
-	assertEquals('10:00:00.5Z', Jsonix.Schema.XSD.Time.INSTANCE.print(t1));
-	assertEquals(36000500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t1)).getTime());
+	assertTrue(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.isInstance(t1));
+	assertEquals('10:00:00.5Z', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t1));
+	assertEquals(36000500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t1)).getTime());
 	delete t1.originalTimezone;
-//	assertEquals('10:00:00.5Z', Jsonix.Schema.XSD.Time.INSTANCE.print(t1));
-	assertEquals(36000500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t1)).getTime());
+//	assertEquals('10:00:00.5Z', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t1));
+	assertEquals(36000500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t1)).getTime());
 
-	var t2 = Jsonix.Schema.XSD.Time.INSTANCE.parse('10:00:00.5+01:00');
+	var t2 = Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse('10:00:00.5+01:00');
 	assertEquals(32400500, t2.getTime());
 	assertEquals(60, t2.originalTimezone);
-	assertTrue(Jsonix.Schema.XSD.Time.INSTANCE.isInstance(t2));
-	assertEquals('10:00:00.5+01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t2));
-	assertEquals(32400500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t2)).getTime());
+	assertTrue(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.isInstance(t2));
+	assertEquals('10:00:00.5+01:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t2));
+	assertEquals(32400500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t2)).getTime());
 	delete t2.originalTimezone;
-//	assertEquals('10:00:00.5+01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t2));
-	assertEquals(32400500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t2)).getTime());
+//	assertEquals('10:00:00.5+01:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t2));
+	assertEquals(32400500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t2)).getTime());
 
-	var t3 = Jsonix.Schema.XSD.Time.INSTANCE.parse('10:00:00.5-01:00');
+	var t3 = Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse('10:00:00.5-01:00');
 	assertEquals(39600500, t3.getTime());
 	assertEquals(-60, t3.originalTimezone);
-	assertTrue(Jsonix.Schema.XSD.Time.INSTANCE.isInstance(t3));
-	assertEquals('10:00:00.5-01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t3));
-	assertEquals(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t3)).getTime());
+	assertTrue(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.isInstance(t3));
+	assertEquals('10:00:00.5-01:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t3));
+	assertEquals(39600500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t3)).getTime());
 	t3.originalTimezone = 60;
-	assertEquals('12:00:00.5+01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t3));
-	assertEquals(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t3)).getTime());
+	assertEquals('12:00:00.5+01:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t3));
+	assertEquals(39600500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t3)).getTime());
 	delete t2.originalTimezone;
-//	assertEquals('12:00:00.5+01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t3));
-	assertEquals(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t3)).getTime());
+//	assertEquals('12:00:00.5+01:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t3));
+	assertEquals(39600500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t3)).getTime());
 
-	var t4 = Jsonix.Schema.XSD.Time.INSTANCE.parse('01:00:00.5+10:00');
+	var t4 = Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse('01:00:00.5+10:00');
 	assertEquals(-32399500, t4.getTime());
 	assertEquals(600, t4.originalTimezone);
-	assertTrue(Jsonix.Schema.XSD.Time.INSTANCE.isInstance(t4));
-	assertEquals('01:00:00.5+10:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t4));
-	assertEquals(-32399500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t4)).getTime());
+	assertTrue(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.isInstance(t4));
+	assertEquals('01:00:00.5+10:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t4));
+	assertEquals(-32399500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t4)).getTime());
 	delete t4.originalTimezone;
-//	assertEquals('00:00:00.5+09:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t4));
-	assertEquals(-32399500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t4)).getTime());
+//	assertEquals('00:00:00.5+09:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t4));
+	assertEquals(-32399500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t4)).getTime());
 
-	var t5 = Jsonix.Schema.XSD.Time.INSTANCE.parse('01:00:00.5-10:00');
+	var t5 = Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse('01:00:00.5-10:00');
 	assertEquals(39600500, t5.getTime());
 	assertEquals(-600, t5.originalTimezone);
-	assertTrue(Jsonix.Schema.XSD.Time.INSTANCE.isInstance(t5));
-	assertEquals('01:00:00.5-10:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t5));
-	assertEquals(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t5)).getTime());
+	assertTrue(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.isInstance(t5));
+	assertEquals('01:00:00.5-10:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t5));
+	assertEquals(39600500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t5)).getTime());
 	delete t5.originalTimezone;
-//	assertEquals('12:00:00.5+01:00', Jsonix.Schema.XSD.Time.INSTANCE.print(t5));
-	assertEquals(39600500, Jsonix.Schema.XSD.Time.INSTANCE.parse(Jsonix.Schema.XSD.Time.INSTANCE.print(t5)).getTime());
+//	assertEquals('12:00:00.5+01:00', Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t5));
+	assertEquals(39600500, Jsonix.Schema.XSD.TimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.TimeAsDate.INSTANCE.print(t5)).getTime());
 }
 
 function testSchemaXSDDate() {
-	var d0 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01');
+	var d0 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01');
 	var date0 = new Date(1970, 0, 1, 0, 0, 0);
 	assertEquals(date0.getTime(), d0.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d0));
-	assertEquals('1970-01-01', Jsonix.Schema.XSD.Date.INSTANCE.print(d0));
-	assertEquals(date0.getTime(), Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d0)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d0));
+	assertEquals('1970-01-01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d0));
+	assertEquals(date0.getTime(), Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d0)).getTime());
 	delete d0.originalTimezone;
-	assertEquals('1970-01-01', Jsonix.Schema.XSD.Date.INSTANCE.print(d0));
-	assertEquals(date0.getTime(), Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d0)).getTime());
+	assertEquals('1970-01-01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d0));
+	assertEquals(date0.getTime(), Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d0)).getTime());
 
-	var d1 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01Z');
+	var d1 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01Z');
 	assertEquals(0, d1.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d1));
-	assertEquals('1970-01-01Z', Jsonix.Schema.XSD.Date.INSTANCE.print(d1));
-	assertEquals(0, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d1)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d1));
+	assertEquals('1970-01-01Z', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d1));
+	assertEquals(0, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d1)).getTime());
 	delete d1.originalTimezone;
-//	assertEquals('1970-01-01Z', Jsonix.Schema.XSD.Date.INSTANCE.print(d1));
-	assertEquals(0, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d1)).getTime());
+//	assertEquals('1970-01-01Z', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d1));
+	assertEquals(0, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d1)).getTime());
 
-	var d2 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01+01:01');
+	var d2 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01+01:01');
 	assertEquals(-3660000, d2.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d2));
-	assertEquals('1970-01-01+01:01', Jsonix.Schema.XSD.Date.INSTANCE.print(d2));
-	assertEquals(-3660000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d2)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d2));
+	assertEquals('1970-01-01+01:01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d2));
+	assertEquals(-3660000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d2)).getTime());
 	delete d2.originalTimezone;
-//	assertEquals('1970-01-01+01:01', Jsonix.Schema.XSD.Date.INSTANCE.print(d2));
-	assertEquals(-3660000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d2)).getTime());
+//	assertEquals('1970-01-01+01:01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d2));
+	assertEquals(-3660000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d2)).getTime());
 
-	var d3 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01-02:01');
+	var d3 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01-02:01');
 	assertEquals(+7260000, d3.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d3));
-	assertEquals('1970-01-01-02:01', Jsonix.Schema.XSD.Date.INSTANCE.print(d3));
-	assertEquals(+7260000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d3)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d3));
+	assertEquals('1970-01-01-02:01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d3));
+	assertEquals(+7260000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d3)).getTime());
 	delete d3.originalTimezone;
-//	assertEquals('1970-01-01-02:01', Jsonix.Schema.XSD.Date.INSTANCE.print(d3));
-	assertEquals(+7260000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d3)).getTime());
+//	assertEquals('1970-01-01-02:01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d3));
+	assertEquals(+7260000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d3)).getTime());
 
-	var d4 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01+01:00');
+	var d4 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01+01:00');
 	assertEquals(-3600000, d4.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d4));
-	assertEquals('1970-01-01+01:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d4));
-	assertEquals(-3600000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d4)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d4));
+	assertEquals('1970-01-01+01:00', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d4));
+	assertEquals(-3600000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d4)).getTime());
 	delete d4.originalTimezone;
-	// assertEquals('1970-01-01+01:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d4));
-	assertEquals(-3600000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d4)).getTime());
+	// assertEquals('1970-01-01+01:00', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d4));
+	assertEquals(-3600000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d4)).getTime());
 
-	var d5 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01+14:00');
+	var d5 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01+14:00');
 	assertEquals(-50400000, d5.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d5));
-	assertEquals('1970-01-01+14:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d5));
-	assertEquals(-50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d5)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d5));
+	assertEquals('1970-01-01+14:00', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d5));
+	assertEquals(-50400000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d5)).getTime());
 	delete d5.originalTimezone;
-	// assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d5));
-	assertEquals(-50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d5)).getTime());
+	// assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d5));
+	assertEquals(-50400000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d5)).getTime());
 
-	var d6 = Jsonix.Schema.XSD.Date.INSTANCE.parse('1970-01-01-14:00');
+	var d6 = Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('1970-01-01-14:00');
 	assertEquals(50400000, d6.getTime());
-	assertTrue(Jsonix.Schema.XSD.Date.INSTANCE.isInstance(d6));
-	assertEquals('1970-01-01-14:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d6));
-	assertEquals(50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d6)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateAsDate.INSTANCE.isInstance(d6));
+	assertEquals('1970-01-01-14:00', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d6));
+	assertEquals(50400000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d6)).getTime());
 	delete d6.originalTimezone;
-	// assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.Date.INSTANCE.print(d6));
-	assertEquals(50400000, Jsonix.Schema.XSD.Date.INSTANCE.parse(Jsonix.Schema.XSD.Date.INSTANCE.print(d6)).getTime());
+	// assertEquals('1970-01-01+15:00', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d6));
+	assertEquals(50400000, Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(d6)).getTime());
 
-	assertEquals('2001-12-31', Jsonix.Schema.XSD.Date.INSTANCE.print(new Date(2001, 11, 31)));
-	assertEquals('2001-12-31', Jsonix.Schema.XSD.Date.INSTANCE.print(Jsonix.Schema.XSD.Date.INSTANCE.parse('2001-12-31')));
-	assertEquals('2001-01-01', Jsonix.Schema.XSD.Date.INSTANCE.print(Jsonix.Schema.XSD.Date.INSTANCE.parse('2001-01-01')));
+	assertEquals('2001-12-31', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(new Date(2001, 11, 31)));
+	assertEquals('2001-12-31', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('2001-12-31')));
+	assertEquals('2001-01-01', Jsonix.Schema.XSD.DateAsDate.INSTANCE.print(Jsonix.Schema.XSD.DateAsDate.INSTANCE.parse('2001-01-01')));
 
-	assertEquals('2001-12-29 2001-12-30 2001-12-31', Jsonix.Schema.XSD.Date.INSTANCE.LIST.print([ new Date(2001, 11, 29), new Date(2001, 11, 30), new Date(2001, 11, 31) ]));
+	assertEquals('2001-12-29 2001-12-30 2001-12-31', Jsonix.Schema.XSD.DateAsDate.INSTANCE.LIST.print([ new Date(2001, 11, 29), new Date(2001, 11, 30), new Date(2001, 11, 31) ]));
 }
 
 function testSchemaXSDDateTime() {
-	var d0 = Jsonix.Schema.XSD.DateTime.INSTANCE.parse('1970-01-01T00:00:00');
+	var d0 = Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse('1970-01-01T00:00:00');
 	var dateTime0 = new Date(1970, 0, 1, 0, 0, 0);
 	assertEquals(dateTime0.getTime(), d0.getTime());
-	assertTrue(Jsonix.Schema.XSD.DateTime.INSTANCE.isInstance(d0));
-	assertEquals('1970-01-01T00:00:00', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d0));
-	assertEquals(dateTime0.getTime(), Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d0)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.isInstance(d0));
+	assertEquals('1970-01-01T00:00:00', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d0));
+	assertEquals(dateTime0.getTime(), Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d0)).getTime());
 	delete d0.originalTimezone;
-//	assertEquals('1970-01-01T00:00:00', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d0));
-	assertEquals(dateTime0.getTime(), Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d0)).getTime());
+//	assertEquals('1970-01-01T00:00:00', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d0));
+	assertEquals(dateTime0.getTime(), Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d0)).getTime());
 
-	var d1 = Jsonix.Schema.XSD.DateTime.INSTANCE.parse('1970-01-01T00:00:00Z');
+	var d1 = Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse('1970-01-01T00:00:00Z');
 	assertEquals(0, d1.getTime());
-	assertTrue(Jsonix.Schema.XSD.DateTime.INSTANCE.isInstance(d1));
-	assertEquals('1970-01-01T00:00:00Z', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d1));
-	assertEquals(0, Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d1)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.isInstance(d1));
+	assertEquals('1970-01-01T00:00:00Z', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d1));
+	assertEquals(0, Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d1)).getTime());
 	delete d1.originalTimezone;
-//	assertEquals('1970-01-01T00:00:00Z', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d1));
-	assertEquals(0, Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d1)).getTime());
+//	assertEquals('1970-01-01T00:00:00Z', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d1));
+	assertEquals(0, Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d1)).getTime());
 	
-	var d2 = Jsonix.Schema.XSD.DateTime.INSTANCE.parse('1970-01-01T00:00:00+01:00');
+	var d2 = Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse('1970-01-01T00:00:00+01:00');
 	assertEquals(-3600000, d2.getTime());
-	assertTrue(Jsonix.Schema.XSD.DateTime.INSTANCE.isInstance(d2));
-	assertEquals('1970-01-01T00:00:00+01:00', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d2));
-	assertEquals(-3600000, Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d2)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.isInstance(d2));
+	assertEquals('1970-01-01T00:00:00+01:00', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d2));
+	assertEquals(-3600000, Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d2)).getTime());
 	delete d2.originalTimezone;
-//	assertEquals('1970-01-01T00:00:00+01:00', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d2));
-	assertEquals(-3600000, Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d2)).getTime());
+//	assertEquals('1970-01-01T00:00:00+01:00', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d2));
+	assertEquals(-3600000, Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d2)).getTime());
 	
-	var d3 = Jsonix.Schema.XSD.DateTime.INSTANCE.parse('1970-01-01T00:00:00-02:00');
+	var d3 = Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse('1970-01-01T00:00:00-02:00');
 	assertEquals(7200000, d3.getTime());
-	assertTrue(Jsonix.Schema.XSD.DateTime.INSTANCE.isInstance(d3));
-	assertEquals('1970-01-01T00:00:00-02:00', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d3));
-	assertEquals(7200000, Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d3)).getTime());
+	assertTrue(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.isInstance(d3));
+	assertEquals('1970-01-01T00:00:00-02:00', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d3));
+	assertEquals(7200000, Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d3)).getTime());
 	delete d3.originalTimezone;
-//	assertEquals('1970-01-01T00:00:00-02:00', Jsonix.Schema.XSD.DateTime.INSTANCE.print(d3));
-	assertEquals(7200000, Jsonix.Schema.XSD.DateTime.INSTANCE.parse(Jsonix.Schema.XSD.DateTime.INSTANCE.print(d3)).getTime());
+//	assertEquals('1970-01-01T00:00:00-02:00', Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d3));
+	assertEquals(7200000, Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.parse(Jsonix.Schema.XSD.DateTimeAsDate.INSTANCE.print(d3)).getTime());
 }
 function testSchemaXSDBase64Binary() {
 	var d0 = Jsonix.Schema.XSD.Base64Binary.INSTANCE.parse('');

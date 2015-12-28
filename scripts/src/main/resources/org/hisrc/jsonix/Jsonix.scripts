@@ -79,8 +79,11 @@
 /org/hisrc/jsonix/Jsonix/Schema/XSD/Calendar.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/Duration.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/DateTime.js
+/org/hisrc/jsonix/Jsonix/Schema/XSD/DateTimeAsDate.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/Time.js
+/org/hisrc/jsonix/Jsonix/Schema/XSD/TimeAsDate.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/Date.js
+/org/hisrc/jsonix/Jsonix/Schema/XSD/DateAsDate.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/GYearMonth.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/GYear.js
 /org/hisrc/jsonix/Jsonix/Schema/XSD/GMonthDay.js

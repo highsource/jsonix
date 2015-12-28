@@ -29,7 +29,7 @@ PO.PurchaseOrderType.properties = [ new Jsonix.Model.ElementPropertyInfo({
 	wrapperElementName : new Jsonix.XML.QName("items")
 }), new Jsonix.Model.AttributePropertyInfo({
 	name : "orderDate",
-	typeInfo : Jsonix.Schema.XSD.Date.INSTANCE
+	typeInfo : Jsonix.Schema.XSD.DateAsDate.INSTANCE
 }) ];
 //
 PO.USAddress.properties = [ new Jsonix.Model.ElementPropertyInfo({
@@ -69,7 +69,7 @@ PO.Item.properties = [ new Jsonix.Model.ElementPropertyInfo({
 	typeInfo : Jsonix.Schema.XSD.String.INSTANCE
 }), new Jsonix.Model.ElementPropertyInfo({
 	name : 'shipDate',
-	typeInfo : Jsonix.Schema.XSD.Date.INSTANCE
+	typeInfo : Jsonix.Schema.XSD.DateAsDate.INSTANCE
 }), new Jsonix.Model.AttributePropertyInfo({
 	name : 'partNum',
 	typeInfo : Jsonix.Schema.XSD.String.INSTANCE
