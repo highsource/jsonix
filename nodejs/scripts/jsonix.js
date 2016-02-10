@@ -2499,6 +2499,7 @@ Jsonix.Model.ClassInfo = Jsonix
 				}
 			},
 			addProperty : function(property) {
+				property.attachedToClass(this);
 				this.properties.push(property);
 				this.propertiesMap[property.name] = property;
 				return this;
@@ -2747,6 +2748,7 @@ Jsonix.Model.PropertyInfo = Jsonix.Class({
 		this.collection = col;
 		var rq = mapping.required || mapping.rq || false;
 		this.required = rq;
+		this.attachedTo = [];
 		if (this.collection) {
 			var mno;
 			if (Jsonix.Util.Type.isNumber(mapping.minOccurs)) {
@@ -2799,6 +2801,9 @@ Jsonix.Model.PropertyInfo = Jsonix.Class({
 				object[this.name] = value;
 			}
 		}
+	},
+	attachedToClass: function(cls) {
+		this.attachedTo.push(cls);
 	},
 	CLASS_NAME : 'Jsonix.Model.PropertyInfo'
 });
@@ -3102,7 +3107,7 @@ Jsonix.Model.ElementPropertyInfo = Jsonix.Class(Jsonix.Model.AbstractElementsPro
 		};
 	},
 	doBuild : function(context, module) {
-		this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
+		this.typeInfo = context.resolveTypeInfo(this.typeInfo, module, this.attachedTo);
 	},
 	buildStructureElements : function(context, structure) {
 		structure.elements[this.elementName.key] = this;
@@ -5891,29 +5896,54 @@ Jsonix.Context = Jsonix
 					this.typeNameKeyToTypeInfo[typeInfo.typeName.key] = typeInfo;
 				}
 			},
-			resolveTypeInfo : function(mapping, module) {
+			resolveTypeInfo : function(mapping, module, attachedTo) {
+				var self = this,
+						found,
+						typeInfoNames;
 				if (!Jsonix.Util.Type.exists(mapping)) {
 					return null;
 				} else if (mapping instanceof Jsonix.Model.TypeInfo) {
 					return mapping;
 				} else if (Jsonix.Util.Type.isString(mapping)) {
-					var typeInfoName;
+					typeInfoNames = [];
 					// If mapping starts with '.' consider it to be a local type name in this module
 					if (mapping.length > 0 && mapping.charAt(0) === '.')
 					{
 						var n = module.name || module.n || undefined;
 						Jsonix.Util.Ensure.ensureObject(module, 'Type info mapping can only be resolved if module is provided.');
 						Jsonix.Util.Ensure.ensureString(n, 'Type info mapping can only be resolved if module name is provided.');
-						typeInfoName = n + mapping;
+						typeInfoNames.push(n + mapping);
+						if(attachedTo instanceof Array) {
+							attachedTo.forEach(function(cls) {
+								if(cls.name.indexOf('.') === -1){
+									return;
+								}
+								var moduleName = cls.name.split('.')[0];
+								var name = moduleName + mapping;
+								// Don't add it twice
+								if(typeInfoNames.indexOf(name) !== -1){
+									return;
+								}
+								typeInfoNames.push(name);
+							});
+						}
 					}
 					else
 					{
-						typeInfoName = mapping;
+						typeInfoNames.push(mapping);
 					}
-					if (!this.typeInfos[typeInfoName]) {
-						throw new Error('Type info [' + typeInfoName + '] is not known in this context.');
+					found = typeInfoNames
+							.filter(function(typeInfoName) {
+								return !!self.typeInfos[typeInfoName];
+							})
+							.map(function(typeInfoName){
+								return self.typeInfos[typeInfoName];
+							});
+					if (!found.length) {
+						throw new Error('Type info [' + typeInfoNames[0] + '] is not known in this context.');
 					} else {
-						return this.typeInfos[typeInfoName];
+						// Return the first found
+						return found[0];
 					}
 				} else {
 					Jsonix.Util.Ensure.ensureObject(module, 'Type info mapping can only be resolved if module is provided.');
