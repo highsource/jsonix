@@ -1,0 +1,36 @@
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+  xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <artifactId>jsonix-typescript</artifactId>
+  <packaging>jar</packaging>
+  <name>Jsonix Typescript</name>
+  <parent>
+    <groupId>org.hisrc.jsonix</groupId>
+    <artifactId>jsonix-project</artifactId>
+    <version>2.4.2-SNAPSHOT</version>
+  </parent>
+  <build>
+    <resources>
+      <resource>
+        <directory>src/main/resources</directory>
+      </resource>
+      <resource>
+        <directory>src/main/typescript</directory>
+      </resource>
+      <resource>
+        <directory>src/main/java</directory>
+      </resource>
+    </resources>
+    <testResources>
+    <testResource>
+        <directory>src/test/java</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/resources</directory>
+      </testResource>
+      <testResource>
+        <directory>src/test/typescript</directory>
+      </testResource>
+    </testResources>
+  </build>
+</project>
