@@ -1,8 +1,9 @@
 package org.hisrc.jsonix.Model;
 
 import com.sun.org.apache.xml.internal.utils.Hashtree2Node;
+
 import org.hisrc.jsonix.Mapping.Styled;
-import org.hisrc.jsonix.Schema.XSD.QName;
+import org.hisrc.jsonix.Schema.XML.QName;
 
 import java.util.HashMap;
 import java.util.Properties;
@@ -21,11 +22,12 @@ public class ClassInfo extends TypeInfo implements Styled {
     QName typeName = null;
     Object instanceFactory = null;
     ElementPropertyInfo[] properties = null;
-    HashMap<String, ElementMapPropertyInfo> propertiesMap = null;
+    HashMap<String, ElementPropertyInfo> propertiesMap = null;
     Structure structure = null;
     String targetNamespace = "";
     String defaultElementNamespaceURI = "";
     String defaultAttributeNamespaceURI = "";
     boolean built = false;
+    Object propertyInfoCreators = null;
 
 }
