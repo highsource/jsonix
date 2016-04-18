@@ -1,16 +1,61 @@
+/**
+ * (description)
+ * 
+ * @interface Unmarshaller
+ */
 interface Unmarshaller {
+    /**
+     * (description)
+     * 
+     * @param {string} arg (description)
+     * @returns {Object} (description)
+     */
     unmarshalString(arg: string): Object;
+    /**
+     * (description)
+     * 
+     * @param {File} arg (description)
+     * @returns {Object} (description)
+     */
     unmarshalFile(arg: File): Object;
 }
+/**
+ * (description)
+ * 
+ * @interface Marshaller
+ */
 interface Marshaller {
 
 }
 
 declare module Jsonix {
     export class Context {
+        /**
+         * Creates an instance of Context.
+         * 
+         * @param {any[]} s (description)
+         */
         constructor(s: any[]);
+        /**
+         * (description)
+         * 
+         * @param {string} name (description)
+         * @returns {TypeInfo} (description)
+         */
         getTypeInfoByName(name: string): TypeInfo;
+        /**
+         * (description)
+         * 
+         * @param {string} typeName (description)
+         * @returns {TypeInfo} (description)
+         */
         getTypeInfoByTypeName(typeName: string): TypeInfo;
+        /**
+         * (description)
+         * 
+         * @param {string} typeNameKey (description)
+         * @returns {TypeInfo} (description)
+         */
         getTypeInfoByTypeNameKey(typeNameKey: string): TypeInfo;
         getElementInfo(name: string, scope: string): any;
         getSubstitutionMembers(name: string): any;
@@ -87,27 +132,47 @@ declare module Jsonix {
 }
 
 
+/**
+ * (description)
+ * 
+ * @interface Styled
+ */
 interface Styled {
     //{ CLASS_NAME: string },
     mappingStyle: Object;
 }
 
 //TODO: package Schema.XSD
+/**
+ * (description)
+ * 
+ * @interface QName
+ */
 interface QName {
-    key : string;
-    namespaceURI : string;
-    localPart : string;
-    prefix : string;
-    string : string;
+    key: string;
+    namespaceURI: string;
+    localPart: string;
+    prefix: string;
+    string: string;
 }
 
 //TODO: package mapping
+/**
+ * (description)
+ * 
+ * @interface TypeInfo
+ */
 interface TypeInfo {
     name: string,
     baseTypeInfo: TypeInfo,
 }
 
-interface PropertyInfo{
+/**
+ * (description)
+ * 
+ * @interface PropertyInfo
+ */
+interface PropertyInfo {
     name: string;
     collection: boolean;
     targetNamespace: string;
@@ -116,7 +181,13 @@ interface PropertyInfo{
     built: boolean;
 }
 
-interface AbstractElementPropertyInfo extends PropertyInfo{
+/**
+ * (description)
+ * 
+ * @interface AbstractElementPropertyInfo
+ * @extends {PropertyInfo}
+ */
+interface AbstractElementPropertyInfo extends PropertyInfo {
     wrapperElement: QName;
     allowDom: boolean;
     allowTypedObject; boolean;
@@ -124,14 +195,27 @@ interface AbstractElementPropertyInfo extends PropertyInfo{
 }
 
 
+/**
+ * (description)
+ * 
+ * @interface ElementPropertyInfo
+ * @extends {AbstractElementPropertyInfo}
+ */
 interface ElementPropertyInfo extends AbstractElementPropertyInfo {
     typeInfo: ClassInfo;
     elementName: QName;
 }
 
 
+/**
+ * (description)
+ * 
+ * @interface ClassInfo
+ * @extends {TypeInfo}
+ * @extends {Styled}
+ */
 interface ClassInfo extends TypeInfo, Styled {
-    localName:string;
+    localName: string;
     typeName: QName;
     instanceFactory: {};
     properties: { [index: number]: PropertyInfo };
@@ -150,24 +234,24 @@ interface ClassInfo extends TypeInfo, Styled {
     built: boolean,
     //TODO confirm this syntax
     propertyInfoCreators: {
-        aa : {aa};
-        anyAttribute : {aa},
-        ae :{ae};
-        anyElement :{ae};
-        a :{a};
-        attribute :{a};
-        em :{em};
-        elementMap :{em};
-        e :{e};
-        element :{e};
-        es :{es};
-        elements :{es};
-        er :{er};
-        elementRef :{er};
-        ers :{ers};
-        elementRefs :{ers};
-        v :{v};
-        value :{v}
+        aa: { aa };
+        anyAttribute: { aa },
+        ae: { ae };
+        anyElement: { ae };
+        a: { a };
+        attribute: { a };
+        em: { em };
+        elementMap: { em };
+        e: { e };
+        element: { e };
+        es: { es };
+        elements: { es };
+        er: { er };
+        elementRef: { er };
+        ers: { ers };
+        elementRefs: { ers };
+        v: { v };
+        value: { v }
     }
 
 
