@@ -7,3 +7,4 @@ target
 .idea
 /bin/
 *.iml
+rm_ide_settings.sh
