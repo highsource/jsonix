@@ -1,6 +1,8 @@
-package org.hisrc.jsonix.model;
+package org.hisrc.jsonix.Model;
 
-public class Module {
+import org.hisrc.jsonix.Mapping.Styled;
+
+public class Module implements Styled {
     Object name = null;
     Object typeInfos = null;
     Object elementInfos = null;

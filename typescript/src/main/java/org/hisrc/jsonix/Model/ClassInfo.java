@@ -1,6 +1,8 @@
-package org.hisrc.jsonix.model;
+package org.hisrc.jsonix.Model;
 
-public class ClassInfo extends TypeInfo {
+import org.hisrc.jsonix.Mapping.Styled;
+
+public class ClassInfo extends TypeInfo implements Styled{
     Object name = null;
     Object localName = null;
     Object typeName = null;
@@ -12,5 +14,5 @@ public class ClassInfo extends TypeInfo {
     String defaultElementNamespaceURI = "";
     String defaultAttributeNamespaceURI = "";
     boolean built = false;
-
+    
 }

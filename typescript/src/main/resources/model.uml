@@ -1,115 +1,180 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Diagram>
   <ID>JAVA</ID>
-  <OriginalElement>org.hisrc.jsonix.model</OriginalElement>
+  <OriginalElement>org.hisrc.jsonix.Model</OriginalElement>
   <nodes>
-    <node x="262.0" y="703.0">org.hisrc.jsonix.model.ClassInfo</node>
-    <node x="626.5" y="0.0">org.hisrc.jsonix.model.PropertyInfo</node>
-    <node x="0.0" y="426.0">org.hisrc.jsonix.model.ElementRefPropertyInfo</node>
-    <node x="222.0" y="426.0">org.hisrc.jsonix.model.ElementRefsPropertyInfo</node>
-    <node x="1140.75" y="225.0">org.hisrc.jsonix.model.AbstractElementsPropertyInfo</node>
-    <node x="54.53333333333342" y="225.0">org.hisrc.jsonix.model.AbstractElementRefsPropertyInfo</node>
-    <node x="0.0" y="763.0">org.hisrc.jsonix.model.EnumLeafInfo</node>
-    <node x="1453.75" y="426.0">org.hisrc.jsonix.model.ElementsPropertyInfo</node>
-    <node x="566.75" y="450.0">org.hisrc.jsonix.model.ValuePropertyInfo</node>
-    <node x="1170.75" y="402.0">org.hisrc.jsonix.model.ElementMapPropertyInfo</node>
-    <node x="745.75" y="438.0">org.hisrc.jsonix.model.AttributePropertyInfo</node>
-    <node x="397.5333333333334" y="237.0">org.hisrc.jsonix.model.AnyElementPropertyInfo</node>
-    <node x="641.5333333333334" y="261.0">org.hisrc.jsonix.model.SingleTypePropertyInfo</node>
-    <node x="1483.75" y="273.0">org.hisrc.jsonix.model.AnyAttributePropertyInfo</node>
-    <node x="0.0" y="1043.0">org.hisrc.jsonix.model.ElementInfo</node>
-    <node x="971.75" y="426.0">org.hisrc.jsonix.model.ElementPropertyInfo</node>
-    <node x="649.0" y="574.0">org.hisrc.jsonix.model.Module</node>
-    <node x="196.0" y="574.0">org.hisrc.jsonix.model.TypeInfo</node>
+    <node x="1315.6357843137255" y="500.0">org.hisrc.jsonix.Model.ValuePropertyInfo</node>
+    <node x="0.0" y="476.0">org.hisrc.jsonix.Model.ElementPropertyInfo</node>
+    <node x="199.0" y="476.0">org.hisrc.jsonix.Model.ElementsPropertyInfo</node>
+    <node x="0.0" y="813.0">org.hisrc.jsonix.Model.Module</node>
+    <node x="1190.6235294117646" y="0.0">org.hisrc.jsonix.Model.PropertyInfo</node>
+    <node x="823.6357843137255" y="476.0">org.hisrc.jsonix.Model.ElementRefPropertyInfo</node>
+    <node x="624.0" y="813.0">org.hisrc.jsonix.Model.EnumLeafInfo</node>
+    <node x="1045.6357843137255" y="476.0">org.hisrc.jsonix.Model.ElementRefsPropertyInfo</node>
+    <node x="1616.1446078431372" y="323.0">org.hisrc.jsonix.Model.AnyAttributePropertyInfo</node>
+    <node x="262.0" y="753.0">org.hisrc.jsonix.Model.ClassInfo</node>
+    <node x="469.0" y="452.0">org.hisrc.jsonix.Model.ElementMapPropertyInfo</node>
+    <node x="659.6357843137255" y="60.0">org.hisrc.jsonix.Binding.Unmashalls.Element</node>
+    <node x="285.91519607843134" y="275.0">org.hisrc.jsonix.Model.AbstractElementsPropertyInfo</node>
+    <node x="1400.1446078431372" y="311.0">org.hisrc.jsonix.Model.SingleTypePropertyInfo</node>
+    <node x="886.1357843137255" y="275.0">org.hisrc.jsonix.Model.AbstractElementRefsPropertyInfo</node>
+    <node x="138.75" y="636.0">org.hisrc.jsonix.Mapping.Styled</node>
+    <node x="642.1357843137255" y="287.0">org.hisrc.jsonix.Model.AnyElementPropertyInfo</node>
+    <node x="550.75" y="624.0">org.hisrc.jsonix.Model.TypeInfo</node>
+    <node x="0.0" y="1093.0">org.hisrc.jsonix.Model.ElementInfo</node>
+    <node x="192.38872549019607" y="60.0">org.hisrc.jsonix.Binding.Mashalls.Element</node>
+    <node x="1494.6357843137255" y="488.0">org.hisrc.jsonix.Model.AttributePropertyInfo</node>
   </nodes>
   <notes />
   <edges>
-    <edge source="org.hisrc.jsonix.model.ElementRefPropertyInfo" target="org.hisrc.jsonix.model.AbstractElementRefsPropertyInfo">
-      <point x="0.0" y="-39.5" />
-      <point x="101.0" y="377.0" />
-      <point x="135.28333333333342" y="377.0" />
-      <point x="-80.75" y="63.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.AttributePropertyInfo" target="org.hisrc.jsonix.model.SingleTypePropertyInfo">
+    <edge source="org.hisrc.jsonix.Model.AttributePropertyInfo" target="org.hisrc.jsonix.Model.SingleTypePropertyInfo">
       <point x="0.0" y="-27.5" />
-      <point x="848.75" y="377.0" />
-      <point x="788.5333333333334" y="377.0" />
+      <point x="1597.6357843137255" y="432.0" />
+      <point x="1547.1446078431372" y="432.0" />
       <point x="49.0" y="27.5" />
     </edge>
-    <edge source="org.hisrc.jsonix.model.ElementRefsPropertyInfo" target="org.hisrc.jsonix.model.AbstractElementRefsPropertyInfo">
-      <point x="0.0" y="-39.5" />
-      <point x="347.0" y="377.0" />
-      <point x="296.7833333333334" y="377.0" />
-      <point x="80.75" y="63.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.EnumLeafInfo" target="org.hisrc.jsonix.model.TypeInfo">
-      <point x="0.0" y="-87.5" />
-      <point x="121.0" y="678.0" />
-      <point x="236.5" y="678.0" />
-      <point x="-40.5" y="39.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.AnyElementPropertyInfo" target="org.hisrc.jsonix.model.PropertyInfo">
-      <point x="0.0" y="-51.5" />
-      <point x="509.5333333333334" y="205.0" />
-      <point x="699.1000000000001" y="205.0" />
-      <point x="-48.39999999999998" y="87.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.SingleTypePropertyInfo" target="org.hisrc.jsonix.model.PropertyInfo">
-      <point x="0.0" y="-27.5" />
-      <point x="739.5333333333334" y="205.0" />
-      <point x="747.5" y="205.0" />
-      <point x="0.0" y="87.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.AnyAttributePropertyInfo" target="org.hisrc.jsonix.model.PropertyInfo">
-      <point x="0.0" y="-15.5" />
-      <point x="1587.75" y="195.0" />
-      <point x="844.3000000000002" y="195.0" />
-      <point x="96.80000000000007" y="87.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.AbstractElementRefsPropertyInfo" target="org.hisrc.jsonix.model.PropertyInfo">
-      <point x="0.0" y="-63.5" />
-      <point x="216.03333333333342" y="195.0" />
-      <point x="650.7" y="195.0" />
-      <point x="-96.79999999999995" y="87.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.ElementPropertyInfo" target="org.hisrc.jsonix.model.AbstractElementsPropertyInfo">
-      <point x="0.0" y="-39.5" />
-      <point x="1061.25" y="377.0" />
-      <point x="1194.5833333333333" y="377.0" />
-      <point x="-107.66666666666674" y="63.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.ClassInfo" target="org.hisrc.jsonix.model.TypeInfo">
-      <point x="0.0" y="-147.5" />
-      <point x="433.0" y="678.0" />
-      <point x="317.5" y="678.0" />
-      <point x="40.5" y="39.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.ElementsPropertyInfo" target="org.hisrc.jsonix.model.AbstractElementsPropertyInfo">
-      <point x="0.0" y="-39.5" />
-      <point x="1578.75" y="377.0" />
-      <point x="1409.9166666666667" y="377.0" />
-      <point x="107.66666666666674" y="63.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.ValuePropertyInfo" target="org.hisrc.jsonix.model.SingleTypePropertyInfo">
-      <point x="0.0" y="-15.5" />
-      <point x="646.25" y="377.0" />
-      <point x="690.5333333333334" y="377.0" />
-      <point x="-49.0" y="27.5" />
-    </edge>
-    <edge source="org.hisrc.jsonix.model.ElementMapPropertyInfo" target="org.hisrc.jsonix.model.AbstractElementsPropertyInfo">
-      <point x="0.0" y="-63.5" />
+    <edge source="org.hisrc.jsonix.Model.ElementsPropertyInfo" target="org.hisrc.jsonix.Model.AbstractElementsPropertyInfo">
+      <point x="62.5" y="-39.5" />
+      <point x="386.5" y="432.0" />
+      <point x="447.41519607843134" y="432.0" />
       <point x="0.0" y="63.5" />
     </edge>
-    <edge source="org.hisrc.jsonix.model.AbstractElementsPropertyInfo" target="org.hisrc.jsonix.model.PropertyInfo">
-      <point x="0.0" y="-63.5" />
-      <point x="1302.25" y="205.0" />
-      <point x="795.9000000000001" y="205.0" />
+    <edge source="org.hisrc.jsonix.Model.AbstractElementsPropertyInfo" target="org.hisrc.jsonix.Model.PropertyInfo">
+      <point x="107.66666666666674" y="-63.5" />
+      <point x="555.0818627450981" y="235.0" />
+      <point x="1214.8235294117646" y="235.0" />
+      <point x="-96.79999999999995" y="87.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AbstractElementRefsPropertyInfo" target="org.hisrc.jsonix.Model.PropertyInfo">
+      <point x="107.66666666666663" y="-63.5" />
+      <point x="1155.302450980392" y="255.0" />
+      <point x="1311.6235294117646" y="255.0" />
+      <point x="0.0" y="87.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AnyElementPropertyInfo" target="org.hisrc.jsonix.Binding.Unmashalls.Element">
+      <point x="-1.4210854715202004E-14" y="-51.5" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ClassInfo" target="org.hisrc.jsonix.Model.TypeInfo">
+      <point x="85.5" y="-147.5" />
+      <point x="518.5" y="728.0" />
+      <point x="591.25" y="728.0" />
+      <point x="-40.5" y="39.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.SingleTypePropertyInfo" target="org.hisrc.jsonix.Model.PropertyInfo">
+      <point x="0.0" y="-27.5" />
+      <point x="1498.1446078431372" y="255.0" />
+      <point x="1360.0235294117647" y="255.0" />
       <point x="48.40000000000009" y="87.5" />
     </edge>
+    <edge source="org.hisrc.jsonix.Model.ElementsPropertyInfo" target="org.hisrc.jsonix.Binding.Mashalls.Element">
+      <point x="-62.5" y="-39.5" />
+      <point x="261.5" y="422.0" />
+      <point x="251.57352941176464" y="422.0" />
+      <point x="251.57352941176464" y="255.0" />
+      <point x="249.0887254901961" y="255.0" />
+      <point x="-37.799999999999955" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ElementPropertyInfo" target="org.hisrc.jsonix.Binding.Mashalls.Element">
+      <point x="-44.75" y="-39.5" />
+      <point x="44.75" y="255.0" />
+      <point x="211.28872549019604" y="255.0" />
+      <point x="-75.60000000000002" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ValuePropertyInfo" target="org.hisrc.jsonix.Model.SingleTypePropertyInfo">
+      <point x="0.0" y="-15.5" />
+      <point x="1395.1357843137255" y="432.0" />
+      <point x="1449.1446078431372" y="432.0" />
+      <point x="-49.0" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ElementPropertyInfo" target="org.hisrc.jsonix.Model.AbstractElementsPropertyInfo">
+      <point x="44.75" y="-39.5" />
+      <point x="134.25" y="432.0" />
+      <point x="339.7485294117646" y="432.0" />
+      <point x="-107.66666666666674" y="63.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AbstractElementRefsPropertyInfo" target="org.hisrc.jsonix.Binding.Mashalls.Element">
+      <point x="-107.66666666666669" y="-63.5" />
+      <point x="939.9691176470587" y="205.0" />
+      <point x="362.4887254901961" y="205.0" />
+      <point x="75.60000000000002" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AbstractElementsPropertyInfo" target="org.hisrc.jsonix.Binding.Mashalls.Element">
+      <point x="-107.66666666666674" y="-63.5" />
+      <point x="339.7485294117646" y="255.0" />
+      <point x="286.88872549019607" y="255.0" />
+      <point x="0.0" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AnyElementPropertyInfo" target="org.hisrc.jsonix.Model.PropertyInfo">
+      <point x="74.66666666666669" y="-51.5" />
+      <point x="828.8024509803921" y="245.0" />
+      <point x="1263.2235294117645" y="245.0" />
+      <point x="-48.39999999999998" y="87.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ElementRefPropertyInfo" target="org.hisrc.jsonix.Model.AbstractElementRefsPropertyInfo">
+      <point x="0.0" y="-39.5" />
+      <point x="924.6357843137255" y="432.0" />
+      <point x="966.8857843137255" y="432.0" />
+      <point x="-80.75" y="63.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ElementRefsPropertyInfo" target="org.hisrc.jsonix.Model.AbstractElementRefsPropertyInfo">
+      <point x="0.0" y="-39.5" />
+      <point x="1170.6357843137255" y="432.0" />
+      <point x="1128.3857843137255" y="432.0" />
+      <point x="80.75" y="63.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ElementMapPropertyInfo" target="org.hisrc.jsonix.Model.AbstractElementsPropertyInfo">
+      <point x="0.0" y="-63.5" />
+      <point x="600.5" y="432.0" />
+      <point x="555.0818627450981" y="432.0" />
+      <point x="107.66666666666674" y="63.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.ClassInfo" target="org.hisrc.jsonix.Mapping.Styled">
+      <point x="-85.5" y="-147.5" />
+      <point x="347.5" y="728.0" />
+      <point x="281.99999999999994" y="728.0" />
+      <point x="47.74999999999994" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AbstractElementRefsPropertyInfo" target="org.hisrc.jsonix.Binding.Unmashalls.Element">
+      <point x="0.0" y="-63.5" />
+      <point x="1047.6357843137255" y="195.0" />
+      <point x="817.1357843137255" y="195.0" />
+      <point x="63.0" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.EnumLeafInfo" target="org.hisrc.jsonix.Model.TypeInfo">
+      <point x="0.0" y="-87.5" />
+      <point x="745.0" y="728.0" />
+      <point x="672.25" y="728.0" />
+      <point x="40.5" y="39.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.Module" target="org.hisrc.jsonix.Mapping.Styled">
+      <point x="0.0" y="-87.5" />
+      <point x="121.0" y="728.0" />
+      <point x="186.5" y="728.0" />
+      <point x="-47.75" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AnyAttributePropertyInfo" target="org.hisrc.jsonix.Model.PropertyInfo">
+      <point x="0.0" y="-15.5" />
+      <point x="1720.1446078431372" y="245.0" />
+      <point x="1408.4235294117645" y="245.0" />
+      <point x="96.80000000000007" y="87.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AnyElementPropertyInfo" target="org.hisrc.jsonix.Binding.Mashalls.Element">
+      <point x="-74.66666666666669" y="-51.5" />
+      <point x="679.4691176470587" y="215.0" />
+      <point x="324.6887254901961" y="215.0" />
+      <point x="37.80000000000001" y="27.5" />
+    </edge>
+    <edge source="org.hisrc.jsonix.Model.AbstractElementsPropertyInfo" target="org.hisrc.jsonix.Binding.Unmashalls.Element">
+      <point x="0.0" y="-63.5" />
+      <point x="447.41519607843134" y="225.0" />
+      <point x="691.1357843137255" y="225.0" />
+      <point x="-63.0" y="27.5" />
+    </edge>
   </edges>
-  <settings layout="Hierarchic Group" zoom="0.742998352553542" x="852.0" y="597.0" />
+  <settings layout="Hierarchic Group" zoom="0.7136075949367089" x="912.6119733924612" y="502.0" />
   <SelectedNodes>
-    <node>org.hisrc.jsonix.model.ValuePropertyInfo</node>
+    <node>org.hisrc.jsonix.Model.AttributePropertyInfo</node>
   </SelectedNodes>
   <Categories>
     <Category>Fields</Category>

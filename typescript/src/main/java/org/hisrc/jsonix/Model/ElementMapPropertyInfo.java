@@ -1,4 +1,4 @@
-package org.hisrc.jsonix.model;
+package org.hisrc.jsonix.Model;
 
 public class ElementMapPropertyInfo extends AbstractElementsPropertyInfo {
     Object elementName = null;

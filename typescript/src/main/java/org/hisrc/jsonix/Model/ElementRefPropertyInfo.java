@@ -1,4 +1,4 @@
-package org.hisrc.jsonix.model;
+package org.hisrc.jsonix.Model;
 
 public class ElementRefPropertyInfo extends AbstractElementRefsPropertyInfo {
     String typeInfo = "String";
