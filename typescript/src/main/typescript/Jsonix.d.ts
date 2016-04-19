@@ -126,7 +126,7 @@ declare module Jsonix {
 
 
         // private
-        typeInfos: ClassInfo[];
+        elementInfos: ClassInfo[];
 
     }
 }
@@ -202,7 +202,7 @@ interface AbstractElementPropertyInfo extends PropertyInfo {
  * @extends {AbstractElementPropertyInfo}
  */
 interface ElementPropertyInfo extends AbstractElementPropertyInfo {
-    typeInfo: ClassInfo;
+    typeInfo: ClassInfo | string;
     elementName: QName;
 }
 
@@ -232,7 +232,7 @@ interface ClassInfo extends TypeInfo, Styled {
     defaultElementNamespaceURI: string,
     defaultAttributeNamespaceURI: string
     built: boolean,
-    //TODO confirm this syntax
+    //TODO: confirm this syntax
     propertyInfoCreators: {
         aa: { aa };
         anyAttribute: { aa },
