@@ -1,69 +1,113 @@
 /**
  * (description)
- * 
+ *
  * @interface Unmarshaller
  */
-interface Unmarshaller {
+interface Unmarshaller {  //TODO: <T> @see createUnmarshaller
     /**
      * (description)
-     * 
+     *
      * @param {string} arg (description)
      * @returns {Object} (description)
      */
     unmarshalString(arg: string): Object;
+
     /**
      * (description)
      * 
-     * @param {File} arg (description)
+     * @param {string} fileName (description)
+     * @param {(unmarshalled:Object)=> void} callback (description)
+     * @param {Object} options (description)
+     */
+    unmarshalFile(fileName: string, callback: (unmarshalled: Object) => void, options: Object): void;
+
+
+    /**
+     * (description)
+     * 
+     * @param {string} url (description)
+     * @param {(unmarshalled:Object)=> void} callback (description)
+     * @param {Object} options (description)
+     */
+    unmarshalURL(url: string, callback: (unmarshalled: Object) => void, options: Object): void;
+
+    /**
+     * (description)
+     * 
+     * @param {Element} doc (description)
+     * @param {string} scope (description)
      * @returns {Object} (description)
      */
-    unmarshalFile(arg: File): Object;
+    unmarshalDocument(doc: Element, scope: string): Object;
 }
 /**
  * (description)
- * 
+ *
  * @interface Marshaller
  */
-interface Marshaller {
+interface Marshaller { // TODO: generics like marshalString(object:T):string;
+    /**
+     * (description)
+     * 
+     * @param {Object} object (description)
+     * @returns {string} (description)
+     */
+    marshalString(object: Object): string;
 
+    /**
+     * (description)
+     * 
+     * @param {Object} object (description)
+     * @returns {Element} (description)
+     */
+    marshalDocument(object: Object): Element;
 }
 
 declare module Jsonix {
     export class Context {
         /**
          * Creates an instance of Context.
-         * 
+         *
          * @param {any[]} s (description)
          */
         constructor(s: any[]);
+
         /**
          * (description)
-         * 
+         *
          * @param {string} name (description)
          * @returns {TypeInfo} (description)
          */
         getTypeInfoByName(name: string): TypeInfo;
+
         /**
          * (description)
-         * 
+         *
          * @param {string} typeName (description)
          * @returns {TypeInfo} (description)
          */
         getTypeInfoByTypeName(typeName: string): TypeInfo;
+
         /**
          * (description)
-         * 
+         *
          * @param {string} typeNameKey (description)
          * @returns {TypeInfo} (description)
          */
         getTypeInfoByTypeNameKey(typeNameKey: string): TypeInfo;
+
         getElementInfo(name: string, scope: string): any;
+
         getSubstitutionMembers(name: string): any;
 
         createMarshaller(): Marshaller;
+
         createUnmarshaller(): Unmarshaller;
 
+        //TODO: createUnmarshaller<T>(type: T): Unmarshaller<T>;
+
         getNamespaceURI(prefix: string): any;
+
         getPrefix(namespaceURI: string, defaultPrefix: string): any;
 
         builtinTypeInfos: {
@@ -134,7 +178,7 @@ declare module Jsonix {
 
 /**
  * (description)
- * 
+ *
  * @interface Styled
  */
 interface Styled {
@@ -145,7 +189,7 @@ interface Styled {
 //TODO: package Schema.XSD
 /**
  * (description)
- * 
+ *
  * @interface QName
  */
 interface QName {
@@ -159,7 +203,7 @@ interface QName {
 //TODO: package mapping
 /**
  * (description)
- * 
+ *
  * @interface TypeInfo
  */
 interface TypeInfo {
@@ -169,7 +213,7 @@ interface TypeInfo {
 
 /**
  * (description)
- * 
+ *
  * @interface PropertyInfo
  */
 interface PropertyInfo {
@@ -183,7 +227,7 @@ interface PropertyInfo {
 
 /**
  * (description)
- * 
+ *
  * @interface AbstractElementPropertyInfo
  * @extends {PropertyInfo}
  */
@@ -197,7 +241,7 @@ interface AbstractElementPropertyInfo extends PropertyInfo {
 
 /**
  * (description)
- * 
+ *
  * @interface ElementPropertyInfo
  * @extends {AbstractElementPropertyInfo}
  */
@@ -209,7 +253,7 @@ interface ElementPropertyInfo extends AbstractElementPropertyInfo {
 
 /**
  * (description)
- * 
+ *
  * @interface ClassInfo
  * @extends {TypeInfo}
  * @extends {Styled}
@@ -253,6 +297,5 @@ interface ClassInfo extends TypeInfo, Styled {
         v: { v };
         value: { v }
     }
-
 
 }
