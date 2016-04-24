@@ -6,3 +6,6 @@ target
 *~
 .idea
 /bin/
+*.iml
+.classpath
+rm_ide_settings.sh

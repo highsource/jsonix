@@ -47,6 +47,7 @@
 	<modules>
 		<module>scripts</module>
 		<module>nodejs</module>
+		<module>typescript</module>
 	</modules>
 	<profiles>
 		<profile>
