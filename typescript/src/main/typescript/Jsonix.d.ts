@@ -114,55 +114,55 @@ declare module Jsonix {
             Jsonix: {
                 Schema: {
                     XSD: {
-                        AnyType: { INSTANCE: {} },
-                        AnySimpleType: { INSTANCE: {} },
-                        AnyURI: { INSTANCE: {} },
-                        Base64Binary: { INSTANCE: {} },
-                        Boolean: { INSTANCE: {} },
-                        Byte: { INSTANCE: {} },
-                        Calendar: { INSTANCE: {} },
-                        DateAsDate: { INSTANCE: {} },
-                        Date: { INSTANCE: {} },
-                        DateTimeAsDate: { INSTANCE: {} },
-                        DateTime: { INSTANCE: {} },
-                        Decimal: { INSTANCE: {} },
-                        Double: { INSTANCE: {} },
-                        Duration: { INSTANCE: {} },
-                        Float: { INSTANCE: {} },
-                        GDay: { INSTANCE: {} },
-                        GMonth: { INSTANCE: {} },
-                        GMonthDay: { INSTANCE: {} },
-                        GYear: { INSTANCE: {} },
-                        GYearMonth: { INSTANCE: {} },
-                        HexBinary: { INSTANCE: {} },
-                        ID: { INSTANCE: {} },
-                        IDREF: { INSTANCE: {} },
-                        IDREFS: { INSTANCE: {} },
-                        Int: { INSTANCE: {} },
-                        Integer: { INSTANCE: {} },
-                        Language: { INSTANCE: {} },
-                        Long: { INSTANCE: {} },
-                        Name: { INSTANCE: {} },
-                        NCName: { INSTANCE: {} },
-                        NegativeInteger: { INSTANCE: {} },
-                        NMToken: { INSTANCE: {} },
-                        NMTokens: { INSTANCE: {} },
-                        NonNegativeInteger: { INSTANCE: {} },
-                        NonPositiveInteger: { INSTANCE: {} },
-                        NormalizedString: { INSTANCE: {} },
-                        Number: { INSTANCE: {} },
-                        PositiveInteger: { INSTANCE: {} },
-                        QName: { INSTANCE: {} },
-                        Short: { INSTANCE: {} },
-                        String: { INSTANCE: {} },
-                        Strings: { INSTANCE: {} },
-                        TimeAsDate: { INSTANCE: {} },
-                        Time: { INSTANCE: {} },
-                        Token: { INSTANCE: {} },
-                        UnsignedByte: { INSTANCE: {} },
-                        UnsignedInt: { INSTANCE: {} },
-                        UnsignedLong: { INSTANCE: {} },
-                        UnsignedShort: { INSTANCE: {} },
+                        AnyType: { INSTANCE: {} };
+                        AnySimpleType: { INSTANCE: {} };
+                        AnyURI: { INSTANCE: {} };
+                        Base64Binary: { INSTANCE: {} };
+                        Boolean: { INSTANCE: {} };
+                        Byte: { INSTANCE: {} };
+                        Calendar: { INSTANCE: {} };
+                        DateAsDate: { INSTANCE: {} };
+                        Date: { INSTANCE: {} };
+                        DateTimeAsDate: { INSTANCE: {} };
+                        DateTime: { INSTANCE: {} };
+                        Decimal: { INSTANCE: {} };
+                        Double: { INSTANCE: {} };
+                        Duration: { INSTANCE: {} };
+                        Float: { INSTANCE: {} };
+                        GDay: { INSTANCE: {} };
+                        GMonth: { INSTANCE: {} };
+                        GMonthDay: { INSTANCE: {} };
+                        GYear: { INSTANCE: {} };
+                        GYearMonth: { INSTANCE: {} };
+                        HexBinary: { INSTANCE: {} };
+                        ID: { INSTANCE: {} };
+                        IDREF: { INSTANCE: {} };
+                        IDREFS: { INSTANCE: {} };
+                        Int: { INSTANCE: {} };
+                        Integer: { INSTANCE: {} };
+                        Language: { INSTANCE: {} };
+                        Long: { INSTANCE: {} };
+                        Name: { INSTANCE: {} };
+                        NCName: { INSTANCE: {} };
+                        NegativeInteger: { INSTANCE: {} };
+                        NMToken: { INSTANCE: {} };
+                        NMTokens: { INSTANCE: {} };
+                        NonNegativeInteger: { INSTANCE: {} };
+                        NonPositiveInteger: { INSTANCE: {} };
+                        NormalizedString: { INSTANCE: {} };
+                        Number: { INSTANCE: {} };
+                        PositiveInteger: { INSTANCE: {} };
+                        QName: { INSTANCE: {} };
+                        Short: { INSTANCE: {} };
+                        String: { INSTANCE: {} };
+                        Strings: { INSTANCE: {} };
+                        TimeAsDate: { INSTANCE: {} };
+                        Time: { INSTANCE: {} };
+                        Token: { INSTANCE: {} };
+                        UnsignedByte: { INSTANCE: {} };
+                        UnsignedInt: { INSTANCE: {} };
+                        UnsignedLong: { INSTANCE: {} };
+                        UnsignedShort: { INSTANCE: {} };
                     }
                 }
             }
@@ -182,7 +182,7 @@ declare module Jsonix {
  * @interface Styled
  */
 interface Styled {
-    //{ CLASS_NAME: string },
+    //{ CLASS_NAME: string };
     mappingStyle: Object;
 }
 
@@ -207,8 +207,8 @@ interface QName {
  * @interface TypeInfo
  */
 interface TypeInfo {
-    name: string,
-    baseTypeInfo: TypeInfo,
+    name: string;
+    baseTypeInfo: TypeInfo;
 }
 
 /**
@@ -218,12 +218,12 @@ interface TypeInfo {
  * @extends {TypeInfo}
  */
 interface EnumLeafInfo extends TypeInfo {
-    name: string,
-    baseTypeInfo: TypeInfo,
-    entries: { [name: string]: string },
-    keys: { [index: number]: string },
-    values: { [index: number]: string },
-    built: boolean
+    name: string;
+    baseTypeInfo: TypeInfo;
+    entries: { [name: string]: string };
+    keys: { [index: number]: string };
+    values: { [index: number]: string };
+    built: boolean;
 
 }
 
@@ -283,20 +283,20 @@ interface ClassInfo extends TypeInfo, Styled {
     propertiesMap: { [name: string]: PropertyInfo };
     //is inner class
     structure: {
-        elements: { [fqn: string]: PropertyInfo },
-        attributes: {},
-        anyAttribute: {},
-        value: {},
+        elements: { [fqn: string]: PropertyInfo };
+        attributes: {};
+        anyAttribute: {};
+        value: {};
         any: {}
     };
-    targetNamespace: string,
-    defaultElementNamespaceURI: string,
+    targetNamespace: string;
+    defaultElementNamespaceURI: string;
     defaultAttributeNamespaceURI: string
-    built: boolean,
+    built: boolean;
     //TODO: confirm this syntax
     propertyInfoCreators: {
         aa: { aa };
-        anyAttribute: { aa },
+        anyAttribute: { aa };
         ae: { ae };
         anyElement: { ae };
         a: { a };
