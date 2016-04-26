@@ -10,35 +10,35 @@ interface Unmarshaller {  //TODO: <T> @see createUnmarshaller
      * @param {string} arg (description)
      * @returns {Object} (description)
      */
-    unmarshalString(arg: string): Object;
+    unmarshalString(arg:string): Object;
 
     /**
      * (description)
-     * 
+     *
      * @param {string} fileName (description)
      * @param {(unmarshalled:Object)=> void} callback (description)
      * @param {Object} options (description)
      */
-    unmarshalFile(fileName: string, callback: (unmarshalled: Object) => void, options: Object): void;
+    unmarshalFile(fileName:string, callback:(unmarshalled:Object) => void, options:Object): void;
 
 
     /**
      * (description)
-     * 
+     *
      * @param {string} url (description)
      * @param {(unmarshalled:Object)=> void} callback (description)
      * @param {Object} options (description)
      */
-    unmarshalURL(url: string, callback: (unmarshalled: Object) => void, options: Object): void;
+    unmarshalURL(url:string, callback:(unmarshalled:Object) => void, options:Object): void;
 
     /**
      * (description)
-     * 
+     *
      * @param {Element} doc (description)
      * @param {string} scope (description)
      * @returns {Object} (description)
      */
-    unmarshalDocument(doc: Element, scope: string): Object;
+    unmarshalDocument(doc:Element, scope:string): Object;
 }
 /**
  * (description)
@@ -48,19 +48,19 @@ interface Unmarshaller {  //TODO: <T> @see createUnmarshaller
 interface Marshaller { // TODO: generics like marshalString(object:T):string;
     /**
      * (description)
-     * 
+     *
      * @param {Object} object (description)
      * @returns {string} (description)
      */
-    marshalString(object: Object): string;
+    marshalString(object:Object): string;
 
     /**
      * (description)
-     * 
+     *
      * @param {Object} object (description)
      * @returns {Element} (description)
      */
-    marshalDocument(object: Object): Element;
+    marshalDocument(object:Object): Element;
 }
 
 declare module Jsonix {
@@ -70,7 +70,7 @@ declare module Jsonix {
          *
          * @param {any[]} s (description)
          */
-        constructor(s: any[]);
+        constructor(s:any[]);
 
         /**
          * (description)
@@ -78,7 +78,7 @@ declare module Jsonix {
          * @param {string} name (description)
          * @returns {TypeInfo} (description)
          */
-        getTypeInfoByName(name: string): TypeInfo;
+        getTypeInfoByName(name:string):TypeInfo;
 
         /**
          * (description)
@@ -86,7 +86,7 @@ declare module Jsonix {
          * @param {string} typeName (description)
          * @returns {TypeInfo} (description)
          */
-        getTypeInfoByTypeName(typeName: string): TypeInfo;
+        getTypeInfoByTypeName(typeName:string):TypeInfo;
 
         /**
          * (description)
@@ -94,23 +94,23 @@ declare module Jsonix {
          * @param {string} typeNameKey (description)
          * @returns {TypeInfo} (description)
          */
-        getTypeInfoByTypeNameKey(typeNameKey: string): TypeInfo;
+        getTypeInfoByTypeNameKey(typeNameKey:string):TypeInfo;
 
-        getElementInfo(name: string, scope: string): any;
+        getElementInfo(name:string, scope:string):any;
 
-        getSubstitutionMembers(name: string): any;
+        getSubstitutionMembers(name:string):any;
 
-        createMarshaller(): Marshaller;
+        createMarshaller():Marshaller;
 
-        createUnmarshaller(): Unmarshaller;
+        createUnmarshaller():Unmarshaller;
 
         //TODO: createUnmarshaller<T>(type: T): Unmarshaller<T>;
 
-        getNamespaceURI(prefix: string): any;
+        getNamespaceURI(prefix:string):any;
 
-        getPrefix(namespaceURI: string, defaultPrefix: string): any;
+        getPrefix(namespaceURI:string, defaultPrefix:string):any;
 
-        builtinTypeInfos: {
+        builtinTypeInfos:{
             Jsonix: {
                 Schema: {
                     XSD: {
@@ -170,7 +170,7 @@ declare module Jsonix {
 
 
         // private
-        elementInfos: ClassInfo[];
+        elementInfos:ClassInfo[];
 
     }
 }
@@ -210,6 +210,23 @@ interface TypeInfo {
     name: string,
     baseTypeInfo: TypeInfo,
 }
+
+/**
+ * (description)
+ * 
+ * @interface EnumLeafInfo
+ * @extends {TypeInfo}
+ */
+interface EnumLeafInfo extends TypeInfo {
+    name: string,
+    baseTypeInfo: TypeInfo,
+    entries: { [name: string]: string },
+    keys: { [index: number]: string },
+    values: { [index: number]: string },
+    built: boolean
+
+}
+
 
 /**
  * (description)
