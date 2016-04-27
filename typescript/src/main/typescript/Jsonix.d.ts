@@ -265,7 +265,7 @@ interface AbstractElementPropertyInfo extends PropertyInfo {
  * @extends {AbstractElementPropertyInfo}
  */
 interface ElementPropertyInfo extends AbstractElementPropertyInfo {
-    typeInfo: ClassInfo | string;
+    typeInfo: TypeInfo | string;
     elementName: QName;
 }
 
