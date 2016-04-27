@@ -182,7 +182,7 @@ declare module Jsonix {
  * @interface Styled
  */
 interface Styled {
-    //{ CLASS_NAME: string };
+    CLASS_NAME: string;
     mappingStyle: Object;
 }
 
@@ -193,6 +193,7 @@ interface Styled {
  * @interface QName
  */
 interface QName {
+    CLASS_NAME: string;
     key: string;
     namespaceURI: string;
     localPart: string;
@@ -213,7 +214,7 @@ interface TypeInfo {
 
 /**
  * (description)
- * 
+ *
  * @interface EnumLeafInfo
  * @extends {TypeInfo}
  */
@@ -234,6 +235,7 @@ interface EnumLeafInfo extends TypeInfo {
  * @interface PropertyInfo
  */
 interface PropertyInfo {
+    CLASS_NAME: string;
     name: string;
     collection: boolean;
     targetNamespace: string;
@@ -276,6 +278,7 @@ interface ElementPropertyInfo extends AbstractElementPropertyInfo {
  * @extends {Styled}
  */
 interface ClassInfo extends TypeInfo, Styled {
+    CLASS_NAME: string;
     localName: string;
     typeName: QName;
     instanceFactory: {};
