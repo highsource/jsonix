@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8" standalone="no"?>
+<xs:schema xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns="gh:141" targetNamespace="gh:141"
+  vc:minVersion="1.1" xmlns:vc="http://www.w3.org/2007/XMLSchema-versioning">
+  <xs:element name="durationTest">
+    <xs:complexType>
+      <xs:sequence>
+        <xs:element name="d" type="xs:duration"> </xs:element>
+      </xs:sequence>
+    </xs:complexType>
+  </xs:element>
+</xs:schema>
