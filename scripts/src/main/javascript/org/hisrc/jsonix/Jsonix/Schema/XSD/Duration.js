@@ -59,25 +59,25 @@ Jsonix.Schema.XSD.Duration = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			result += '-';
 		}
 		result += 'P';
-		if (value.years) {
+		if (Jsonix.Util.Type.exists(value.years)) {
 			result += (value.years + 'Y');
 		}
-		if (value.months) {
+		if (Jsonix.Util.Type.exists(value.months)) {
 			result += (value.months + 'M');
 		}
-		if (value.days) {
+		if (Jsonix.Util.Type.exists(value.days)) {
 			result += (value.days + 'D');
 		}
-		if (value.hours || value.minutes || value.seconds)
+		if (Jsonix.Util.Type.exists(value.hours) || Jsonix.Util.Type.exists(value.minutes) || Jsonix.Util.Type.exists(value.seconds))
 		{
 			result += 'T';
-			if (value.hours) {
+			if (Jsonix.Util.Type.exists(value.hours)) {
 				result += (value.hours + 'H');
 			}
-			if (value.minutes) {
+			if (Jsonix.Util.Type.exists(value.minutes)) {
 				result += (value.minutes + 'M');
 			}
-			if (value.seconds) {
+			if (Jsonix.Util.Type.exists(value.seconds)) {
 				result += (value.seconds + 'S');
 			}
 		}
