@@ -13,6 +13,8 @@ Jsonix advantages:
 
 See also the other [Jsonix features](#jsonix-features).
 
+For publish jsonix NPM [package.json](./nodejs/scripts/package.json)
+
 ## Example
 
 Here's a working example for the [purchase order schema](http://www.w3.org/TR/xmlschema-0/#po.xsd) (try it [online in JSFiddle](http://jsfiddle.net/lexi/LP3DC/)).
