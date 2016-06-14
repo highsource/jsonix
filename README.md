@@ -13,8 +13,6 @@ Jsonix advantages:
 
 See also the other [Jsonix features](#jsonix-features).
 
-For publish jsonix NPM [package.json](./nodejs/scripts/package.json)
-
 ## Example
 
 Here's a working example for the [purchase order schema](http://www.w3.org/TR/xmlschema-0/#po.xsd) (try it [online in JSFiddle](http://jsfiddle.net/lexi/LP3DC/)).
@@ -89,7 +87,7 @@ You can also `marshalString`.
 ## Jsonix Features
 
 * Runs in almost any modern browser
-* Runs in [Node.js](http://nodejs.org/)
+* Runs in [Node.js](http://nodejs.org/), `package.json` can be found [here](./nodejs/scripts/package.json)
 * Runs with CommonJS modules, AMD modules as well as vanilla (globals, without any module loader)
 * Bidirectional (XML -> JS as well as JS -> XML)
 * Implements *marshalling* (serializing the JavaScript object into XML)
