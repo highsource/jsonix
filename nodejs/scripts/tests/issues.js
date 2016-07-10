@@ -9,6 +9,7 @@ module.exports = {
 		"GH83" : require('./GH83/GH83'),
 		"GH96" : require('./GH96/GH96'),
 		"GH111" : require('./GH111/GH111'),
+		"GH135" : require('./GH135/GH135'),
 		"GH141" : require('./GH141/GH141')
 	}
 };
