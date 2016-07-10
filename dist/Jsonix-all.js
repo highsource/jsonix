@@ -5877,11 +5877,11 @@ Jsonix.Context = Jsonix
 				}
 				for (index = 0; index < this.modules.length; index++) {
 					module = this.modules[index];
-					module.buildTypeInfos(this);
+					module.registerElementInfos(this);
 				}
 				for (index = 0; index < this.modules.length; index++) {
 					module = this.modules[index];
-					module.registerElementInfos(this);
+					module.buildTypeInfos(this);
 				}
 				for (index = 0; index < this.modules.length; index++) {
 					module = this.modules[index];

@@ -2384,11 +2384,11 @@ c.registerTypeInfos(this)
 }for(d=0;
 d<this.modules.length;
 d++){c=this.modules[d];
-c.buildTypeInfos(this)
+c.registerElementInfos(this)
 }for(d=0;
 d<this.modules.length;
 d++){c=this.modules[d];
-c.registerElementInfos(this)
+c.buildTypeInfos(this)
 }for(d=0;
 d<this.modules.length;
 d++){c=this.modules[d];
