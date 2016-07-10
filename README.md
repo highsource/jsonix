@@ -87,7 +87,7 @@ You can also `marshalString`.
 ## Jsonix Features
 
 * Runs in almost any modern browser
-* Runs in [Node.js](http://nodejs.org/)
+* Runs in [Node.js](http://nodejs.org/), `package.json` can be found [here](./nodejs/scripts/package.json)
 * Runs with CommonJS modules, AMD modules as well as vanilla (globals, without any module loader)
 * Bidirectional (XML -> JS as well as JS -> XML)
 * Implements *marshalling* (serializing the JavaScript object into XML)
