@@ -2108,6 +2108,7 @@ Jsonix.Binding.Unmarshaller.Simplified = Jsonix.Class(Jsonix.Binding.Unmarshalle
 	CLASS_NAME : 'Jsonix.Binding.Unmarshaller.Simplified'
 });
 Jsonix.Model.TypeInfo = Jsonix.Class({
+	module: null,			
 	name : null,
 	baseTypeInfo : null,
 	initialize : function() {
@@ -2199,17 +2200,17 @@ Jsonix.Model.ClassInfo = Jsonix
 			// Obsolete
 			destroy : function() {
 			},
-			build : function(context, module) {
+			build : function(context) {
 				if (!this.built) {
-					this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, module);
+					this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, this.module);
 					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
-						this.baseTypeInfo.build(context, module);
+						this.baseTypeInfo.build(context);
 					}
 
 					// Build properties in this context
 					for ( var index = 0; index < this.properties.length; index++) {
 						var propertyInfo = this.properties[index];
-						propertyInfo.build(context, module);
+						propertyInfo.build(context, this.module);
 					}
 
 					// Build the structure
@@ -2553,10 +2554,10 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			this.entries = vs;
 		}		
 	},
-	build : function(context, module) {
+	build : function(context) {
 		if (!this.built) {
-			this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, module);
-			this.baseTypeInfo.build(context, module);
+			this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, this.module);
+			this.baseTypeInfo.build(context);
 			var items = this.entries;
 			var entries = {};
 			var keys = [];
@@ -2687,6 +2688,7 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	CLASS_NAME : 'Jsonix.Model.EnumLeafInfo'
 });
 Jsonix.Model.ElementInfo = Jsonix.Class({
+	module: null,			
 	elementName : null,
 	typeInfo : null,
 	substitutionHead : null,
@@ -2715,11 +2717,11 @@ Jsonix.Model.ElementInfo = Jsonix.Class({
 		var sc = mapping.scope||mapping.sc||null;
 		this.scope = sc;
 	},
-	build : function(context, module) {
+	build : function(context) {
 		// If element info is not yet built
 		if (!this.built) {
-			this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
-			this.scope = context.resolveTypeInfo(this.scope, module);
+			this.typeInfo = context.resolveTypeInfo(this.typeInfo, this.module);
+			this.scope = context.resolveTypeInfo(this.scope, this.module);
 			this.built = true;
 		}
 	},
@@ -3874,6 +3876,7 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		var classInfo = new this.mappingStyle.classInfo(mapping, {
 			mappingStyle : this.mappingStyle
 		});
+		classInfo.module = this;
 		return classInfo;
 	},
 	createEnumLeafInfo : function(mapping) {
@@ -3883,6 +3886,7 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping, {
 			mappingStyle : this.mappingStyle
 		});
+		enumLeafInfo.module = this;
 		return enumLeafInfo;
 	},
 	createList : function(mapping) {
@@ -3899,7 +3903,9 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		}
 		var s = mapping.separator || mapping.sep || ' ';
 		Jsonix.Util.Ensure.ensureExists(ti);
-		return new Jsonix.Schema.XSD.List(ti, tn, s);
+		var listTypeInfo = new Jsonix.Schema.XSD.List(ti, tn, s);
+		listTypeInfo.module = this;
+		return listTypeInfo;
 	},
 	createElementInfo : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
@@ -3935,6 +3941,7 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		var elementInfo = new this.mappingStyle.elementInfo(mapping, {
 			mappingStyle : this.mappingStyle
 		});
+		elementInfo.module = this;
 		return elementInfo;
 	},
 	registerTypeInfos : function(context) {
@@ -4138,9 +4145,9 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.trimmedSeparator = trimmedSeparator;
 						}
 					},
-					build : function(context, module) {
+					build : function(context) {
 						if (!this.built) {
-							this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
+							this.typeInfo = context.resolveTypeInfo(this.typeInfo, this.module);
 							this.built = true;
 						}
 					},

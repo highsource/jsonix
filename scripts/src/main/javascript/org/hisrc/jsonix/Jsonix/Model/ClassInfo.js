@@ -73,17 +73,17 @@ Jsonix.Model.ClassInfo = Jsonix
 			// Obsolete
 			destroy : function() {
 			},
-			build : function(context, module) {
+			build : function(context) {
 				if (!this.built) {
-					this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, module);
+					this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, this.module);
 					if (Jsonix.Util.Type.exists(this.baseTypeInfo)) {
-						this.baseTypeInfo.build(context, module);
+						this.baseTypeInfo.build(context);
 					}
 
 					// Build properties in this context
 					for ( var index = 0; index < this.properties.length; index++) {
 						var propertyInfo = this.properties[index];
-						propertyInfo.build(context, module);
+						propertyInfo.build(context, this.module);
 					}
 
 					// Build the structure

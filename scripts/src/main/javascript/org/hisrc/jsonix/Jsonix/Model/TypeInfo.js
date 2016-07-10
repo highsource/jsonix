@@ -1,4 +1,5 @@
 Jsonix.Model.TypeInfo = Jsonix.Class({
+	module: null,			
 	name : null,
 	baseTypeInfo : null,
 	initialize : function() {

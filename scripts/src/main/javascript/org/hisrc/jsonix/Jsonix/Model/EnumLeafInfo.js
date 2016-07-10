@@ -26,10 +26,10 @@ Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 			this.entries = vs;
 		}		
 	},
-	build : function(context, module) {
+	build : function(context) {
 		if (!this.built) {
-			this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, module);
-			this.baseTypeInfo.build(context, module);
+			this.baseTypeInfo = context.resolveTypeInfo(this.baseTypeInfo, this.module);
+			this.baseTypeInfo.build(context);
 			var items = this.entries;
 			var entries = {};
 			var keys = [];

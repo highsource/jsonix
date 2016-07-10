@@ -137,6 +137,7 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		var classInfo = new this.mappingStyle.classInfo(mapping, {
 			mappingStyle : this.mappingStyle
 		});
+		classInfo.module = this;
 		return classInfo;
 	},
 	createEnumLeafInfo : function(mapping) {
@@ -146,6 +147,7 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		var enumLeafInfo = new this.mappingStyle.enumLeafInfo(mapping, {
 			mappingStyle : this.mappingStyle
 		});
+		enumLeafInfo.module = this;
 		return enumLeafInfo;
 	},
 	createList : function(mapping) {
@@ -162,7 +164,9 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		}
 		var s = mapping.separator || mapping.sep || ' ';
 		Jsonix.Util.Ensure.ensureExists(ti);
-		return new Jsonix.Schema.XSD.List(ti, tn, s);
+		var listTypeInfo = new Jsonix.Schema.XSD.List(ti, tn, s);
+		listTypeInfo.module = this;
+		return listTypeInfo;
 	},
 	createElementInfo : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
@@ -198,6 +202,7 @@ Jsonix.Model.Module = Jsonix.Class(Jsonix.Mapping.Styled, {
 		var elementInfo = new this.mappingStyle.elementInfo(mapping, {
 			mappingStyle : this.mappingStyle
 		});
+		elementInfo.module = this;
 		return elementInfo;
 	},
 	registerTypeInfos : function(context) {

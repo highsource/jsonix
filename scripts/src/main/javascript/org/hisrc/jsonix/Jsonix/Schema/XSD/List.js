@@ -36,9 +36,9 @@ Jsonix.Schema.XSD.List = Jsonix
 							this.trimmedSeparator = trimmedSeparator;
 						}
 					},
-					build : function(context, module) {
+					build : function(context) {
 						if (!this.built) {
-							this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
+							this.typeInfo = context.resolveTypeInfo(this.typeInfo, this.module);
 							this.built = true;
 						}
 					},

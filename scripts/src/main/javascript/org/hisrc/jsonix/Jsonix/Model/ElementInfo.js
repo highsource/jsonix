@@ -1,4 +1,5 @@
 Jsonix.Model.ElementInfo = Jsonix.Class({
+	module: null,			
 	elementName : null,
 	typeInfo : null,
 	substitutionHead : null,
@@ -27,11 +28,11 @@ Jsonix.Model.ElementInfo = Jsonix.Class({
 		var sc = mapping.scope||mapping.sc||null;
 		this.scope = sc;
 	},
-	build : function(context, module) {
+	build : function(context) {
 		// If element info is not yet built
 		if (!this.built) {
-			this.typeInfo = context.resolveTypeInfo(this.typeInfo, module);
-			this.scope = context.resolveTypeInfo(this.scope, module);
+			this.typeInfo = context.resolveTypeInfo(this.typeInfo, this.module);
+			this.scope = context.resolveTypeInfo(this.scope, this.module);
 			this.built = true;
 		}
 	},
