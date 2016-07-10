@@ -850,7 +850,7 @@ this.unmarshalElement(this.context,f,j,h);
 return g
 },CLASS_NAME:"Jsonix.Binding.Unmarshaller"});
 Jsonix.Binding.Unmarshaller.Simplified=Jsonix.Class(Jsonix.Binding.Unmarshaller,Jsonix.Binding.Unmarshalls.Element.AsSimplifiedElementRef,{CLASS_NAME:"Jsonix.Binding.Unmarshaller.Simplified"});
-Jsonix.Model.TypeInfo=Jsonix.Class({name:null,baseTypeInfo:null,initialize:function(){},isBasedOn:function(c){var d=this;
+Jsonix.Model.TypeInfo=Jsonix.Class({module:null,name:null,baseTypeInfo:null,initialize:function(){},isBasedOn:function(c){var d=this;
 while(d){if(c===d){return true
 }d=d.baseTypeInfo
 }return false
@@ -886,15 +886,15 @@ for(var s=0;
 s<x.length;
 s++){this.p(x[s])
 }},getPropertyInfoByName:function(b){return this.propertiesMap[b]
-},destroy:function(){},build:function(i,j){if(!this.built){this.baseTypeInfo=i.resolveTypeInfo(this.baseTypeInfo,j);
-if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.build(i,j)
-}for(var f=0;
-f<this.properties.length;
-f++){var h=this.properties[f];
-h.build(i,j)
-}var g={elements:null,attributes:{},anyAttribute:null,value:null,any:null};
-this.buildStructure(i,g);
-this.structure=g
+},destroy:function(){},build:function(h){if(!this.built){this.baseTypeInfo=h.resolveTypeInfo(this.baseTypeInfo,this.module);
+if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.build(h)
+}for(var e=0;
+e<this.properties.length;
+e++){var g=this.properties[e];
+g.build(h,this.module)
+}var f={elements:null,attributes:{},anyAttribute:null,value:null,any:null};
+this.buildStructure(h,f);
+this.structure=f
 }},buildStructure:function(h,f){if(Jsonix.Util.Type.exists(this.baseTypeInfo)){this.baseTypeInfo.buildStructure(h,f)
 }for(var e=0;
 e<this.properties.length;
@@ -995,39 +995,39 @@ var h=f.values||f.vs||undefined;
 Jsonix.Util.Ensure.ensureExists(h);
 if(!(Jsonix.Util.Type.isObject(h)||Jsonix.Util.Type.isArray(h))){throw new Error("Enum values must be either an array or an object.")
 }else{this.entries=h
-}},build:function(r,q){if(!this.built){this.baseTypeInfo=r.resolveTypeInfo(this.baseTypeInfo,q);
-this.baseTypeInfo.build(r,q);
-var n=this.entries;
-var p={};
-var j=[];
-var k=[];
+}},build:function(m){if(!this.built){this.baseTypeInfo=m.resolveTypeInfo(this.baseTypeInfo,this.module);
+this.baseTypeInfo.build(m);
+var p=this.entries;
+var j={};
+var l=[];
+var i=[];
 var o=0;
-var l;
-var m;
-if(Jsonix.Util.Type.isArray(n)){for(o=0;
-o<n.length;
-o++){m=n[o];
-if(Jsonix.Util.Type.isString(m)){l=m;
+var n;
+var k;
+if(Jsonix.Util.Type.isArray(p)){for(o=0;
+o<p.length;
+o++){k=p[o];
+if(Jsonix.Util.Type.isString(k)){n=k;
 if(!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.parse))){throw new Error("Enum value is provided as string but the base type ["+this.baseTypeInfo.name+"] of the enum info ["+this.name+"] does not implement the parse method.")
-}m=this.baseTypeInfo.parse(m,r,null,this)
-}else{if(this.baseTypeInfo.isInstance(m,r,this)){if(!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.print))){throw new Error("The base type ["+this.baseTypeInfo.name+"] of the enum info ["+this.name+"] does not implement the print method, unable to produce the enum key as string.")
-}l=this.baseTypeInfo.print(m,r,null,this)
-}else{throw new Error("Enum value ["+m+"] is not an instance of the enum base type ["+this.baseTypeInfo.name+"].")
-}}p[l]=m;
-j[o]=l;
-k[o]=m
-}}else{if(Jsonix.Util.Type.isObject(n)){for(l in n){if(n.hasOwnProperty(l)){m=n[l];
-if(Jsonix.Util.Type.isString(m)){if(!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.parse))){throw new Error("Enum value is provided as string but the base type ["+this.baseTypeInfo.name+"] of the enum info ["+this.name+"] does not implement the parse method.")
-}m=this.baseTypeInfo.parse(m,r,null,this)
-}else{if(!this.baseTypeInfo.isInstance(m,r,this)){throw new Error("Enum value ["+m+"] is not an instance of the enum base type ["+this.baseTypeInfo.name+"].")
-}}p[l]=m;
-j[o]=l;
-k[o]=m;
+}k=this.baseTypeInfo.parse(k,m,null,this)
+}else{if(this.baseTypeInfo.isInstance(k,m,this)){if(!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.print))){throw new Error("The base type ["+this.baseTypeInfo.name+"] of the enum info ["+this.name+"] does not implement the print method, unable to produce the enum key as string.")
+}n=this.baseTypeInfo.print(k,m,null,this)
+}else{throw new Error("Enum value ["+k+"] is not an instance of the enum base type ["+this.baseTypeInfo.name+"].")
+}}j[n]=k;
+l[o]=n;
+i[o]=k
+}}else{if(Jsonix.Util.Type.isObject(p)){for(n in p){if(p.hasOwnProperty(n)){k=p[n];
+if(Jsonix.Util.Type.isString(k)){if(!(Jsonix.Util.Type.isFunction(this.baseTypeInfo.parse))){throw new Error("Enum value is provided as string but the base type ["+this.baseTypeInfo.name+"] of the enum info ["+this.name+"] does not implement the parse method.")
+}k=this.baseTypeInfo.parse(k,m,null,this)
+}else{if(!this.baseTypeInfo.isInstance(k,m,this)){throw new Error("Enum value ["+k+"] is not an instance of the enum base type ["+this.baseTypeInfo.name+"].")
+}}j[n]=k;
+l[o]=n;
+i[o]=k;
 o++
 }}}else{throw new Error("Enum values must be either an array or an object.")
-}}this.entries=p;
-this.keys=j;
-this.values=k;
+}}this.entries=j;
+this.keys=l;
+this.values=i;
 this.built=true
 }},unmarshal:function(e,f,h){var g=f.getElementText();
 return this.parse(g,e,f,h)
@@ -1046,7 +1046,7 @@ f<this.values.length;
 f++){if(this.values[f]===g){return true
 }}return false
 },CLASS_NAME:"Jsonix.Model.EnumLeafInfo"});
-Jsonix.Model.ElementInfo=Jsonix.Class({elementName:null,typeInfo:null,substitutionHead:null,scope:null,built:false,initialize:function(g){Jsonix.Util.Ensure.ensureObject(g);
+Jsonix.Model.ElementInfo=Jsonix.Class({module:null,elementName:null,typeInfo:null,substitutionHead:null,scope:null,built:false,initialize:function(g){Jsonix.Util.Ensure.ensureObject(g);
 var j=g.defaultElementNamespaceURI||g.dens||"";
 this.defaultElementNamespaceURI=j;
 var h=g.elementName||g.en||undefined;
@@ -1059,8 +1059,8 @@ var l=g.substitutionHead||g.sh||null;
 this.substitutionHead=l;
 var i=g.scope||g.sc||null;
 this.scope=i
-},build:function(c,d){if(!this.built){this.typeInfo=c.resolveTypeInfo(this.typeInfo,d);
-this.scope=c.resolveTypeInfo(this.scope,d);
+},build:function(b){if(!this.built){this.typeInfo=b.resolveTypeInfo(this.typeInfo,this.module);
+this.scope=b.resolveTypeInfo(this.scope,this.module);
 this.built=true
 }},CLASS_NAME:"Jsonix.Model.ElementInfo"});
 Jsonix.Model.PropertyInfo=Jsonix.Class({name:null,collection:false,targetNamespace:"",defaultElementNamespaceURI:"",defaultAttributeNamespaceURI:"",built:false,initialize:function(r){Jsonix.Util.Ensure.ensureObject(r);
@@ -1507,19 +1507,23 @@ var h=f.defaultAttributeNamespaceURI||f.dans||this.defaultAttributeNamespaceURI;
 f.defaultAttributeNamespaceURI=h;
 this.initializeNames(f);
 var i=new this.mappingStyle.classInfo(f,{mappingStyle:this.mappingStyle});
+i.module=this;
 return i
 },createEnumLeafInfo:function(d){Jsonix.Util.Ensure.ensureObject(d);
 this.initializeNames(d);
 var c=new this.mappingStyle.enumLeafInfo(d,{mappingStyle:this.mappingStyle});
+c.module=this;
 return c
-},createList:function(e){Jsonix.Util.Ensure.ensureObject(e);
-var g=e.baseTypeInfo||e.typeInfo||e.bti||e.ti||"String";
-var f=e.typeName||e.tn||null;
-if(Jsonix.Util.Type.exists(f)){if(Jsonix.Util.Type.isString(f)){f=new Jsonix.XML.QName(this.targetNamespace,f)
-}else{f=Jsonix.XML.QName.fromObject(f)
-}}var h=e.separator||e.sep||" ";
-Jsonix.Util.Ensure.ensureExists(g);
-return new Jsonix.Schema.XSD.List(g,f,h)
+},createList:function(f){Jsonix.Util.Ensure.ensureObject(f);
+var h=f.baseTypeInfo||f.typeInfo||f.bti||f.ti||"String";
+var g=f.typeName||f.tn||null;
+if(Jsonix.Util.Type.exists(g)){if(Jsonix.Util.Type.isString(g)){g=new Jsonix.XML.QName(this.targetNamespace,g)
+}else{g=Jsonix.XML.QName.fromObject(g)
+}}var i=f.separator||f.sep||" ";
+Jsonix.Util.Ensure.ensureExists(h);
+var j=new Jsonix.Schema.XSD.List(h,g,i);
+j.module=this;
+return j
 },createElementInfo:function(g){Jsonix.Util.Ensure.ensureObject(g);
 g=Jsonix.Util.Type.cloneObject(g);
 var i=g.defaultElementNamespaceURI||g.dens||this.defaultElementNamespaceURI;
@@ -1537,6 +1541,7 @@ if(Jsonix.Util.Type.exists(l)){if(Jsonix.Util.Type.isObject(l)){g.substitutionHe
 }else{Jsonix.Util.Ensure.ensureString(l);
 g.substitutionHead=new Jsonix.XML.QName(this.defaultElementNamespaceURI,l)
 }}var k=new this.mappingStyle.elementInfo(g,{mappingStyle:this.mappingStyle});
+k.module=this;
 return k
 },registerTypeInfos:function(d){for(var e=0;
 e<this.typeInfos.length;
@@ -1594,7 +1599,7 @@ if(!Jsonix.Util.Type.exists(this.name)){this.name=e.name+"*"
 }var g=Jsonix.Util.StringUtils.trim(this.separator);
 if(g.length===0){this.trimmedSeparator=Jsonix.Util.StringUtils.whitespaceCharacters
 }else{this.trimmedSeparator=g
-}},build:function(c,d){if(!this.built){this.typeInfo=c.resolveTypeInfo(this.typeInfo,d);
+}},build:function(b){if(!this.built){this.typeInfo=b.resolveTypeInfo(this.typeInfo,this.module);
 this.built=true
 }},print:function(i,k,g,j){if(!Jsonix.Util.Type.exists(i)){return null
 }Jsonix.Util.Ensure.ensureArray(i);
@@ -2136,13 +2141,13 @@ if(e){throw new Error("At least one of the components (years, months, days, hour
 var g="";
 if(h.sign===-1){g+="-"
 }g+="P";
-if(h.years){g+=(h.years+"Y")
-}if(h.months){g+=(h.months+"M")
-}if(h.days){g+=(h.days+"D")
-}if(h.hours||h.minutes||h.seconds){g+="T";
-if(h.hours){g+=(h.hours+"H")
-}if(h.minutes){g+=(h.minutes+"M")
-}if(h.seconds){g+=(h.seconds+"S")
+if(Jsonix.Util.Type.exists(h.years)){g+=(h.years+"Y")
+}if(Jsonix.Util.Type.exists(h.months)){g+=(h.months+"M")
+}if(Jsonix.Util.Type.exists(h.days)){g+=(h.days+"D")
+}if(Jsonix.Util.Type.exists(h.hours)||Jsonix.Util.Type.exists(h.minutes)||Jsonix.Util.Type.exists(h.seconds)){g+="T";
+if(Jsonix.Util.Type.exists(h.hours)){g+=(h.hours+"H")
+}if(Jsonix.Util.Type.exists(h.minutes)){g+=(h.minutes+"M")
+}if(Jsonix.Util.Type.exists(h.seconds)){g+=(h.seconds+"S")
 }}return g
 },parse:function(m,p,j,o){var k=new RegExp("^"+Jsonix.Schema.XSD.Duration.PATTERN+"$");
 var i=m.match(k);
