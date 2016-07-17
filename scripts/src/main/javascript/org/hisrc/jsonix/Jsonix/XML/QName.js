@@ -106,7 +106,7 @@ Jsonix.XML.QName.fromObject = function(object) {
 	if (object instanceof Jsonix.XML.QName || (Jsonix.Util.Type.isString(object.CLASS_NAME) && object.CLASS_NAME === 'Jsonix.XML.QName')) {
 		return object;
 	}
-	var localPart = object.localPart||object.lp||null;
+	var localPart = object.localPart||object.lp||'';
 	Jsonix.Util.Ensure.ensureString(localPart);
 	var namespaceURI = object.namespaceURI||object.ns||'';
 	var prefix = object.prefix||object.p||'';
