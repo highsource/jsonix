@@ -95,6 +95,19 @@ Jsonix.XML.Output = Jsonix.Class({
 		return node;
 
 	},
+	writeCDATA : function(text) {
+		var node;
+		if (Jsonix.Util.Type.isFunction(this.document.createCDATASection))	{
+			node = this.document.createCDATASection(text);
+		}
+		else if (this.xmldom) {
+			node = this.xmldom.createCDATASection(text);
+		} else {
+			throw new Error("Could not create a CDATA section node.");
+		}
+		this.peek().appendChild(node);
+		return node;
+	},
 	writeAttribute : function(name, value) {
 		Jsonix.Util.Ensure.ensureString(value);
 		Jsonix.Util.Ensure.ensureObject(name);
@@ -132,7 +145,7 @@ Jsonix.XML.Output = Jsonix.Class({
 			}
 			this.declareNamespace(namespaceURI, prefix);
 		}
-		
+
 	},
 	writeNode : function(node) {
 		var importedNode;
@@ -241,7 +254,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		if (Jsonix.Util.Type.isString(p))
 		{
 			var oldp = nspItem[ns];
-			// If prefix is already declared and equals the proposed prefix 
+			// If prefix is already declared and equals the proposed prefix
 			if (p === oldp)
 			{
 				// Nothing to do

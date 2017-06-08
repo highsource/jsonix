@@ -2,6 +2,9 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+
+		var c = mapping.asCDATA || mapping.c || false;
+		this.asCDATA = c;
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
@@ -11,7 +14,12 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
 		}
-		output.writeCharacters(this.print(value, context, output, scope));
+
+		if (this.asCDATA) {
+			output.writeCDATA(this.print(value, context, output, scope));
+		} else {
+			output.writeCharacters(this.print(value, context, output, scope));
+		}
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);

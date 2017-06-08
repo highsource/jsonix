@@ -1618,6 +1618,19 @@ Jsonix.XML.Output = Jsonix.Class({
 		return node;
 
 	},
+	writeCDATA : function(text) {
+		var node;
+		if (Jsonix.Util.Type.isFunction(this.document.createCDATASection))	{
+			node = this.document.createCDATASection(text);
+		}
+		else if (this.xmldom) {
+			node = this.xmldom.createCDATASection(text);
+		} else {
+			throw new Error("Could not create a CDATA section node.");
+		}
+		this.peek().appendChild(node);
+		return node;
+	},
 	writeAttribute : function(name, value) {
 		Jsonix.Util.Ensure.ensureString(value);
 		Jsonix.Util.Ensure.ensureObject(name);
@@ -1655,7 +1668,7 @@ Jsonix.XML.Output = Jsonix.Class({
 			}
 			this.declareNamespace(namespaceURI, prefix);
 		}
-		
+
 	},
 	writeNode : function(node) {
 		var importedNode;
@@ -1764,7 +1777,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		if (Jsonix.Util.Type.isString(p))
 		{
 			var oldp = nspItem[ns];
-			// If prefix is already declared and equals the proposed prefix 
+			// If prefix is already declared and equals the proposed prefix
 			if (p === oldp)
 			{
 				// Nothing to do
@@ -1804,6 +1817,7 @@ Jsonix.XML.Output = Jsonix.Class({
 	},
 	CLASS_NAME : "Jsonix.XML.Output"
 });
+
 Jsonix.Mapping = {};
 Jsonix.Mapping.Style = Jsonix.Class({
 	marshaller : null,
@@ -1866,6 +1880,7 @@ Jsonix.Binding.Marshalls.Element = Jsonix.Class({
 			}
 		}
 		var typeInfo = actualTypeInfo || declaredTypeInfo;
+
 		if (typeInfo) {
 			output.writeStartElement(elementValue.name);
 			if (actualTypeInfo && declaredTypeInfo !== actualTypeInfo) {
@@ -2145,22 +2160,22 @@ Jsonix.Model.ClassInfo = Jsonix
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
-				
+
 				var ln = mapping.localName||mapping.ln||null;
 				this.localName = ln;
 
 				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 				this.defaultElementNamespaceURI = dens;
-				
+
 				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
 				this.targetNamespace = tns;
 
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 				this.defaultAttributeNamespaceURI = dans;
-				
+
 				var bti = mapping.baseTypeInfo||mapping.bti||null;
 				this.baseTypeInfo = bti;
-				
+
 				var inF = mapping.instanceFactory||mapping.inF||undefined;
 				if (Jsonix.Util.Type.exists(inF)) {
 					// TODO: should we support instanceFactory as functions?
@@ -2168,9 +2183,9 @@ Jsonix.Model.ClassInfo = Jsonix
 					Jsonix.Util.Ensure.ensureFunction(inF);
 					this.instanceFactory = inF;
 				}
-				
+
 				var tn = mapping.typeName||mapping.tn||undefined;
-				
+
 				if (Jsonix.Util.Type.exists(tn))
 				{
 					if (Jsonix.Util.Type.isString(tn))
@@ -2185,14 +2200,14 @@ Jsonix.Model.ClassInfo = Jsonix
 				{
 					this.typeName = new Jsonix.XML.QName(tns, ln);
 				}
-				
+
 				this.properties = [];
 				this.propertiesMap = {};
 				var ps = mapping.propertyInfos||mapping.ps||[];
 				Jsonix.Util.Ensure.ensureArray(ps);
 				for ( var index = 0; index < ps.length; index++) {
 					this.p(ps[index]);
-				}				
+				}
 			},
 			getPropertyInfoByName : function(name) {
 				return this.propertiesMap[name];
@@ -2237,15 +2252,15 @@ Jsonix.Model.ClassInfo = Jsonix
 			unmarshal : function(context, input) {
 				this.build(context);
 				var result;
-				
+
 				if (this.instanceFactory) {
 					result = new this.instanceFactory();
 				}
 				else
 				{
-					result = { TYPE_NAME : this.name }; 
+					result = { TYPE_NAME : this.name };
 				}
-				
+
 				if (input.eventType !== 1) {
 					throw new Error("Parser must be on START_ELEMENT to read a class info.");
 				}
@@ -2526,6 +2541,7 @@ Jsonix.Model.ClassInfo.prototype.propertyInfoCreators = {
 	"v" : Jsonix.Model.ClassInfo.prototype.v,
 	"value" : Jsonix.Model.ClassInfo.prototype.v
 };
+
 Jsonix.Model.EnumLeafInfo = Jsonix.Class(Jsonix.Model.TypeInfo, {
 	name : null,
 	baseTypeInfo : 'String',
@@ -2948,6 +2964,9 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
+
+		var c = mapping.asCDATA || mapping.c || false;
+		this.asCDATA = c;
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
@@ -2957,7 +2976,12 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		if (!Jsonix.Util.Type.exists(value)) {
 			return;
 		}
-		output.writeCharacters(this.print(value, context, output, scope));
+
+		if (this.asCDATA) {
+			output.writeCDATA(this.print(value, context, output, scope));
+		} else {
+			output.writeCharacters(this.print(value, context, output, scope));
+		}
 	},
 	buildStructure : function(context, structure) {
 		Jsonix.Util.Ensure.ensureObject(structure);
@@ -5820,15 +5844,15 @@ Jsonix.Context = Jsonix
 					Jsonix.Util.Ensure.ensureObject(options);
 					if (Jsonix.Util.Type
 							.isObject(options.namespacePrefixes)) {
-						this.namespacePrefixes = 
+						this.namespacePrefixes =
 							Jsonix.Util.Type.cloneObject(options.namespacePrefixes, {});
 					}
 					if (Jsonix.Util.Type
 							.isBoolean(options.supportXsiType)) {
-						this.supportXsiType = options.supportXsiType; 
+						this.supportXsiType = options.supportXsiType;
 					}
 				}
-				
+
 				// Initialize prefix/namespace mapping
 				for (var ns in this.namespacePrefixes)
 				{
@@ -5857,7 +5881,7 @@ Jsonix.Context = Jsonix
 					module = mapping;
 				} else {
 					mapping = Jsonix.Util.Type.cloneObject(mapping);
-					module = new this.mappingStyle.module(mapping, 
+					module = new this.mappingStyle.module(mapping,
 					{
 						mappingStyle : this.mappingStyle
 					});
@@ -6098,6 +6122,7 @@ Jsonix.Context = Jsonix
 					Jsonix.Schema.XSD.UnsignedShort.INSTANCE ],
 			CLASS_NAME : 'Jsonix.Context'
 		});
+
 	// Complete Jsonix script is included above
 	return { Jsonix: Jsonix };
 };
