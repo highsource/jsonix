@@ -81,7 +81,7 @@ module.exports =
 		test.equal('c', result.value.attributes['{urn:c}c']);
 		test.done();
 	},
-	
+
 	"MarhshalAttributeType" : function(test) {
 		var context = new Jsonix.Context([ One ], {
 			namespacePrefixes : {}
@@ -125,7 +125,7 @@ module.exports =
 		test.equal('test', result.value.attribute);
 		test.done();
 	},
-	
+
 	"MarhshalElementType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var marshaller = context.createMarshaller();
@@ -145,7 +145,7 @@ module.exports =
 		test.ok(serializedNode.length > 5);
 		test.done();
 	},
-	
+
 	"UnmarhshalElementType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var unmarshaller = context.createUnmarshaller();
@@ -190,7 +190,7 @@ module.exports =
 		test.equal('f', result.value.items[2]);
 		test.done();
 	},
-	
+
 	"MarhshalElementsType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var marshaller = context.createMarshaller();
@@ -226,7 +226,7 @@ module.exports =
 		test.ok(serializedNode.length > 5);
 		test.done();
 	},
-	
+
 	"UnmarhshalElementsType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var unmarshaller = context.createUnmarshaller();
@@ -282,7 +282,7 @@ module.exports =
 		console.log(marshaller.marshalString(result));
 		test.done();
 	},
-	
+
 	"MarhshalElementRefType" : function(test) {
 		var context = new Jsonix.Context([ One, Two ], {
 			namespacePrefixes : {
@@ -390,7 +390,7 @@ module.exports =
 		test.equal('twelve', result.value.mix[2]);
 		test.done();
 	},
-	
+
 	"UnmarshalElementRefsType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var unmarshaller = context.createUnmarshaller();
@@ -495,7 +495,7 @@ module.exports =
 					}
 				}, 'three', Jsonix.DOM.parse('<node>four</node>').documentElement ]
 			}
-	
+
 		};
 		var node = marshaller.marshalDocument(value);
 		var serializedNode = Jsonix.DOM.serialize(node);
@@ -503,7 +503,7 @@ module.exports =
 		test.ok(serializedNode.length > 5);
 		test.done();
 	},
-	
+
 	"UnmarhshalAnyElementType" : function(test) {
 		var context = new Jsonix.Context([ One, Two ]);
 		var unmarshaller = context.createUnmarshaller();
@@ -561,7 +561,7 @@ module.exports =
 		test.ok(serializedNode.length > 5);
 		test.done();
 	},
-	
+
 	"UnmarhshalSimpleTypesType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var unmarshaller = context.createUnmarshaller();
@@ -598,7 +598,7 @@ module.exports =
 		test.equal(1.1, result.value['double']);
 		test.equal(2, result.value.integer);
 		test.equal('three', result.value.string);
-	
+
 		//
 		test.equal(2000, result.value.dates[0].getFullYear());
 		test.equal(2001, result.value.dates[1].getFullYear());
@@ -614,7 +614,7 @@ module.exports =
 		test.equal(7, result.value.doublesList[2][1]);
 		test.done();
 	},
-	
+
 	"UnmarhshalMapElementType" : function(test) {
 		var context = new Jsonix.Context([ One ]);
 		var unmarshaller = context.createUnmarshaller();
@@ -723,6 +723,33 @@ module.exports =
 		var context = new Jsonix.Context([ One, Two ]);
 		var unmarshaller = context.createUnmarshaller();
 		var text = '<string>text</string>';
+		var result = unmarshaller.unmarshalString(text);
+		test.equal('string', result.name.localPart);
+		test.equal('text', result.value);
+		test.done();
+	},
+	"MarshalCDATAValueType" : function(test)
+	{
+		var context = new Jsonix.Context([ One ]);
+		var marshaller = context.createMarshaller();
+		var value = {
+			name : {
+				localPart : "valueAsCDATA"
+			},
+			value : {
+				value : 'test<>?\'"&'
+			}
+		};
+		var result = marshaller.marshalString(value);
+		console.log(result);
+		test.ok(result === '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>');
+		test.done();
+	},
+	"UnmarshalCDATAValueType": function (test)
+	{
+		var context = new Jsonix.Context([ One ]);
+		var unmarshaller = context.createUnmarshaller();
+		var text = '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>';
 		var result = unmarshaller.unmarshalString(text);
 		test.equal('string', result.name.localPart);
 		test.equal('text', result.value);
