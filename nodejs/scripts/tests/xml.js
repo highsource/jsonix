@@ -44,12 +44,15 @@ module.exports =
 		output.writeStartElement(new Jsonix.XML.QName("test"));
 		output.writeAttribute(new Jsonix.XML.QName("test"), 'test');
 		output.writeCharacters('test');
-
+		output.writeCdata(']]>');
+		output.writeCdata('a]]>');
+		output.writeCdata('b]]>c');
+		output.writeCdata(']]>d');
 		output.writeEndElement();
 		output.writeEndDocument();
 		test.notEqual(null, doc.documentElement);
 		var serializedDocument = Jsonix.DOM.serialize(doc);
-		console.log(serializedDocument);
+		test.equal('<test test="test">test<![CDATA[]]]]><![CDATA[>]]><![CDATA[a]]]]><![CDATA[>]]><![CDATA[b]]]]><![CDATA[>c]]><![CDATA[]]]]><![CDATA[>d]]></test>', serializedDocument);
 		test.done();
 	},
 	"OutputNS": function(test) {

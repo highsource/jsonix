@@ -95,7 +95,21 @@ Jsonix.XML.Output = Jsonix.Class({
 		return node;
 
 	},
-	writeCDATA : function(text) {
+	writeCdata : function(text) {
+		var parts = text.split(']]>');
+		for (var index = 0; index < parts.length; index++) {
+			if (index + 1 < parts.length) {
+				parts[index] = parts[index] + ']]';
+				parts[index + 1] = '>' + parts[index + 1];
+			}
+		}
+		var node;
+		for (var jndex = 0; jndex < parts.length; jndex ++) {
+			node = this.writeCdataWithoutCdend(parts[jndex]);
+		}
+		return node;
+	},
+	writeCdataWithoutCdend : function(text) {
 		var node;
 		if (Jsonix.Util.Type.isFunction(this.document.createCDATASection))	{
 			node = this.document.createCDATASection(text);

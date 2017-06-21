@@ -1618,7 +1618,7 @@ Jsonix.XML.Output = Jsonix.Class({
 		return node;
 
 	},
-	writeCDATA : function(text) {
+	writeCdata : function(text) {
 		var node;
 		if (Jsonix.Util.Type.isFunction(this.document.createCDATASection))	{
 			node = this.document.createCDATASection(text);
@@ -2978,7 +2978,7 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		}
 
 		if (this.asCDATA) {
-			output.writeCDATA(this.print(value, context, output, scope));
+			output.writeCdata(this.print(value, context, output, scope));
 		} else {
 			output.writeCharacters(this.print(value, context, output, scope));
 		}

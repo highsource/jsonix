@@ -6,7 +6,6 @@
 	],
 	"main": "jsonix-tests-basic.js",
 	"dependencies": {
-		"jsonix": "2.x.x"
 	},
 	"devDependencies" : {
 		"nodeunit" : "0.x.x",

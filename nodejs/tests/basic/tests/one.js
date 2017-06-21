@@ -742,7 +742,7 @@ module.exports =
 		};
 		var result = marshaller.marshalString(value);
 		console.log(result);
-		test.ok(result === '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>');
+		test.equal(result, '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>');
 		test.done();
 	},
 	"UnmarshalCDATAValueType": function (test)
@@ -751,8 +751,8 @@ module.exports =
 		var unmarshaller = context.createUnmarshaller();
 		var text = '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>';
 		var result = unmarshaller.unmarshalString(text);
-		test.equal('string', result.name.localPart);
-		test.equal('text', result.value);
+		test.equal('valueAsCDATA', result.name.localPart);
+		test.equal('test<>?\'"&', result.value.value);
 		test.done();
 	}
 };

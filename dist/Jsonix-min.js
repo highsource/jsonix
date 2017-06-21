@@ -650,7 +650,7 @@ if(Jsonix.Util.Type.isFunction(this.document.createTextNode)){d=this.document.cr
 }else{throw new Error("Could not create a text node.")
 }}this.peek().appendChild(d);
 return d
-},writeCDATA:function(c){var d;
+},writeCdata:function(c){var d;
 if(Jsonix.Util.Type.isFunction(this.document.createCDATASection)){d=this.document.createCDATASection(c)
 }else{if(this.xmldom){d=this.xmldom.createCDATASection(c)
 }else{throw new Error("Could not create a CDATA section node.")
@@ -1162,7 +1162,7 @@ this.asCDATA=c
 },unmarshal:function(e,f,h){var g=f.getElementText();
 return this.unmarshalValue(g,e,f,h)
 },marshal:function(g,e,f,h){if(!Jsonix.Util.Type.exists(g)){return
-}if(this.asCDATA){f.writeCDATA(this.print(g,e,f,h))
+}if(this.asCDATA){f.writeCdata(this.print(g,e,f,h))
 }else{f.writeCharacters(this.print(g,e,f,h))
 }},buildStructure:function(c,d){Jsonix.Util.Ensure.ensureObject(d);
 if(Jsonix.Util.Type.exists(d.elements)){throw new Error("The structure already defines element mappings, it cannot define a value property.")
