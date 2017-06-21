@@ -428,6 +428,13 @@ module.exports =
 		test.equal(67, d3[2]);
 		test.equal('QUJD', Jsonix.Schema.XSD.Base64Binary.INSTANCE.print(d3));
 		test.done();
+
+		var d4 = Jsonix.Schema.XSD.Base64Binary.INSTANCE.parse('1g==');
+		test.ok(Jsonix.Schema.XSD.Base64Binary.INSTANCE.isInstance(d4));
+		test.equal(1, d4.length);
+		test.equal(214, d4[0]);
+		test.equal('1g==', Jsonix.Schema.XSD.Base64Binary.INSTANCE.print(d4));
+
 	},
 	"HexBinary": function(test) {
 		var d0 = Jsonix.Schema.XSD.HexBinary.INSTANCE.parse('');
