@@ -688,7 +688,7 @@ function testOneUnmarhshalUnexpectedElementType() {
 	var text = '<element>' +
 	//
 	'<unexpected>1<two/>3<four>5</four>6</unexpected>' +
-	// 
+	//
 	'<element>earth</element>' +
 	//
 	'</element>';
@@ -713,4 +713,30 @@ function testOneMarhshalUnexpectedElementType() {
 	var serializedNode = Jsonix.DOM.serialize(node);
 	logger.debug(serializedNode);
 	assertTrue(serializedNode.length > 5);
+}
+
+function testOneMarshalCDATAValueType()
+{
+	var context = new Jsonix.Context([ One ]);
+	var marshaller = context.createMarshaller();
+	var value = {
+		name : {
+			localPart : "valueAsCDATA"
+		},
+		value : {
+			value : 'test<>?\'"&'
+		}
+	};
+	var result = marshaller.marshalString(value);
+	logger.debug(result);
+	assertTrue(result === '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>');
+}
+function testOneUnmarshalCDATAValueType()
+{
+	var context = new Jsonix.Context([ One ]);
+	var unmarshaller = context.createUnmarshaller();
+	var text = '<valueAsCDATA><![CDATA[test<>?\'"&]]></valueAsCDATA>';
+	var result = unmarshaller.unmarshalString(text);
+	logger.debug(result.value.value);
+	assertTrue(result.value.value === 'test<>?\'"&');
 }

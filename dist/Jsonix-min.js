@@ -650,6 +650,12 @@ if(Jsonix.Util.Type.isFunction(this.document.createTextNode)){d=this.document.cr
 }else{throw new Error("Could not create a text node.")
 }}this.peek().appendChild(d);
 return d
+},writeCDATA:function(c){var d;
+if(Jsonix.Util.Type.isFunction(this.document.createCDATASection)){d=this.document.createCDATASection(c)
+}else{if(this.xmldom){d=this.xmldom.createCDATASection(c)
+}else{throw new Error("Could not create a CDATA section node.")
+}}this.peek().appendChild(d);
+return d
 },writeAttribute:function(t,k){Jsonix.Util.Ensure.ensureString(k);
 Jsonix.Util.Ensure.ensureObject(t);
 var n=t.localPart||t.lp||null;
@@ -1149,13 +1155,16 @@ Jsonix.Util.Ensure.ensureObject(e.attributes);
 var d=this.attributeName.key;
 e.attributes[d]=this
 },CLASS_NAME:"Jsonix.Model.AttributePropertyInfo"});
-Jsonix.Model.ValuePropertyInfo=Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo,{initialize:function(b){Jsonix.Util.Ensure.ensureObject(b);
-Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this,[b])
+Jsonix.Model.ValuePropertyInfo=Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo,{initialize:function(d){Jsonix.Util.Ensure.ensureObject(d);
+Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this,[d]);
+var c=d.asCDATA||d.c||false;
+this.asCDATA=c
 },unmarshal:function(e,f,h){var g=f.getElementText();
 return this.unmarshalValue(g,e,f,h)
 },marshal:function(g,e,f,h){if(!Jsonix.Util.Type.exists(g)){return
-}f.writeCharacters(this.print(g,e,f,h))
-},buildStructure:function(c,d){Jsonix.Util.Ensure.ensureObject(d);
+}if(this.asCDATA){f.writeCDATA(this.print(g,e,f,h))
+}else{f.writeCharacters(this.print(g,e,f,h))
+}},buildStructure:function(c,d){Jsonix.Util.Ensure.ensureObject(d);
 if(Jsonix.Util.Type.exists(d.elements)){throw new Error("The structure already defines element mappings, it cannot define a value property.")
 }else{d.value=this
 }},CLASS_NAME:"Jsonix.Model.ValuePropertyInfo"});

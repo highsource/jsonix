@@ -3,6 +3,9 @@ One = {};
 One.ValueType = new Jsonix.Model.ClassInfo({
 	name : "One.ValueType"
 });
+One.ValueAsCDATAType = new Jsonix.Model.ClassInfo({
+	name : "One.ValueAsCDATAType"
+});
 One.AnyAttributeType = new Jsonix.Model.ClassInfo({
 	name : "One.AnyAttributeType"
 });
@@ -34,6 +37,11 @@ One.ElementMapType = new Jsonix.Model.ClassInfo({
 One.ValueType.properties = [ new Jsonix.Model.ValuePropertyInfo({
 	name : "value",
 	typeInfo : Jsonix.Schema.XSD.String.INSTANCE
+}) ];
+One.ValueAsCDATAType.properties = [ new Jsonix.Model.ValuePropertyInfo({
+	name : "value",
+	typeInfo : Jsonix.Schema.XSD.String.INSTANCE,
+	asCDATA: true
 }) ];
 One.AnyAttributeType.properties = [ new Jsonix.Model.AnyAttributePropertyInfo({
 	name : "attributes"
@@ -211,7 +219,7 @@ One.AnyElementType.properties = [ new Jsonix.Model.AttributePropertyInfo({
 }) ];
 
 One.SimpleTypesType.properties = [
-		//                                   
+		//
 		new Jsonix.Model.ElementPropertyInfo({
 			name : "date",
 			typeInfo : Jsonix.Schema.XSD.DateAsDate.INSTANCE
@@ -303,6 +311,9 @@ One.ElementMapType.properties = [ new Jsonix.Model.ElementMapPropertyInfo({
 One.elementInfos = [ {
 	elementName : new Jsonix.XML.QName('value'),
 	typeInfo : One.ValueType
+}, {
+	elementName : new Jsonix.XML.QName('valueAsCDATA'),
+	typeInfo : One.ValueAsCDATAType
 }, {
 	elementName : new Jsonix.XML.QName('anyAttribute'),
 	typeInfo : One.AnyAttributeType
