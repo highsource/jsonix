@@ -7,5 +7,6 @@ public class QName
 	String 	localPart = null;
 	String 	prefix = null;
 	String 	string = null;
+	String CLASS_NAME = "";
 
 }
