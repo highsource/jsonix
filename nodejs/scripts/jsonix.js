@@ -4397,7 +4397,7 @@ Jsonix.Schema.XSD.Base64Binary = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 
 		input = text.replace(/[^A-Za-z0-9\+\/\=]/g, "");
 
-		var length = (input.length / 4) * 3;
+		var length = Math.floor(input.length / 4 * 3);
 		if (input.charAt(input.length - 1) === "=") {
 			length--;
 		}
