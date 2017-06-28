@@ -1,18 +1,19 @@
 {
-	"name": "jsonix-tests-browserify",
-	"description": "Jsonix Tests Browserify.",
-	"engines": [
-		"node >= 0.8.0"
-	],
-	"main": "main.js",
-	"dependencies": {
-		"jsonix": "2.x.x",
-		"jsonix-schema-compiler": "2.x.x"
-	},
-	"devDependencies" : {
-		"nodeunit" : "~0.x.x"
-	},
-	"scripts": {
-		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar purchaseorder.xsd -b bindings.xjb"
-	}
+  "name": "jsonix-tests-browserify",
+  "description": "Jsonix Tests Browserify.",
+  "engines": [
+    "node >= 0.8.0"
+  ],
+  "main": "main.js",
+  "dependencies": {
+    "jsonix": "2.x.x",
+    "jsonix-schema-compiler": "2.x.x"
+  },
+  "devDependencies": {
+    "browserify": "^14.4.0",
+    "nodeunit": "~0.x.x"
+  },
+  "scripts": {
+    "prepublish": "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar purchaseorder.xsd -b bindings.xjb"
+  }
 }
