@@ -1,90 +1,100 @@
 {
-	"id" : "http://www.jsonix.org/jsonschemas/jsonix/Jsonix.jsonschema#",
-	"definitions" : {
-		"calendar" : {
-			"anyOf" : [ {
-				"type" : "object",
-				"properties" : {
-					"year" : {
-						"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
-					},
-					"month" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
-						}, {
-							"minimum" : 1,
-							"exclusiveMinimum" : false,
-							"maximum" : 12,
-							"exclusiveMaximum" : false
-						} ]
-					},
-					"day" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
-						}, {
-							"minimum" : 1,
-							"exclusiveMinimum" : false,
-							"maximum" : 31,
-							"exclusiveMaximum" : false
-						} ]
-					},
-					"hour" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
-						}, {
-							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 23,
-							"exclusiveMaximum" : false
-						} ]
-					},
-					"minute" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
-						}, {
-							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 59,
-							"exclusiveMaximum" : false
-						} ]
-					},
-					"second" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
-						}, {
-							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 59,
-							"exclusiveMaximum" : false
-						} ]
-					},
-					"fractionalSecond" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/decimal"
-						}, {
-							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 1,
-							"exclusiveMaximum" : true
-						} ]
-					},
-					"timezone" : {
-						"allOf" : [ {
-							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
-						}, {
-							"minimum" : -1440,
-							"exclusiveMinimum" : false,
-							"maximum" : 1440,
-							"exclusiveMaximum" : true
-						} ]
-					}
-				}
-			}, {
-				"type" : "null"
-			} ],
-			"description" : "http://www.w3.org/TR/xmlschema-2/#dateTime"
-		},
-		"dom" : {},
-		"wildcard" : {}
-	}
+    "$id": "http://www.jsonix.org/jsonschemas/jsonix/Jsonix.jsonschema#",
+    "definitions": {
+        "calendar": {
+            "anyOf": [
+                {
+                    "type": "object",
+                    "properties": {
+                        "year": {
+                            "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                        },
+                        "month": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
+                                },
+                                {
+                                    "minimum": 1,
+                                    "maximum": 12
+                                }
+                            ]
+                        },
+                        "day": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
+                                },
+                                {
+                                    "minimum": 1,
+                                    "maximum": 31
+                                }
+                            ]
+                        },
+                        "hour": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
+                                },
+                                {
+                                    "minimum": 0,
+                                    "maximum": 23
+                                }
+                            ]
+                        },
+                        "minute": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
+                                },
+                                {
+                                    "minimum": 0,
+                                    "maximum": 59
+                                }
+                            ]
+                        },
+                        "second": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
+                                },
+                                {
+                                    "minimum": 0,
+                                    "maximum": 59
+                                }
+                            ]
+                        },
+                        "fractionalSecond": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/decimal"
+                                },
+                                {
+                                    "minimum": 0,
+                                    "exclusiveMaximum": 1
+                                }
+                            ]
+                        },
+                        "timezone": {
+                            "allOf": [
+                                {
+                                    "$ref": "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
+                                },
+                                {
+                                    "minimum": -1440,
+                                    "exclusiveMaximum": 1440
+                                }
+                            ]
+                        }
+                    }
+                },
+                {
+                    "type": "null"
+                }
+            ],
+            "description": "http://www.w3.org/TR/xmlschema-2/#dateTime"
+        },
+        "dom": true,
+        "wildcard": true
+    }
 }
