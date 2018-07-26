@@ -1,4 +1,4 @@
-var Jsonix = require('Jsonix').Jsonix;
+var Jsonix = require('jsonix').Jsonix;
 var PO = require('./PO').PO;
 
 // Utility function

@@ -29,7 +29,7 @@
 							<goal>exec</goal>
 						</goals>
 						<configuration>
-							<executable>browserify</executable>
+							<executable>node_modules/.bin/browserify</executable>
 							<arguments>
 								<argument>main.js</argument>
 								<argument>-o</argument>
