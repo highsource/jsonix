@@ -1,5 +1,6 @@
 Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo, {
 	attributeName : null,
+	defaultValue : null,
 	initialize : function(mapping) {
 		Jsonix.Util.Ensure.ensureObject(mapping);
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
@@ -11,6 +12,11 @@ Jsonix.Model.AttributePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropert
 		} else {
 			this.attributeName = new Jsonix.XML.QName(this.defaultAttributeNamespaceURI, this.name);
 		}
+
+		var dv = !Jsonix.Util.Type.isUndefined(mapping.defaultValue) ? mapping.defaultValue : (
+			Jsonix.Util.Type.isUndefined(mapping.dv) ? mapping.dv : null
+		);
+		this.defaultValue = dv;
 	},
 	unmarshal : function(context, input, scope) {
 		var attributeCount = input.getAttributeCount();

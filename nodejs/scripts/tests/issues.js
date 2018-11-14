@@ -11,6 +11,7 @@ module.exports = {
 		"GH111" : require('./GH111/GH111'),
 		"GH135" : require('./GH135/GH135'),
 		"GH141" : require('./GH141/GH141'),
-		"GH150" : require('./GH150/GH150')
+		"GH150" : require('./GH150/GH150'),
+		"GH203" : require('./GH203/GH203')
 	}
 };

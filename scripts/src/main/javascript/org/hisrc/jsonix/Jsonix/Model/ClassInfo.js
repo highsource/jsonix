@@ -18,22 +18,22 @@ Jsonix.Model.ClassInfo = Jsonix
 				var n = mapping.name||mapping.n||undefined;
 				Jsonix.Util.Ensure.ensureString(n);
 				this.name = n;
-				
+
 				var ln = mapping.localName||mapping.ln||null;
 				this.localName = ln;
 
 				var dens = mapping.defaultElementNamespaceURI||mapping.dens||mapping.targetNamespace||mapping.tns||'';
 				this.defaultElementNamespaceURI = dens;
-				
+
 				var tns =  mapping.targetNamespace||mapping.tns||mapping.defaultElementNamespaceURI||mapping.dens||this.defaultElementNamespaceURI;
 				this.targetNamespace = tns;
 
 				var dans = mapping.defaultAttributeNamespaceURI||mapping.dans||'';
 				this.defaultAttributeNamespaceURI = dans;
-				
+
 				var bti = mapping.baseTypeInfo||mapping.bti||null;
 				this.baseTypeInfo = bti;
-				
+
 				var inF = mapping.instanceFactory||mapping.inF||undefined;
 				if (Jsonix.Util.Type.exists(inF)) {
 					// TODO: should we support instanceFactory as functions?
@@ -41,9 +41,9 @@ Jsonix.Model.ClassInfo = Jsonix
 					Jsonix.Util.Ensure.ensureFunction(inF);
 					this.instanceFactory = inF;
 				}
-				
+
 				var tn = mapping.typeName||mapping.tn||undefined;
-				
+
 				if (Jsonix.Util.Type.exists(tn))
 				{
 					if (Jsonix.Util.Type.isString(tn))
@@ -58,14 +58,14 @@ Jsonix.Model.ClassInfo = Jsonix
 				{
 					this.typeName = new Jsonix.XML.QName(tns, ln);
 				}
-				
+
 				this.properties = [];
 				this.propertiesMap = {};
 				var ps = mapping.propertyInfos||mapping.ps||[];
 				Jsonix.Util.Ensure.ensureArray(ps);
 				for ( var index = 0; index < ps.length; index++) {
 					this.p(ps[index]);
-				}				
+				}
 			},
 			getPropertyInfoByName : function(name) {
 				return this.propertiesMap[name];
@@ -110,15 +110,16 @@ Jsonix.Model.ClassInfo = Jsonix
 			unmarshal : function(context, input) {
 				this.build(context);
 				var result;
-				
+				var attributePropertyInfo;
+
 				if (this.instanceFactory) {
 					result = new this.instanceFactory();
 				}
 				else
 				{
-					result = { TYPE_NAME : this.name }; 
+					result = { TYPE_NAME : this.name };
 				}
-				
+
 				if (input.eventType !== 1) {
 					throw new Error("Parser must be on START_ELEMENT to read a class info.");
 				}
@@ -135,11 +136,28 @@ Jsonix.Model.ClassInfo = Jsonix
 								var attributeValue = input
 										.getAttributeValue(index);
 								if (Jsonix.Util.Type.isString(attributeValue)) {
-									var attributePropertyInfo = this.structure.attributes[attributeNameKey];
+									attributePropertyInfo = this.structure.attributes[attributeNameKey];
 									this.unmarshalPropertyValue(context, input,
 											attributePropertyInfo, result,
 											attributeValue);
 								}
+							}
+						}
+					}
+
+					// Process default values of attributes
+					for (var attr in this.structure.attributes) {
+						if (Object.prototype.hasOwnProperty.call(this.structure.attributes, attr)) {
+							attributePropertyInfo = this.structure.attributes[attr];
+
+							if (
+								!Object.prototype.hasOwnProperty.call(result, attributePropertyInfo.name) &&
+								'defaultValue' in attributePropertyInfo
+							) {
+								attributePropertyInfo.setProperty(
+									result,
+									attributePropertyInfo.defaultValue
+								);
 							}
 						}
 					}
