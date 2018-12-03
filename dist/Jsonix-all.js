@@ -2366,7 +2366,11 @@ Jsonix.Model.ClassInfo = Jsonix
 						var propertyInfo = this.properties[index];
 						var propertyValue = value[propertyInfo.name];
 						if (Jsonix.Util.Type.exists(propertyValue)) {
-							propertyInfo.marshal(propertyValue, context, output, this);
+							try {
+								propertyInfo.marshal(propertyValue, context, output, this);
+							} catch(ex) {
+								throw new Error("Property [" + propertyInfo.name + "] failed to marshal: " + ex);
+							}
 						}
 					}
 				}
