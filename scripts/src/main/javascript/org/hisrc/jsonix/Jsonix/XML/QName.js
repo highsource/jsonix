@@ -126,6 +126,7 @@ Jsonix.XML.QName.key = function(namespaceURI, localPart) {
 	Jsonix.Util.Ensure.ensureString(localPart);
 	if (namespaceURI) {
 		var colonPosition = localPart.indexOf(':');
+		var localName;
 		if (colonPosition > 0 && colonPosition < localPart.length) {
 			localName = localPart.substring(colonPosition + 1);
 		} else {
