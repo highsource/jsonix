@@ -650,7 +650,17 @@ if(Jsonix.Util.Type.isFunction(this.document.createTextNode)){d=this.document.cr
 }else{throw new Error("Could not create a text node.")
 }}this.peek().appendChild(d);
 return d
-},writeCdata:function(c){var d;
+},writeCdata:function(h){var j=h.split("]]>");
+for(var g=0;
+g<j.length;
+g++){if(g+1<j.length){j[g]=j[g]+"]]";
+j[g+1]=">"+j[g+1]
+}}var f;
+for(var i=0;
+i<j.length;
+i++){f=this.writeCdataWithoutCdend(j[i])
+}return f
+},writeCdataWithoutCdend:function(c){var d;
 if(Jsonix.Util.Type.isFunction(this.document.createCDATASection)){d=this.document.createCDATASection(c)
 }else{if(this.xmldom){d=this.xmldom.createCDATASection(c)
 }else{throw new Error("Could not create a CDATA section node.")
@@ -1157,7 +1167,7 @@ e.attributes[d]=this
 },CLASS_NAME:"Jsonix.Model.AttributePropertyInfo"});
 Jsonix.Model.ValuePropertyInfo=Jsonix.Class(Jsonix.Model.SingleTypePropertyInfo,{initialize:function(d){Jsonix.Util.Ensure.ensureObject(d);
 Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this,[d]);
-var c=d.asCDATA||d.c||false;
+var c=d.asCDATA||d.cdata||false;
 this.asCDATA=c
 },unmarshal:function(e,f,h){var g=f.getElementText();
 return this.unmarshalValue(g,e,f,h)
@@ -1709,7 +1719,7 @@ t="="
 }w=w+p+q+r+t
 }return w
 },decode:function(j){input=j.replace(/[^A-Za-z0-9\+\/\=]/g,"");
-var x=(input.length/4)*3;
+var x=Math.floor(input.length/4*3);
 if(input.charAt(input.length-1)==="="){x--
 }if(input.charAt(input.length-2)==="="){x--
 }var t=new Array(x);

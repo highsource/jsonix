@@ -21,7 +21,7 @@ Jsonix.Util.Ensure = {
 	},
 	ensureInteger : function(value) {
 		if (!Jsonix.Util.Type.isNumber(value)) {
-			throw new Error('Argument must be an integer, but it is not a number.');
+			throw new Error('Argument [' + value + '] must be an integer, but it is not a number.');
 		} else if (!Jsonix.Util.NumberUtils.isInteger(value)) {
 			throw new Error('Argument [' + value + '] must be an integer.');
 		}
