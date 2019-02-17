@@ -25,8 +25,9 @@ module.exports = {
 		"Roundtrips" : roundtrips(__dirname + "/ns", [standardNsContext]),
 		"Comparisons" : comparisons(__dirname + "/ns", [standardNsContext, ".standard.json"])
 	},
+	/* TODO #211
 	"SimplifiedNs" : {
 		"Roundtrips" : roundtrips(__dirname + "/ns", [simplifiedNsContext]),
 		"Comparisons" : comparisons(__dirname + "/ns", [simplifiedNsContext, ".simplified.json"])
-	}
+	}*/
 };
