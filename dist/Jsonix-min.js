@@ -331,11 +331,12 @@ return new Jsonix.XML.QName(e,f,g)
 Jsonix.XML.QName.fromObjectOrString=function(f,d,e){if(Jsonix.Util.Type.isString(f)){return Jsonix.XML.QName.fromString(f,d,e)
 }else{return Jsonix.XML.QName.fromObject(f)
 }};
-Jsonix.XML.QName.key=function(f,e){Jsonix.Util.Ensure.ensureString(e);
-if(f){var d=e.indexOf(":");
-if(d>0&&d<e.length){localName=e.substring(d+1)
-}else{localName=e
-}return"{"+f+"}"+localName
+Jsonix.XML.QName.key=function(g,e){Jsonix.Util.Ensure.ensureString(e);
+if(g){var h=e.indexOf(":");
+var f;
+if(h>0&&h<e.length){f=e.substring(h+1)
+}else{f=e
+}return"{"+g+"}"+f
 }else{return e
 }};
 Jsonix.XML.Calendar=Jsonix.Class({year:NaN,month:NaN,day:NaN,hour:NaN,minute:NaN,second:NaN,fractionalSecond:NaN,timezone:NaN,date:null,initialize:function(f){Jsonix.Util.Ensure.ensureObject(f);
@@ -1939,19 +1940,19 @@ var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.DATETIME_PATTERN+"$");
 var h=j.match(k);
 if(h!==null){var l={year:parseInt(h[1],10),month:parseInt(h[5],10),day:parseInt(h[7],10),hour:parseInt(h[9],10),minute:parseInt(h[10],10),second:parseInt(h[11],10),fractionalSecond:(h[12]?parseFloat(h[12]):0),timezone:this.parseTimezoneString(h[14])};
 return new Jsonix.XML.Calendar(l)
-}throw new Error("Value ["+value+"] does not match the xs:date pattern.")
+}throw new Error("Value ["+j+"] does not match the xs:date pattern.")
 },parseDate:function(j,n,i,m){Jsonix.Util.Ensure.ensureString(j);
 var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.DATE_PATTERN+"$");
 var h=j.match(k);
 if(h!==null){var l={year:parseInt(h[1],10),month:parseInt(h[5],10),day:parseInt(h[7],10),timezone:this.parseTimezoneString(h[9])};
 return new Jsonix.XML.Calendar(l)
-}throw new Error("Value ["+value+"] does not match the xs:date pattern.")
+}throw new Error("Value ["+j+"] does not match the xs:date pattern.")
 },parseTime:function(j,n,i,m){Jsonix.Util.Ensure.ensureString(j);
 var k=new RegExp("^"+Jsonix.Schema.XSD.Calendar.TIME_PATTERN+"$");
 var h=j.match(k);
 if(h!==null){var l={hour:parseInt(h[1],10),minute:parseInt(h[2],10),second:parseInt(h[3],10),fractionalSecond:(h[4]?parseFloat(h[4]):0),timezone:this.parseTimezoneString(h[6])};
 return new Jsonix.XML.Calendar(l)
-}throw new Error("Value ["+value+"] does not match the xs:time pattern.")
+}throw new Error("Value ["+j+"] does not match the xs:time pattern.")
 },parseTimezoneString:function(i){if(!Jsonix.Util.Type.isString(i)){return NaN
 }else{if(i===""){return NaN
 }else{if(i==="Z"){return 0
@@ -1963,7 +1964,7 @@ if(l!==null){var g=l[1]==="+"?1:-1;
 var h=parseInt(l[4],10);
 var k=parseInt(l[5],10);
 return g*(h*60+k)
-}throw new Error("Value ["+value+"] does not match the timezone pattern.")
+}throw new Error("Value ["+i+"] does not match the timezone pattern.")
 }}}}}},print:function(g,e,f,h){Jsonix.Util.Ensure.ensureObject(g);
 if(Jsonix.Util.NumberUtils.isInteger(g.year)&&Jsonix.Util.NumberUtils.isInteger(g.month)&&Jsonix.Util.NumberUtils.isInteger(g.day)&&Jsonix.Util.NumberUtils.isInteger(g.hour)&&Jsonix.Util.NumberUtils.isInteger(g.minute)&&Jsonix.Util.NumberUtils.isInteger(g.second)){return this.printDateTime(g)
 }else{if(Jsonix.Util.NumberUtils.isInteger(g.year)&&Jsonix.Util.NumberUtils.isInteger(g.month)&&Jsonix.Util.NumberUtils.isInteger(g.day)){return this.printDate(g)

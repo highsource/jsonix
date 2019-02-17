@@ -921,6 +921,7 @@ Jsonix.XML.QName.key = function(namespaceURI, localPart) {
 	Jsonix.Util.Ensure.ensureString(localPart);
 	if (namespaceURI) {
 		var colonPosition = localPart.indexOf(':');
+		var localName;
 		if (colonPosition > 0 && colonPosition < localPart.length) {
 			localName = localPart.substring(colonPosition + 1);
 		} else {
@@ -4901,7 +4902,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
-		throw new Error('Value [' + value + '] does not match the xs:date pattern.');
+		throw new Error('Value [' + text + '] does not match the xs:date pattern.');
 	},
 	parseDate : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
@@ -4916,7 +4917,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
-		throw new Error('Value [' + value + '] does not match the xs:date pattern.');
+		throw new Error('Value [' + text + '] does not match the xs:date pattern.');
 	},
 	parseTime : function(text, context, input, scope) {
 		Jsonix.Util.Ensure.ensureString(text);
@@ -4932,7 +4933,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 			};
 			return new Jsonix.XML.Calendar(data);
 		}
-		throw new Error('Value [' + value + '] does not match the xs:time pattern.');
+		throw new Error('Value [' + text + '] does not match the xs:time pattern.');
 	},
 	parseTimezoneString : function(text) {
 		// (('+' | '-') hh ':' mm) | 'Z'
@@ -4955,7 +4956,7 @@ Jsonix.Schema.XSD.Calendar = Jsonix.Class(Jsonix.Schema.XSD.AnySimpleType, {
 				var minute = parseInt(results[5], 10);
 				return sign * (hour * 60 + minute);
 			}
-			throw new Error('Value [' + value + '] does not match the timezone pattern.');
+			throw new Error('Value [' + text + '] does not match the timezone pattern.');
 		}
 	},
 	print : function(value, context, output, scope) {
