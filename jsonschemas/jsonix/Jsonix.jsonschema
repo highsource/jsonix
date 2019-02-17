@@ -13,9 +13,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 1,
-							"exclusiveMinimum" : false,
-							"maximum" : 12,
-							"exclusiveMaximum" : false
+							"maximum" : 12
 						} ]
 					},
 					"day" : {
@@ -23,9 +21,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 1,
-							"exclusiveMinimum" : false,
-							"maximum" : 31,
-							"exclusiveMaximum" : false
+							"maximum" : 31
 						} ]
 					},
 					"hour" : {
@@ -33,9 +29,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 23,
-							"exclusiveMaximum" : false
+							"maximum" : 23
 						} ]
 					},
 					"minute" : {
@@ -43,9 +37,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 59,
-							"exclusiveMaximum" : false
+							"maximum" : 59
 						} ]
 					},
 					"second" : {
@@ -53,9 +45,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/unsignedByte"
 						}, {
 							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 59,
-							"exclusiveMaximum" : false
+							"maximum" : 59
 						} ]
 					},
 					"fractionalSecond" : {
@@ -63,9 +53,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/decimal"
 						}, {
 							"minimum" : 0,
-							"exclusiveMinimum" : false,
-							"maximum" : 1,
-							"exclusiveMaximum" : true
+							"maximum" : 1
 						} ]
 					},
 					"timezone" : {
@@ -73,9 +61,7 @@
 							"$ref" : "http://www.jsonix.org/jsonschemas/w3c/2001/XMLSchema.jsonschema#/definitions/integer"
 						}, {
 							"minimum" : -1440,
-							"exclusiveMinimum" : false,
-							"maximum" : 1440,
-							"exclusiveMaximum" : true
+							"maximum" : 1440
 						} ]
 					}
 				}
