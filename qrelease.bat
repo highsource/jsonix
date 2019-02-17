@@ -1,6 +1,6 @@
 setlocal
-echo Setting JAVA_HOME to %JAVA6_HOME%.
-set JAVA_HOME=%JAVA6_HOME%
+echo Setting JAVA_HOME to %JAVA8_HOME%.
+set JAVA_HOME=%JAVA8_HOME%
 
 echo Performing a short clean build.
 rem pause
