@@ -29,8 +29,8 @@ var AR_Module_Factory = function () {
           }]
       }],
     elementInfos: [{
-        elementName: 'AccumulateResponse',
-        typeInfo: '.AccumulateResponse'
+        typeInfo: '.AccumulateResponse',
+        elementName: 'AccumulateResponse'
       }]
   };
   return {

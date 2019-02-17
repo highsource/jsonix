@@ -6,13 +6,13 @@
 	],
 	"main": "main.js",
 	"dependencies": {
-		"jsonix": "2.x.x",
+		"jsonix": "file:../../scripts/jsonix-2.4.2-SNAPSHOT.tgz",
 		"jsonix-schema-compiler": "2.x.x"
 	},
-	"devDependencies" : {
-		"nodeunit" : "~0.x.x"
+	"devDependencies": {
+		"nodeunit": "~0.x.x"
 	},
 	"scripts": {
-		"prepublish" : "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar purchaseorder.xsd -b bindings.xjb"
+		"prepublish": "java -jar node_modules/jsonix-schema-compiler/lib/jsonix-schema-compiler-full.jar purchaseorder.xsd -b bindings.xjb"
 	}
 }

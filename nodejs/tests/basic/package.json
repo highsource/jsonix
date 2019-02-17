@@ -6,12 +6,13 @@
 	],
 	"main": "jsonix-tests-basic.js",
 	"dependencies": {
+		"jsonix": "file:../../scripts/jsonix-2.4.2-SNAPSHOT.tgz"
 	},
-	"devDependencies" : {
-		"nodeunit" : "0.x.x",
-		"node-static" : "0.x.x"
+	"devDependencies": {
+		"nodeunit": "0.x.x",
+		"node-static": "0.x.x"
 	},
 	"scripts": {
-		"test": "nodeunit tests/tests.js" 
+		"test": "nodeunit tests/tests.js"
 	}
 }

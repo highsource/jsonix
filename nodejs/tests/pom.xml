@@ -15,6 +15,14 @@
 		<module>ar</module>
 		<module>browserify</module>
 	</modules>
+	<dependencies>
+		<dependency>
+			<groupId>${project.groupId}</groupId>
+			<artifactId>jsonix-nodejs-scripts</artifactId>
+			<version>${project.version}</version>
+			<type>pom</type>
+		</dependency>
+	</dependencies>
 	<build>
 		<plugins>
 			<plugin>
@@ -45,7 +53,7 @@
 				<artifactId>exec-maven-plugin</artifactId>
 				<executions>
 					<execution>
-						<id>initialize</id>
+						<id>npm-install</id>
 						<!--phase>initialize</phase-->
 						<phase>none</phase>
 						<goals>
@@ -55,13 +63,12 @@
 							<executable>npm</executable>
 							<arguments>
 								<argument>install</argument>
-								<argument>../../scripts</argument>
 							</arguments>
 						</configuration>
 					</execution>
 					<execution>
-						<id>compile</id>
-						<!--phase>install</phase-->
+						<id>npm-install-jsonix</id>
+						<!--phase>initialize</phase-->
 						<phase>none</phase>
 						<goals>
 							<goal>exec</goal>
@@ -70,6 +77,7 @@
 							<executable>npm</executable>
 							<arguments>
 								<argument>install</argument>
+								<argument>../../scripts/jsonix-${project.version}.tgz</argument>
 							</arguments>
 						</configuration>
 					</execution>
