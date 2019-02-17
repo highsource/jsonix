@@ -222,6 +222,46 @@ module.exports =
 		test.equal(-733, gd.timezone);
 		test.equal('---06-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(gd));
 
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parse('nomatch'); },
+			/Value \[nomatch\] does not match xs:dateTime, xs:date, xs:time, xs:gYearMonth, xs:gYear, xs:gMonthDay, xs:gMonth or xs:gDay patterns\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGYearMonth('201002'); },
+			/Value \[201002\] does not match the xs:gYearMonth pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGYear('10'); },
+			/Value \[10\] does not match the xs:gYear pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGMonthDay('02-10'); },
+			/Value \[02-10\] does not match the xs:gMonthDay pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGMonth('02'); },
+			/Value \[02\] does not match the xs:gMonth pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGDay('01'); },
+			/Value \[01\] does not match the xs:gDay pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseDateTime('2010-02-01 12:23:0'); },
+			/Value \[2010-02-01 12:23:0\] does not match the xs:date pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseDate('20100201'); },
+			/Value \[20100201\] does not match the xs:date pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseTime('12:23:0'); },
+			/Value \[12:23:0\] does not match the xs:time pattern\./);
+
+		test.throws(
+			function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseTimezoneString('PDT'); },
+			/Value \[PDT\] does not match the timezone pattern\./);
+
 		test.done();
 	},
 
