@@ -1,3 +1,17 @@
+function expectError(expectedError, fn) {
+	try {
+		fn();
+		fail('Expected error but none thrown');
+	} catch (e) {
+		// throw again the exception thorwned by 'fail' above
+		if (e instanceof JsUnitException) throw e;
+
+		// throwned class and message should be as expected
+		assertEquals(expectedError.name, e.name);
+		assertEquals(expectedError.message, e.message)
+	}
+}
+
 function testSchemaXSDString() {
 	var t = Jsonix.Schema.XSD.String.INSTANCE;
 	assertEquals('test', t.print('test'));
@@ -189,6 +203,48 @@ function testSchemaXSDCalendar() {
 	assertEquals(-733, dt1.timezone);
 	assertEquals('-1234-05-06T07:08:09.1011-12:13', Jsonix.Schema.XSD.Calendar.INSTANCE.print(dt1));
 
+}
+
+function testSchemaXSDCalendarError() {
+	expectError(
+		new Error('Value [nomatch] does not match xs:dateTime, xs:date, xs:time, xs:gYearMonth, xs:gYear, xs:gMonthDay, xs:gMonth or xs:gDay patterns.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parse('nomatch') });
+
+	expectError(
+		new Error('Value [201002] does not match the xs:gYearMonth pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGYearMonth('201002'); });
+
+	expectError(
+		new Error('Value [10] does not match the xs:gYear pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGYear('10'); });
+
+	expectError(
+		new Error('Value [02-10] does not match the xs:gMonthDay pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGMonthDay('02-10'); });
+
+	expectError(
+		new Error('Value [02] does not match the xs:gMonth pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGMonth('02'); });
+
+	expectError(
+		new Error('Value [01] does not match the xs:gDay pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseGDay('01'); });
+
+	expectError(
+		new Error('Value [2010-02-01 12:23:0] does not match the xs:date pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseDateTime('2010-02-01 12:23:0'); });
+
+	expectError(
+		new Error('Value [20100201] does not match the xs:date pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseDate('20100201') });
+
+	expectError(
+		new Error('Value [12:23:0] does not match the xs:time pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseTime('12:23:0'); });
+
+	expectError(
+		new Error('Value [PDT] does not match the timezone pattern.'),
+		function() { Jsonix.Schema.XSD.Calendar.INSTANCE.parseTimezoneString('PDT'); });
 }
 
 function testSchemaXSDTime() {
