@@ -31,7 +31,7 @@ module.exports =
 				var responseText = transport.responseText;
 				console.log('CLIENT: Response text:');
 				console.log(responseText);
-				test.equal(30, responseText.length);
+				test.equal(28, responseText.length);
 				test.done();
 			});
 		},

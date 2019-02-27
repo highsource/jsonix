@@ -15,7 +15,7 @@ module.exports =
 				test.notEqual(null, dataString);
 //				console.log('Read content:');
 //				console.log(dataString);
-				test.equal(30, dataString.length);
+				test.equal(28, dataString.length);
 			}
 			test.ifError(err);
 			test.done();
