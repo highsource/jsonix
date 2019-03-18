@@ -7,7 +7,7 @@
 	"main": "jsonix-tests-po.js",
 	"dependencies": {
 		"ajv": ">=1.2.1",
-		"jsonix": "file:../../scripts/jsonix-2.4.2-SNAPSHOT.tgz",
+		"jsonix": "file:../../scripts/jsonix-3.0.0.tgz",
 		"jsonix-schema-compiler": ">=2.3.7"
 	},
 	"devDependencies": {

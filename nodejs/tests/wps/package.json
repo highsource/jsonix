@@ -7,7 +7,7 @@
 	],
 	"main": "jsonix-tests-wps.js",
 	"dependencies": {
-		"jsonix": "file:../../scripts/jsonix-2.4.2-SNAPSHOT.tgz"
+		"jsonix": "file:../../scripts/jsonix-3.0.0.tgz"
 	},
 	"devDependencies": {
 		"nodeunit": "~0.8.6",
