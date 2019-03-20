@@ -114,7 +114,7 @@
 							</arguments>
 						</configuration>
 					</execution>
-					<execution>
+					<!--execution>
 						<id>publish</id>
 						<phase>deploy</phase>
 						<goals>
@@ -127,7 +127,7 @@
 								<argument>.</argument>
 							</arguments>
 						</configuration>
-					</execution>
+					</execution-->
 				</executions>
 			</plugin>
 		</plugins>
