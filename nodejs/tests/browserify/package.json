@@ -6,7 +6,7 @@
 	],
 	"main": "main.js",
 	"dependencies": {
-		"jsonix": "file:../../scripts/jsonix-3.0.0.tgz",
+		"jsonix": "file:../../scripts/jsonix-3.0.1-SNAPSHOT.tgz",
 		"jsonix-schema-compiler": "2.x.x"
 	},
 	"devDependencies": {

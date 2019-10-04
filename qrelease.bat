@@ -10,16 +10,16 @@ rem pause
 
 echo Performing a full clean build.
 rem pause
-call mvn clean install -DperformRelease -Pall
+call mvn clean install -DperformRelease -Pall,sonatype-oss-release
 echo Full clean build completed.
 rem pause
 
 echo Setting new version to %1.
 rem pause
-call mvn versions:set -Pall -DnewVersion=%1
+call mvn versions:set -Pall,sonatype-oss-release -DnewVersion=%1
 echo Version was set to %1.
 rem pause
-call mvn versions:commit -Pall
+call mvn versions:commit -Pall,sonatype-oss-release
 echo Version %1 committed.
 rem pause
 
@@ -31,7 +31,7 @@ rem pause
 
 echo Performing a full clean build.
 rem pause
-call mvn clean install -Pall -DperformRelease
+call mvn clean install -Pall,sonatype-oss-release -DperformRelease
 echo Full clean build completed.
 rem pause
 
@@ -62,10 +62,10 @@ rem pause
 
 echo Setting new version to %2.
 rem pause
-call mvn versions:set -Pall -DnewVersion=%2
+call mvn versions:set -Pall,sonatype-oss-release -DnewVersion=%2
 echo Version was set to %2.
 rem pause
-call mvn versions:commit -Pall
+call mvn versions:commit -Pall,sonatype-oss-release
 echo Version %2 was committed.
 rem pause
 
@@ -77,7 +77,7 @@ rem pause
 
 echo Performing a full clean build.
 rem pause
-call mvn clean install -DperformRelease -Pall
+call mvn clean install -DperformRelease -Pall,sonatype-oss-release
 echo Full clean build completed.
 rem pause
 
