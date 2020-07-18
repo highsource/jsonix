@@ -63,115 +63,117 @@ interface Marshaller { // TODO: generics like marshalString(object:T):string;
     marshalDocument(object:Object): Element;
 }
 
-declare module Jsonix {
-    export class Context {
-        /**
-         * Creates an instance of Context.
-         *
-         * @param {any[]} s (description)
-         */
-        constructor(s:any[]);
+declare module 'jsonix' {
+    export namespace Jsonix {
+        export class Context {
+            /**
+             * Creates an instance of Context.
+             *
+             * @param {any[]} s (description)
+             */
+            constructor(s:any[]);
 
-        /**
-         * (description)
-         *
-         * @param {string} name (description)
-         * @returns {TypeInfo} (description)
-         */
-        getTypeInfoByName(name:string):TypeInfo;
+            /**
+             * (description)
+             *
+             * @param {string} name (description)
+             * @returns {TypeInfo} (description)
+             */
+            getTypeInfoByName(name:string):TypeInfo;
 
-        /**
-         * (description)
-         *
-         * @param {string} typeName (description)
-         * @returns {TypeInfo} (description)
-         */
-        getTypeInfoByTypeName(typeName:string):TypeInfo;
+            /**
+             * (description)
+             *
+             * @param {string} typeName (description)
+             * @returns {TypeInfo} (description)
+             */
+            getTypeInfoByTypeName(typeName:string):TypeInfo;
 
-        /**
-         * (description)
-         *
-         * @param {string} typeNameKey (description)
-         * @returns {TypeInfo} (description)
-         */
-        getTypeInfoByTypeNameKey(typeNameKey:string):TypeInfo;
+            /**
+             * (description)
+             *
+             * @param {string} typeNameKey (description)
+             * @returns {TypeInfo} (description)
+             */
+            getTypeInfoByTypeNameKey(typeNameKey:string):TypeInfo;
 
-        getElementInfo(name:string, scope:string):any;
+            getElementInfo(name:string, scope:string):any;
 
-        getSubstitutionMembers(name:string):any;
+            getSubstitutionMembers(name:string):any;
 
-        createMarshaller():Marshaller;
+            createMarshaller():Marshaller;
 
-        createUnmarshaller():Unmarshaller;
+            createUnmarshaller():Unmarshaller;
 
-        //TODO: createUnmarshaller<T>(type: T): Unmarshaller<T>;
+            //TODO: createUnmarshaller<T>(type: T): Unmarshaller<T>;
 
-        getNamespaceURI(prefix:string):any;
+            getNamespaceURI(prefix:string):any;
 
-        getPrefix(namespaceURI:string, defaultPrefix:string):any;
+            getPrefix(namespaceURI:string, defaultPrefix:string):any;
 
-        builtinTypeInfos:{
-            Jsonix: {
-                Schema: {
-                    XSD: {
-                        AnyType: { INSTANCE: {} };
-                        AnySimpleType: { INSTANCE: {} };
-                        AnyURI: { INSTANCE: {} };
-                        Base64Binary: { INSTANCE: {} };
-                        Boolean: { INSTANCE: {} };
-                        Byte: { INSTANCE: {} };
-                        Calendar: { INSTANCE: {} };
-                        DateAsDate: { INSTANCE: {} };
-                        Date: { INSTANCE: {} };
-                        DateTimeAsDate: { INSTANCE: {} };
-                        DateTime: { INSTANCE: {} };
-                        Decimal: { INSTANCE: {} };
-                        Double: { INSTANCE: {} };
-                        Duration: { INSTANCE: {} };
-                        Float: { INSTANCE: {} };
-                        GDay: { INSTANCE: {} };
-                        GMonth: { INSTANCE: {} };
-                        GMonthDay: { INSTANCE: {} };
-                        GYear: { INSTANCE: {} };
-                        GYearMonth: { INSTANCE: {} };
-                        HexBinary: { INSTANCE: {} };
-                        ID: { INSTANCE: {} };
-                        IDREF: { INSTANCE: {} };
-                        IDREFS: { INSTANCE: {} };
-                        Int: { INSTANCE: {} };
-                        Integer: { INSTANCE: {} };
-                        Language: { INSTANCE: {} };
-                        Long: { INSTANCE: {} };
-                        Name: { INSTANCE: {} };
-                        NCName: { INSTANCE: {} };
-                        NegativeInteger: { INSTANCE: {} };
-                        NMToken: { INSTANCE: {} };
-                        NMTokens: { INSTANCE: {} };
-                        NonNegativeInteger: { INSTANCE: {} };
-                        NonPositiveInteger: { INSTANCE: {} };
-                        NormalizedString: { INSTANCE: {} };
-                        Number: { INSTANCE: {} };
-                        PositiveInteger: { INSTANCE: {} };
-                        QName: { INSTANCE: {} };
-                        Short: { INSTANCE: {} };
-                        String: { INSTANCE: {} };
-                        Strings: { INSTANCE: {} };
-                        TimeAsDate: { INSTANCE: {} };
-                        Time: { INSTANCE: {} };
-                        Token: { INSTANCE: {} };
-                        UnsignedByte: { INSTANCE: {} };
-                        UnsignedInt: { INSTANCE: {} };
-                        UnsignedLong: { INSTANCE: {} };
-                        UnsignedShort: { INSTANCE: {} };
+            builtinTypeInfos:{
+                Jsonix: {
+                    Schema: {
+                        XSD: {
+                            AnyType: { INSTANCE: {} };
+                            AnySimpleType: { INSTANCE: {} };
+                            AnyURI: { INSTANCE: {} };
+                            Base64Binary: { INSTANCE: {} };
+                            Boolean: { INSTANCE: {} };
+                            Byte: { INSTANCE: {} };
+                            Calendar: { INSTANCE: {} };
+                            DateAsDate: { INSTANCE: {} };
+                            Date: { INSTANCE: {} };
+                            DateTimeAsDate: { INSTANCE: {} };
+                            DateTime: { INSTANCE: {} };
+                            Decimal: { INSTANCE: {} };
+                            Double: { INSTANCE: {} };
+                            Duration: { INSTANCE: {} };
+                            Float: { INSTANCE: {} };
+                            GDay: { INSTANCE: {} };
+                            GMonth: { INSTANCE: {} };
+                            GMonthDay: { INSTANCE: {} };
+                            GYear: { INSTANCE: {} };
+                            GYearMonth: { INSTANCE: {} };
+                            HexBinary: { INSTANCE: {} };
+                            ID: { INSTANCE: {} };
+                            IDREF: { INSTANCE: {} };
+                            IDREFS: { INSTANCE: {} };
+                            Int: { INSTANCE: {} };
+                            Integer: { INSTANCE: {} };
+                            Language: { INSTANCE: {} };
+                            Long: { INSTANCE: {} };
+                            Name: { INSTANCE: {} };
+                            NCName: { INSTANCE: {} };
+                            NegativeInteger: { INSTANCE: {} };
+                            NMToken: { INSTANCE: {} };
+                            NMTokens: { INSTANCE: {} };
+                            NonNegativeInteger: { INSTANCE: {} };
+                            NonPositiveInteger: { INSTANCE: {} };
+                            NormalizedString: { INSTANCE: {} };
+                            Number: { INSTANCE: {} };
+                            PositiveInteger: { INSTANCE: {} };
+                            QName: { INSTANCE: {} };
+                            Short: { INSTANCE: {} };
+                            String: { INSTANCE: {} };
+                            Strings: { INSTANCE: {} };
+                            TimeAsDate: { INSTANCE: {} };
+                            Time: { INSTANCE: {} };
+                            Token: { INSTANCE: {} };
+                            UnsignedByte: { INSTANCE: {} };
+                            UnsignedInt: { INSTANCE: {} };
+                            UnsignedLong: { INSTANCE: {} };
+                            UnsignedShort: { INSTANCE: {} };
+                        }
                     }
                 }
-            }
-        }[];
+            }[];
 
 
-        // private
-        elementInfos:ClassInfo[];
+            // private
+            elementInfos:ClassInfo[];
 
+        }
     }
 }
 
@@ -253,7 +255,7 @@ interface PropertyInfo {
 interface AbstractElementPropertyInfo extends PropertyInfo {
     wrapperElement: QName;
     allowDom: boolean;
-    allowTypedObject; boolean;
+    allowTypedObject: boolean;
     mixed: boolean;
 }
 
@@ -298,24 +300,24 @@ interface ClassInfo extends TypeInfo, Styled {
     built: boolean;
     //TODO: confirm this syntax
     propertyInfoCreators: {
-        aa: { aa };
-        anyAttribute: { aa };
-        ae: { ae };
-        anyElement: { ae };
-        a: { a };
-        attribute: { a };
-        em: { em };
-        elementMap: { em };
-        e: { e };
-        element: { e };
-        es: { es };
-        elements: { es };
-        er: { er };
-        elementRef: { er };
-        ers: { ers };
-        elementRefs: { ers };
-        v: { v };
-        value: { v }
+        aa: { aa: any };
+        anyAttribute: { aa: any };
+        ae: { ae: any };
+        anyElement: { ae: any };
+        a: { a: any };
+        attribute: { a: any };
+        em: { em: any };
+        elementMap: { em: any };
+        e: { e: any };
+        element: { e: any };
+        es: { es: any };
+        elements: { es: any };
+        er: { er: any };
+        elementRef: { er: any };
+        ers: { ers: any };
+        elementRefs: { ers: any };
+        v: { v: any };
+        value: { v: any }
     }
 
 }
