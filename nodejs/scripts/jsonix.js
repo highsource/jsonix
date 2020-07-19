@@ -2979,7 +2979,9 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 		Jsonix.Model.SingleTypePropertyInfo.prototype.initialize.apply(this, [ mapping ]);
 
 		var cdata = mapping.asCDATA || mapping.cdata || false;
+		var cdatacondition = mapping.CDATAcondition;
 		this.asCDATA = cdata;
+		this.CDATAcondition = cdatacondition;
 	},
 	unmarshal : function(context, input, scope) {
 		var text = input.getElementText();
@@ -2990,7 +2992,8 @@ Jsonix.Model.ValuePropertyInfo = Jsonix.Class(Jsonix.Model.SingleTypePropertyInf
 			return;
 		}
 
-		if (this.asCDATA) {
+		if ((this.asCDATA && this.CDATAcondition == null) ||
+        	(this.asCDATA && value.match(new RegExp(this.CDATAcondition)) != null )) {
 			output.writeCdata(this.print(value, context, output, scope));
 		} else {
 			output.writeCharacters(this.print(value, context, output, scope));
