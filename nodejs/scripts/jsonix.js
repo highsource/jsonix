@@ -31,7 +31,7 @@ Jsonix.Util.extend = function(destination, source) {
 
 		// REWORK
 		// Node.js
-		sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event === "function" && source instanceof window.Event;
+		var sourceIsEvt = typeof window !== 'undefined' && window !== null && typeof window.Event === "function" && source instanceof window.Event;
 
 		if (!sourceIsEvt && source.hasOwnProperty && source.hasOwnProperty('toString')) {
 			destination.toString = source.toString;
@@ -2094,7 +2094,7 @@ Jsonix.Binding.Unmarshaller = Jsonix.Class(Jsonix.Binding.Unmarshalls.Element, J
 		if (Jsonix.Util.Type.exists(options)) {
 			Jsonix.Util.Ensure.ensureObject(options);
 		}
-		that = this;
+		var that = this;
 		Jsonix.DOM.load(url, function(doc) {
 			callback(that.unmarshalDocument(doc));
 		}, options);
@@ -5871,7 +5871,7 @@ Jsonix.Context = Jsonix
 				{
 					if (this.namespacePrefixes.hasOwnProperty(ns))
 					{
-						p = this.namespacePrefixes[ns];
+						var p = this.namespacePrefixes[ns];
 						this.prefixNamespaces[p] = ns;
 					}
 				}
